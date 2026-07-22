@@ -265,6 +265,16 @@ document.getElementById('addRule').addEventListener('click', function() {
     return;
   }
   
+  // НОВОЕ: Получаем выбранный режим блокировки
+  const modeRadios = document.querySelectorAll('input[name="blockMode"]');
+  let blockMode = 'hide';
+  for (const radio of modeRadios) {
+    if (radio.checked) {
+      blockMode = radio.value;
+      break;
+    }
+  }
+  
   // Проверяем, сколько элементов находит селектор
   chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
     if (!tabs || !tabs[0]) {
@@ -307,14 +317,18 @@ document.getElementById('addRule').addEventListener('click', function() {
         }
       }
       
-      // Сохраняем правило
+      // Сохраняем правило с режимом блокировки
       chrome.storage.local.get(['rules'], function(result) {
         const rules = result.rules || [];
         if (rules.some(rule => rule.selector === selector)) {
           alert('Это правило уже существует');
           return;
         }
-        rules.push({ selector });
+        // НОВОЕ: сохраняем не только селектор, но и режим
+        rules.push({ 
+          selector: selector,
+          mode: blockMode  // 'hide' или 'remove'
+        });
         chrome.storage.local.set({ rules }, function() {
           document.getElementById('status').textContent = '✅ Правило добавлено!';
           document.getElementById('status').style.color = 'green';
@@ -325,10 +339,24 @@ document.getElementById('addRule').addEventListener('click', function() {
   });
 });
 
-// ===== Отображение списка правил =====
+// ===== Обновлённое отображение списка правил =====
 function renderRulesList() {
   chrome.storage.local.get(['rules'], function(result) {
-    const rules = result.rules || [];
+    let rules = result.rules || [];
+    let needsUpdate = false;
+    
+    // Миграция: добавляем mode='hide' для старых правил
+    rules = rules.map(rule => {
+      if (!rule.mode) {
+        needsUpdate = true;
+        return { ...rule, mode: 'hide' };
+      }
+      return rule;
+    });
+    
+    if (needsUpdate) {
+      chrome.storage.local.set({ rules });
+    }
     const list = document.getElementById('rulesList');
     list.innerHTML = '';
     if (rules.length === 0) {
@@ -337,7 +365,11 @@ function renderRulesList() {
     }
     rules.forEach((rule, index) => {
       const li = document.createElement('li');
-      li.textContent = rule.selector;
+      
+      // Отображаем селектор и режим
+      const modeLabel = rule.mode === 'remove' ? '🗑️' : '👻';
+      li.textContent = `${modeLabel} ${rule.selector}`;
+      
       const deleteBtn = document.createElement('button');
       deleteBtn.textContent = 'Удалить';
       deleteBtn.addEventListener('click', function() {
@@ -350,9 +382,20 @@ function renderRulesList() {
   });
 }
 
-// ===== Загружаем список правил при открытии popup =====
+// ===== Обновление подсказки при переключении режима =====
+document.querySelectorAll('input[name="blockMode"]').forEach(radio => {
+  radio.addEventListener('change', function() {
+    const hint = document.getElementById('modeHint');
+    if (this.value === 'remove') {
+      hint.textContent = 'Элемент будет полностью удалён из HTML. Вёрстка может "поехать", но место освободится.';
+    } else {
+      hint.textContent = 'Элемент станет невидимым, но сохранит свои размеры. Вёрстка не "поедет".';
+    }
+  });
+});
+
+// ===== Загрузка списка правил при открытии popup =====
 document.addEventListener('DOMContentLoaded', function() {
+  console.log('[BlockIt] Popup загружен, загружаем правила');
   renderRulesList();
-  // Инициализируем проверку селектора при загрузке
-  checkSelectorCount('');
 });

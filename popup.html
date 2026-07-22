@@ -38,6 +38,24 @@
     <!-- Отображение количества найденных элементов -->
     <div id="elementCount" style="margin: 8px 0; font-size: 14px;">🔍 Проверка...</div>
     
+    <!-- НОВОЕ: Переключатель режима блокировки -->
+    <div style="margin: 10px 0; padding: 10px; background: #f5f5f5; border-radius: 4px;">
+      <label style="font-weight: 600; display: block; margin-bottom: 6px;">Режим блокировки:</label>
+      <div style="display: flex; gap: 20px; align-items: center;">
+        <label style="display: flex; align-items: center; gap: 6px; font-weight: normal; cursor: pointer;">
+          <input type="radio" name="blockMode" value="hide" checked>
+          👻 Скрыть (сохранить место)
+        </label>
+        <label style="display: flex; align-items: center; gap: 6px; font-weight: normal; cursor: pointer;">
+          <input type="radio" name="blockMode" value="remove">
+          🗑️ Удалить (убрать место)
+        </label>
+      </div>
+      <div style="font-size: 11px; color: #666; margin-top: 4px;">
+        <span id="modeHint">Элемент станет невидимым, но сохранит свои размеры. Вёрстка не "поедет".</span>
+      </div>
+    </div>
+    
     <button id="addRule">➕ Добавить правило</button>
     <div id="status"></div>
   </div>

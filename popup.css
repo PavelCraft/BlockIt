@@ -158,3 +158,20 @@ hr {
 #rulesList button:hover {
   background: #a1262a;
 }
+
+/* Стили для переключателя режимов */
+input[type="radio"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+input[type="radio"]:checked {
+  accent-color: #0078d4;
+}
+
+#modeHint {
+  font-size: 12px;
+  color: #666;
+  font-style: italic;
+}
