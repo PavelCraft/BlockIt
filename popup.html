@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <h3>BlockIt</h3>
+  
+  <!-- Поле для вставки HTML -->
+  <label for="htmlInput">Вставьте скопированный HTML-элемент:</label>
+  <textarea id="htmlInput" placeholder='Например: <li class="ad" id="banner">...</li>'></textarea>
+  <button id="parseBtn">Разобрать</button>
+  
+  <hr>
+  
+  <!-- Отображение тега и атрибутов -->
+  <div id="parsedContainer">
+    <h4>Тег:</h4>
+    <div id="tagDisplay">(не определён)</div>
+    
+    <h4>Атрибуты (нажмите на ✏️ для редактирования, на 🗑️ для удаления):</h4>
+    <div id="attributesContainer">
+      <div style="color: #999; font-style: italic;">Нет атрибутов</div>
+    </div>
+    
+    <!-- Поле для добавления нового атрибута -->
+    <h4>Добавить атрибут:</h4>
+    <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+      <input type="text" id="newAttrName" placeholder="Имя атрибута (например, data-testid)" style="flex: 1;">
+      <input type="text" id="newAttrValue" placeholder="Значение" style="flex: 1;">
+      <button id="addAttrBtn" disabled>➕ Добавить</button>
+    </div>
+    
+    <h4>Готовый селектор (можно редактировать вручную):</h4>
+    <input type="text" id="selectorInput" placeholder="Напишите или отредактируйте селектор">
+    
+    <!-- Отображение количества найденных элементов -->
+    <div id="elementCount" style="margin: 8px 0; font-size: 14px;">🔍 Проверка...</div>
+    
+    <button id="addRule">➕ Добавить правило</button>
+    <div id="status"></div>
+  </div>
+  
+  <hr>
+  <h4>Активные правила</h4>
+  <ul id="rulesList"></ul>
+  
+  <script src="popup.js"></script>
+</body>
+</html>

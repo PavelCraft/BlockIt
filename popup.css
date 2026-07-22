@@ -1,0 +1,160 @@
+body {
+  width: 450px;
+  padding: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 13px;
+  background: #fff;
+}
+
+h3 {
+  margin: 0 0 12px 0;
+  font-size: 18px;
+  color: #1a1a1a;
+}
+
+h4 {
+  margin: 10px 0 4px 0;
+  font-size: 13px;
+  color: #333;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+textarea {
+  width: 100%;
+  height: 60px;
+  padding: 6px;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+input[type="text"] {
+  padding: 6px;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+#selectorInput {
+  width: 100%;
+  background: #f5f5f5;
+}
+
+button {
+  padding: 6px 14px;
+  background: #0078d4;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+button:hover {
+  background: #005a9e;
+}
+
+button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+#parseBtn {
+  margin-top: 6px;
+}
+
+#addAttrBtn {
+  flex-shrink: 0;
+}
+
+hr {
+  margin: 12px 0;
+  border: none;
+  border-top: 1px solid #eee;
+}
+
+#attributesContainer {
+  margin: 6px 0 10px 0;
+}
+
+.attr-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 3px 0;
+  padding: 4px 8px;
+  background: #f5f5f5;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+}
+
+.attr-item .attr-name {
+  font-weight: bold;
+  color: #0078d4;
+}
+
+.attr-item .attr-value {
+  color: #333;
+}
+
+.attr-item .attr-edit,
+.attr-item .attr-delete {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-size: 13px;
+  padding: 0 4px;
+  line-height: 1;
+}
+
+.attr-item .attr-edit:hover {
+  color: #0078d4;
+}
+
+.attr-item .attr-delete:hover {
+  color: #d13438;
+}
+
+#elementCount {
+  padding: 4px 0;
+  font-weight: 500;
+}
+
+#status {
+  margin-top: 6px;
+  font-weight: 500;
+}
+
+#rulesList {
+  padding-left: 20px;
+  margin: 4px 0 0 0;
+}
+
+#rulesList li {
+  margin: 4px 0;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  word-break: break-all;
+}
+
+#rulesList button {
+  padding: 2px 10px;
+  font-size: 11px;
+  background: #d13438;
+  margin-left: 8px;
+}
+
+#rulesList button:hover {
+  background: #a1262a;
+}
