@@ -1,0 +1,362 @@
+{
+  "extensionName": {
+    "message": "BlockIt",
+    "description": "拡張機能の名前"
+  },
+  "extensionDescription": {
+    "message": "セレクタを使用して任意のWebサイトでHTML要素をブロックします",
+    "description": "拡張機能の説明"
+  },
+  "pasteHtmlLabel": {
+    "message": "コピーしたHTML要素を貼り付け：",
+    "description": "HTML入力フィールドのラベル"
+  },
+  "pasteHtmlPlaceholder": {
+    "message": "例：<li class=\"ad\" id=\"banner\">...</li>",
+    "description": "HTML入力フィールドのプレースホルダー"
+  },
+  "parseBtn": {
+    "message": "解析",
+    "description": "解析ボタンのテキスト"
+  },
+  "tagLabel": {
+    "message": "タグ：",
+    "description": "タグラベル"
+  },
+  "tagNotDefined": {
+    "message": "(未定義)",
+    "description": "タグが定義されていない場合のメッセージ"
+  },
+  "attributesLabel": {
+    "message": "属性（✏️で編集、🗑️で削除）：",
+    "description": "属性セクションのラベル"
+  },
+  "addAttrLabel": {
+    "message": "属性を追加：",
+    "description": "属性追加セクションのラベル"
+  },
+  "attrNamePlaceholder": {
+    "message": "属性名（例：id）",
+    "description": "属性名入力のプレースホルダー"
+  },
+  "attrValuePlaceholder": {
+    "message": "値",
+    "description": "属性値入力のプレースホルダー"
+  },
+  "addAttrBtn": {
+    "message": "➕ 追加",
+    "description": "属性追加ボタンのテキスト"
+  },
+  "enterSelector": {
+    "message": "🔍 セレクタを入力",
+    "description": "セレクタが空の場合のメッセージ"
+  },
+  "checkError": {
+    "message": "⚠️ チェックエラー",
+    "description": "セレクタチェックエラー"
+  },
+  "blockModeLabel": {
+    "message": "ブロックモード：",
+    "description": "ブロックモードセクションのラベル"
+  },
+  "modeHide": {
+    "message": "👻 非表示（スペースを維持）",
+    "description": "非表示モードのラジオラベル"
+  },
+  "modeRemove": {
+    "message": "🗑️ 削除（スペースを解放）",
+    "description": "削除モードのラジオラベル"
+  },
+  "modeHideHint": {
+    "message": "要素は非表示になりますが、サイズは維持されます。レイアウトが崩れません。",
+    "description": "非表示モードのヒント"
+  },
+  "modeRemoveHint": {
+    "message": "要素はHTMLから完全に削除されます。レイアウトが変わる可能性がありますが、スペースは解放されます。",
+    "description": "削除モードのヒント"
+  },
+  "addRuleBtn": {
+    "message": "➕ ルールを追加",
+    "description": "ルール追加ボタンのテキスト"
+  },
+  "noAttributes": {
+    "message": "属性がありません",
+    "description": "属性がない場合のメッセージ"
+  },
+  "noRules": {
+    "message": "アクティブなルールがありません",
+    "description": "ルールがない場合のメッセージ"
+  },
+  "deleteBtn": {
+    "message": "削除",
+    "description": "削除ボタンのテキスト"
+  },
+  "editAttrTitle": {
+    "message": "属性値を編集",
+    "description": "属性編集ボタンのツールチップ"
+  },
+  "deleteAttrTitle": {
+    "message": "属性を削除",
+    "description": "属性削除ボタンのツールチップ"
+  },
+  "editAttrPrompt": {
+    "message": "属性 \"{key}\" の新しい値を入力：",
+    "description": "属性値編集ダイアログ"
+  },
+  "selectorInvalid": {
+    "message": "❌ 無効なセレクタ",
+    "description": "セレクタ無効ステータス"
+  },
+  "foundZero": {
+    "message": "🔍 見つかった要素：0（現在のページで）",
+    "description": "0個の要素が見つかった"
+  },
+  "foundOne": {
+    "message": "✅ 見つかった要素：1（完璧！）",
+    "description": "1個の要素が見つかった"
+  },
+  "foundMultiple": {
+    "message": "⚠️ 見つかった要素：{count}（セレクタが広すぎる可能性があります）",
+    "description": "複数の要素が見つかった"
+  },
+  "ruleAdded": {
+    "message": "✅ ルールが追加されました！",
+    "description": "ルール追加成功メッセージ"
+  },
+  "rulesCleared": {
+    "message": "🧹 すべてのルールがクリアされました",
+    "description": "ルールクリアメッセージ"
+  },
+  "clearRulesBtn": {
+    "message": "🗑️ すべてのルールをクリア",
+    "description": "すべてのルールをクリアボタン"
+  },
+  "confirmClearRules": {
+    "message": "すべてのルールを削除しますか？この操作は元に戻せません。",
+    "description": "ルールクリアの確認"
+  },
+  "activeRulesLabel": {
+    "message": "アクティブなルール",
+    "description": "アクティブルールセクションのラベル"
+  },
+  "alertPasteHtml": {
+    "message": "HTML要素を貼り付けてください",
+    "description": "HTMLフィールドが空の場合の警告"
+  },
+  "alertParseError": {
+    "message": "HTMLの解析に失敗しました。有効な開始タグであることを確認してください。",
+    "description": "HTML解析エラー"
+  },
+  "alertAttrName": {
+    "message": "属性名を入力してください",
+    "description": "属性名が空の場合の警告"
+  },
+  "alertAttrValue": {
+    "message": "属性値を入力してください",
+    "description": "属性値が空の場合の警告"
+  },
+  "alertEmptySelector": {
+    "message": "セレクタが空です。セレクタを入力または生成してください。",
+    "description": "セレクタが空の場合の警告"
+  },
+  "alertNoTab": {
+    "message": "ページへのアクセスに失敗しました",
+    "description": "ページアクセスエラー"
+  },
+  "alertCheckError": {
+    "message": "セレクタチェックエラー",
+    "description": "セレクタチェックエラー"
+  },
+  "alertInvalidSelector": {
+    "message": "無効なセレクタです。構文を確認してください。",
+    "description": "無効なセレクタ"
+  },
+  "alertRuleExists": {
+    "message": "このルールは既に存在します",
+    "description": "ルールが既に存在する"
+  },
+  "alertClearError": {
+    "message": "クリアエラー",
+    "description": "ルールクリアエラー"
+  },
+  "confirmZeroElements": {
+    "message": "セレクタは現在のページで要素を見つけられませんでした。別のページにいる可能性があります。\n\nそれでもルールを追加しますか？",
+    "description": "0個の要素が見つかった場合の確認"
+  },
+  "confirmMultipleElements": {
+    "message": "このセレクタはページ上で {count} 個の要素に一致します。十分に具体的でない可能性があります。\n\nルールを追加しますか？",
+    "description": "複数の要素が見つかった場合の確認"
+  },
+  "faqLink": {
+    "message": "!!! 説明書 !!!",
+    "description": "FAQ/説明書ページへのリンク"
+  },
+  "rulesForThisSite": {
+    "message": "このサイトの場合：{site}",
+    "description": "現在のサイトのルールセクションのタイトル"
+  },
+  "rulesForOtherSites": {
+    "message": "他のサイトの場合",
+    "description": "他のサイトのルールセクションのタイトル"
+  },
+  "allSitesRules": {
+    "message": "すべてのルール",
+    "description": "サイトグループ化なしの場合のセクションタイトル"
+  },
+  "thisSite": {
+    "message": "このサイト",
+    "description": "ドメインが空の場合のフォールバック"
+  },
+  "importTitle": {
+    "message": "📥 ルールをインポート",
+    "description": "インポートウィンドウのタイトル"
+  },
+  "importDescription": {
+    "message": "以下のJSONを貼り付けるか、ファイルをアップロードしてください：",
+    "description": "インポートウィンドウの説明テキスト"
+  },
+  "loadFileBtn": {
+    "message": "📂 ファイルを選択",
+    "description": "ファイル読み込みボタン"
+  },
+  "clearBtn": {
+    "message": "🗑️ クリア",
+    "description": "テキストエリアをクリアするボタン"
+  },
+  "jsonPlaceholder": {
+    "message": "ここにJSONを貼り付け...",
+    "description": "JSONテキストエリアのプレースホルダー"
+  },
+  "replaceBtn": {
+    "message": "🔄 すべて置き換え",
+    "description": "すべてのルールを置き換えるボタン"
+  },
+  "addBtn": {
+    "message": "➕ 追加",
+    "description": "ルールを追加するボタン"
+  },
+  "closeBtn": {
+    "message": "✖️ 閉じる",
+    "description": "ウィンドウを閉じるボタン"
+  },
+  "errorInvalidFormat": {
+    "message": "無効な形式です。ルールの配列または 'rules' フィールドを持つオブジェクトが必要です。",
+    "description": "無効な形式エラー"
+  },
+  "errorMissingSelector": {
+    "message": "ルール #{index} に 'selector' フィールドがありません。",
+    "description": "セレクタフィールド欠落エラー"
+  },
+  "errorEmptyFile": {
+    "message": "⚠️ ファイルが空です（0バイト）。有効なファイルを選択してください。",
+    "description": "空のファイルエラー"
+  },
+  "errorEmptyData": {
+    "message": "⚠️ ファイルにデータが含まれていません。",
+    "description": "ファイルにデータがないエラー"
+  },
+  "errorReadFile": {
+    "message": "❌ ファイルの読み取りエラー。",
+    "description": "ファイル読み取りエラー"
+  },
+  "errorParse": {
+    "message": "⚠️ {message}",
+    "description": "解析エラー"
+  },
+  "errorImport": {
+    "message": "❌ エラー：{message}",
+    "description": "インポートエラー"
+  },
+  "fileInfo": {
+    "message": "📄 ファイル：{name}（{size} KB）",
+    "description": "ファイル情報"
+  },
+  "fileInfoWithCount": {
+    "message": "📄 ファイル：{name}（{size} KB）— ルール数：{count}",
+    "description": "ルール数を含むファイル情報"
+  },
+  "fileInfoError": {
+    "message": "📄 ファイル：{name} — ⚠️ {error}",
+    "description": "ファイルエラー情報"
+  },
+  "statusReplaced": {
+    "message": "✅ {count} 個のルールを置き換えました。",
+    "description": "ルール置き換え成功メッセージ"
+  },
+  "statusAdded": {
+    "message": "✅ {added} 個の新しいルールを追加しました。合計：{total} 個のルール。",
+    "description": "ルール追加成功メッセージ"
+  },
+  "exportRulesBtn": {
+    "message": "📤 ルールをエクスポート",
+    "description": "ルールエクスポートボタン"
+  },
+  "importRulesBtn": {
+    "message": "📥 ルールをインポート",
+    "description": "ルールインポートボタン"
+  },
+  "alertNoRulesToExport": {
+    "message": "エクスポートするルールがありません。",
+    "description": "エクスポートするルールがない場合のメッセージ"
+  },
+  "alertInvalidImportFile": {
+    "message": "無効なファイル形式です。BlockItからエクスポートされたJSONファイルを選択してください。",
+    "description": "インポートファイルが無効な場合のメッセージ"
+  },
+  "alertNoRulesInFile": {
+    "message": "ファイルにルールが見つかりませんでした。",
+    "description": "ファイルにルールがない場合のメッセージ"
+  },
+  "alertNoNewRules": {
+    "message": "新しいルールは追加されませんでした。ファイル内のすべてのルールは既に存在します。",
+    "description": "すべてのルールが既に存在する場合のメッセージ"
+  },
+  "alertImportAdded": {
+    "message": "{added} 個の新しいルールを追加しました。合計：{total} 個のルール。",
+    "description": "ルールが追加された場合のメッセージ"
+  },
+  "confirmImportChoice": {
+    "message": "ファイル内に {count} 個のルールが見つかりました。\n\n「OK」をクリックすると現在のすべてのルールを置き換えます。\n「キャンセル」をクリックすると新しいルールを追加します（重複をスキップ）。",
+    "description": "インポート選択の確認"
+  },
+  "rulesImported": {
+    "message": "✅ ルールのインポートに成功しました！",
+    "description": "インポート成功メッセージ"
+  },
+  "selectorTypeCSS": {
+    "message": "セレクタ",
+    "description": "CSSセレクタタイプのラベル"
+  },
+  "selectorTypeXPath": {
+    "message": "XPath",
+    "description": "XPathタイプのラベル"
+  },
+  "selectorTypeUnknown": {
+    "message": "不明なセレクタタイプ",
+    "description": "不明なセレクタタイプのラベル"
+  },
+  "copyHint": {
+    "message": "💡 ヒント：要素を右クリック → 「検証」 → コードを右クリック → 「コピー」 → 「セレクタをコピー」または「XPathをコピー」",
+    "description": "DevToolsからセレクタをコピーする方法のヒント"
+  },
+  "toggleAdvanced": {
+    "message": "⚙️ 詳細モード",
+    "description": "詳細モードを表示するボタン"
+  },
+  "hideAdvanced": {
+    "message": "⚙️ 基本モード",
+    "description": "詳細モードを非表示にするボタン"
+  },
+  "selectorLabel": {
+    "message": "CSSセレクタまたはXPathを入力：",
+    "description": "セレクタ入力フィールドのラベル"
+  },
+  "selectorPlaceholder": {
+    "message": "例：#ad-container または //div[@id='ad']",
+    "description": "セレクタ入力フィールドのプレースホルダー"
+  },
+  "toolsDivider": {
+    "message": "─── ツール ───",
+    "description": "ツールセクションの区切り文字"
+  }
+}

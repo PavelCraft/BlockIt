@@ -1,0 +1,362 @@
+{
+  "extensionName": {
+    "message": "BlockIt",
+    "description": "Название расширения"
+  },
+  "extensionDescription": {
+    "message": "Блокировка HTML-элементов на любых сайтах с помощью селекторов",
+    "description": "Описание расширения"
+  },
+  "pasteHtmlLabel": {
+    "message": "Вставьте скопированный HTML-элемент:",
+    "description": "Метка для поля ввода HTML"
+  },
+  "pasteHtmlPlaceholder": {
+    "message": "Например: <li class=\"ad\" id=\"banner\">...</li>",
+    "description": "Плейсхолдер для поля ввода HTML"
+  },
+  "parseBtn": {
+    "message": "Разобрать",
+    "description": "Текст кнопки 'Разобрать'"
+  },
+  "tagLabel": {
+    "message": "Тег:",
+    "description": "Метка для тега"
+  },
+  "tagNotDefined": {
+    "message": "(не определён)",
+    "description": "Сообщение, когда тег не задан"
+  },
+  "attributesLabel": {
+    "message": "Атрибуты (нажмите ✏️ для редактирования, 🗑️ для удаления):",
+    "description": "Метка для секции атрибутов"
+  },
+  "addAttrLabel": {
+    "message": "Добавить атрибут:",
+    "description": "Метка для секции добавления атрибута"
+  },
+  "attrNamePlaceholder": {
+    "message": "Имя атрибута (например, id)",
+    "description": "Плейсхолдер для имени атрибута"
+  },
+  "attrValuePlaceholder": {
+    "message": "Значение",
+    "description": "Плейсхолдер для значения атрибута"
+  },
+  "addAttrBtn": {
+    "message": "➕ Добавить",
+    "description": "Текст кнопки добавления атрибута"
+  },
+  "enterSelector": {
+    "message": "🔍 Введите селектор",
+    "description": "Сообщение для пустого селектора"
+  },
+  "checkError": {
+    "message": "⚠️ Ошибка проверки",
+    "description": "Ошибка проверки селектора"
+  },
+  "blockModeLabel": {
+    "message": "Режим блокировки:",
+    "description": "Метка для секции режима блокировки"
+  },
+  "modeHide": {
+    "message": "👻 Скрыть (сохранить место)",
+    "description": "Метка для режима 'Скрыть'"
+  },
+  "modeRemove": {
+    "message": "🗑️ Удалить (убрать место)",
+    "description": "Метка для режима 'Удалить'"
+  },
+  "modeHideHint": {
+    "message": "Элемент станет невидимым, но сохранит свои размеры. Вёрстка не 'поедет'.",
+    "description": "Подсказка для режима 'Скрыть'"
+  },
+  "modeRemoveHint": {
+    "message": "Элемент будет полностью удалён из HTML. Вёрстка может 'поехать', но место освободится.",
+    "description": "Подсказка для режима 'Удалить'"
+  },
+  "addRuleBtn": {
+    "message": "➕ Добавить правило",
+    "description": "Текст кнопки добавления правила"
+  },
+  "noAttributes": {
+    "message": "Нет атрибутов",
+    "description": "Сообщение, когда нет атрибутов"
+  },
+  "noRules": {
+    "message": "Нет активных правил",
+    "description": "Сообщение, когда нет правил"
+  },
+  "deleteBtn": {
+    "message": "Удалить",
+    "description": "Текст кнопки удаления"
+  },
+  "editAttrTitle": {
+    "message": "Редактировать значение атрибута",
+    "description": "Подсказка для кнопки редактирования атрибута"
+  },
+  "deleteAttrTitle": {
+    "message": "Удалить атрибут",
+    "description": "Подсказка для кнопки удаления атрибута"
+  },
+  "editAttrPrompt": {
+    "message": "Введите новое значение для атрибута \"{key}\":",
+    "description": "Диалог редактирования значения атрибута"
+  },
+  "selectorInvalid": {
+    "message": "❌ Невалидный селектор",
+    "description": "Статус невалидного селектора"
+  },
+  "foundZero": {
+    "message": "🔍 Найдено элементов: 0 (на текущей странице)",
+    "description": "Найдено 0 элементов"
+  },
+  "foundOne": {
+    "message": "✅ Найдено элементов: 1 (отлично!)",
+    "description": "Найден 1 элемент"
+  },
+  "foundMultiple": {
+    "message": "⚠️ Найдено элементов: {count} (возможно, селектор слишком широкий)",
+    "description": "Найдено несколько элементов"
+  },
+  "ruleAdded": {
+    "message": "✅ Правило добавлено!",
+    "description": "Сообщение об успешном добавлении правила"
+  },
+  "rulesCleared": {
+    "message": "🧹 Все правила очищены",
+    "description": "Сообщение об очистке правил"
+  },
+  "clearRulesBtn": {
+    "message": "🗑️ Очистить все правила",
+    "description": "Кнопка очистки всех правил"
+  },
+  "confirmClearRules": {
+    "message": "Удалить все правила? Это действие нельзя отменить.",
+    "description": "Подтверждение очистки правил"
+  },
+  "activeRulesLabel": {
+    "message": "Активные правила",
+    "description": "Метка для секции активных правил"
+  },
+  "alertPasteHtml": {
+    "message": "Вставьте HTML-элемент",
+    "description": "Сообщение, если поле HTML пустое"
+  },
+  "alertParseError": {
+    "message": "Не удалось распарсить HTML. Убедитесь, что это корректный открывающий тег.",
+    "description": "Ошибка парсинга HTML"
+  },
+  "alertAttrName": {
+    "message": "Введите имя атрибута",
+    "description": "Сообщение, если имя атрибута пустое"
+  },
+  "alertAttrValue": {
+    "message": "Введите значение атрибута",
+    "description": "Сообщение, если значение атрибута пустое"
+  },
+  "alertEmptySelector": {
+    "message": "Селектор пуст. Напишите или сгенерируйте селектор.",
+    "description": "Сообщение, если селектор пустой"
+  },
+  "alertNoTab": {
+    "message": "Не удалось получить доступ к странице",
+    "description": "Ошибка доступа к странице"
+  },
+  "alertCheckError": {
+    "message": "Ошибка проверки селектора",
+    "description": "Ошибка проверки селектора"
+  },
+  "alertInvalidSelector": {
+    "message": "Невалидный селектор. Проверьте синтаксис.",
+    "description": "Невалидный селектор"
+  },
+  "alertRuleExists": {
+    "message": "Это правило уже существует",
+    "description": "Правило уже существует"
+  },
+  "alertClearError": {
+    "message": "Ошибка очистки",
+    "description": "Ошибка очистки правил"
+  },
+  "confirmZeroElements": {
+    "message": "Селектор не нашёл элементов на текущей странице. Возможно, вы на другой странице?\n\nВсё равно добавить правило?",
+    "description": "Подтверждение при 0 найденных элементов"
+  },
+  "confirmMultipleElements": {
+    "message": "Данный селектор находит {count} элементов на странице. Возможно, он не вполне специфичный.\n\nДобавить правило?",
+    "description": "Подтверждение при нескольких найденных элементах"
+  },
+  "faqLink": {
+    "message": "!!! Инструкция !!!",
+    "description": "Ссылка на страницу FAQ / инструкцию"
+  },
+  "rulesForThisSite": {
+    "message": "Для этого сайта: {site}",
+    "description": "Заголовок раздела для правил на текущем сайте"
+  },
+  "rulesForOtherSites": {
+    "message": "Для остальных сайтов",
+    "description": "Заголовок раздела для правил на других сайтах"
+  },
+  "allSitesRules": {
+    "message": "Все правила",
+    "description": "Заголовок раздела, когда нет группировки по сайтам"
+  },
+  "thisSite": {
+    "message": "этого сайта",
+    "description": "Заглушка, когда домен не определён"
+  },
+  "importTitle": {
+    "message": "📥 Импорт правил",
+    "description": "Заголовок окна импорта"
+  },
+  "importDescription": {
+    "message": "Вставьте JSON с правилами в поле ниже или загрузите файл:",
+    "description": "Текст описания в окне импорта"
+  },
+  "loadFileBtn": {
+    "message": "📂 Выбрать файл",
+    "description": "Кнопка для загрузки файла"
+  },
+  "clearBtn": {
+    "message": "🗑️ Очистить",
+    "description": "Кнопка для очистки текстового поля"
+  },
+  "jsonPlaceholder": {
+    "message": "Вставьте JSON с правилами сюда...",
+    "description": "Плейсхолдер для текстового поля JSON"
+  },
+  "replaceBtn": {
+    "message": "🔄 Заменить все",
+    "description": "Кнопка для замены всех правил"
+  },
+  "addBtn": {
+    "message": "➕ Добавить",
+    "description": "Кнопка для добавления правил"
+  },
+  "closeBtn": {
+    "message": "✖️ Закрыть",
+    "description": "Кнопка для закрытия окна"
+  },
+  "errorInvalidFormat": {
+    "message": "Неверный формат. Ожидается массив правил или объект с полем 'rules'.",
+    "description": "Ошибка неверного формата"
+  },
+  "errorMissingSelector": {
+    "message": "Правило #{index} не содержит поля 'selector'.",
+    "description": "Ошибка отсутствия поля selector"
+  },
+  "errorEmptyFile": {
+    "message": "⚠️ Файл пустой (0 байт). Выберите корректный файл.",
+    "description": "Ошибка пустого файла"
+  },
+  "errorEmptyData": {
+    "message": "⚠️ Файл не содержит данных.",
+    "description": "Ошибка отсутствия данных в файле"
+  },
+  "errorReadFile": {
+    "message": "❌ Ошибка чтения файла.",
+    "description": "Ошибка чтения файла"
+  },
+  "errorParse": {
+    "message": "⚠️ {message}",
+    "description": "Ошибка парсинга"
+  },
+  "errorImport": {
+    "message": "❌ Ошибка: {message}",
+    "description": "Ошибка импорта"
+  },
+  "fileInfo": {
+    "message": "📄 Файл: {name} ({size} КБ)",
+    "description": "Информация о файле"
+  },
+  "fileInfoWithCount": {
+    "message": "📄 Файл: {name} ({size} КБ) — найдено правил: {count}",
+    "description": "Информация о файле с количеством правил"
+  },
+  "fileInfoError": {
+    "message": "📄 Файл: {name} — ⚠️ {error}",
+    "description": "Информация об ошибке в файле"
+  },
+  "statusReplaced": {
+    "message": "✅ Заменено {count} правил.",
+    "description": "Сообщение о замене правил"
+  },
+  "statusAdded": {
+    "message": "✅ Добавлено {added} новых правил. Всего: {total} правил.",
+    "description": "Сообщение о добавлении правил"
+  },
+  "exportRulesBtn": {
+    "message": "📤 Экспорт правил",
+    "description": "Кнопка экспорта правил"
+  },
+  "importRulesBtn": {
+    "message": "📥 Импорт правил",
+    "description": "Кнопка импорта правил"
+  },
+  "alertNoRulesToExport": {
+    "message": "Нет правил для экспорта.",
+    "description": "Сообщение, когда нет правил для экспорта"
+  },
+  "alertInvalidImportFile": {
+    "message": "Неверный формат файла. Выберите JSON-файл, экспортированный из BlockIt.",
+    "description": "Сообщение, когда файл импорта невалидный"
+  },
+  "alertNoRulesInFile": {
+    "message": "В файле не найдено правил.",
+    "description": "Сообщение, когда в файле нет правил"
+  },
+  "alertNoNewRules": {
+    "message": "Новых правил не добавлено. Все правила из файла уже существуют.",
+    "description": "Сообщение, когда все правила уже существуют"
+  },
+  "alertImportAdded": {
+    "message": "Добавлено {added} новых правил. Всего: {total} правил.",
+    "description": "Сообщение, когда правила добавлены"
+  },
+  "confirmImportChoice": {
+    "message": "Найдено {count} правил в файле.\n\nНажмите ОК, чтобы ЗАМЕНИТЬ все текущие правила.\nНажмите Отмена, чтобы ДОБАВИТЬ новые правила (пропуская дубликаты).",
+    "description": "Подтверждение выбора импорта"
+  },
+  "rulesImported": {
+    "message": "✅ Правила импортированы успешно!",
+    "description": "Сообщение об успешном импорте"
+  },
+  "selectorTypeCSS": {
+    "message": "селектор",
+    "description": "Метка для типа CSS-селектор"
+  },
+  "selectorTypeXPath": {
+    "message": "XPath",
+    "description": "Метка для типа XPath"
+  },
+  "selectorTypeUnknown": {
+    "message": "Неизвестный тип селектора",
+    "description": "Метка для неизвестного типа"
+  },
+  "copyHint": {
+    "message": "💡 Подсказка: ПКМ по элементу → 'Посмотреть код' → ПКМ по коду → 'Copy' → 'Copy selector' или 'Copy XPath'",
+    "description": "Подсказка о копировании селектора из DevTools"
+  },
+  "toggleAdvanced": {
+    "message": "Продвинутый режим",
+    "description": "Кнопка показа расширенного режима"
+  },
+  "hideAdvanced": {
+    "message": "Базовый режим",
+    "description": "Кнопка скрытия расширенного режима"
+  },
+  "selectorLabel": {
+    "message": "Введите CSS-селектор или XPath:",
+    "description": "Метка для поля ввода селектора"
+  },
+  "selectorPlaceholder": {
+    "message": "Например: #ad-container или //div[@id='ad']",
+    "description": "Плейсхолдер для поля ввода селектора"
+  },
+  "toolsDivider": {
+    "message": "─── Инструменты ───",
+    "description": "Разделитель для секции инструментов"
+  }
+}

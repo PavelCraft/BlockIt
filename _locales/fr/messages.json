@@ -1,0 +1,362 @@
+{
+  "extensionName": {
+    "message": "BlockIt",
+    "description": "Nom de l'extension"
+  },
+  "extensionDescription": {
+    "message": "Bloquez des éléments HTML sur n'importe quel site avec des sélecteurs",
+    "description": "Description de l'extension"
+  },
+  "pasteHtmlLabel": {
+    "message": "Collez l'élément HTML copié :",
+    "description": "Étiquette du champ HTML"
+  },
+  "pasteHtmlPlaceholder": {
+    "message": "Ex: <li class=\"ad\" id=\"banner\">...</li>",
+    "description": "Espace réservé pour le champ HTML"
+  },
+  "parseBtn": {
+    "message": "Analyser",
+    "description": "Bouton Analyser"
+  },
+  "tagLabel": {
+    "message": "Balise :",
+    "description": "Étiquette de la balise"
+  },
+  "tagNotDefined": {
+    "message": "(non défini)",
+    "description": "Message lorsque la balise n'est pas définie"
+  },
+  "attributesLabel": {
+    "message": "Attributs (cliquez sur ✏️ pour modifier, 🗑️ pour supprimer) :",
+    "description": "Étiquette des attributs"
+  },
+  "addAttrLabel": {
+    "message": "Ajouter un attribut :",
+    "description": "Étiquette d'ajout d'attribut"
+  },
+  "attrNamePlaceholder": {
+    "message": "Nom de l'attribut (ex: id)",
+    "description": "Espace réservé du nom d'attribut"
+  },
+  "attrValuePlaceholder": {
+    "message": "Valeur",
+    "description": "Espace réservé de la valeur"
+  },
+  "addAttrBtn": {
+    "message": "➕ Ajouter",
+    "description": "Bouton Ajouter un attribut"
+  },
+  "enterSelector": {
+    "message": "🔍 Entrez le sélecteur",
+    "description": "Message pour un sélecteur vide"
+  },
+  "checkError": {
+    "message": "⚠️ Erreur de vérification",
+    "description": "Erreur de vérification du sélecteur"
+  },
+  "blockModeLabel": {
+    "message": "Mode de blocage :",
+    "description": "Étiquette du mode de blocage"
+  },
+  "modeHide": {
+    "message": "👻 Masquer (conserver l'espace)",
+    "description": "Mode Masquer"
+  },
+  "modeRemove": {
+    "message": "🗑️ Supprimer (libérer l'espace)",
+    "description": "Mode Supprimer"
+  },
+  "modeHideHint": {
+    "message": "L'élément devient invisible mais conserve sa taille. La mise en page ne bouge pas.",
+    "description": "Astuce du mode Masquer"
+  },
+  "modeRemoveHint": {
+    "message": "L'élément est complètement supprimé du HTML. La mise en page peut changer, mais l'espace est libéré.",
+    "description": "Astuce du mode Supprimer"
+  },
+  "addRuleBtn": {
+    "message": "➕ Ajouter une règle",
+    "description": "Bouton Ajouter une règle"
+  },
+  "noAttributes": {
+    "message": "Aucun attribut",
+    "description": "Message quand aucun attribut"
+  },
+  "noRules": {
+    "message": "Aucune règle active",
+    "description": "Message quand aucune règle"
+  },
+  "deleteBtn": {
+    "message": "Supprimer",
+    "description": "Bouton Supprimer"
+  },
+  "editAttrTitle": {
+    "message": "Modifier la valeur de l'attribut",
+    "description": "Info-bulle du bouton d'édition d'attribut"
+  },
+  "deleteAttrTitle": {
+    "message": "Supprimer l'attribut",
+    "description": "Info-bulle du bouton de suppression d'attribut"
+  },
+  "editAttrPrompt": {
+    "message": "Entrez la nouvelle valeur pour l'attribut \"{key}\" :",
+    "description": "Invite pour modifier la valeur d'un attribut"
+  },
+  "selectorInvalid": {
+    "message": "❌ Sélecteur invalide",
+    "description": "Sélecteur invalide"
+  },
+  "foundZero": {
+    "message": "🔍 Éléments trouvés : 0 (sur la page actuelle)",
+    "description": "0 élément trouvé"
+  },
+  "foundOne": {
+    "message": "✅ Éléments trouvés : 1 (parfait !)",
+    "description": "1 élément trouvé"
+  },
+  "foundMultiple": {
+    "message": "⚠️ Éléments trouvés : {count} (le sélecteur est peut-être trop large)",
+    "description": "Plusieurs éléments trouvés"
+  },
+  "ruleAdded": {
+    "message": "✅ Règle ajoutée !",
+    "description": "Règle ajoutée avec succès"
+  },
+  "rulesCleared": {
+    "message": "🧹 Toutes les règles supprimées",
+    "description": "Toutes les règles supprimées"
+  },
+  "clearRulesBtn": {
+    "message": "🗑️ Supprimer toutes les règles",
+    "description": "Bouton Supprimer toutes les règles"
+  },
+  "confirmClearRules": {
+    "message": "Supprimer toutes les règles ? Cette action est irréversible.",
+    "description": "Confirmation de suppression"
+  },
+  "activeRulesLabel": {
+    "message": "Règles actives",
+    "description": "Étiquette des règles actives"
+  },
+  "alertPasteHtml": {
+    "message": "Collez un élément HTML",
+    "description": "Alerte si le champ HTML est vide"
+  },
+  "alertParseError": {
+    "message": "Échec de l'analyse HTML. Assurez-vous qu'il s'agit d'une balise ouvrante valide.",
+    "description": "Erreur d'analyse HTML"
+  },
+  "alertAttrName": {
+    "message": "Entrez le nom de l'attribut",
+    "description": "Alerte si le nom de l'attribut est vide"
+  },
+  "alertAttrValue": {
+    "message": "Entrez la valeur de l'attribut",
+    "description": "Alerte si la valeur de l'attribut est vide"
+  },
+  "alertEmptySelector": {
+    "message": "Le sélecteur est vide. Écrivez ou générez un sélecteur.",
+    "description": "Alerte si le sélecteur est vide"
+  },
+  "alertNoTab": {
+    "message": "Échec de l'accès à la page",
+    "description": "Erreur d'accès à la page"
+  },
+  "alertCheckError": {
+    "message": "Erreur de vérification du sélecteur",
+    "description": "Erreur de vérification du sélecteur"
+  },
+  "alertInvalidSelector": {
+    "message": "Sélecteur invalide. Vérifiez la syntaxe.",
+    "description": "Sélecteur invalide"
+  },
+  "alertRuleExists": {
+    "message": "Cette règle existe déjà",
+    "description": "La règle existe déjà"
+  },
+  "alertClearError": {
+    "message": "Erreur de suppression",
+    "description": "Erreur de suppression des règles"
+  },
+  "confirmZeroElements": {
+    "message": "Le sélecteur n'a trouvé aucun élément sur la page actuelle. Vous êtes peut-être sur une autre page.\n\nAjouter la règle quand même ?",
+    "description": "Confirmation pour 0 élément trouvé"
+  },
+  "confirmMultipleElements": {
+    "message": "Ce sélecteur trouve {count} éléments sur la page. Il n'est peut-être pas assez spécifique.\n\nAjouter la règle ?",
+    "description": "Confirmation pour plusieurs éléments trouvés"
+  },
+  "faqLink": {
+    "message": "!!! Instructions !!!",
+    "description": "Lien vers la page FAQ / instructions"
+  },
+  "rulesForThisSite": {
+    "message": "Pour ce site : {site}",
+    "description": "Titre de la section pour les règles du site actuel"
+  },
+  "rulesForOtherSites": {
+    "message": "Pour les autres sites",
+    "description": "Titre de la section pour les règles des autres sites"
+  },
+  "allSitesRules": {
+    "message": "Toutes les règles",
+    "description": "Titre de la section quand il n'y a pas de regroupement par site"
+  },
+  "thisSite": {
+    "message": "ce site",
+    "description": "Texte de remplacement quand le domaine n'est pas défini"
+  },
+  "importTitle": {
+    "message": "📥 Importer les règles",
+    "description": "Titre de la fenêtre d'importation"
+  },
+  "importDescription": {
+    "message": "Collez le JSON avec les règles ci-dessous ou chargez un fichier :",
+    "description": "Texte de description dans la fenêtre d'importation"
+  },
+  "loadFileBtn": {
+    "message": "📂 Choisir un fichier",
+    "description": "Bouton pour charger un fichier"
+  },
+  "clearBtn": {
+    "message": "🗑️ Effacer",
+    "description": "Bouton pour effacer le champ de texte"
+  },
+  "jsonPlaceholder": {
+    "message": "Collez le JSON avec les règles ici...",
+    "description": "Espace réservé pour le champ JSON"
+  },
+  "replaceBtn": {
+    "message": "🔄 Tout remplacer",
+    "description": "Bouton pour remplacer toutes les règles"
+  },
+  "addBtn": {
+    "message": "➕ Ajouter",
+    "description": "Bouton pour ajouter des règles"
+  },
+  "closeBtn": {
+    "message": "✖️ Fermer",
+    "description": "Bouton pour fermer la fenêtre"
+  },
+  "errorInvalidFormat": {
+    "message": "Format invalide. Tableau de règles ou objet avec le champ 'rules' attendu.",
+    "description": "Erreur de format invalide"
+  },
+  "errorMissingSelector": {
+    "message": "La règle #{index} ne contient pas le champ 'selector'.",
+    "description": "Erreur d'absence du champ selector"
+  },
+  "errorEmptyFile": {
+    "message": "⚠️ Le fichier est vide (0 octet). Veuillez sélectionner un fichier valide.",
+    "description": "Erreur de fichier vide"
+  },
+  "errorEmptyData": {
+    "message": "⚠️ Le fichier ne contient pas de données.",
+    "description": "Erreur d'absence de données dans le fichier"
+  },
+  "errorReadFile": {
+    "message": "❌ Erreur de lecture du fichier.",
+    "description": "Erreur de lecture du fichier"
+  },
+  "errorParse": {
+    "message": "⚠️ {message}",
+    "description": "Erreur d'analyse"
+  },
+  "errorImport": {
+    "message": "❌ Erreur : {message}",
+    "description": "Erreur d'importation"
+  },
+  "fileInfo": {
+    "message": "📄 Fichier : {name} ({size} Ko)",
+    "description": "Informations sur le fichier"
+  },
+  "fileInfoWithCount": {
+    "message": "📄 Fichier : {name} ({size} Ko) — règles trouvées : {count}",
+    "description": "Informations sur le fichier avec le nombre de règles"
+  },
+  "fileInfoError": {
+    "message": "📄 Fichier : {name} — ⚠️ {error}",
+    "description": "Informations d'erreur sur le fichier"
+  },
+  "statusReplaced": {
+    "message": "✅ {count} règles remplacées.",
+    "description": "Message de remplacement des règles"
+  },
+  "statusAdded": {
+    "message": "✅ {added} nouvelles règles ajoutées. Total : {total} règles.",
+    "description": "Message d'ajout des règles"
+  },
+  "exportRulesBtn": {
+    "message": "📤 Exporter les règles",
+    "description": "Bouton d'exportation des règles"
+  },
+  "importRulesBtn": {
+    "message": "📥 Importer les règles",
+    "description": "Bouton d'importation des règles"
+  },
+  "alertNoRulesToExport": {
+    "message": "Aucune règle à exporter.",
+    "description": "Message quand il n'y a pas de règles à exporter"
+  },
+  "alertInvalidImportFile": {
+    "message": "Format de fichier invalide. Veuillez sélectionner un fichier JSON exporté depuis BlockIt.",
+    "description": "Message quand le fichier d'importation est invalide"
+  },
+  "alertNoRulesInFile": {
+    "message": "Aucune règle trouvée dans le fichier.",
+    "description": "Message quand il n'y a pas de règles dans le fichier"
+  },
+  "alertNoNewRules": {
+    "message": "Aucune nouvelle règle ajoutée. Toutes les règles du fichier existent déjà.",
+    "description": "Message quand toutes les règles existent déjà"
+  },
+  "alertImportAdded": {
+    "message": "{added} nouvelles règles ajoutées. Total : {total} règles.",
+    "description": "Message quand les règles sont ajoutées"
+  },
+  "confirmImportChoice": {
+    "message": "{count} règles trouvées dans le fichier.\n\nCliquez sur OK pour REMPLACER toutes les règles actuelles.\nCliquez sur Annuler pour AJOUTER les nouvelles règles (en ignorant les doublons).",
+    "description": "Confirmation du choix d'importation"
+  },
+  "rulesImported": {
+    "message": "✅ Règles importées avec succès !",
+    "description": "Message de succès de l'importation"
+  },
+  "selectorTypeCSS": {
+    "message": "sélecteur",
+    "description": "Étiquette pour le type CSS-sélecteur"
+  },
+  "selectorTypeXPath": {
+    "message": "XPath",
+    "description": "Étiquette pour le type XPath"
+  },
+  "selectorTypeUnknown": {
+    "message": "Type de sélecteur inconnu",
+    "description": "Étiquette pour le type de sélecteur inconnu"
+  },
+  "copyHint": {
+    "message": "💡 Astuce : Clic droit sur un élément → 'Inspecter' → Clic droit sur le code → 'Copier' → 'Copier le sélecteur' ou 'Copier XPath'",
+    "description": "Astuce sur la copie du sélecteur depuis DevTools"
+  },
+  "toggleAdvanced": {
+    "message": "⚙️ Mode avancé",
+    "description": "Bouton pour afficher le mode avancé"
+  },
+  "hideAdvanced": {
+    "message": "⚙️ Mode de base",
+    "description": "Bouton pour masquer le mode avancé"
+  },
+  "selectorLabel": {
+    "message": "Entrez le sélecteur CSS ou XPath :",
+    "description": "Étiquette pour le champ de saisie du sélecteur"
+  },
+  "selectorPlaceholder": {
+    "message": "Ex: #ad-container ou //div[@id='ad']",
+    "description": "Espace réservé pour le champ de saisie du sélecteur"
+  },
+  "toolsDivider": {
+    "message": "─── Outils ───",
+    "description": "Séparateur pour la section des outils"
+  }
+}

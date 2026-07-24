@@ -1,0 +1,362 @@
+{
+  "extensionName": {
+    "message": "BlockIt",
+    "description": "Name of the extension"
+  },
+  "extensionDescription": {
+    "message": "Block HTML elements on any website using selectors",
+    "description": "Description of the extension"
+  },
+  "pasteHtmlLabel": {
+    "message": "Paste copied HTML element:",
+    "description": "Label for HTML input"
+  },
+  "pasteHtmlPlaceholder": {
+    "message": "e.g. <li class=\"ad\" id=\"banner\">...</li>",
+    "description": "Placeholder for HTML input"
+  },
+  "parseBtn": {
+    "message": "Parse",
+    "description": "Parse button text"
+  },
+  "tagLabel": {
+    "message": "Tag:",
+    "description": "Tag label"
+  },
+  "tagNotDefined": {
+    "message": "(not defined)",
+    "description": "Message when tag is not defined"
+  },
+  "attributesLabel": {
+    "message": "Attributes (click ✏️ to edit, 🗑️ to delete):",
+    "description": "Attributes section label"
+  },
+  "addAttrLabel": {
+    "message": "Add attribute:",
+    "description": "Add attribute section label"
+  },
+  "attrNamePlaceholder": {
+    "message": "Attribute name (e.g., id)",
+    "description": "Attribute name input placeholder"
+  },
+  "attrValuePlaceholder": {
+    "message": "Value",
+    "description": "Attribute value input placeholder"
+  },
+  "addAttrBtn": {
+    "message": "➕ Add",
+    "description": "Add attribute button text"
+  },
+  "enterSelector": {
+    "message": "🔍 Enter selector",
+    "description": "Message for empty selector"
+  },
+  "checkError": {
+    "message": "⚠️ Check error",
+    "description": "Selector check error"
+  },
+  "blockModeLabel": {
+    "message": "Blocking mode:",
+    "description": "Blocking mode section label"
+  },
+  "modeHide": {
+    "message": "👻 Hide (keep space)",
+    "description": "Hide mode radio label"
+  },
+  "modeRemove": {
+    "message": "🗑️ Remove (free space)",
+    "description": "Remove mode radio label"
+  },
+  "modeHideHint": {
+    "message": "Element becomes invisible but keeps its size. Layout will not break.",
+    "description": "Hint for hide mode"
+  },
+  "modeRemoveHint": {
+    "message": "Element is completely removed from HTML. Layout may shift, but space is freed.",
+    "description": "Hint for remove mode"
+  },
+  "addRuleBtn": {
+    "message": "➕ Add Rule",
+    "description": "Add rule button text"
+  },
+  "noAttributes": {
+    "message": "No attributes",
+    "description": "Message when no attributes"
+  },
+  "noRules": {
+    "message": "No active rules",
+    "description": "Message when no rules"
+  },
+  "deleteBtn": {
+    "message": "Delete",
+    "description": "Delete button text"
+  },
+  "editAttrTitle": {
+    "message": "Edit attribute value",
+    "description": "Edit attribute button tooltip"
+  },
+  "deleteAttrTitle": {
+    "message": "Delete attribute",
+    "description": "Delete attribute button tooltip"
+  },
+  "editAttrPrompt": {
+    "message": "Enter new value for attribute \"{key}\":",
+    "description": "Prompt for editing attribute value"
+  },
+  "selectorInvalid": {
+    "message": "❌ Invalid selector",
+    "description": "Invalid selector status"
+  },
+  "foundZero": {
+    "message": "🔍 Elements found: 0 (on current page)",
+    "description": "Zero elements found"
+  },
+  "foundOne": {
+    "message": "✅ Elements found: 1 (perfect!)",
+    "description": "One element found"
+  },
+  "foundMultiple": {
+    "message": "⚠️ Elements found: {count} (selector might be too broad)",
+    "description": "Multiple elements found"
+  },
+  "ruleAdded": {
+    "message": "✅ Rule added!",
+    "description": "Rule added success message"
+  },
+  "rulesCleared": {
+    "message": "🧹 All rules cleared",
+    "description": "Rules cleared message"
+  },
+  "clearRulesBtn": {
+    "message": "🗑️ Clear all rules",
+    "description": "Clear all rules button"
+  },
+  "confirmClearRules": {
+    "message": "Delete all rules? This cannot be undone.",
+    "description": "Clear rules confirmation"
+  },
+  "activeRulesLabel": {
+    "message": "Active rules",
+    "description": "Active rules section label"
+  },
+  "alertPasteHtml": {
+    "message": "Paste HTML element",
+    "description": "Alert when HTML input is empty"
+  },
+  "alertParseError": {
+    "message": "Failed to parse HTML. Make sure it's a valid opening tag.",
+    "description": "Alert when HTML parsing fails"
+  },
+  "alertAttrName": {
+    "message": "Enter attribute name",
+    "description": "Alert when attribute name is empty"
+  },
+  "alertAttrValue": {
+    "message": "Enter attribute value",
+    "description": "Alert when attribute value is empty"
+  },
+  "alertEmptySelector": {
+    "message": "Selector is empty. Write or generate a selector.",
+    "description": "Alert when selector is empty"
+  },
+  "alertNoTab": {
+    "message": "Failed to access page",
+    "description": "Alert when cannot access tab"
+  },
+  "alertCheckError": {
+    "message": "Selector check error",
+    "description": "Alert when selector check fails"
+  },
+  "alertInvalidSelector": {
+    "message": "Invalid selector. Check syntax.",
+    "description": "Alert when selector is invalid"
+  },
+  "alertRuleExists": {
+    "message": "This rule already exists",
+    "description": "Alert when rule already exists"
+  },
+  "alertClearError": {
+    "message": "Clear error",
+    "description": "Alert when clearing rules fails"
+  },
+  "confirmZeroElements": {
+    "message": "Selector found 0 elements on current page. You might be on a different page.\n\nAdd rule anyway?",
+    "description": "Confirmation when selector finds 0 elements"
+  },
+  "confirmMultipleElements": {
+    "message": "This selector matches {count} elements on the page. It might not be specific enough.\n\nAdd rule?",
+    "description": "Confirmation when selector matches multiple elements"
+  },
+  "faqLink": {
+    "message": "!!! Instructions !!!",
+    "description": "Link to FAQ / instructions page"
+  },
+  "rulesForThisSite": {
+    "message": "For this site: {site}",
+    "description": "Section title for rules on current site"
+  },
+  "rulesForOtherSites": {
+    "message": "For other sites",
+    "description": "Section title for rules on other sites"
+  },
+  "allSitesRules": {
+    "message": "All rules",
+    "description": "Section title when no site grouping"
+  },
+  "thisSite": {
+    "message": "this site",
+    "description": "Fallback when domain is empty"
+  },
+  "importTitle": {
+    "message": "📥 Import Rules",
+    "description": "Title of the import window"
+  },
+  "importDescription": {
+    "message": "Paste JSON with rules below or upload a file:",
+    "description": "Description text in import window"
+  },
+  "loadFileBtn": {
+    "message": "📂 Choose file",
+    "description": "Button to load a file"
+  },
+  "clearBtn": {
+    "message": "🗑️ Clear",
+    "description": "Button to clear the text area"
+  },
+  "jsonPlaceholder": {
+    "message": "Paste JSON with rules here...",
+    "description": "Placeholder for JSON textarea"
+  },
+  "replaceBtn": {
+    "message": "🔄 Replace all",
+    "description": "Button to replace all rules"
+  },
+  "addBtn": {
+    "message": "➕ Add",
+    "description": "Button to add rules"
+  },
+  "closeBtn": {
+    "message": "✖️ Close",
+    "description": "Button to close the window"
+  },
+  "errorInvalidFormat": {
+    "message": "Invalid format. Expected an array of rules or an object with a 'rules' field.",
+    "description": "Error when format is invalid"
+  },
+  "errorMissingSelector": {
+    "message": "Rule #{index} does not contain a 'selector' field.",
+    "description": "Error when rule is missing selector field"
+  },
+  "errorEmptyFile": {
+    "message": "⚠️ File is empty (0 bytes). Please select a valid file.",
+    "description": "Error when file is empty"
+  },
+  "errorEmptyData": {
+    "message": "⚠️ File contains no data.",
+    "description": "Error when file has no data"
+  },
+  "errorReadFile": {
+    "message": "❌ Error reading file.",
+    "description": "Error when reading file fails"
+  },
+  "errorParse": {
+    "message": "⚠️ {message}",
+    "description": "Error when parsing fails"
+  },
+  "errorImport": {
+    "message": "❌ Error: {message}",
+    "description": "Error during import"
+  },
+  "fileInfo": {
+    "message": "📄 File: {name} ({size} KB)",
+    "description": "File info"
+  },
+  "fileInfoWithCount": {
+    "message": "📄 File: {name} ({size} KB) — rules found: {count}",
+    "description": "File info with rules count"
+  },
+  "fileInfoError": {
+    "message": "📄 File: {name} — ⚠️ {error}",
+    "description": "File info with error"
+  },
+  "statusReplaced": {
+    "message": "✅ Replaced {count} rules.",
+    "description": "Success message when rules are replaced"
+  },
+  "statusAdded": {
+    "message": "✅ Added {added} new rules. Total: {total} rules.",
+    "description": "Success message when rules are added"
+  },
+  "exportRulesBtn": {
+    "message": "📤 Export Rules",
+    "description": "Export rules button"
+  },
+  "importRulesBtn": {
+    "message": "📥 Import Rules",
+    "description": "Import rules button"
+  },
+  "alertNoRulesToExport": {
+    "message": "No rules to export.",
+    "description": "Alert when no rules to export"
+  },
+  "alertInvalidImportFile": {
+    "message": "Invalid file format. Please select a valid JSON file exported from BlockIt.",
+    "description": "Alert when import file is invalid"
+  },
+  "alertNoRulesInFile": {
+    "message": "No rules found in the file.",
+    "description": "Alert when file has no rules"
+  },
+  "alertNoNewRules": {
+    "message": "No new rules were added. All rules from the file already exist.",
+    "description": "Alert when all rules already exist"
+  },
+  "alertImportAdded": {
+    "message": "Added {added} new rules. Total: {total} rules.",
+    "description": "Alert when rules were added"
+  },
+  "confirmImportChoice": {
+    "message": "Found {count} rules in the file.\n\nClick OK to REPLACE all current rules.\nClick Cancel to ADD new rules (skip duplicates).",
+    "description": "Import choice confirmation"
+  },
+  "rulesImported": {
+    "message": "✅ Rules imported successfully!",
+    "description": "Success message after import"
+  },
+  "selectorTypeCSS": {
+    "message": "selector",
+    "description": "Label for CSS selector type"
+  },
+  "selectorTypeXPath": {
+    "message": "XPath",
+    "description": "Label for XPath type"
+  },
+  "selectorTypeUnknown": {
+    "message": "Unknown selector type",
+    "description": "Label for unknown selector type"
+  },
+  "copyHint": {
+    "message": "💡 Tip: Right-click an element → 'Inspect' → right-click the code → 'Copy' → 'Copy selector' or 'Copy XPath'",
+    "description": "Hint about copying selector from DevTools"
+  },
+  "toggleAdvanced": {
+    "message": "Advanced mode",
+    "description": "Button to show advanced mode"
+  },
+  "hideAdvanced": {
+    "message": "Basic mode",
+    "description": "Button to hide advanced mode"
+  },
+  "selectorLabel": {
+    "message": "Enter CSS selector or XPath:",
+    "description": "Label for selector input"
+  },
+  "selectorPlaceholder": {
+    "message": "e.g., #ad-container or //div[@id='ad']",
+    "description": "Placeholder for selector input"
+  },
+  "toolsDivider": {
+    "message": "─── Tools ───",
+    "description": "Divider text for tools section"
+  }
+}

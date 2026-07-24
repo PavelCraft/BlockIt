@@ -1,50 +1,187 @@
-// ===== Парсер без регулярок =====
+// ============================================================
+//  BLOCKIT — POPUP SCRIPT
+//  Main UI logic for the browser extension popup
+// ============================================================
+
+// ============================================================
+//  STATE
+// ============================================================
+
+let currentTag = '';
+let currentAttributes = {};
+let advancedVisible = false;
+
+// ============================================================
+//  DOM REFS
+// ============================================================
+
+const selectorInput = document.getElementById('selectorInput');
+const selectorTypeIndicator = document.getElementById('selectorTypeIndicator');
+const elementCount = document.getElementById('elementCount');
+const addRuleBtn = document.getElementById('addRule');
+const statusDiv = document.getElementById('status');
+const modeRadios = document.querySelectorAll('input[name="blockMode"]');
+const rulesContainer = document.getElementById('rulesContainer');
+const clearRulesBtn = document.getElementById('clearRules');
+const importRulesBtn = document.getElementById('importRules');
+
+const toggleAdvancedBtn = document.getElementById('toggleAdvanced');
+const advancedPanel = document.getElementById('advancedPanel');
+const hintContainer = document.getElementById('hintContainer');
+const toolsContainer = document.getElementById('toolsContainer');
+const htmlInput = document.getElementById('htmlInput');
+const parseBtn = document.getElementById('parseBtn');
+const tagDisplay = document.getElementById('tagDisplay');
+const attributesContainer = document.getElementById('attributesContainer');
+const newAttrName = document.getElementById('newAttrName');
+const newAttrValue = document.getElementById('newAttrValue');
+const addAttrBtn = document.getElementById('addAttrBtn');
+
+// ============================================================
+//  LOCALIZATION
+// ============================================================
+
+function localizeUI() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    const msg = chrome.i18n.getMessage(key);
+    if (msg) el.textContent = msg;
+  });
+
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.dataset.i18nPlaceholder;
+    const msg = chrome.i18n.getMessage(key);
+    if (msg) el.placeholder = msg;
+  });
+
+  if (!currentTag) {
+    const msg = chrome.i18n.getMessage('tagNotDefined');
+    if (msg) tagDisplay.textContent = msg;
+  }
+
+  updateModeHint();
+}
+
+function updateModeHint() {
+  const hint = document.getElementById('modeHint');
+  const selected = document.querySelector('input[name="blockMode"]:checked');
+  if (selected) {
+    const key = selected.value === 'remove' ? 'modeRemoveHint' : 'modeHideHint';
+    const msg = chrome.i18n.getMessage(key);
+    if (msg) hint.textContent = msg;
+  }
+}
+
+// ============================================================
+//  DOMAIN UTILITIES
+// ============================================================
+
+function getDomainFromUrl(url) {
+  if (!url) return '';
+
+  let domain = url;
+
+  const protocolIdx = domain.indexOf('://');
+  if (protocolIdx !== -1) {
+    domain = domain.substring(protocolIdx + 3);
+  }
+
+  const slashIdx = domain.indexOf('/');
+  if (slashIdx !== -1) {
+    domain = domain.substring(0, slashIdx);
+  }
+
+  if (domain.startsWith('www.')) {
+    domain = domain.substring(4);
+  }
+
+  const parts = domain.split('.');
+  if (parts.length >= 2) {
+    return parts.slice(-2).join('.');
+  }
+
+  return domain;
+}
+
+// ============================================================
+//  SELECTOR / XPATH DETECTION
+// ============================================================
+
+function detectSelectorType(input) {
+  const trimmed = input.trim();
+  if (!trimmed) return null;
+
+  if (/^xpath:/i.test(trimmed)) return 'xpath';
+  if (trimmed.startsWith('/') || trimmed.startsWith('//')) return 'xpath';
+  if (trimmed.startsWith('(')) return 'xpath';
+
+  const xpathAxes = [
+    'ancestor::', 'parent::', 'child::', 'descendant::',
+    'following-sibling::', 'preceding-sibling::',
+    'following::', 'preceding::', 'attribute::',
+    'namespace::', 'self::', 'descendant-or-self::'
+  ];
+
+  for (const axis of xpathAxes) {
+    if (trimmed.includes(axis)) return 'xpath';
+  }
+
+  if (trimmed.includes('text()') || trimmed.includes('node()')) return 'xpath';
+  if (trimmed.includes('@') && !trimmed.includes('@keyframes') && !trimmed.includes('@import')) return 'xpath';
+  if (trimmed.includes('//')) return 'xpath';
+
+  return 'css';
+}
+
+// ============================================================
+//  HTML PARSER (no regex)
+// ============================================================
+
 function parseOuterTag(html) {
   let i = 0;
   const len = html.length;
-  
+
   while (i < len && html[i] !== '<') i++;
   if (i >= len) return null;
   i++;
-  
+
   let tag = '';
   while (i < len && html[i] !== ' ' && html[i] !== '>') {
     tag += html[i];
     i++;
   }
   if (!tag) return null;
-  
+
   const attributes = {};
   while (i < len && html[i] !== '>') {
     while (i < len && html[i] === ' ') i++;
     if (i >= len || html[i] === '>') break;
-    
+
     let attrName = '';
     while (i < len && html[i] !== '=' && html[i] !== ' ') {
       attrName += html[i];
       i++;
     }
     if (!attrName) break;
-    
+
     while (i < len && html[i] !== '"' && html[i] !== "'") i++;
     if (i >= len) break;
     const quote = html[i];
     i++;
-    
+
     let attrValue = '';
     while (i < len && html[i] !== quote) {
       attrValue += html[i];
       i++;
     }
     if (i < len) i++;
-    
+
     attributes[attrName] = attrValue;
   }
-  
+
   return { tag, attributes };
 }
 
-// ===== Сборка селектора =====
 function buildSelector(tag, attributes) {
   let selector = tag;
   for (const [key, value] of Object.entries(attributes)) {
@@ -53,285 +190,464 @@ function buildSelector(tag, attributes) {
   return selector;
 }
 
-// ===== Состояние =====
-let currentTag = '';
-let currentAttributes = {};
+// ============================================================
+//  ATTRIBUTES RENDERER
+// ============================================================
 
-// ===== Отображение атрибутов с кнопками редактирования/удаления =====
 function renderAttributes(tag, attributes) {
-  const container = document.getElementById('attributesContainer');
-  container.innerHTML = '';
-  
+  attributesContainer.innerHTML = '';
+
   const keys = Object.keys(attributes);
   if (keys.length === 0) {
-    const emptyMsg = document.createElement('div');
-    emptyMsg.style.color = '#999';
-    emptyMsg.style.fontStyle = 'italic';
-    emptyMsg.textContent = 'Нет атрибутов';
-    container.appendChild(emptyMsg);
+    const empty = document.createElement('div');
+    empty.className = 'empty-message';
+    empty.textContent = chrome.i18n.getMessage('noAttributes');
+    attributesContainer.appendChild(empty);
     return;
   }
-  
+
   for (const [key, value] of Object.entries(attributes)) {
     const div = document.createElement('div');
     div.className = 'attr-item';
-    
+
     const nameSpan = document.createElement('span');
     nameSpan.className = 'attr-name';
     nameSpan.textContent = key;
-    
+
     const valueSpan = document.createElement('span');
     valueSpan.className = 'attr-value';
     valueSpan.textContent = `="${value}"`;
-    
+
     const editBtn = document.createElement('button');
     editBtn.className = 'attr-edit';
     editBtn.textContent = '✏️';
-    editBtn.title = 'Редактировать значение атрибута';
-    editBtn.addEventListener('click', function(e) {
+    editBtn.title = chrome.i18n.getMessage('editAttrTitle');
+    editBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      const newValue = prompt(`Введите новое значение для атрибута "${key}":`, value);
+      const promptMsg = chrome.i18n.getMessage('editAttrPrompt').replace('{key}', key);
+      const newValue = prompt(promptMsg, value);
       if (newValue !== null && newValue.trim() !== '') {
         attributes[key] = newValue.trim();
         renderAttributes(tag, attributes);
         updateSelector(tag, attributes);
       }
     });
-    
+
     const deleteBtn = document.createElement('button');
     deleteBtn.className = 'attr-delete';
     deleteBtn.textContent = '🗑️';
-    deleteBtn.title = 'Удалить атрибут';
-    deleteBtn.addEventListener('click', function(e) {
+    deleteBtn.title = chrome.i18n.getMessage('deleteAttrTitle');
+    deleteBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       delete attributes[key];
       renderAttributes(tag, attributes);
       updateSelector(tag, attributes);
     });
-    
+
     div.appendChild(nameSpan);
     div.appendChild(valueSpan);
     div.appendChild(editBtn);
     div.appendChild(deleteBtn);
-    container.appendChild(div);
+    attributesContainer.appendChild(div);
   }
 }
 
-// ===== Обновление селектора =====
+// ============================================================
+//  SELECTOR PREVIEW & ELEMENT COUNT CHECK
+// ============================================================
+
 function updateSelector(tag, attributes) {
   const selector = buildSelector(tag, attributes);
-  document.getElementById('selectorInput').value = selector;
+  selectorInput.value = selector;
   currentTag = tag;
   currentAttributes = attributes;
-  
-  // Проверяем, сколько элементов найдёт селектор на текущей странице
   checkSelectorCount(selector);
 }
 
-// ===== Проверка количества элементов =====
 function checkSelectorCount(selector) {
-  const countSpan = document.getElementById('elementCount');
-  
-  if (!selector || selector.trim() === '') {
-    countSpan.textContent = '🔍 Введите селектор';
-    countSpan.style.color = '#999';
+  const trimmed = selector.trim();
+
+  if (!trimmed) {
+    elementCount.textContent = chrome.i18n.getMessage('enterSelector');
+    elementCount.style.color = '#999';
+    selectorTypeIndicator.textContent = '';
+    selectorTypeIndicator.style.color = '';
     return;
   }
-  
-  chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+
+  const type = detectSelectorType(trimmed);
+
+  if (type === 'css') {
+    selectorTypeIndicator.textContent = 'CSS ' + chrome.i18n.getMessage('selectorTypeCSS');
+    selectorTypeIndicator.style.color = '#0078d4';
+  } else if (type === 'xpath') {
+    selectorTypeIndicator.textContent = chrome.i18n.getMessage('selectorTypeXPath');
+    selectorTypeIndicator.style.color = '#d13438';
+  } else {
+    selectorTypeIndicator.textContent = chrome.i18n.getMessage('selectorTypeUnknown');
+    selectorTypeIndicator.style.color = '#999';
+  }
+
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     if (!tabs || !tabs[0]) {
-      countSpan.textContent = '⚠️ Не удалось определить';
-      countSpan.style.color = 'orange';
+      elementCount.textContent = chrome.i18n.getMessage('checkError');
+      elementCount.style.color = 'orange';
       return;
     }
-    
+
     chrome.scripting.executeScript({
       target: { tabId: tabs[0].id },
-      func: (sel) => {
+      func: (sel, selType) => {
         try {
-          return document.querySelectorAll(sel).length;
+          if (selType === 'xpath') {
+            const xpath = sel.replace(/^xpath:/i, '');
+            const result = document.evaluate(
+              xpath,
+              document,
+              null,
+              XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
+              null
+            );
+            return result.snapshotLength;
+          } else {
+            return document.querySelectorAll(sel).length;
+          }
         } catch (e) {
           return -1;
         }
       },
-      args: [selector]
-    }, function(results) {
+      args: [trimmed, type]
+    }, (results) => {
       if (chrome.runtime.lastError) {
-        countSpan.textContent = '⚠️ Ошибка проверки';
-        countSpan.style.color = 'orange';
+        elementCount.textContent = chrome.i18n.getMessage('checkError');
+        elementCount.style.color = 'orange';
         return;
       }
-      
-      const count = results && results[0] ? results[0].result : -1;
-      
+
+      const count = results?.[0]?.result ?? -1;
+
       if (count === -1) {
-        countSpan.textContent = '❌ Невалидный селектор';
-        countSpan.style.color = 'red';
+        elementCount.textContent = chrome.i18n.getMessage('selectorInvalid');
+        elementCount.style.color = 'red';
       } else if (count === 0) {
-        countSpan.textContent = '🔍 Найдено элементов: 0 (на текущей странице)';
-        countSpan.style.color = 'orange';
+        elementCount.textContent = chrome.i18n.getMessage('foundZero');
+        elementCount.style.color = 'orange';
       } else if (count === 1) {
-        countSpan.textContent = '✅ Найдено элементов: 1 (отлично!)';
-        countSpan.style.color = 'green';
+        elementCount.textContent = chrome.i18n.getMessage('foundOne');
+        elementCount.style.color = 'green';
       } else {
-        countSpan.textContent = `⚠️ Найдено элементов: ${count} (возможно, селектор слишком широкий)`;
-        countSpan.style.color = 'red';
+        const msg = chrome.i18n.getMessage('foundMultiple').replace('{count}', count);
+        elementCount.textContent = msg;
+        elementCount.style.color = 'red';
       }
     });
   });
 }
 
-// ===== Обработка вставленного HTML =====
-document.getElementById('parseBtn').addEventListener('click', function() {
-  const html = document.getElementById('htmlInput').value.trim();
-  if (!html) {
-    alert('Вставьте HTML-элемент');
-    return;
-  }
-  
-  const parsed = parseOuterTag(html);
-  if (!parsed || !parsed.tag) {
-    alert('Не удалось распарсить HTML. Убедитесь, что это корректный открывающий тег.');
-    return;
-  }
-  
-  currentTag = parsed.tag;
-  currentAttributes = parsed.attributes;
-  
-  document.getElementById('tagDisplay').textContent = currentTag;
-  renderAttributes(currentTag, currentAttributes);
-  updateSelector(currentTag, currentAttributes);
-});
+// ============================================================
+//  RULES LIST (grouped by domain)
+// ============================================================
 
-// ===== Добавление нового атрибута вручную =====
-document.getElementById('addAttrBtn').addEventListener('click', function() {
-  const nameInput = document.getElementById('newAttrName');
-  const valueInput = document.getElementById('newAttrValue');
-  const name = nameInput.value.trim();
-  const value = valueInput.value.trim();
-  
-  if (!name) {
-    alert('Введите имя атрибута');
-    return;
-  }
-  if (!value) {
-    alert('Введите значение атрибута');
-    return;
-  }
-  
-  // Если тег ещё не задан, ставим div по умолчанию
-  if (!currentTag) {
-    currentTag = 'div';
-    document.getElementById('tagDisplay').textContent = currentTag;
-  }
-  
-  currentAttributes[name] = value;
-  renderAttributes(currentTag, currentAttributes);
-  updateSelector(currentTag, currentAttributes);
-  
-  // Очищаем поля и добавляем новое пустое поле
-  nameInput.value = '';
-  valueInput.value = '';
-  nameInput.focus();
-  
-  // Кнопка "Добавить" снова становится неактивной
-  document.getElementById('addAttrBtn').disabled = true;
-});
+function renderRulesList() {
+  chrome.storage.local.get(['rules'], (result) => {
+    const rules = result.rules || [];
+    rulesContainer.innerHTML = '';
 
-// ===== Включение/отключение кнопки "Добавить атрибут" =====
-document.getElementById('newAttrName').addEventListener('input', toggleAddAttrBtn);
-document.getElementById('newAttrValue').addEventListener('input', toggleAddAttrBtn);
+    if (rules.length === 0) {
+      const empty = document.createElement('div');
+      empty.className = 'empty-message';
+      empty.textContent = chrome.i18n.getMessage('noRules');
+      rulesContainer.appendChild(empty);
+      return;
+    }
 
-function toggleAddAttrBtn() {
-  const name = document.getElementById('newAttrName').value.trim();
-  const value = document.getElementById('newAttrValue').value.trim();
-  document.getElementById('addAttrBtn').disabled = !(name && value);
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      let currentDomain = '';
+      if (tabs?.[0]?.url) {
+        currentDomain = getDomainFromUrl(tabs[0].url);
+      }
+
+      const currentSite = [];
+      const other = [];
+
+      rules.forEach(rule => {
+        const ruleDomain = rule.domain || '';
+        if (ruleDomain && currentDomain && currentDomain.endsWith(ruleDomain)) {
+          currentSite.push(rule);
+        } else {
+          other.push(rule);
+        }
+      });
+
+      if (currentSite.length > 0) {
+        const label = currentDomain || chrome.i18n.getMessage('thisSite');
+        const title = chrome.i18n.getMessage('rulesForThisSite').replace('{site}', label);
+        renderRuleGroup(rulesContainer, title, currentSite);
+      }
+
+      if (other.length > 0) {
+        const title = chrome.i18n.getMessage('rulesForOtherSites');
+        renderRuleGroup(rulesContainer, title, other);
+      }
+    });
+  });
 }
 
-// ===== Редактирование селектора вручную =====
-document.getElementById('selectorInput').addEventListener('input', function() {
-  const manualSelector = this.value.trim();
-  if (manualSelector) {
-    // Если пользователь вручную редактирует селектор, проверяем его
-    checkSelectorCount(manualSelector);
+function renderRuleGroup(container, title, rules) {
+  const group = document.createElement('div');
+  group.className = 'rules-group';
+
+  const header = document.createElement('div');
+  header.className = 'group-title';
+  header.textContent = `${title} (${rules.length})`;
+  group.appendChild(header);
+
+  const ul = document.createElement('ul');
+
+  rules.forEach((rule) => {
+    const li = document.createElement('li');
+    const icon = rule.mode === 'remove' ? '🗑️' : '👻';
+    const typeLabel = rule.type === 'xpath' ? '[XP] ' : '';
+    li.textContent = `${icon} ${typeLabel}${rule.selector}`;
+
+    const del = document.createElement('button');
+    del.textContent = chrome.i18n.getMessage('deleteBtn');
+    del.addEventListener('click', () => {
+      chrome.storage.local.get(['rules'], (res) => {
+        const all = res.rules || [];
+        const idx = all.findIndex(r => r.selector === rule.selector && r.domain === rule.domain);
+        if (idx !== -1) {
+          all.splice(idx, 1);
+          chrome.storage.local.set({ rules: all }, renderRulesList);
+        }
+      });
+    });
+
+    li.appendChild(del);
+    ul.appendChild(li);
+  });
+
+  group.appendChild(ul);
+  container.appendChild(group);
+}
+
+// ============================================================
+//  ADVANCED MODE TOGGLE
+// ============================================================
+
+function updateToggleButton() {
+  if (advancedVisible) {
+    toggleAdvancedBtn.innerHTML = `
+      <span class="toggle-icon toggle-icon-up"></span>
+      <span data-i18n="hideAdvanced">${chrome.i18n.getMessage('hideAdvanced')}</span>
+      <span class="toggle-icon toggle-icon-up"></span>
+    `;
+    advancedPanel.classList.remove('hidden');
+    hintContainer.classList.add('hidden');
+    toolsContainer.classList.remove('hidden');
+  } else {
+    toggleAdvancedBtn.innerHTML = `
+      <span class="toggle-icon toggle-icon-down"></span>
+      <span data-i18n="toggleAdvanced">${chrome.i18n.getMessage('toggleAdvanced')}</span>
+      <span class="toggle-icon toggle-icon-down"></span>
+    `;
+    advancedPanel.classList.add('hidden');
+    hintContainer.classList.remove('hidden');
+    toolsContainer.classList.add('hidden');
+  }
+}
+
+function toggleAdvancedMode() {
+  advancedVisible = !advancedVisible;
+  updateToggleButton();
+}
+
+toggleAdvancedBtn.addEventListener('click', toggleAdvancedMode);
+
+// ============================================================
+//  HANDLERS — Manual Selector / XPath Input
+// ============================================================
+
+selectorInput.addEventListener('input', () => {
+  const manual = selectorInput.value.trim();
+  if (manual) {
+    checkSelectorCount(manual);
+  } else {
+    elementCount.textContent = chrome.i18n.getMessage('enterSelector');
+    elementCount.style.color = '#999';
+    selectorTypeIndicator.textContent = '';
+    selectorTypeIndicator.style.color = '';
   }
 });
 
-// ===== Добавление правила с проверкой =====
-document.getElementById('addRule').addEventListener('click', function() {
-  const selector = document.getElementById('selectorInput').value.trim();
-  if (!selector) {
-    alert('Селектор пуст. Напишите или сгенерируйте селектор.');
+// ============================================================
+//  HANDLERS — Parse HTML
+// ============================================================
+
+parseBtn.addEventListener('click', () => {
+  const html = htmlInput.value.trim();
+  if (!html) {
+    alert(chrome.i18n.getMessage('alertPasteHtml'));
     return;
   }
-  
-  // НОВОЕ: Получаем выбранный режим блокировки
-  const modeRadios = document.querySelectorAll('input[name="blockMode"]');
-  let blockMode = 'hide';
+
+  const parsed = parseOuterTag(html);
+  if (!parsed || !parsed.tag) {
+    alert(chrome.i18n.getMessage('alertParseError'));
+    return;
+  }
+
+  currentTag = parsed.tag;
+  currentAttributes = parsed.attributes;
+
+  tagDisplay.textContent = currentTag;
+  renderAttributes(currentTag, currentAttributes);
+  updateSelector(currentTag, currentAttributes);
+});
+
+// ============================================================
+//  HANDLERS — Manual Attribute Addition
+// ============================================================
+
+function toggleAddAttrBtn() {
+  const name = newAttrName.value.trim();
+  const val = newAttrValue.value.trim();
+  addAttrBtn.disabled = !(name && val);
+}
+
+newAttrName.addEventListener('input', toggleAddAttrBtn);
+newAttrValue.addEventListener('input', toggleAddAttrBtn);
+
+addAttrBtn.addEventListener('click', () => {
+  const name = newAttrName.value.trim();
+  const val = newAttrValue.value.trim();
+
+  if (!name) {
+    alert(chrome.i18n.getMessage('alertAttrName'));
+    return;
+  }
+  if (!val) {
+    alert(chrome.i18n.getMessage('alertAttrValue'));
+    return;
+  }
+
+  if (!currentTag) {
+    currentTag = 'div';
+    tagDisplay.textContent = currentTag;
+  }
+
+  currentAttributes[name] = val;
+  renderAttributes(currentTag, currentAttributes);
+  updateSelector(currentTag, currentAttributes);
+
+  newAttrName.value = '';
+  newAttrValue.value = '';
+  newAttrName.focus();
+  addAttrBtn.disabled = true;
+});
+
+// ============================================================
+//  HANDLERS — Add Rule
+// ============================================================
+
+addRuleBtn.addEventListener('click', () => {
+  const rawSelector = selectorInput.value.trim();
+  if (!rawSelector) {
+    alert(chrome.i18n.getMessage('alertEmptySelector'));
+    return;
+  }
+
+  const type = detectSelectorType(rawSelector);
+  if (!type) {
+    alert(chrome.i18n.getMessage('alertInvalidSelector'));
+    return;
+  }
+
+  let selector = rawSelector;
+  if (type === 'xpath') {
+    selector = rawSelector.replace(/^xpath:/i, '');
+  }
+
+  let blockMode = 'remove';
   for (const radio of modeRadios) {
     if (radio.checked) {
       blockMode = radio.value;
       break;
     }
   }
-  
-  // Проверяем, сколько элементов находит селектор
-  chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     if (!tabs || !tabs[0]) {
-      alert('Не удалось получить доступ к странице');
+      alert(chrome.i18n.getMessage('alertNoTab'));
       return;
     }
-    
+
+    let currentDomain = '';
+    if (tabs[0].url) {
+      currentDomain = getDomainFromUrl(tabs[0].url);
+    }
+
     chrome.scripting.executeScript({
       target: { tabId: tabs[0].id },
-      func: (sel) => {
+      func: (sel, selType) => {
         try {
-          return document.querySelectorAll(sel).length;
+          if (selType === 'xpath') {
+            const xpath = sel.replace(/^xpath:/i, '');
+            const result = document.evaluate(
+              xpath,
+              document,
+              null,
+              XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
+              null
+            );
+            return result.snapshotLength;
+          } else {
+            return document.querySelectorAll(sel).length;
+          }
         } catch (e) {
           return -1;
         }
       },
-      args: [selector]
-    }, function(results) {
+      args: [selector, type]
+    }, (results) => {
       if (chrome.runtime.lastError) {
-        alert('Ошибка проверки селектора');
+        alert(chrome.i18n.getMessage('alertCheckError'));
         return;
       }
-      
-      const count = results && results[0] ? results[0].result : -1;
-      
+
+      const count = results?.[0]?.result ?? -1;
+
       if (count === -1) {
-        alert('Невалидный селектор. Проверьте синтаксис.');
+        alert(chrome.i18n.getMessage('alertInvalidSelector'));
         return;
       }
-      
+
       if (count === 0) {
-        if (!confirm('Селектор не нашёл элементов на текущей странице. Возможно, вы на другой странице?\n\nВсё равно добавить правило?')) {
-          return;
-        }
+        if (!confirm(chrome.i18n.getMessage('confirmZeroElements'))) return;
       }
-      
+
       if (count > 1) {
-        if (!confirm(`Данный селектор находит ${count} элементов на странице. Возможно, он не вполне специфичный.\n\nДобавить правило?`)) {
-          return;
-        }
+        const msg = chrome.i18n.getMessage('confirmMultipleElements').replace('{count}', count);
+        if (!confirm(msg)) return;
       }
-      
-      // Сохраняем правило с режимом блокировки
-      chrome.storage.local.get(['rules'], function(result) {
-        const rules = result.rules || [];
-        if (rules.some(rule => rule.selector === selector)) {
-          alert('Это правило уже существует');
+
+      chrome.storage.local.get(['rules'], (res) => {
+        const rules = res.rules || [];
+        if (rules.some(r => r.selector === selector && r.domain === currentDomain)) {
+          alert(chrome.i18n.getMessage('alertRuleExists'));
           return;
         }
-        // НОВОЕ: сохраняем не только селектор, но и режим
-        rules.push({ 
+
+        rules.push({
           selector: selector,
-          mode: blockMode  // 'hide' или 'remove'
+          type: type,
+          mode: blockMode,
+          domain: currentDomain
         });
-        chrome.storage.local.set({ rules }, function() {
-          document.getElementById('status').textContent = '✅ Правило добавлено!';
-          document.getElementById('status').style.color = 'green';
+
+        chrome.storage.local.set({ rules }, () => {
+          statusDiv.textContent = chrome.i18n.getMessage('ruleAdded');
+          statusDiv.style.color = 'green';
           renderRulesList();
         });
       });
@@ -339,63 +655,92 @@ document.getElementById('addRule').addEventListener('click', function() {
   });
 });
 
-// ===== Обновлённое отображение списка правил =====
-function renderRulesList() {
-  chrome.storage.local.get(['rules'], function(result) {
-    let rules = result.rules || [];
-    let needsUpdate = false;
-    
-    // Миграция: добавляем mode='hide' для старых правил
-    rules = rules.map(rule => {
-      if (!rule.mode) {
-        needsUpdate = true;
-        return { ...rule, mode: 'hide' };
-      }
-      return rule;
-    });
-    
-    if (needsUpdate) {
-      chrome.storage.local.set({ rules });
-    }
-    const list = document.getElementById('rulesList');
-    list.innerHTML = '';
-    if (rules.length === 0) {
-      list.innerHTML = '<li>Нет активных правил</li>';
+// ============================================================
+//  HANDLERS — Mode Hint Update
+// ============================================================
+
+modeRadios.forEach(radio => {
+  radio.addEventListener('change', updateModeHint);
+});
+
+// ============================================================
+//  HANDLERS — Clear All Rules
+// ============================================================
+
+clearRulesBtn.addEventListener('click', () => {
+  if (!confirm(chrome.i18n.getMessage('confirmClearRules'))) return;
+
+  chrome.storage.local.clear(() => {
+    if (chrome.runtime.lastError) {
+      alert(chrome.i18n.getMessage('alertClearError') + ': ' + chrome.runtime.lastError.message);
       return;
     }
-    rules.forEach((rule, index) => {
-      const li = document.createElement('li');
-      
-      // Отображаем селектор и режим
-      const modeLabel = rule.mode === 'remove' ? '🗑️' : '👻';
-      li.textContent = `${modeLabel} ${rule.selector}`;
-      
-      const deleteBtn = document.createElement('button');
-      deleteBtn.textContent = 'Удалить';
-      deleteBtn.addEventListener('click', function() {
-        rules.splice(index, 1);
-        chrome.storage.local.set({ rules }, renderRulesList);
-      });
-      li.appendChild(deleteBtn);
-      list.appendChild(li);
-    });
-  });
-}
 
-// ===== Обновление подсказки при переключении режима =====
-document.querySelectorAll('input[name="blockMode"]').forEach(radio => {
-  radio.addEventListener('change', function() {
-    const hint = document.getElementById('modeHint');
-    if (this.value === 'remove') {
-      hint.textContent = 'Элемент будет полностью удалён из HTML. Вёрстка может "поехать", но место освободится.';
-    } else {
-      hint.textContent = 'Элемент станет невидимым, но сохранит свои размеры. Вёрстка не "поедет".';
-    }
+    statusDiv.textContent = chrome.i18n.getMessage('rulesCleared');
+    statusDiv.style.color = 'orange';
+    renderRulesList();
   });
 });
 
-// ===== Загрузка списка правил при открытии popup =====
-document.addEventListener('DOMContentLoaded', function() {
-  console.log('[BlockIt] Popup загружен, загружаем правила');
+// ============================================================
+//  HANDLERS — Export / Import
+// ============================================================
+
+document.getElementById('exportRules').addEventListener('click', () => {
+  chrome.storage.local.get(['rules'], (result) => {
+    const rules = result.rules || [];
+    if (rules.length === 0) {
+      alert(chrome.i18n.getMessage('alertNoRulesToExport'));
+      return;
+    }
+
+    const data = {
+      version: '1.0',
+      exportedAt: new Date().toISOString(),
+      totalRules: rules.length,
+      rules
+    };
+
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `blockit-rules-${new Date().toISOString().slice(0,10)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+});
+
+importRulesBtn.addEventListener('click', () => {
+  chrome.windows.create({
+    url: chrome.runtime.getURL('import.html'),
+    type: 'popup',
+    width: 500,
+    height: 450,
+    focused: true
+  });
+});
+
+// ============================================================
+//  HANDLERS — Messages from import window
+// ============================================================
+
+chrome.runtime.onMessage.addListener((message) => {
+  if (message.type === 'rulesUpdated') {
+    renderRulesList();
+    statusDiv.textContent = chrome.i18n.getMessage('rulesImported');
+    statusDiv.style.color = 'green';
+  }
+});
+
+// ============================================================
+//  INIT
+// ============================================================
+
+document.addEventListener('DOMContentLoaded', () => {
+  localizeUI();
+  updateToggleButton();
   renderRulesList();
 });

@@ -1,0 +1,662 @@
+/* ============================================================
+ *  BLOCKIT — GLOBAL STYLES
+ *  Shared styles for popup and import windows
+ * ============================================================ */
+
+/* ============================================================
+ *  1. RESET & BASE
+ * ============================================================ */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  background: #fff;
+  color: #333;
+}
+
+/* ============================================================
+ *  2. TYPOGRAPHY
+ * ============================================================ */
+
+h2 {
+  font-size: 18px;
+  margin-bottom: 12px;
+  color: #1a1a1a;
+}
+
+h3 {
+  font-size: 18px;
+  margin: 0 0 12px 0;
+  color: #1a1a1a;
+}
+
+h4 {
+  margin: 10px 0 4px 0;
+  font-size: 13px;
+  color: #333;
+}
+
+p {
+  margin-bottom: 10px;
+  color: #666;
+  font-size: 13px;
+}
+
+/* ============================================================
+ *  3. LAYOUT
+ * ============================================================ */
+
+hr {
+  margin: 12px 0;
+  border: none;
+  border-top: 1px solid #eee;
+}
+
+/* ============================================================
+ *  4. INPUTS
+ * ============================================================ */
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+textarea {
+  width: 100%;
+  height: 60px;
+  padding: 6px;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: #69B064;
+}
+
+input[type="text"] {
+  padding: 6px;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border-color: #69B064;
+}
+
+/* ============================================================
+ *  5. BUTTONS
+ * ============================================================ */
+
+button {
+  padding: 6px 14px;
+  background: #69B064;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.2s ease;
+}
+
+button:hover {
+  background: #5E9F5A;
+}
+
+button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+/* Button variants */
+.btn-primary {
+  background: #69B064;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #4a8f46;
+}
+
+.btn-danger {
+  background: #d13438;
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background: #a1262a;
+}
+
+.btn-secondary {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.btn-secondary:hover {
+  background: #ccc;
+}
+
+.btn-file {
+  background: #f0f0f0;
+  color: #333;
+  border: 1px dashed #999;
+  padding: 8px 16px;
+}
+
+.btn-file:hover {
+  background: #e8e8e8;
+}
+
+.btn-export,
+.btn-import {
+  flex: 1;
+  background: #4a8f46;
+}
+
+.btn-export:hover,
+.btn-import:hover {
+  background: #3a7a36;
+}
+
+.btn-clear-all {
+  background: #d13438;
+  width: 100%;
+}
+
+.btn-clear-all:hover {
+  background: #a1262a;
+}
+
+.button-group {
+  display: flex;
+  gap: 8px;
+  margin: 12px 0 8px;
+  flex-wrap: wrap;
+}
+
+#parseBtn {
+  margin-top: 6px;
+}
+
+#addAttrBtn {
+  flex-shrink: 0;
+}
+
+/* ============================================================
+ *  6. RADIO BUTTONS (custom)
+ * ============================================================ */
+
+input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #69B064;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+input[type="radio"]:checked {
+  background: radial-gradient(circle, #69B064 0 40%, transparent 42%);
+}
+
+input[type="radio"]:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(105, 176, 100, 0.3);
+}
+
+/* ============================================================
+ *  7. POPUP SPECIFIC
+ * ============================================================ */
+
+body.popup {
+  width: 450px;
+  padding: 12px;
+  background: #f0efef;
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.popup-header h3 {
+  margin: 0;
+}
+
+.faq-link {
+  font-size: 13px;
+  font-weight: 700;
+  color: #69B064;
+  background: #fff;
+  padding: 4px 12px;
+  border-radius: 4px;
+  border: 2px solid #69B064;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.faq-link:hover {
+  background: #69B064;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+#selectorInput {
+  width: 100%;
+  background: #f5f5f5;
+}
+
+#elementCount {
+  padding: 4px 0;
+  font-weight: 500;
+}
+
+#status {
+  margin-top: 6px;
+  font-weight: 500;
+}
+
+.block-mode-container {
+  margin: 10px 0;
+  padding: 10px;
+  background: #f5f5f5;
+  border-radius: 4px;
+}
+
+.block-mode-container label {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.block-mode-options {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.block-mode-options label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+#modeHint {
+  font-size: 11px;
+  color: #666;
+  margin-top: 4px;
+  font-style: italic;
+}
+
+#selectorTypeIndicator {
+  font-size: 11px;
+  font-weight: 500;
+  margin: 2px 0;
+  min-height: 18px;
+}
+
+/* ============================================================
+ *  8. IMPORT SPECIFIC
+ * ============================================================ */
+
+body.import {
+  padding: 20px;
+  background: #fff;
+}
+
+#jsonInput {
+  width: 100%;
+  height: 140px;
+  padding: 10px;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+  box-sizing: border-box;
+  background: #f9f9f9;
+}
+
+#jsonInput:focus {
+  outline: none;
+  border-color: #69B064;
+}
+
+#fileInfo {
+  font-size: 12px;
+  color: #666;
+  margin: 4px 0 8px 0;
+}
+
+#status {
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 4px;
+  display: none;
+}
+
+#status.success {
+  background: #d4edda;
+  color: #155724;
+  display: block;
+}
+
+#status.error {
+  background: #f8d7da;
+  color: #721c24;
+  display: block;
+}
+
+#status.info {
+  background: #d1ecf1;
+  color: #0c5460;
+  display: block;
+}
+
+/* ============================================================
+ *  9. SELECTOR INPUT
+ * ============================================================ */
+
+.selector-input {
+  width: 100%;
+  padding: 8px 10px;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.2s ease;
+}
+
+.selector-input:focus {
+  outline: none;
+  border-color: #69B064;
+}
+
+.selector-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 4px 0 6px 0;
+  font-size: 12px;
+  min-height: 20px;
+}
+
+/* ============================================================
+ *  10. HINT
+ * ============================================================ */
+
+.hint {
+  font-size: 11px;
+  color: #888;
+  margin: 2px 0 8px 0;
+  padding: 6px 10px;
+  background: #f9f9f9;
+  border-radius: 4px;
+  border-left: 3px solid #69B064;
+}
+
+.hint.hidden {
+  display: none;
+}
+
+/* ============================================================
+ *  11. TOOLS (export/import)
+ * ============================================================ */
+
+.tools-container {
+  margin: 6px 0 10px 0;
+}
+
+.tools-container.hidden {
+  display: none;
+}
+
+.tools-divider {
+  text-align: center;
+  font-size: 11px;
+  color: #999;
+  margin: 6px 0 8px 0;
+  letter-spacing: 1px;
+}
+
+.tools-container .button-group {
+  display: flex;
+  gap: 8px;
+}
+
+.tools-container .button-group button {
+  flex: 1;
+}
+
+/* ============================================================
+ *  12. ADVANCED PANEL
+ * ============================================================ */
+
+.advanced-panel {
+  margin-bottom: 10px;
+  padding: 12px;
+  background: #f9f9f9;
+  border-radius: 6px;
+  border: 1px solid #eee;
+  transition: all 0.3s ease;
+}
+
+.advanced-panel.hidden {
+  display: none;
+}
+
+/* ============================================================
+ *  13. ATTRIBUTES LIST
+ * ============================================================ */
+
+#attributesContainer {
+  margin: 6px 0 10px 0;
+}
+
+.attr-item {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+  margin: 3px 0;
+  padding: 4px 8px;
+  background: #f5f5f5;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  word-break: break-all;
+}
+
+.attr-item .attr-name {
+  font-weight: bold;
+  color: #0078d4;
+  flex-shrink: 0;
+}
+
+.attr-item .attr-value {
+  color: #333;
+  word-break: break-all;
+  flex: 1;
+  min-width: 0;
+}
+
+.attr-item .attr-edit,
+.attr-item .attr-delete {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-size: 13px;
+  padding: 0 4px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.attr-item .attr-edit:hover {
+  color: #0078d4;
+}
+
+.attr-item .attr-delete:hover {
+  color: #d13438;
+}
+
+/* ============================================================
+ *  14. ATTRIBUTE ADD ROW
+ * ============================================================ */
+
+.attr-add-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.attr-add-row input[type="text"] {
+  padding: 4px 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.attr-add-row input[type="text"]:focus {
+  outline: none;
+  border-color: #69B064;
+}
+
+.attr-add-row #newAttrName {
+  flex: 0 0 58%;
+  width: 58%;
+}
+
+.attr-add-row #newAttrValue {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ============================================================
+ *  15. RULES LIST (grouped)
+ * ============================================================ */
+
+.rules-group {
+  margin-bottom: 10px;
+}
+
+.rules-group .group-title {
+  font-weight: 600;
+  font-size: 13px;
+  color: #333;
+  margin: 4px 0 4px 0;
+  padding-bottom: 2px;
+  border-bottom: 1px solid #eee;
+}
+
+.rules-group .group-title .rule-count {
+  font-weight: normal;
+  font-size: 11px;
+  color: #999;
+}
+
+.rules-group ul {
+  padding-left: 20px;
+  margin: 4px 0 0 0;
+}
+
+.rules-group ul li {
+  margin: 4px 0;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  word-break: break-all;
+}
+
+.rules-group ul li button {
+  padding: 2px 10px;
+  font-size: 11px;
+  background: #d13438;
+  margin-left: 8px;
+  border: none;
+  border-radius: 3px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.rules-group ul li button:hover {
+  background: #a1262a;
+}
+
+/* ============================================================
+ *  16. TOGGLE ADVANCED BUTTON
+ * ============================================================ */
+
+.btn-toggle-advanced {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #e8e8e8;
+  color: #333;
+  font-size: 12px;
+  padding: 6px 12px;
+  margin-bottom: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-toggle-advanced:hover {
+  background: #d5d5d5;
+}
+
+.btn-toggle-advanced .toggle-icon {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  flex-shrink: 0;
+}
+
+.btn-toggle-advanced .toggle-icon-down {
+  background-image: url('icons/angles-down-solid.svg');
+}
+
+.btn-toggle-advanced .toggle-icon-up {
+  background-image: url('icons/angles-up-solid.svg');
+}
+
+/* ============================================================
+ *  17. EMPTY MESSAGE
+ * ============================================================ */
+
+.empty-message {
+  color: #999;
+  font-style: italic;
+}

@@ -2,68 +2,97 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <link rel="stylesheet" href="popup.css">
+  <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-  <h3>BlockIt</h3>
-  
-  <!-- Поле для вставки HTML -->
-  <label for="htmlInput">Вставьте скопированный HTML-элемент:</label>
-  <textarea id="htmlInput" placeholder='Например: <li class="ad" id="banner">...</li>'></textarea>
-  <button id="parseBtn">Разобрать</button>
-  
-  <hr>
-  
-  <!-- Отображение тега и атрибутов -->
-  <div id="parsedContainer">
-    <h4>Тег:</h4>
-    <div id="tagDisplay">(не определён)</div>
-    
-    <h4>Атрибуты (нажмите на ✏️ для редактирования, на 🗑️ для удаления):</h4>
-    <div id="attributesContainer">
-      <div style="color: #999; font-style: italic;">Нет атрибутов</div>
-    </div>
-    
-    <!-- Поле для добавления нового атрибута -->
-    <h4>Добавить атрибут:</h4>
-    <div style="display: flex; gap: 8px; margin-bottom: 10px;">
-      <input type="text" id="newAttrName" placeholder="Имя атрибута (например, data-testid)" style="flex: 1;">
-      <input type="text" id="newAttrValue" placeholder="Значение" style="flex: 1;">
-      <button id="addAttrBtn" disabled>➕ Добавить</button>
-    </div>
-    
-    <h4>Готовый селектор (можно редактировать вручную):</h4>
-    <input type="text" id="selectorInput" placeholder="Напишите или отредактируйте селектор">
-    
-    <!-- Отображение количества найденных элементов -->
-    <div id="elementCount" style="margin: 8px 0; font-size: 14px;">🔍 Проверка...</div>
-    
-    <!-- НОВОЕ: Переключатель режима блокировки -->
-    <div style="margin: 10px 0; padding: 10px; background: #f5f5f5; border-radius: 4px;">
-      <label style="font-weight: 600; display: block; margin-bottom: 6px;">Режим блокировки:</label>
-      <div style="display: flex; gap: 20px; align-items: center;">
-        <label style="display: flex; align-items: center; gap: 6px; font-weight: normal; cursor: pointer;">
-          <input type="radio" name="blockMode" value="hide" checked>
-          👻 Скрыть (сохранить место)
-        </label>
-        <label style="display: flex; align-items: center; gap: 6px; font-weight: normal; cursor: pointer;">
-          <input type="radio" name="blockMode" value="remove">
-          🗑️ Удалить (убрать место)
-        </label>
-      </div>
-      <div style="font-size: 11px; color: #666; margin-top: 4px;">
-        <span id="modeHint">Элемент станет невидимым, но сохранит свои размеры. Вёрстка не "поедет".</span>
-      </div>
-    </div>
-    
-    <button id="addRule">➕ Добавить правило</button>
-    <div id="status"></div>
+<body class="popup">
+  <!-- ===== HEADER ===== -->
+  <div class="popup-header">
+    <h3 data-i18n="extensionName">BlockIt</h3>
+    <a href="#" id="faqLink" class="faq-link" data-i18n="faqLink">!!! Instructions !!!</a>
   </div>
-  
+
+  <!-- ===== ADVANCED MODE TOGGLE ===== -->
+  <button id="toggleAdvanced" class="btn-toggle-advanced" data-i18n="toggleAdvanced">
+    <span class="toggle-icon toggle-icon-down"></span>
+    <span data-i18n="toggleAdvanced">Advanced options</span>
+    <span class="toggle-icon toggle-icon-down"></span>
+  </button>
+
+  <!-- ===== ADVANCED PANEL (HTML parser + attributes) ===== -->
+  <div id="advancedPanel" class="advanced-panel hidden">
+    <label for="htmlInput" data-i18n="pasteHtmlLabel">Paste copied HTML element:</label>
+    <textarea id="htmlInput" data-i18n-placeholder="pasteHtmlPlaceholder"></textarea>
+    <button id="parseBtn" class="btn-primary" data-i18n="parseBtn">Parse</button>
+
+    <h4 data-i18n="tagLabel">Tag:</h4>
+    <div id="tagDisplay" data-i18n="tagNotDefined">(not defined)</div>
+
+    <h4 data-i18n="attributesLabel">Attributes (click ✏️ to edit, 🗑️ to delete):</h4>
+    <div id="attributesContainer">
+      <div class="empty-message" data-i18n="noAttributes">No attributes</div>
+    </div>
+
+    <h4 data-i18n="addAttrLabel">Add attribute:</h4>
+    <div class="attr-add-row">
+      <input type="text" id="newAttrName" data-i18n-placeholder="attrNamePlaceholder">
+      <input type="text" id="newAttrValue" data-i18n-placeholder="attrValuePlaceholder">
+    </div>
+    <button id="addAttrBtn" class="btn-primary add-attr-btn" disabled data-i18n="addAttrBtn">Add</button>
+  </div>
+
+  <!-- ===== SELECTOR INPUT ===== -->
+  <label for="selectorInput" data-i18n="selectorLabel">Enter CSS selector or XPath:</label>
+  <input type="text" id="selectorInput" class="selector-input" data-i18n-placeholder="selectorPlaceholder">
+
+  <div class="selector-info">
+    <span id="selectorTypeIndicator"></span>
+    <span id="elementCount"></span>
+  </div>
+
+  <!-- ===== HINT (visible only in basic mode) ===== -->
+  <div id="hintContainer" class="hint">
+    <span data-i18n="copyHint"></span>
+  </div>
+
+  <!-- ===== BLOCKING MODE ===== -->
+  <div class="block-mode-container">
+    <label data-i18n="blockModeLabel">Blocking mode:</label>
+    <div class="block-mode-options">
+      <label>
+        <input type="radio" name="blockMode" value="remove" checked>
+        <span data-i18n="modeRemove">Remove (free space)</span>
+      </label>
+      <label>
+        <input type="radio" name="blockMode" value="hide">
+        <span data-i18n="modeHide">Hide (keep space)</span>
+      </label>
+    </div>
+    <div id="modeHint" data-i18n="modeRemoveHint">Element is completely removed from HTML. Layout may shift, but space is freed.</div>
+  </div>
+
+  <button id="addRule" class="btn-primary" data-i18n="addRuleBtn">Add Rule</button>
+  <div id="status"></div>
+
+  <!-- ===== TOOLS (export/import - visible only in advanced mode) ===== -->
+  <div id="toolsContainer" class="tools-container hidden">
+    <div class="tools-divider" data-i18n="toolsDivider">─── Tools ───</div>
+    <div class="button-group">
+      <button id="exportRules" class="btn-export" data-i18n="exportRulesBtn">Export</button>
+      <button id="importRules" class="btn-import" data-i18n="importRulesBtn">Import</button>
+    </div>
+  </div>
+
   <hr>
-  <h4>Активные правила</h4>
-  <ul id="rulesList"></ul>
-  
+
+  <!-- ===== RULES LIST ===== -->
+  <h4 data-i18n="activeRulesLabel">Active rules</h4>
+  <div id="rulesContainer"></div>
+
+  <hr>
+
+  <!-- ===== CLEAR ALL ===== -->
+  <button id="clearRules" class="btn-clear-all" data-i18n="clearRulesBtn">Clear all rules</button>
+
   <script src="popup.js"></script>
 </body>
 </html>

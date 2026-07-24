@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title data-i18n="importTitle">Import Rules</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="import">
+  <h2 data-i18n="importTitle">Import Rules</h2>
+  <p data-i18n="importDescription">Paste JSON with rules below or upload a file:</p>
+
+  <div class="button-group">
+    <button id="loadFileBtn" class="btn-file" data-i18n="loadFileBtn">Choose file</button>
+    <button id="clearBtn" class="btn-secondary" data-i18n="clearBtn">Clear</button>
+  </div>
+
+  <input type="file" id="fileInput" style="display: none;">
+
+  <div id="fileInfo"></div>
+
+  <textarea id="jsonInput" data-i18n-placeholder="jsonPlaceholder"></textarea>
+
+  <div class="button-group">
+    <button id="replaceBtn" class="btn-danger" data-i18n="replaceBtn">Replace all</button>
+    <button id="addBtn" class="btn-primary" data-i18n="addBtn">Add</button>
+  </div>
+
+  <div id="status"></div>
+
+  <button id="closeBtn" class="btn-secondary" style="margin-top: 8px;" data-i18n="closeBtn">Close</button>
+
+  <script src="import.js"></script>
+</body>
+</html>

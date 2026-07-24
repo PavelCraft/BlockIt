@@ -1,0 +1,362 @@
+{
+  "extensionName": {
+    "message": "BlockIt",
+    "description": "扩展名称"
+  },
+  "extensionDescription": {
+    "message": "使用选择器在任何网站上屏蔽 HTML 元素",
+    "description": "扩展描述"
+  },
+  "pasteHtmlLabel": {
+    "message": "粘贴复制的 HTML 元素：",
+    "description": "HTML 输入字段标签"
+  },
+  "pasteHtmlPlaceholder": {
+    "message": "例如：<li class=\"ad\" id=\"banner\">...</li>",
+    "description": "HTML 输入字段占位符"
+  },
+  "parseBtn": {
+    "message": "解析",
+    "description": "解析按钮文本"
+  },
+  "tagLabel": {
+    "message": "标签：",
+    "description": "标签标签"
+  },
+  "tagNotDefined": {
+    "message": "(未定义)",
+    "description": "标签未定义时的消息"
+  },
+  "attributesLabel": {
+    "message": "属性（点击 ✏️ 编辑，🗑️ 删除）：",
+    "description": "属性区域标签"
+  },
+  "addAttrLabel": {
+    "message": "添加属性：",
+    "description": "添加属性区域标签"
+  },
+  "attrNamePlaceholder": {
+    "message": "属性名称（例如 id）",
+    "description": "属性名称输入占位符"
+  },
+  "attrValuePlaceholder": {
+    "message": "值",
+    "description": "属性值输入占位符"
+  },
+  "addAttrBtn": {
+    "message": "➕ 添加",
+    "description": "添加属性按钮文本"
+  },
+  "enterSelector": {
+    "message": "🔍 输入选择器",
+    "description": "选择器为空时的消息"
+  },
+  "checkError": {
+    "message": "⚠️ 检查错误",
+    "description": "选择器检查错误"
+  },
+  "blockModeLabel": {
+    "message": "阻止模式：",
+    "description": "阻止模式区域标签"
+  },
+  "modeHide": {
+    "message": "👻 隐藏（保留空间）",
+    "description": "隐藏模式单选标签"
+  },
+  "modeRemove": {
+    "message": "🗑️ 删除（释放空间）",
+    "description": "删除模式单选标签"
+  },
+  "modeHideHint": {
+    "message": "元素变为不可见，但保留其大小。布局不会错位。",
+    "description": "隐藏模式提示"
+  },
+  "modeRemoveHint": {
+    "message": "元素从 HTML 中完全删除。布局可能会发生变化，但空间会被释放。",
+    "description": "删除模式提示"
+  },
+  "addRuleBtn": {
+    "message": "➕ 添加规则",
+    "description": "添加规则按钮文本"
+  },
+  "noAttributes": {
+    "message": "没有属性",
+    "description": "没有属性时的消息"
+  },
+  "noRules": {
+    "message": "没有活动规则",
+    "description": "没有规则时的消息"
+  },
+  "deleteBtn": {
+    "message": "删除",
+    "description": "删除按钮文本"
+  },
+  "editAttrTitle": {
+    "message": "编辑属性值",
+    "description": "编辑属性按钮提示"
+  },
+  "deleteAttrTitle": {
+    "message": "删除属性",
+    "description": "删除属性按钮提示"
+  },
+  "editAttrPrompt": {
+    "message": "为属性 \"{key}\" 输入新值：",
+    "description": "编辑属性值对话框"
+  },
+  "selectorInvalid": {
+    "message": "❌ 选择器无效",
+    "description": "选择器无效状态"
+  },
+  "foundZero": {
+    "message": "🔍 找到的元素：0（在当前页面上）",
+    "description": "找到 0 个元素"
+  },
+  "foundOne": {
+    "message": "✅ 找到的元素：1（完美！）",
+    "description": "找到 1 个元素"
+  },
+  "foundMultiple": {
+    "message": "⚠️ 找到的元素：{count}（选择器可能太宽）",
+    "description": "找到多个元素"
+  },
+  "ruleAdded": {
+    "message": "✅ 规则已添加！",
+    "description": "规则添加成功消息"
+  },
+  "rulesCleared": {
+    "message": "🧹 所有规则已清除",
+    "description": "规则清除消息"
+  },
+  "clearRulesBtn": {
+    "message": "🗑️ 清除所有规则",
+    "description": "清除所有规则按钮"
+  },
+  "confirmClearRules": {
+    "message": "删除所有规则？此操作无法撤消。",
+    "description": "清除规则确认"
+  },
+  "activeRulesLabel": {
+    "message": "活动规则",
+    "description": "活动规则区域标签"
+  },
+  "alertPasteHtml": {
+    "message": "粘贴 HTML 元素",
+    "description": "HTML 字段为空时的警告"
+  },
+  "alertParseError": {
+    "message": "解析 HTML 失败。请确保这是一个有效的开始标签。",
+    "description": "HTML 解析错误"
+  },
+  "alertAttrName": {
+    "message": "输入属性名称",
+    "description": "属性名称为空时的警告"
+  },
+  "alertAttrValue": {
+    "message": "输入属性值",
+    "description": "属性值为空时的警告"
+  },
+  "alertEmptySelector": {
+    "message": "选择器为空。编写或生成选择器。",
+    "description": "选择器为空时的警告"
+  },
+  "alertNoTab": {
+    "message": "无法访问页面",
+    "description": "无法访问页面错误"
+  },
+  "alertCheckError": {
+    "message": "选择器检查错误",
+    "description": "选择器检查错误"
+  },
+  "alertInvalidSelector": {
+    "message": "选择器无效。检查语法。",
+    "description": "选择器无效"
+  },
+  "alertRuleExists": {
+    "message": "此规则已存在",
+    "description": "规则已存在"
+  },
+  "alertClearError": {
+    "message": "清除错误",
+    "description": "清除规则错误"
+  },
+  "confirmZeroElements": {
+    "message": "选择器在当前页面上没有找到元素。您可能在其他页面上。\n\n仍然添加规则吗？",
+    "description": "找到 0 个元素时的确认"
+  },
+  "confirmMultipleElements": {
+    "message": "此选择器在页面上找到 {count} 个元素。它可能不够具体。\n\n添加规则吗？",
+    "description": "找到多个元素时的确认"
+  },
+  "faqLink": {
+    "message": "!!! 说明 !!!",
+    "description": "指向 FAQ / 说明页面的链接"
+  },
+  "rulesForThisSite": {
+    "message": "对于此网站：{site}",
+    "description": "当前网站规则的章节标题"
+  },
+  "rulesForOtherSites": {
+    "message": "对于其他网站",
+    "description": "其他网站规则的章节标题"
+  },
+  "allSitesRules": {
+    "message": "所有规则",
+    "description": "没有网站分组时的章节标题"
+  },
+  "thisSite": {
+    "message": "此网站",
+    "description": "域名为空时的后备文本"
+  },
+  "importTitle": {
+    "message": "📥 导入规则",
+    "description": "导入窗口标题"
+  },
+  "importDescription": {
+    "message": "在下方粘贴包含规则的 JSON 或上传文件：",
+    "description": "导入窗口中的描述文本"
+  },
+  "loadFileBtn": {
+    "message": "📂 选择文件",
+    "description": "加载文件按钮"
+  },
+  "clearBtn": {
+    "message": "🗑️ 清空",
+    "description": "清空文本区域按钮"
+  },
+  "jsonPlaceholder": {
+    "message": "在此粘贴包含规则的 JSON...",
+    "description": "JSON 文本区域的占位符"
+  },
+  "replaceBtn": {
+    "message": "🔄 全部替换",
+    "description": "替换所有规则按钮"
+  },
+  "addBtn": {
+    "message": "➕ 添加",
+    "description": "添加规则按钮"
+  },
+  "closeBtn": {
+    "message": "✖️ 关闭",
+    "description": "关闭窗口按钮"
+  },
+  "errorInvalidFormat": {
+    "message": "格式无效。期望的是一个规则数组或带有 'rules' 字段的对象。",
+    "description": "格式无效错误"
+  },
+  "errorMissingSelector": {
+    "message": "规则 #{index} 不包含 'selector' 字段。",
+    "description": "缺少 selector 字段错误"
+  },
+  "errorEmptyFile": {
+    "message": "⚠️ 文件为空（0 字节）。请选择一个有效的文件。",
+    "description": "空文件错误"
+  },
+  "errorEmptyData": {
+    "message": "⚠️ 文件不包含数据。",
+    "description": "文件中没有数据错误"
+  },
+  "errorReadFile": {
+    "message": "❌ 读取文件错误。",
+    "description": "读取文件错误"
+  },
+  "errorParse": {
+    "message": "⚠️ {message}",
+    "description": "解析错误"
+  },
+  "errorImport": {
+    "message": "❌ 错误：{message}",
+    "description": "导入错误"
+  },
+  "fileInfo": {
+    "message": "📄 文件：{name}（{size} KB）",
+    "description": "文件信息"
+  },
+  "fileInfoWithCount": {
+    "message": "📄 文件：{name}（{size} KB）— 找到规则：{count}",
+    "description": "带有规则数量的文件信息"
+  },
+  "fileInfoError": {
+    "message": "📄 文件：{name} — ⚠️ {error}",
+    "description": "文件错误信息"
+  },
+  "statusReplaced": {
+    "message": "✅ 已替换 {count} 条规则。",
+    "description": "规则替换成功消息"
+  },
+  "statusAdded": {
+    "message": "✅ 已添加 {added} 条新规则。总计：{total} 条规则。",
+    "description": "规则添加成功消息"
+  },
+  "exportRulesBtn": {
+    "message": "📤 导出规则",
+    "description": "导出规则按钮"
+  },
+  "importRulesBtn": {
+    "message": "📥 导入规则",
+    "description": "导入规则按钮"
+  },
+  "alertNoRulesToExport": {
+    "message": "没有规则可导出。",
+    "description": "没有规则可导出时的消息"
+  },
+  "alertInvalidImportFile": {
+    "message": "文件格式无效。请选择从 BlockIt 导出的 JSON 文件。",
+    "description": "导入文件无效时的消息"
+  },
+  "alertNoRulesInFile": {
+    "message": "文件中未找到规则。",
+    "description": "文件中没有规则时的消息"
+  },
+  "alertNoNewRules": {
+    "message": "未添加新规则。文件中的所有规则已存在。",
+    "description": "所有规则已存在时的消息"
+  },
+  "alertImportAdded": {
+    "message": "已添加 {added} 条新规则。总计：{total} 条规则。",
+    "description": "规则已添加时的消息"
+  },
+  "confirmImportChoice": {
+    "message": "在文件中找到 {count} 条规则。\n\n点击“确定”替换所有当前规则。\n点击“取消”添加新规则（跳过重复项）。",
+    "description": "导入选择确认"
+  },
+  "rulesImported": {
+    "message": "✅ 规则导入成功！",
+    "description": "导入成功消息"
+  },
+  "selectorTypeCSS": {
+    "message": "选择器",
+    "description": "CSS 选择器类型的标签"
+  },
+  "selectorTypeXPath": {
+    "message": "XPath",
+    "description": "XPath 类型的标签"
+  },
+  "selectorTypeUnknown": {
+    "message": "未知的选择器类型",
+    "description": "未知选择器类型的标签"
+  },
+  "copyHint": {
+    "message": "💡 提示：右键点击元素 → \"检查\" → 右键点击代码 → \"复制\" → \"复制选择器\" 或 \"复制 XPath\"",
+    "description": "关于从 DevTools 复制选择器的提示"
+  },
+  "toggleAdvanced": {
+    "message": "⚙️ 高级模式",
+    "description": "显示高级模式的按钮"
+  },
+  "hideAdvanced": {
+    "message": "⚙️ 基本模式",
+    "description": "隐藏高级模式的按钮"
+  },
+  "selectorLabel": {
+    "message": "输入 CSS 选择器或 XPath：",
+    "description": "选择器输入字段的标签"
+  },
+  "selectorPlaceholder": {
+    "message": "例如：#ad-container 或 //div[@id='ad']",
+    "description": "选择器输入字段的占位符"
+  },
+  "toolsDivider": {
+    "message": "─── 工具 ───",
+    "description": "工具部分的分隔符"
+  }
+}
