@@ -19,5 +19,11 @@
       "js": ["content.js"],
       "run_at": "document_end"
     }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["instruction.html", "instruction.js", "styles.css"],
+      "matches": ["<all_urls>"]
+    }
   ]
 }

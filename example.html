@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пример для тренировки селекторов</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+
+        <header class="page-header">
+            <h1 data-type="title" class="main-title">😺 Галерея котов-мемов</h1>
+            <p class="subtitle">Наводите курсор на строки кода, чтобы увидеть, как подсвечиваются элементы</p>
+        </header>
+
+        <div class="cards-wrapper">
+
+            <!-- Карточка 1: Салатный кот -->
+            <div class="card card--salad">
+                <div class="card__image-wrapper">
+                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/60182e9/images/cat1.jpg" alt="Кот, который не любит салат" class="card__image">
+                </div>
+                <div class="card__body">
+                    <h2 id="salad-cat" class="card__title">Салатный кот</h2>
+                    <p data-type="description" class="card__description">Кот, который смотрит на салат с презрением</p>
+                    <div class="card__actions">
+                        <button type="button" class="btn btn--view">Смотреть</button>
+                        <button type="button" class="btn btn--edit">Редактировать</button>
+                    </div>
+                </div>
+            </div>
+
+                        <!-- Карточка 2: Кот "А?" (вертикальная картинка) -->
+            <div class="card card--confused">
+                <div class="card__image-wrapper card__image-wrapper--portrait">
+                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/60182e9/images/cat2.jfif" alt="Кот, который спрашивает А?" class="card__image card__image--portrait">
+                </div>
+                <div class="card__body">
+                    <h2 id="confused-cat" class="card__title">Кот «А?»</h2>
+                    <p data-type="description" class="card__description">Когда ты не понял вопрос, но хочешь казаться умным</p>
+                    <div class="card__actions">
+                        <button type="button" class="btn btn--view">Смотреть</button>
+                        <button type="button" class="btn btn--edit">Редактировать</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Карточка 3: Хлебный кот -->
+            <div class="card card--bread">
+                <div class="card__image-wrapper">
+                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/60182e9/images/cat3.jpg" alt="Кот, похожий на хлеб" class="card__image">
+                </div>
+                <div class="card__body">
+                    <h2 id="bread-cat" class="card__title">Хлебный кот</h2>
+                    <p data-type="description" class="card__description">Не ешь, подумой!</p>
+                    <div class="card__actions">
+                        <button type="button" class="btn btn--view">Смотреть</button>
+                        <button type="button" class="btn btn--edit">Редактировать</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</body>
+</html>
