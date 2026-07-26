@@ -10,9 +10,7 @@
 
 ### 💡 What is BlockIt?
 
-**BlockIt** is a lightweight browser extension that lets you remove unwanted HTML elements from any website. Unlike traditional ad blockers that rely on pre-built filter lists, BlockIt puts control in your hands:
-
-choose what to block (ads, banners, popups, and any other annoying elements), how to block (remove or hide), manage rules (create, delete, group by site, export and import settings), and use both CSS selectors and XPath.
+**BlockIt** is a lightweight browser extension that lets you remove unwanted HTML elements from any website. Unlike traditional ad blockers that rely on pre-built filter lists, BlockIt puts control in your hands: choose what to block (ads, banners, popups, and any other annoying elements), how to block (remove or hide), manage rules (create, delete, group by site, export and import settings), and use both CSS selectors and XPath.
 
 ---
 
@@ -22,15 +20,17 @@ choose what to block (ads, banners, popups, and any other annoying elements), ho
    - **Via terminal:** `git clone https://github.com/PavelCraft/BlockIt.git`
    - **Or as a ZIP archive:** on the repository page, click "Code" → "Download ZIP" and extract it.
 
-   ![Download ZIP archive](https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/16.png)
+   <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/feaf3ea/images/16.png" width="500" alt="Download ZIP archive">
 
 2. Open Chrome and go to `chrome://extensions/`.
 3. Enable **Developer mode** (toggle in the top-right corner).
 4. Click **Load unpacked** and select the project folder.
 
-   ![Load unpacked extension](https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/17.png)
+   <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/feaf3ea/images/17.png" width="500" alt="Load unpacked extension">
 
 5. Pin the extension to the toolbar: click the puzzle icon next to the address bar and select **Pin** next to BlockIt.
+
+   <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/1.png" width="500" alt="Pin the extension to the toolbar">
 
 ---
 
@@ -59,9 +59,7 @@ BSD 3-Clause © 2026 [PavelCraft](https://github.com/PavelCraft)
 
 ### 💡 Что такое BlockIt?
 
-**BlockIt** — это лёгкое расширение для браузера, которое позволяет удалять нежелательные HTML-элементы с любых сайтов. В отличие от классических блокировщиков рекламы, которые используют готовые списки фильтров, BlockIt даёт управление в руки пользователя:
-
-выбирать, что блокировать (рекламу, баннеры, попапы и любые другие надоедливые элементы), как блокировать (удалять или скрывать), управлять правилами (создавать, удалять, группировать по сайтам, экспортировать и импортировать настройки) и использовать как CSS-селекторы, так и XPath.
+**BlockIt** — это лёгкое расширение для браузера, которое позволяет удалять нежелательные HTML-элементы с любых сайтов. В отличие от классических блокировщиков рекламы, которые используют готовые списки фильтров, BlockIt даёт управление в руки пользователя: выбирать, что блокировать (рекламу, баннеры, попапы и любые другие надоедливые элементы), как блокировать (удалять или скрывать), управлять правилами (создавать, удалять, группировать по сайтам, экспортировать и импортировать настройки) и использовать как CSS-селекторы, так и XPath.
 
 ---
 
@@ -71,15 +69,17 @@ BSD 3-Clause © 2026 [PavelCraft](https://github.com/PavelCraft)
    - **Через терминал:** `git clone https://github.com/PavelCraft/BlockIt.git`
    - **Или как ZIP-архив:** на странице репозитория нажмите «Code» → «Download ZIP» и распакуйте.
 
-   ![Скачать ZIP-архив](https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/16.png)
+   <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/feaf3ea/images/16.png" width="500" alt="Скачать ZIP-архив">
 
 2. Откройте Chrome и перейдите на страницу `chrome://extensions/`.
 3. Включите **«Режим разработчика»** (переключатель в правом верхнем углу).
 4. Нажмите **«Загрузить распакованное расширение»** и выберите папку с проектом.
 
-   ![Загрузить распакованное расширение](https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/17.png)
+   <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/feaf3ea/images/17.png" width="500" alt="Загрузить распакованное расширение">
 
 5. Закрепите расширение на панели: нажмите на иконку пазла рядом с адресной строкой и выберите **«Закрепить»** напротив BlockIt.
+
+   <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/1.png" width="500" alt="Закрепить расширение на панели">
 
 ---
 
@@ -101,5 +101,3 @@ BSD 3-Clause © 2026 [PavelCraft](https://github.com/PavelCraft)
 ### 📜 Лицензия
 
 BSD 3-Clause © 2026 [PavelCraft](https://github.com/PavelCraft)
-
-
