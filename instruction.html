@@ -44,11 +44,19 @@
             <p><strong>Ключевые особенности:</strong></p>
             <ul>
                 <li><strong>Простота использования:</strong> Достаточно скопировать селектор из инструментов разработчика и вставить его в расширение.</li>
-                <li><strong>Гибкость:</strong> Поддерживаются как CSS-селекторы, так и XPath-выражения.</li>
-                <li><strong>Два режима блокировки:</strong> Вы можете полностью удалить элемент или скрыть его, сохранив место на странице.</li>
+                <li><strong>Гибкость:</strong>
+                    <ul>
+                        <li>Поддерживаются как CSS-селекторы, так и XPath-выражения</li>
+                        <li>Вы сами решаете, удалить элемент или скрыть</li>
+                        <li>Вы сами решаете, какие элементы блокировать, какие нет</li>
+                        <li>Вы решаете, какие правила блокировки оставить, какие удалить</li>
+                    </ul>
+                </li>
                 <li><strong>Приватность:</strong> Все правила хранятся только локально в вашем браузере и никуда не отправляются.</li>
                 <li><strong>Группировка правил по сайтам:</strong> Правила автоматически группируются для текущего сайта и для всех остальных. Это упрощает управление ими.</li>
                 <li><strong>Обмен настройками:</strong> Вы можете поделиться своими правилами с другими пользователями, экспортировав их в файл.</li>
+                <li><strong>Поддержка нескольких языков:</strong> Интерфейс расширения автоматически переключается на язык, установленный в вашем браузере. Поддерживаются: русский, английский, французский, немецкий, испанский, португальский, китайский и японский. Если ваш язык не поддерживается, интерфейс отобразится на английском (язык по умолчанию).</li>
+                <li><strong>Открытый исходный код:</strong> Расширение разрабатывается под лицензией BSD-3-Clause. Вы можете участвовать в развитии проекта, предлагать улучшения и изучать код на <a href="https://github.com/PavelCraft/BlockIt" target="_blank">GitHub</a>.</li>
             </ul>
         </section>
 
@@ -61,31 +69,31 @@
             <h3 id="installation">Установка</h3>
             <p><strong>Способ 1 (рекомендованный):</strong> Перейдите в <a href="https://chrome.google.com/webstore" target="_blank">Chrome Web Store</a>, найдите расширение BlockIt и нажмите «Установить». После установки обязательно закрепите расширение на панели браузера, нажав на иконку пазла рядом с адресной строкой и выбрав «закрепить» напротив BlockIt.</p>
             <div class="screenshot">
-                <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/60182e9/images/1.png" alt="Закрепление расширения на панели" class="screenshot-img">
+                <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/1.png" alt="Закрепление расширения на панели" class="screenshot-img">
             </div>
 
             <h3 id="how-to-block">Как заблокировать элемент</h3>
             <ol>
                 <li>Нажмите правой кнопкой мыши по элементу, который хотите заблокировать, и выберите «Посмотреть код» (или «Inspect»). Это действие всегда приводит вас к нужному элементу в дереве HTML.</li>
                 <div class="screenshot">
-                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/60182e9/images/2.png" alt="Открытие контекстного меню" class="screenshot-img">
+                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/2.png" alt="Открытие контекстного меню" class="screenshot-img">
                 </div>
                 <li>В открывшемся дереве HTML найдите нужный элемент. Чтобы убедиться, что вы выбрали правильный элемент, наводите курсор на строки кода — соответствующие элементы на странице будут подсвечиваться. Выбирайте самый внешний (верхний) элемент, который полностью покрывает блок, который вы хотите заблокировать.</li>
                 <div class="screenshot">
-                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/60182e9/images/3.png" alt="Найти элемент" class="screenshot-img">
+                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/3.png" alt="Найти элемент" class="screenshot-img">
                 </div>
                 <li>Нажмите правой кнопкой по элементу в дереве → <strong>Копировать</strong> (или <strong>Copy</strong>) → <strong>Копировать селектор</strong> (или <strong>Copy selector</strong>). Для XPath: <strong>Копировать XPath</strong> (или <strong>Copy XPath</strong>).</li>
                 <div class="screenshot">
-                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/60182e9/images/4.png" alt="Копирование элемента" class="screenshot-img">
+                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/4.png" alt="Копирование элемента" class="screenshot-img">
                 </div>
                 <li>Откройте расширение BlockIt, вставьте скопированный селектор в поле ввода, выберите режим блокировки и нажмите «Добавить правило».
                     <div class="screenshot">
-                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/60182e9/images/5.png" alt="Вставка селектора в поле ввода" class="screenshot-img">
+                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/5.png" alt="Вставка селектора в поле ввода" class="screenshot-img">
                     </div>
                 </li>
                 <li>Готово! Правило появилось в списке активных, а элемент исчез со страницы.
                     <div class="screenshot">
-                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/60182e9/images/6.png" alt="Список активных правил" class="screenshot-img">
+                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/6.png" alt="Список активных правил" class="screenshot-img">
                     </div>
                 </li>
                 <li>Чтобы закрыть инструменты разработчика, нажмите <kbd>F12</kbd> или кликните на крестик в правом верхнем углу панели DevTools.</li>
@@ -123,25 +131,25 @@
                 <li><strong>Экспорт и импорт правил:</strong> Возможность делиться своими правилами с другими пользователями или переносить их между устройствами.</li>
             </ul>
             
-            <h3 id="html-parser">HTML-парсер, редактирование и добавление атрибутов</h3>
+            <h4 id="html-parser">HTML-парсер, редактирование и добавление атрибутов</h4>
             <p>Эти три инструмента работают в связке, образуя единый процесс создания точного селектора без необходимости помнить синтаксис:</p>
             <ol>
                 <li><strong>Скопируйте HTML-код элемента</strong> (ПКМ → <strong>Копировать</strong> (или <strong>Copy</strong>) → <strong>Копировать элемент</strong> (или <strong>Copy element</strong>)).
                     <div class="screenshot">
-                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/60182e9/images/7.png" alt="Копирование html-элемента" class="screenshot-img">
+                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/7.png" alt="Копирование html-элемента" class="screenshot-img">
                     </div>
                 </li>
                 <li><strong>Нажмите кнопку "Продвинутый режим" в расширении и вставьте HTML-код элемента в соответствующее поле</strong>. Нажмите кнопку "Разобрать". Расширение распарсит код и покажет вам тег и список всех его атрибутов.
                 </li>
                 <li><strong>Отредактируйте предложенный список атрибутов.</strong> Оставьте только те атрибуты, которые с наибольшей вероятностью не изменятся в будущем. Например, <code>id</code> и <code>class</code>, похожие на динамически сгенерированные (бессмысленный набор символов), для этой цели подходят плохо. Селектор в поле ввода будет обновляться автоматически при каждом изменении списка.
                     <div class="screenshot">
-                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/60182e9/images/8.png" alt="Вставка html-элемента в Продвинутом режиме" class="screenshot-img">
+                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/8.png" alt="Вставка html-элемента в Продвинутом режиме" class="screenshot-img">
                     </div>
                 </li>
                 <li><strong>При необходимости добавьте атрибут вручную.</strong> Если предложенного набора атрибутов недостаточно для создания уникального селектора, вы можете добавить свой.</li>
                 <li><strong>Нажмите кнопку "Добавить правило" и убедитесь, что оно добавлено, а элемент удалён со страницы".</strong>
                     <div class="screenshot">
-                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/60182e9/images/9.png" alt="Редактирование списка атрибутов" class="screenshot-img">
+                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/9.png" alt="Редактирование списка атрибутов" class="screenshot-img">
                     </div>
                 </li>
             </ol>
@@ -170,7 +178,7 @@
             <p>Если ни один из автоматических способов не дал стабильного селектора, вы можете вручную добавить уникальный атрибут и его значение, чтобы сузить поиск.</p>
 
             <h3>6. Написать селектор вручную</h3>
-            <p>Требует базового понимания синтаксиса CSS-селекторов. Это даёт больше контроля и стабильности. Для изучения основ обратитесь к <a href="#selectors-cheatsheet">Конспекту по написанию селекторов</a> или <a href="https://docs.sherparpa.ru/sherpa-rpa/sherpa-designer/rabota-v-sherpa-designer/rukovodstvo-po-veb-selektoram/spravochnik-po-notacii-css-i-xpath-selektorov" target="_blank">справочнику по нотации CSS и XPath селекторов</a>.</p>
+            <p>Требует базового понимания синтаксиса CSS-селекторов. Это даёт больше контроля и стабильности. Для изучения основ обратитесь к <a href="#selectors-cheatsheet">Конспекту по написанию селекторов</a> или к <a href="https://docs.sherparpa.ru/sherpa-rpa/sherpa-designer/rabota-v-sherpa-designer/rukovodstvo-po-veb-selektoram/spravochnik-po-notacii-css-i-xpath-selektorov" target="_blank">Справочнику по нотации CSS и XPath селекторов</a>.</p>
         </section>
 
         <!-- ============================================================
@@ -187,17 +195,17 @@
             <ul>
                 <li><strong>В продвинутом режиме нажмите кнопку "Импортировать", откроется окно, нажмите кнопку "Выбрать файл" и выберите файл.</strong>
                     <div class="screenshot">
-                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/60182e9/images/10.png" alt="Выбор файла с правилами для импорта" class="screenshot-img">
+                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/10.png" alt="Выбор файла с правилами для импорта" class="screenshot-img">
                     </div>
                 </li>
                 <li><strong>Выберите опцию: добавить импортируемые правила к вашему списку или заменить импортируемыми правилами ваш список. В зависимости от того, что вы хотите, нажмите кнопку "Заменить все" или "Добавить"</strong>
                     <div class="screenshot">
-                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/60182e9/images/11.png" alt="Окно импорта правил" class="screenshot-img">
+                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/11.png" alt="Окно импорта правил" class="screenshot-img">
                     </div>
                 </li>
                 <li><strong>Если всё прошло успешно, вы увидите сообщение об импорте и новые правила в вашем списке активных правил в окне расширения</strong>
                     <div class="screenshot">
-                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/60182e9/images/12.png" alt="Результат успешного импорта правил" class="screenshot-img">
+                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/12.png" alt="Результат успешного импорта правил" class="screenshot-img">
                     </div>
                 </li>
             </ul>
@@ -211,15 +219,15 @@
 
             <h4>Созданное правило не сработало</h4>
             <ul>
-                <li><strong>Выбран не самый внешний элемент:</strong> Попробуйте подняться по дереву HTML выше и скопировать селектор для родительского контейнера.</li>
-                <li><strong>Сайт использует динамические классы (обфускацию):</strong> В этом случае скопированный селектор может перестать работать. Используйте XPath или напишите селектор вручную.</li>
-                <li><strong>Элемент подгружается динамически:</strong> Расширение автоматически применяет правила при изменениях на странице. Если это не помогло, попробуйте обновить страницу.</li>
-                <li><strong>Правило создано для другого домена:</strong> Проверьте, что правило находится в группе «Для этого сайта» или «Для остальных сайтов».</li>
+                <li><strong>Возможная причина №1. Выбран не самый внешний элемент:</strong> Попробуйте подняться по дереву HTML выше и скопировать селектор для родительского контейнера.</li>
+                <li><strong>Возможная причина №2. Сайт использует динамические классы (обфускацию):</strong> В этом случае скопированный селектор может перестать работать. Используйте XPath или напишите селектор вручную.</li>
+                <li><strong>Возможная причина №3. Элемент подгружается динамически:</strong> Расширение автоматически применяет правила при изменениях на странице. Если это не помогло, попробуйте обновить страницу.</li>
+                <li><strong>Возможная причина №4. Правило создано для другого домена:</strong> Проверьте, что правило находится в группе «Для этого сайта» или «Для остальных сайтов».</li>
             </ul>
 
             <h4>Селектор не находит ни одного элемента</h4>
             <ul>
-                <li><strong>Проверьте селектор в консоли:</strong> Откройте DevTools (F12), перейдите на вкладку «Console» и выполните: <code>document.querySelectorAll('ваш_селектор')</code>. Если он возвращает пустой массив — селектор неверен.</li>
+                <li><strong>Проверьте ваш селектор:</strong> Откройте DevTools (F12) и перейдите на вкладку «Elements» (или «Элементы»). Нажмите Ctrl + F (или Cmd + F на Mac), введите ваш селектор в строку поиска. Если строка поиска не находит ни одного элемента, значит, ваш селектор неверен.</li>
                 <li><strong>Страница использует Shadow DOM:</strong> В этом случае стандартные селекторы могут не работать. Попробуйте использовать XPath или поискать элемент внутри теневого корня.</li>
                 <li><strong>Элемент подгружается после выполнения скрипта:</strong> Некоторые элементы появляются с задержкой. Попробуйте обновить страницу или подождать.</li>
             </ul>
@@ -233,7 +241,7 @@
             <p>Уточните селектор, добавив больше атрибутов или используя более специфичный путь. В Продвинутом режиме вы можете вручную добавить уникальный атрибут, чтобы сузить поиск.</p>
 
             <h4>Ничего не помогает</h4>
-            <p>Если вы перепробовали все способы, а элемент упорно не блокируется — возможно, этот сайт просто не хочет, чтобы его блокировали. В таком случае можно <strong>обоссать этот сайт и забыть о его существовании</strong>. 😄</p>
+            <p>Если вы перепробовали все способы, а элемент упорно не блокируется — возможно, возможно, лучшее, что вы можете сделать — <strong>обоссать этот сайт, покинуть его и забыть о его существовании</strong>. 😄</p>
         </section>
 
         <!-- ============================================================
@@ -278,12 +286,11 @@
                 <li>Откройте DevTools (<kbd>F12</kbd>).</li>
                 <li>Нажмите на иконку шестерёнки (⚙️) в правом верхнем углу → <strong>Настройки</strong> (или <strong>Settings</strong>).</li>
                 <li>В разделе <strong>«Язык»</strong> (или <strong>«Language»</strong>) выберите нужный язык из выпадающего списка.</li>
+                <div class="screenshot">
+                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/13.png" alt="Смена языка в DevTools" class="screenshot-img">
+                </div>
                 <li>Закройте и снова откройте DevTools.</li>
             </ol>
-            <div class="screenshot">
-                <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/60182e9/images/13.png" alt="Смена языка в DevTools" class="screenshot-img">
-                <p class="screenshot-caption">Смена языка интерфейса DevTools</p>
-            </div>
 
             <h4>Расположение панели</h4>
             <ol>
@@ -298,8 +305,7 @@
                 </li>
             </ol>
             <div class="screenshot">
-                <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/60182e9/images/14.png" alt="Изменение расположения панели DevTools" class="screenshot-img">
-                <p class="screenshot-caption">Изменение расположения панели DevTools</p>
+                <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/14.png" alt="Изменение расположения панели DevTools" class="screenshot-img">
             </div>
 
             <h3>Как проверять селекторы в инструментах разработчика</h3>
@@ -312,14 +318,8 @@
             </ol>
             <p>Строка поиска показывает, сколько элементов найдено (например, <code>1 of 3</code>). Это помогает понять, насколько точный селектор вы написали.</p>
             <div class="screenshot">
-                <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/60182e9/images/15.png" alt="Поиск селектора через Ctrl+F" class="screenshot-img">
-                <p class="screenshot-caption">Поиск селектора через <kbd>Ctrl+F</kbd> в DevTools</p>
+                <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/15.png" alt="Поиск селектора через Ctrl+F" class="screenshot-img">
             </div>
-
-            <p><strong>Альтернативный способ</strong> — через консоль (вкладка «Console»):</p>
-            <pre><code>document.querySelectorAll('ваш_селектор_сюда')</code></pre>
-            <p>Этот код вернёт массив всех элементов, найденных по вашему селектору.</p>
-
             <h3>Практический пример: Галерея котов-мемов</h3>
             <p>Теперь давайте применим знания на практике. Откройте <a href="example.html" target="_blank">страницу example.html</a> и откройте DevTools. Попробуйте вводить селекторы из таблицы ниже и смотрите, какие элементы они находят.</p>
 
@@ -351,7 +351,7 @@
                 <li><code>.btn--view</code> — все элементы с классом <code>btn--view</code></li>
             </ul>
 
-            <h4>4. Селектор по идентификатору (<code>#ид</code>)</h4>
+            <h4>4. Селектор по идентификатору (<code>#id</code>)</h4>
             <p>Находит элемент с уникальным идентификатором <code>id</code>. На странице должен быть только один такой элемент.</p>
             <p><strong>Селекторы:</strong> <code>#salad-cat</code>, <code>#confused-cat</code>, <code>#bread-cat</code></p>
             <p><strong>Что найдёт:</strong></p>
@@ -458,9 +458,9 @@
                     </tr>
                     <tr>
                         <td>8</td>
-                        <td>Найти элемент с классом <code>card__description</code>, который идёт сразу после заголовка с <code>id="confused-cat"</code></td>
-                        <td>Один элемент</td>
-                        <td>Селектор соседнего элемента</td>
+                        <td>Найти кнопку <code>btn--edit</code>, которая идёт сразу после кнопки <code>btn--view</code> внутри блока <code>card__actions</code></td>
+                        <td>Несколько элементов</td>
+                        <td>Селектор соседнего элемента (<code>+</code>)</td>
                     </tr>
                     <tr>
                         <td>9</td>
@@ -497,7 +497,7 @@
             <h2>Обратная связь и контакты <a href="#top" class="back-link">В начало</a></h2>
             <p>Я всегда открыт к вашим предложениям и обратной связи! Если вы нашли ошибку, хотите предложить улучшение, просто поделиться впечатлениями или предложить мне работу — напишите мне.</p>
             <ul>
-                <li><strong>GitHub:</strong> <a href="https://github.com/PavelCraft/BlockIt" target="_blank">Репозиторий проекта</a></li>
+                <li><strong>GitHub:</strong> <a href="https://github.com/PavelCraft" target="_blank">PavelCraft</a></li>
                 <li><strong>Telegram:</strong> <a href="https://t.me/PavelCodeMaster" target="_blank">@PavelCodeMaster</a></li>
                 <li><strong>Email:</strong> <a href="mailto:pavelborisov@list.ru">pavelborisov@list.ru</a></li>
             </ul>
