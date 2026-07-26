@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selector Practice Example</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div class="container">
+
+        <header class="page-header">
+            <h1 data-type="title" class="main-title">😺 Cat Meme Gallery</h1>
+            <p class="subtitle">Hover your cursor over the code lines to see elements highlighted on the page</p>
+        </header>
+
+        <div class="cards-wrapper">
+
+            <!-- Card 1: Salad Cat -->
+            <div class="card card--salad">
+                <div class="card__image-wrapper">
+                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/60182e9/images/cat1.jpg" alt="Cat that doesn't like salad" class="card__image">
+                </div>
+                <div class="card__body">
+                    <h2 id="salad-cat" class="card__title">Salad Cat</h2>
+                    <p data-type="description" class="card__description">Cat looking at salad with contempt</p>
+                    <div class="card__actions">
+                        <button type="button" class="btn btn--view">View</button>
+                        <button type="button" class="btn btn--edit">Edit</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Confused Cat (vertical image) -->
+            <div class="card card--confused">
+                <div class="card__image-wrapper card__image-wrapper--portrait">
+                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/60182e9/images/cat2.jfif" alt="Cat asking 'Huh?'" class="card__image card__image--portrait">
+                </div>
+                <div class="card__body">
+                    <h2 id="confused-cat" class="card__title">Confused Cat</h2>
+                    <p data-type="description" class="card__description">When you didn't understand the question but want to look smart</p>
+                    <div class="card__actions">
+                        <button type="button" class="btn btn--view">View</button>
+                        <button type="button" class="btn btn--edit">Edit</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: Bread Cat -->
+            <div class="card card--bread">
+                <div class="card__image-wrapper">
+                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/60182e9/images/cat3.jpg" alt="Cat that looks like bread" class="card__image">
+                </div>
+                <div class="card__body">
+                    <h2 id="bread-cat" class="card__title">Bread Cat</h2>
+                    <p data-type="description" class="card__description">Don't eat it, think!</p>
+                    <div class="card__actions">
+                        <button type="button" class="btn btn--view">View</button>
+                        <button type="button" class="btn btn--edit">Edit</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</body>
+</html>
