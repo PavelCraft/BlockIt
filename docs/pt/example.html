@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemplo para praticar seletores</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div class="container">
+
+        <header class="page-header">
+            <h1 data-type="title" class="main-title">😺 Galeria de memes de gatos</h1>
+            <p class="subtitle">Passe o cursor sobre as linhas de código para ver como os elementos são realçados na página</p>
+        </header>
+
+        <div class="cards-wrapper">
+
+            <!-- Cartão 1: Gato salada -->
+            <div class="card card--salad">
+                <div class="card__image-wrapper">
+                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/60182e9/images/cat1.jpg" alt="O gato que não gosta de salada" class="card__image">
+                </div>
+                <div class="card__body">
+                    <h2 id="salad-cat" class="card__title">Gato salada</h2>
+                    <p data-type="description" class="card__description">O gato que olha para a salada com desprezo</p>
+                    <div class="card__actions">
+                        <button type="button" class="btn btn--view">Ver</button>
+                        <button type="button" class="btn btn--edit">Editar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cartão 2: Gato "Hein?" (imagem vertical) -->
+            <div class="card card--confused">
+                <div class="card__image-wrapper card__image-wrapper--portrait">
+                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/60182e9/images/cat2.jfif" alt="O gato que pergunta 'Hein?'" class="card__image card__image--portrait">
+                </div>
+                <div class="card__body">
+                    <h2 id="confused-cat" class="card__title">Gato « Hein? »</h2>
+                    <p data-type="description" class="card__description">Quando não percebeste a pergunta, mas queres parecer inteligente</p>
+                    <div class="card__actions">
+                        <button type="button" class="btn btn--view">Ver</button>
+                        <button type="button" class="btn btn--edit">Editar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cartão 3: Gato pão -->
+            <div class="card card--bread">
+                <div class="card__image-wrapper">
+                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/60182e9/images/cat3.jpg" alt="O gato que parece pão" class="card__image">
+                </div>
+                <div class="card__body">
+                    <h2 id="bread-cat" class="card__title">Gato pão</h2>
+                    <p data-type="description" class="card__description">Não comas, pensa!</p>
+                    <div class="card__actions">
+                        <button type="button" class="btn btn--view">Ver</button>
+                        <button type="button" class="btn btn--edit">Editar</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</body>
+</html>

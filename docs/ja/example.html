@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>セレクタ練習用サンプル</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div class="container">
+
+        <header class="page-header">
+            <h1 data-type="title" class="main-title">😺 猫ミームギャラリー</h1>
+            <p class="subtitle">コード行にカーソルを合わせると、ページ上の要素がハイライトされるのを確認できます</p>
+        </header>
+
+        <div class="cards-wrapper">
+
+            <!-- カード1：サラダ猫 -->
+            <div class="card card--salad">
+                <div class="card__image-wrapper">
+                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/60182e9/images/cat1.jpg" alt="サラダが嫌いな猫" class="card__image">
+                </div>
+                <div class="card__body">
+                    <h2 id="salad-cat" class="card__title">サラダ猫</h2>
+                    <p data-type="description" class="card__description">サラダを軽蔑の目で見る猫</p>
+                    <div class="card__actions">
+                        <button type="button" class="btn btn--view">表示</button>
+                        <button type="button" class="btn btn--edit">編集</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- カード2：「え？」猫（縦長画像） -->
+            <div class="card card--confused">
+                <div class="card__image-wrapper card__image-wrapper--portrait">
+                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/60182e9/images/cat2.jfif" alt="「え？」と尋ねる猫" class="card__image card__image--portrait">
+                </div>
+                <div class="card__body">
+                    <h2 id="confused-cat" class="card__title">「え？」猫</h2>
+                    <p data-type="description" class="card__description">質問が理解できなかったけど賢そうに見せたい時</p>
+                    <div class="card__actions">
+                        <button type="button" class="btn btn--view">表示</button>
+                        <button type="button" class="btn btn--edit">編集</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- カード3：パン猫 -->
+            <div class="card card--bread">
+                <div class="card__image-wrapper">
+                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/60182e9/images/cat3.jpg" alt="パンに見える猫" class="card__image">
+                </div>
+                <div class="card__body">
+                    <h2 id="bread-cat" class="card__title">パン猫</h2>
+                    <p data-type="description" class="card__description">食べるな、考えろ！</p>
+                    <div class="card__actions">
+                        <button type="button" class="btn btn--view">表示</button>
+                        <button type="button" class="btn btn--edit">編集</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</body>
+</html>

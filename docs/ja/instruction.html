@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="referrer" content="no-referrer">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlockIt 拡張機能ユーザーガイド</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div class="container">
+
+        <!-- ============================================================
+        ヘッダーとナビゲーション
+        ============================================================ -->
+        <header>
+            <h1 id="top">BlockIt 拡張機能ユーザーガイド</h1>
+            <p>CSSセレクタまたはXPathを使用して、あらゆるサイトの要素をブロック</p>
+        </header>
+
+        <nav>
+            <h2>目次</h2>
+            <ul>
+                <li><a href="#what-is">BlockItとは？</a></li>
+                <li><a href="#quick-start">クイックスタート</a></li>
+                <li><a href="#advanced">高度な機能</a></li>
+                <li><a href="#selector-tips">ブロックする要素を選択するためのヒント</a></li>
+                <li><a href="#export-import">ルールのエクスポートとインポート</a></li>
+                <li><a href="#troubleshooting">トラブルシューティング（FAQ）</a></li>
+                <li><a href="#selectors-cheatsheet">セレクターチートシート</a></li>
+                <li><a href="#feedback">フィードバックと連絡先</a></li>
+            </ul>
+        </nav>
+
+        <hr>
+
+        <!-- ============================================================
+        セクション1: BlockItとは？
+        ============================================================ -->
+        <section id="what-is">
+            <h2>BlockItとは？ <a href="#top" class="back-link">トップへ戻る</a></h2>
+            <p>広告を表示するウェブサイトと一般的な広告ブロッカーは、絶え間ない「軍拡競争」を繰り広げています。サイト開発者は新しい方法で広告を表示し、ブロッカーはそれを隠す方法を見つけ出します。</p>
+            <p><strong>BlockIt</strong> は異なるアプローチを提供します。一般的なフィルターリストに依存する代わりに、ユーザー自身が特定の要素をブロックするルールを作成します。ルールは、ユーザー自身が共有しない限り、ユーザーだけが知っているため、迂回されにくくなります。</p>
+            <p><strong>主な機能：</strong></p>
+            <ul>
+                <li><strong>使いやすさ：</strong> 開発者ツールからセレクタをコピーして拡張機能に貼り付けるだけです。</li>
+                <li><strong>柔軟性：</strong>
+                    <ul>
+                        <li>CSSセレクタとXPath式の両方をサポート</li>
+                        <li>要素を削除するか非表示にするかを自分で決定</li>
+                        <li>ブロックする要素と保持する要素を自分で決定</li>
+                        <li>保持するブロックルールと削除するルールを自分で決定</li>
+                    </ul>
+                </li>
+                <li><strong>プライバシー：</strong> すべてのルールはブラウザにローカルに保存され、どこにも送信されません。</li>
+                <li><strong>サイトごとのルールグループ化：</strong> ルールは現在のサイトとその他すべてのサイトに対して自動的にグループ化されます。これにより管理が容易になります。</li>
+                <li><strong>設定の共有：</strong> ルールをファイルにエクスポートして、他のユーザーと共有できます。</li>
+                <li><strong>多言語サポート：</strong> 拡張機能のインターフェースは、ブラウザに設定された言語に自動的に切り替わります。サポート言語：ロシア語、英語、フランス語、ドイツ語、スペイン語、ポルトガル語、中国語、日本語。お使いの言語がサポートされていない場合は、英語（デフォルト言語）で表示されます。</li>
+                <li><strong>オープンソース：</strong> この拡張機能はBSD-3-Clauseライセンスの下で開発されています。プロジェクトに貢献したり、改善を提案したり、<a href="https://github.com/PavelCraft/BlockIt" target="_blank">GitHub</a>でコードを調べることができます。</li>
+            </ul>
+        </section>
+
+        <!-- ============================================================
+        セクション2: クイックスタート
+        ============================================================ -->
+        <section id="quick-start">
+            <h2>クイックスタート <a href="#top" class="back-link">トップへ戻る</a></h2>
+
+            <h3 id="installation">インストール</h3>
+            <p><strong>方法1（推奨）：</strong> <a href="https://chrome.google.com/webstore" target="_blank">Chrome ウェブストア</a> にアクセスし、BlockIt拡張機能を見つけて「インストール」をクリックします。インストール後、アドレスバーの横にあるパズルアイコンをクリックし、BlockItの横にある「ピン留め」を選択して、拡張機能をブラウザのツールバーにピン留めしてください。</p>
+            <div class="screenshot">
+                <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/1.png" alt="拡張機能をツールバーにピン留め" class="screenshot-img">
+            </div>
+
+            <p><strong>方法 2（開発者向け）：</strong><a href="https://github.com/PavelCraft/BlockIt#-english" target="_blank">GitHub</a> からソースコードをダウンロードし、展開した拡張機能を読み込んでください。</p>
+
+            <h3 id="how-to-block">要素をブロックする方法</h3>
+            <ol>
+                <li>ブロックしたい要素を右クリックし、「検証」（または「要素を検証」）を選択します。この操作により、HTMLツリー内のその要素に直接移動します。</li>
+                <div class="screenshot">
+                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/2.png" alt="コンテキストメニューを開く" class="screenshot-img">
+                </div>
+                <li>HTMLツリーで、目的の要素を見つけます。正しい要素を選択したことを確認するには、コード行にカーソルを合わせると、ページ上の対応する要素がハイライトされます。ブロックしたいブロックを完全に覆う、最も外側の要素を選択してください。</li>
+                <div class="screenshot">
+                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/3.png" alt="要素を見つける" class="screenshot-img">
+                </div>
+                <li>ツリー内の要素を右クリック → <strong>コピー</strong> → <strong>セレクタをコピー</strong>（または <strong>Copy selector</strong>）。XPathの場合：<strong>XPathをコピー</strong>（または <strong>Copy XPath</strong>）。</li>
+                <div class="screenshot">
+                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/4.png" alt="要素をコピー" class="screenshot-img">
+                </div>
+                <li>BlockIt拡張機能を開き、コピーしたセレクタを入力フィールドに貼り付け、ブロックモードを選択して「ルールを追加」をクリックします。
+                    <div class="screenshot">
+                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/5.png" alt="セレクタをフィールドに貼り付け" class="screenshot-img">
+                    </div>
+                </li>
+                <li>完了！ルールがアクティブルールのリストに表示され、要素がページから消えます。
+                    <div class="screenshot">
+                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/6.png" alt="アクティブルールのリスト" class="screenshot-img">
+                    </div>
+                </li>
+                <li>開発者ツールを閉じるには、<kbd>F12</kbd> を押すか、DevToolsパネルの右上隅にある×ボタンをクリックします。</li>
+            </ol>
+
+            <h3 id="modes">ブロックモードの意味は？</h3>
+            <ul>
+                <li><strong>削除</strong>（ほとんどの場合に適しています）：要素はページのHTMLから完全に削除され、そのスペースは他の要素のために解放されます。ただし、このオプションはレイアウトが崩れる原因になることがあります。</li>
+                <li><strong>非表示：</strong> 要素は見えなくなりますが、ページ上で同じスペースを占有し続けます。レイアウトは崩れません。</li>
+            </ul>
+        </section>
+
+        <!-- ============================================================
+        セクション3: 高度な機能
+        ============================================================ -->
+        <section id="advanced">
+            <h2>高度な機能 <a href="#top" class="back-link">トップへ戻る</a></h2>
+
+            <h3 id="xpath">XPathによるブロック</h3>
+            <p>XPathは、CSSセレクタが不安定な場合に、動的クラス（難読化）を使用するサイトで役立ちます。</p>
+            <p><strong>XPathをコピーする方法：</strong></p>
+            <ol>
+                <li>「検証」で要素を見つけます。</li>
+                <li>コード内の要素を右クリック → <strong>コピー</strong> → <strong>XPathをコピー</strong>（または <strong>Copy XPath</strong>）。</li>
+                <li>コピーした式をBlockItの入力フィールドに貼り付けます。拡張機能は自動的にXPathと認識し、<strong>これのために高度なモードを有効にする必要はありません</strong>。</li>
+            </ol>
+
+            <h3 id="advanced-mode">高度なモード</h3>
+            <p>基本モードでは、拡張機能はセレクタを入力するためのシンプルなフィールドを提供します。ルールをより細かく調整し、追加のツールを使用するには、<strong>高度なモード</strong>があります。有効にするには、拡張機能のインターフェースで対応するボタンをクリックします。</p>
+            <p>このモードでは、以下にアクセスできます：</p>
+            <ul>
+                <li><strong>HTMLパーサー：</strong> 要素のHTMLコードを貼り付けると、拡張機能がその属性から構成されるセレクタを自動的に提案します。</li>
+                <li><strong>属性の編集：</strong> 解析後、要素の属性リストが表示され、信頼性の低い属性（例：動的に生成されたクラス）を削除してセレクタを調整できます。</li>
+                <li><strong>属性の手動追加：</strong> セレクタをさらに調整したい場合、属性とその値を手動で追加できます。</li>
+                <li><strong>ルールのエクスポートとインポート：</strong> ルールを他のユーザーと共有したり、デバイス間で転送したりできます。</li>
+            </ul>
+
+            <h4 id="html-parser">HTMLパーサー、編集、属性の追加</h4>
+            <p>これらの3つのツールは連携して機能し、構文を覚える必要なく正確なセレクタを作成するための統合ワークフローを形成します：</p>
+            <ol>
+                <li><strong>要素のHTMLコードをコピーします</strong>（右クリック → <strong>コピー</strong> → <strong>要素をコピー</strong>（または <strong>Copy element</strong>））。
+                    <div class="screenshot">
+                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/7.png" alt="HTML要素をコピー" class="screenshot-img">
+                    </div>
+                </li>
+                <li><strong>拡張機能で高度なモードを有効にし、HTMLコードを対応するフィールドに貼り付けます</strong>。「解析」をクリックします。拡張機能がコードを解析し、タグとそのすべての属性のリストを表示します。
+                </li>
+                <li><strong>提案された属性リストを編集します。</strong> 将来変更される可能性が低い属性のみを残します。例えば、動的に生成されたように見える <code>id</code> や <code>class</code> はこの目的には適していません。入力フィールドのセレクタは、変更を加えるたびに自動的に更新されます。
+                    <div class="screenshot">
+                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/8.png" alt="高度なモードでHTMLを貼り付け" class="screenshot-img">
+                    </div>
+                </li>
+                <li><strong>必要に応じて属性を手動で追加します。</strong> 提案された属性セットだけでは一意のセレクタを作成するのに不十分な場合、独自の属性を追加できます。</li>
+                <li><strong>「ルールを追加」をクリックし、追加され、要素がページから削除されたことを確認します。</strong>
+                    <div class="screenshot">
+                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/9.png" alt="属性リストの編集" class="screenshot-img">
+                    </div>
+                </li>
+            </ol>
+        </section>
+
+        <!-- ============================================================
+        セクション4: ブロックする要素を選択するためのヒント
+        ============================================================ -->
+        <section id="selector-tips">
+            <h2>ブロックする要素を選択するためのヒント <a href="#top" class="back-link">トップへ戻る</a></h2>
+            <p>以下の方法は、最も簡単なものから高度なものへと順序付けられています。最初の方法から始めて、前の方法がうまくいかない場合は次の方法に進んでください。</p>
+
+            <h3>1. DevToolsからセレクタをコピーする</h3>
+            <p>これはほとんどのサイトで機能する最も簡単な方法です。手順は <a href="#how-to-block">「要素をブロックする方法」</a> セクションに記載されています。</p>
+
+            <h3>2. DevToolsからXPathをコピーする</h3>
+            <p>サイトの動的クラスが原因でコピーしたセレクタが機能しない場合は、この方法を使用します。XPathのコピー手順は <a href="#xpath">「XPathによるブロック」</a> セクションにあります。</p>
+
+            <h3>3. HTMLパーサーを使用する（高度なモード）</h3>
+            <p>この方法は、セレクタの理論は知っているが正確な構文を覚えていない場合に便利です。要素のHTMLコードを貼り付けると、拡張機能がその属性に基づいてセレクタを提案します。</p>
+
+            <h3>4. 属性リストを編集する（高度なモード）</h3>
+            <p>HTMLパーサーを使用した後、要素のすべての属性のリストが表示されます。将来変更される可能性が低い属性のみを残します。動的に生成されたクラス（意味不明な文字列）はこの目的には適していません。</p>
+
+            <h3>5. 属性を手動で追加する（高度なモード）</h3>
+            <p>自動的な方法のどれも安定したセレクタを提供しない場合は、一意の属性とその値を手動で追加して検索範囲を絞り込むことができます。</p>
+
+            <h3>6. セレクタを手動で記述する</h3>
+            <p>CSSセレクタ構文の基本的な理解が必要です。これにより、より多くの制御と安定性が得られます。基本を学ぶには、<a href="#selectors-cheatsheet">セレクターチートシート</a> または <a href="https://docs.sherparpa.ru/sherpa-rpa/sherpa-designer/rabota-v-sherpa-designer/rukovodstvo-po-veb-selektoram/spravochnik-po-notacii-css-i-xpath-selektorov" target="_blank">CSSおよびXPathセレクターリファレンス</a>（ロシア語）を参照してください。</p>
+        </section>
+
+        <!-- ============================================================
+        セクション5: ルールのエクスポートとインポート
+        ============================================================ -->
+        <section id="export-import">
+            <h2>ルールのエクスポートとインポート <a href="#top" class="back-link">トップへ戻る</a></h2>
+            <p>この機能により、ルールを他のユーザーと共有したり、コンピュータ間で転送したりできます。<strong>高度なモード</strong> で利用可能です。</p>
+            <ul>
+                <li><strong>エクスポート：</strong> すべてのルールをJSONファイルに保存します。</li>
+                <li><strong>インポート：</strong> JSONファイルからルールを読み込みます。すべての現在のルールを置き換えるか、新しいルールを追加できます（重複はスキップされます）。</li>
+            </ul>
+            <h3>ルールをインポートする方法は？</h3>
+            <ul>
+                <li><strong>高度なモードで「インポート」ボタンをクリックすると、ウィンドウが開きます。「ファイルを選択」をクリックしてファイルを選択します。</strong>
+                    <div class="screenshot">
+                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/10.png" alt="インポートするルールファイルを選択" class="screenshot-img">
+                    </div>
+                </li>
+                <li><strong>インポートしたルールをリストに追加するか、インポートしたルールでリストを置き換えるかを選択します。希望に応じて、「すべて置き換え」または「追加」をクリックします。</strong>
+                    <div class="screenshot">
+                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/11.png" alt="インポートウィンドウ" class="screenshot-img">
+                    </div>
+                </li>
+                <li><strong>成功すると、確認メッセージが表示され、新しいルールが拡張機能ウィンドウのアクティブルールリストに表示されます。</strong>
+                    <div class="screenshot">
+                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/12.png" alt="インポート成功結果" class="screenshot-img">
+                    </div>
+                </li>
+            </ul>
+        </section>
+
+        <!-- ============================================================
+        セクション6: トラブルシューティング（FAQ）
+        ============================================================ -->
+        <section id="troubleshooting">
+            <h2>トラブルシューティング（FAQ） <a href="#top" class="back-link">トップへ戻る</a></h2>
+
+            <h4>ルールが機能しませんでした</h4>
+            <ul>
+                <li><strong>考えられる理由 #1. 選択した要素が最も外側ではない：</strong> HTMLツリーを上に移動し、親コンテナのセレクタをコピーしてみてください。</li>
+                <li><strong>考えられる理由 #2. サイトが動的クラス（難読化）を使用している：</strong> この場合、コピーしたセレクタは機能しなくなる可能性があります。XPathを使用するか、セレクタを手動で記述してください。</li>
+                <li><strong>考えられる理由 #3. 要素が動的に読み込まれる：</strong> ページが変更されると、拡張機能は自動的にルールを再適用します。それでも解決しない場合は、ページを更新してみてください。</li>
+                <li><strong>考えられる理由 #4. ルールが別のドメイン用に作成された：</strong> ルールが「このサイト用」または「他のサイト用」グループにあることを確認してください。</li>
+            </ul>
+
+            <h4>セレクタが要素を見つけられない</h4>
+            <ul>
+                <li><strong>セレクタを確認してください：</strong> DevTools（F12）を開き、「Elements」タブに移動し、Ctrl+F（Macの場合はCmd+F）を押して、検索ボックスにセレクタを入力します。検索で何も見つからない場合、セレクタが正しくありません。</li>
+                <li><strong>ページがShadow DOMを使用している：</strong> この場合、標準のセレクタは機能しない可能性があります。XPathを使用するか、シャドウルート内で要素を検索してみてください。</li>
+                <li><strong>要素がスクリプト実行後に読み込まれる：</strong> 一部の要素は遅延して表示されます。ページを更新するか、待ってみてください。</li>
+            </ul>
+
+            <h4>要素を削除した後、レイアウトが崩れ、広告がある時より見た目が悪くなった</h4>
+            <ul>
+                <li><strong>解決策：</strong> ルールを削除し、<strong>「非表示」</strong> モードを選択してルールを再作成します。これにより、ページ上のスペースが保持され、レイアウトが維持されます。</li>
+            </ul>
+
+            <h4>セレクタが要素を多く見つけすぎる</h4>
+            <p>より多くの属性を追加するか、より具体的なパスを使用してセレクタを調整します。高度なモードでは、一意の属性を手動で追加して検索範囲を絞り込むことができます。</p>
+
+            <h4>何も効果がない</h4>
+            <p>すべて試しても要素がブロックされない場合、おそらく最善の選択は、<strong>そのサイトを忘れて離れること</strong>です。😄</p>
+        </section>
+
+        <!-- ============================================================
+        セクション7: セレクターチートシート
+        ============================================================ -->
+        <section id="selectors-cheatsheet">
+            <h2>セレクターチートシート <a href="#top" class="back-link">トップへ戻る</a></h2>
+
+            <h3>セレクタとは？</h3>
+            <p><strong>セレクタ</strong> は、タグ、クラス、ID、属性、またはHTML構造内の位置などのプロパティに基づいて、Webページ上の特定の要素を見つける方法です。</p>
+            <p>CSSスタイルとは異なり、BlockItではセレクタは <strong>要素を見つけるためだけ</strong> に使用されます。色、フォント、余白を設定するのではなく、要素を <strong>見つけて</strong> ブロックするだけです。</p>
+
+            <h3>開発者ツールを開く方法</h3>
+            <p>開発者ツール（DevTools）は、セレクタを操作するための主要なツールです。開き方は次のとおりです：</p>
+            <table class="cheatsheet-table">
+                <thead>
+                    <tr>
+                        <th>操作</th>
+                        <th>結果</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><kbd>F12</kbd> キーを押す</td>
+                        <td>DevToolsパネルが開く</td>
+                    </tr>
+                    <tr>
+                        <td>または <kbd>Ctrl + Shift + I</kbd> を押す</td>
+                        <td>同じ</td>
+                    </tr>
+                    <tr>
+                        <td>または要素を右クリック → <strong>「検証」</strong></td>
+                        <td>要素がハイライトされたDevToolsが開く</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>開発者ツールをカスタマイズする方法</h3>
+
+            <h4>インターフェース言語</h4>
+            <ol>
+                <li>DevTools（<kbd>F12</kbd>）を開きます。</li>
+                <li>右上隅の歯車アイコン（⚙️）をクリック → <strong>設定</strong>。</li>
+                <li><strong>「言語」</strong> セクションで、ドロップダウンメニューから希望の言語を選択します。</li>
+                <div class="screenshot">
+                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/13.png" alt="DevToolsの言語を変更" class="screenshot-img">
+                </div>
+                <li>DevToolsを閉じて再度開きます。</li>
+            </ol>
+
+            <h4>パネルのドッキング位置</h4>
+            <ol>
+                <li>DevToolsの右上隅にある3つの点（⋮）をクリックします。</li>
+                <li>以下のオプションから選択します：
+                    <ul>
+                        <li><strong>Dock to right</strong>（デフォルト）</li>
+                        <li><strong>Dock to bottom</strong> — ワイドモニターを使用している場合に便利</li>
+                        <li><strong>Dock to left</strong> — 異なるレイアウトを希望する場合</li>
+                        <li><strong>Undock into separate window</strong> — 別のモニターに移動</li>
+                    </ul>
+                </li>
+            </ol>
+            <div class="screenshot">
+                <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/14.png" alt="DevToolsパネルの位置を変更" class="screenshot-img">
+            </div>
+
+            <h3>開発者ツールでセレクタをテストする方法</h3>
+            <p>セレクタが機能するかどうかを確認する最速の方法は、<strong>検索（<kbd>Ctrl + F</kbd>）</strong> を使用することです：</p>
+            <ol>
+                <li>DevTools（<kbd>F12</kbd>）を開き、<strong>「Elements」</strong> タブに移動します。</li>
+                <li><kbd>Ctrl + F</kbd>（Macの場合は <kbd>Cmd + F</kbd>）を押します。</li>
+                <li>検索ボックスにセレクタを入力します。</li>
+                <li>DevToolsがセレクタに一致するすべての要素をハイライトします。</li>
+            </ol>
+            <p>検索バーには、見つかった要素の数が表示されます（例：<code>1 of 3</code>）。これにより、セレクタの精度を把握できます。</p>
+            <div class="screenshot">
+                <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/15.png" alt="Ctrl+Fでセレクタを検索" class="screenshot-img">
+            </div>
+
+            <h3>実践例：猫ミームギャラリー</h3>
+            <p>それでは、この知識を実践してみましょう。<a href="example.html" target="_blank">example.html ページ</a> を開き、DevToolsを開きます。下の表のセレクタを入力して、どの要素が見つかるか確認してみてください。</p>
+
+            <h3>セレクタのタイプ</h3>
+
+            <h4>1. ユニバーサルセレクタ (<code>*</code>)</h4>
+            <p>ページ上の <strong>すべての</strong> 要素を検索します。注意して使用してください — HTML内のすべてが返されます。</p>
+            <p><strong>セレクタ：</strong> <code>*</code></p>
+            <p><strong>検索対象：</strong> すべての要素（例外なし）。</p>
+
+            <h4>2. タイプセレクタ</h4>
+            <p>指定されたHTMLタグを持つすべての要素を検索します。</p>
+            <p><strong>セレクタ：</strong> <code>h1</code>, <code>p</code>, <code>button</code>, <code>div</code></p>
+            <p><strong>検索対象：</strong></p>
+            <ul>
+                <li><code>h1</code> — すべての第1レベルの見出し</li>
+                <li><code>p</code> — すべての段落</li>
+                <li><code>button</code> — すべてのボタン</li>
+                <li><code>div</code> — すべての <code>&lt;div&gt;</code> コンテナ</li>
+            </ul>
+
+            <h4>3. クラスセレクタ (<code>.class</code>)</h4>
+            <p><code>class</code> 属性に指定されたクラスを持つすべての要素を検索します。</p>
+            <p><strong>セレクタ：</strong> <code>.card</code>, <code>.card__title</code>, <code>.btn--view</code></p>
+            <p><strong>検索対象：</strong></p>
+            <ul>
+                <li><code>.card</code> — クラス <code>card</code> を持つすべての要素</li>
+                <li><code>.card__title</code> — クラス <code>card__title</code> を持つすべての要素</li>
+                <li><code>.btn--view</code> — クラス <code>btn--view</code> を持つすべての要素</li>
+            </ul>
+
+            <h4>4. IDセレクタ (<code>#id</code>)</h4>
+            <p>一意の <code>id</code> を持つ要素を検索します。ページ上にこのような要素は1つだけであるべきです。</p>
+            <p><strong>セレクタ：</strong> <code>#salad-cat</code>, <code>#confused-cat</code>, <code>#bread-cat</code></p>
+            <p><strong>検索対象：</strong></p>
+            <ul>
+                <li><code>#salad-cat</code> — <code>id="salad-cat"</code> を持つ要素</li>
+                <li><code>#confused-cat</code> — <code>id="confused-cat"</code> を持つ要素</li>
+                <li><code>#bread-cat</code> — <code>id="bread-cat"</code> を持つ要素</li>
+            </ul>
+
+            <h4>5. 複合セレクタ</h4>
+            <p>より正確な検索のために、タグ、クラス、IDを組み合わせることができます。</p>
+            <p><strong>セレクタ：</strong> <code>h2.card__title</code>, <code>div.card</code>, <code>p.card__description</code>, <code>button.btn--edit</code></p>
+            <p><strong>検索対象：</strong></p>
+            <ul>
+                <li><code>h2.card__title</code> — クラス <code>card__title</code> を持つ <code>&lt;h2&gt;</code></li>
+                <li><code>div.card</code> — クラス <code>card</code> を持つ <code>&lt;div&gt;</code></li>
+                <li><code>p.card__description</code> — クラス <code>card__description</code> を持つ <code>&lt;p&gt;</code></li>
+                <li><code>button.btn--edit</code> — クラス <code>btn--edit</code> を持つ <code>&lt;button&gt;</code></li>
+            </ul>
+
+            <h4>6. 属性セレクタ (<code>[attribute="value"]</code>)</h4>
+            <p>特定の属性と値を持つ要素を検索します。</p>
+            <p><strong>セレクタ：</strong> <code>[data-type="description"]</code>, <code>[data-type="title"]</code></p>
+            <p><strong>検索対象：</strong></p>
+            <ul>
+                <li><code>[data-type="description"]</code> — <code>data-type="description"</code> を持つすべての要素</li>
+                <li><code>[data-type="title"]</code> — <code>data-type="title"</code> を持つ要素</li>
+            </ul>
+
+            <h4>7. 子孫セレクタ（スペース）</h4>
+            <p>別の要素の <strong>内部</strong> にある要素を検索します（任意のネストレベル）。</p>
+            <p><strong>セレクタ：</strong> <code>.card .btn</code></p>
+            <p><strong>検索対象：</strong> クラス <code>card</code> を持つ要素の内部にある、クラス <code>btn</code> を持つすべての要素。</p>
+
+            <h4>8. 子セレクタ (<code>&gt;</code>)</h4>
+            <p>別の要素の <strong>直接の</strong> 子要素を検索します。検索は1レベル深くまでしか進みません。</p>
+            <p><strong>セレクタ：</strong> <code>.card__body &gt; .card__title</code></p>
+            <p><strong>検索対象：</strong> クラス <code>card__body</code> を持つ要素の直接の子要素である、クラス <code>card__title</code> を持つ要素。</p>
+
+            <h4>9. 隣接兄弟セレクタ (<code>+</code>)</h4>
+            <p>同じネストレベルで別の要素の <strong>次の兄弟</strong> である要素を検索します。</p>
+            <p><strong>セレクタ：</strong> <code>#confused-cat + .card__description</code></p>
+            <p><strong>検索対象：</strong> <code>id="confused-cat"</code> を持つ要素の直後にある段落 (<code>&lt;p&gt;</code>)。</p>
+
+            <h4>10. 位置疑似クラス</h4>
+            <p>兄弟要素間での位置に基づいて要素を選択します。</p>
+            <p><strong>セレクタ：</strong> <code>.card__actions :nth-child(2)</code></p>
+            <p><strong>検索対象：</strong> クラス <code>card__actions</code> を持つ要素内の2番目の子要素。</p>
+
+            <h3>🧠 練習問題</h3>
+            <p><a href="example.html" target="_blank">example.html ページ</a> と DevTools を開きます。セレクタを使用して次の要素を見つけてみてください。検索バー（<kbd>Ctrl + F</kbd>）で作業を確認してください — 見つかった要素の数が表示されます。</p>
+
+            <table class="cheatsheet-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>タスク</th>
+                        <th>検索対象</th>
+                        <th>ヒント</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>すべての第2レベルの見出しを検索</td>
+                        <td><code>&lt;h2&gt;</code></td>
+                        <td>タイプセレクタ</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>クラス <code>subtitle</code> を持つ要素を検索</td>
+                        <td>1つの要素</td>
+                        <td>クラスセレクタ</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td><code>id="confused-cat"</code> を持つ要素を検索</td>
+                        <td>1つの要素</td>
+                        <td>IDセレクタ</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>クラス <code>card__description</code> を持つすべての段落を検索</td>
+                        <td>複数の要素</td>
+                        <td>複合セレクタ（タグ + クラス）</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>クラス <code>btn--edit</code> を持つすべてのボタンを検索</td>
+                        <td>複数の要素</td>
+                        <td>複合セレクタ（タグ + クラス）</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>属性 <code>data-type="description"</code> を持つすべての要素を検索</td>
+                        <td>複数の要素</td>
+                        <td>属性セレクタ</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>クラス <code>card</code> を持つ要素の内部にあるすべてのボタンを検索</td>
+                        <td>複数の要素</td>
+                        <td>子孫セレクタ</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td><code>card__actions</code> 内部で <code>btn--view</code> ボタンの直後にある <code>btn--edit</code> ボタンを検索</td>
+                        <td>複数の要素</td>
+                        <td>隣接兄弟セレクタ (<code>+</code>)</td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td>クラス <code>card__actions</code> を持つ要素内の2番目のボタンを検索</td>
+                        <td>複数の要素</td>
+                        <td>疑似クラス <code>:nth-child</code></td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td>「Bread Cat」カード内のクラス <code>card__image</code> を持つすべての要素を検索</td>
+                        <td>1つの要素</td>
+                        <td>セレクタの組み合わせ</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>🔍 回答を確認する方法</h3>
+            <p>セレクタを記述したら、DevToolsの検索バー（<kbd>Ctrl + F</kbd>）に貼り付けます。検索バーには、見つかった要素の数が表示されます（例：<code>1 of 3</code>）。</p>
+            <ul>
+                <li><strong>特定の単一要素</strong>（例：<code>id</code> による）を探していた場合、結果は <code>1 of 1</code> になるはずです。</li>
+                <li><strong>要素のグループ</strong>（例：特定のクラスを持つすべての段落）を探していた場合、結果は <code>1 of 3</code> 以上になることがあります — これは正常です。</li>
+                <li>重要なのは、ハイライトされた要素が探していた要素であることです。視覚的に確認してください：ページ上で正しい要素がハイライトされていますか？</li>
+            </ul>
+            <p>間違った要素がハイライトされている場合は、条件を追加してセレクタを調整してください。</p>
+
+            <h3>🎮 追加練習</h3>
+            <p>スキルを強化するために、ゲーム <a href="https://flukeout.github.io/" target="_blank">CSS Diner</a> をプレイしてみてください。CSSセレクタを使用して正しいプレートを選択し、テーブルをセットアップします。タスクは徐々に難しくなり、すべての主要なセレクタタイプをカバーします。</p>
+        </section>
+
+        <!-- ============================================================
+        セクション8: フィードバックと連絡先
+        ============================================================ -->
+        <section id="feedback">
+            <h2>フィードバックと連絡先 <a href="#top" class="back-link">トップへ戻る</a></h2>
+            <p>ご提案やフィードバックをいつでもお待ちしています！バグを見つけた場合、改善を提案したい場合、感想を共有したい場合、または仕事を依頼したい場合 — お気軽にお問い合わせください。</p>
+            <ul>
+                <li><strong>GitHub：</strong> <a href="https://github.com/PavelCraft" target="_blank">PavelCraft</a></li>
+                <li><strong>Telegram：</strong> <a href="https://t.me/PavelCodeMaster" target="_blank">@PavelCodeMaster</a></li>
+                <li><strong>メール：</strong> <a href="mailto:pavelborisov@list.ru">pavelborisov@list.ru</a></li>
+            </ul>
+            <p>プロジェクトへの貢献も可能です：翻訳の支援、アイデアの提案、新機能のテストなど。</p>
+        </section>
+
+        <!-- ============================================================
+        フッター
+        ============================================================ -->
+        <hr>
+        <footer>
+            <p><a href="#top">トップへ戻る</a></p>
+        </footer>
+
+    </div> <!-- /.container -->
+
+    <!-- ===== スクリーンショット用モーダルウィンドウ ===== -->
+    <div id="screenshotModal" class="modal">
+        <span class="modal-close">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+    <script src="../instruction.js"></script>
+</body>
+</html>

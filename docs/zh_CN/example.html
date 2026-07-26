@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>选择器练习示例</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div class="container">
+
+        <header class="page-header">
+            <h1 data-type="title" class="main-title">😺 猫表情包画廊</h1>
+            <p class="subtitle">将鼠标悬停在代码行上，查看页面上的元素如何被高亮显示</p>
+        </header>
+
+        <div class="cards-wrapper">
+
+            <!-- 卡片1：沙拉猫 -->
+            <div class="card card--salad">
+                <div class="card__image-wrapper">
+                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/60182e9/images/cat1.jpg" alt="不喜欢沙拉的猫" class="card__image">
+                </div>
+                <div class="card__body">
+                    <h2 id="salad-cat" class="card__title">沙拉猫</h2>
+                    <p data-type="description" class="card__description">用鄙视的眼神看着沙拉的猫</p>
+                    <div class="card__actions">
+                        <button type="button" class="btn btn--view">查看</button>
+                        <button type="button" class="btn btn--edit">编辑</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 卡片2：“啊？”猫（竖图） -->
+            <div class="card card--confused">
+                <div class="card__image-wrapper card__image-wrapper--portrait">
+                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/60182e9/images/cat2.jfif" alt="问‘啊？’的猫" class="card__image card__image--portrait">
+                </div>
+                <div class="card__body">
+                    <h2 id="confused-cat" class="card__title">「啊？」猫</h2>
+                    <p data-type="description" class="card__description">当你没听懂问题但想显得聪明时</p>
+                    <div class="card__actions">
+                        <button type="button" class="btn btn--view">查看</button>
+                        <button type="button" class="btn btn--edit">编辑</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 卡片3：面包猫 -->
+            <div class="card card--bread">
+                <div class="card__image-wrapper">
+                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/60182e9/images/cat3.jpg" alt="看起来像面包的猫" class="card__image">
+                </div>
+                <div class="card__body">
+                    <h2 id="bread-cat" class="card__title">面包猫</h2>
+                    <p data-type="description" class="card__description">别吃它，动动脑子！</p>
+                    <div class="card__actions">
+                        <button type="button" class="btn btn--view">查看</button>
+                        <button type="button" class="btn btn--edit">编辑</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</body>
+</html>

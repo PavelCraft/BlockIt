@@ -1,55 +1,105 @@
-## 🇬🇧 English
+# BlockIt
 
-### Description
+[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
-**BlockIt** is a lightweight browser extension that allows you to remove unwanted HTML elements from any website. Unlike traditional ad blockers that rely on pre-built filter lists, BlockIt puts the power in your hands:
-
-- **Element-based blocking:** Right-click any element, copy its HTML, paste it into BlockIt, and the extension will suggest a CSS selector to hide it.
-- **Manual selector input:** For advanced users, write your own CSS selectors to handle complex or dynamic pages.
-- **Real-time preview:** BlockIt checks if the selector matches exactly one element. If it matches multiple elements, you'll get a warning.
-- **Permanent blocking:** Once added, the rule will hide the element every time you visit the page.
-
-### How It Works
-
-1. **Find the element:** Right-click on any page element → "Inspect" → find the exact node in the HTML tree.
-2. **Copy the element:** Right-click the node in DevTools → "Copy" → "Copy element".
-3. **Create a rule:** Click the BlockIt icon → "Add rule" → paste the copied HTML into the input field.
-4. **Review selector:** BlockIt will suggest a CSS selector based on the element's attributes. You can edit it if needed.
-5. **Confirm or warn:** If the selector matches more than one element, you'll see a warning. Confirm, and the element is blocked forever.
-
-You can also skip steps 1–2 and write a custom CSS selector directly in the rule editor.
-
-### Why BlockIt?
-
-- **Blocks everything:** Advertisements, cookie banners, "Sign up" popups, distracting sidebars, sponsored posts in feeds — you name it.
-- **Privacy-friendly:** All rules are stored locally in your browser. No data is sent anywhere.
-- **Open source:** Fork it, modify it, contribute back. BSD 3-Clause license.
+> Блокировка любых HTML-элементов на сайтах с помощью CSS-селекторов или XPath.
 
 ---
 
-## 🇷🇺 Русский
+## English
 
-### Описание
+### 💡 What is BlockIt?
+
+**BlockIt** is a lightweight browser extension that lets you remove unwanted HTML elements from any website. Unlike traditional ad blockers that rely on pre-built filter lists, BlockIt puts control in your hands:
+
+choose what to block (ads, banners, popups, and any other annoying elements), how to block (remove or hide), manage rules (create, delete, group by site, export and import settings), and use both CSS selectors and XPath.
+
+---
+
+### 🚀 Installation
+
+1. Download the project:
+   - **Via terminal:** `git clone https://github.com/PavelCraft/BlockIt.git`
+   - **Or as a ZIP archive:** on the repository page, click "Code" → "Download ZIP" and extract it.
+
+   ![Download ZIP archive](https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/16.png)
+
+2. Open Chrome and go to `chrome://extensions/`.
+3. Enable **Developer mode** (toggle in the top-right corner).
+4. Click **Load unpacked** and select the project folder.
+
+   ![Load unpacked extension](https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/17.png)
+
+5. Pin the extension to the toolbar: click the puzzle icon next to the address bar and select **Pin** next to BlockIt.
+
+---
+
+### 📖 Full Documentation
+
+Detailed guide with screenshots and answers to common questions:  
+👉 [**BlockIt User Guide**](https://pavelcraft.github.io/BlockIt/)
+
+---
+
+### 🤝 Contacts
+
+For questions, suggestions, or bug reports:  
+**Telegram:** [@PavelCodeMaster](https://t.me/PavelCodeMaster)  
+**Email:** [pavelborisov@list.ru](mailto:pavelborisov@list.ru)
+
+---
+
+### 📜 License
+
+BSD 3-Clause © 2026 [PavelCraft](https://github.com/PavelCraft)
+
+---
+
+## Русский
+
+### 💡 Что такое BlockIt?
 
 **BlockIt** — это лёгкое расширение для браузера, которое позволяет удалять нежелательные HTML-элементы с любых сайтов. В отличие от классических блокировщиков рекламы, которые используют готовые списки фильтров, BlockIt даёт управление в руки пользователя:
 
-- **Блокировка по элементу:** Кликните правой кнопкой по любому элементу, скопируйте его HTML, вставьте в BlockIt — расширение предложит CSS-селектор для блокировки.
-- **Ручной ввод селектора:** Для продвинутых пользователей — напишите свой собственный CSS-селектор, чтобы справиться со сложными или динамическими страницами.
-- **Предварительный просмотр:** BlockIt проверяет, соответствует ли селектор ровно одному элементу. Если элементов несколько — вы получите предупреждение.
-- **Постоянная блокировка:** После добавления правила элемент будет скрываться при каждом посещении страницы.
+выбирать, что блокировать (рекламу, баннеры, попапы и любые другие надоедливые элементы), как блокировать (удалять или скрывать), управлять правилами (создавать, удалять, группировать по сайтам, экспортировать и импортировать настройки) и использовать как CSS-селекторы, так и XPath.
 
-### Как это работает
+---
 
-1. **Найдите элемент:** Кликните правой кнопкой по элементу на странице → «Посмотреть код» → найдите нужный узел в дереве HTML.
-2. **Скопируйте элемент:** Кликните правой кнопкой по узлу в DevTools → «Copy» → «Copy element».
-3. **Создайте правило:** Кликните по иконке BlockIt → «Добавить правило» → вставьте скопированный HTML в поле.
-4. **Проверьте селектор:** BlockIt предложит CSS-селектор на основе атрибутов элемента. Вы можете отредактировать его, если какие-то атрибуты слишком узкие или ненадёжные.
-5. **Подтвердите или предупредите:** Если селектор находит больше одного элемента, вы увидите предупреждение. После подтверждения элемент будет заблокирован.
+### 🚀 Установка
 
-Вы также можете пропустить шаги 1–2 и написать селектор вручную прямо в редакторе правил.
+1. Скачайте проект:
+   - **Через терминал:** `git clone https://github.com/PavelCraft/BlockIt.git`
+   - **Или как ZIP-архив:** на странице репозитория нажмите «Code» → «Download ZIP» и распакуйте.
 
-### Зачем BlockIt?
+   ![Скачать ZIP-архив](https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/16.png)
 
-- **Блокирует всё:** Рекламу, баннеры о куках, попапы «Зарегистрируйтесь», отвлекающие боковые панели, спонсорские посты в лентах — что угодно.
-- **Безопасность:** Все правила хранятся локально в вашем браузере. Никакие данные никуда не отправляются.
-- **Открытый исходный код:** Форкайте, изменяйте, вносите свой вклад. Лицензия BSD 3-Clause.
+2. Откройте Chrome и перейдите на страницу `chrome://extensions/`.
+3. Включите **«Режим разработчика»** (переключатель в правом верхнем углу).
+4. Нажмите **«Загрузить распакованное расширение»** и выберите папку с проектом.
+
+   ![Загрузить распакованное расширение](https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/17.png)
+
+5. Закрепите расширение на панели: нажмите на иконку пазла рядом с адресной строкой и выберите **«Закрепить»** напротив BlockIt.
+
+---
+
+### 📖 Полная инструкция
+
+Подробное руководство с картинками и ответами на частые вопросы:  
+👉 [**Инструкция к BlockIt**](https://pavelcraft.github.io/BlockIt/)
+
+---
+
+### 🤝 Контакты
+
+По всем вопросам, предложениям и багам:  
+**Telegram:** [@PavelCodeMaster](https://t.me/PavelCodeMaster)  
+**Email:** [pavelborisov@list.ru](mailto:pavelborisov@list.ru)
+
+---
+
+### 📜 Лицензия
+
+BSD 3-Clause © 2026 [PavelCraft](https://github.com/PavelCraft)
+
+

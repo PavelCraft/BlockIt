@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemple pour s'entraîner aux sélecteurs</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div class="container">
+
+        <header class="page-header">
+            <h1 data-type="title" class="main-title">😺 Galerie de chats-mèmes</h1>
+            <p class="subtitle">Passez votre curseur sur les lignes de code pour voir les éléments se surligner sur la page</p>
+        </header>
+
+        <div class="cards-wrapper">
+
+            <!-- Carte 1 : Chat salade -->
+            <div class="card card--salad">
+                <div class="card__image-wrapper">
+                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/60182e9/images/cat1.jpg" alt="Le chat qui n'aime pas la salade" class="card__image">
+                </div>
+                <div class="card__body">
+                    <h2 id="salad-cat" class="card__title">Chat salade</h2>
+                    <p data-type="description" class="card__description">Le chat qui regarde la salade avec mépris</p>
+                    <div class="card__actions">
+                        <button type="button" class="btn btn--view">Voir</button>
+                        <button type="button" class="btn btn--edit">Modifier</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Carte 2 : Chat "Hein?" (image verticale) -->
+            <div class="card card--confused">
+                <div class="card__image-wrapper card__image-wrapper--portrait">
+                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/60182e9/images/cat2.jfif" alt="Le chat qui demande 'Hein?'" class="card__image card__image--portrait">
+                </div>
+                <div class="card__body">
+                    <h2 id="confused-cat" class="card__title">Chat « Hein ? »</h2>
+                    <p data-type="description" class="card__description">Quand tu n'as pas compris la question mais que tu veux avoir l'air intelligent</p>
+                    <div class="card__actions">
+                        <button type="button" class="btn btn--view">Voir</button>
+                        <button type="button" class="btn btn--edit">Modifier</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Carte 3 : Chat pain -->
+            <div class="card card--bread">
+                <div class="card__image-wrapper">
+                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/60182e9/images/cat3.jpg" alt="Le chat qui ressemble à du pain" class="card__image">
+                </div>
+                <div class="card__body">
+                    <h2 id="bread-cat" class="card__title">Chat pain</h2>
+                    <p data-type="description" class="card__description">N'en mange pas, réfléchis !</p>
+                    <div class="card__actions">
+                        <button type="button" class="btn btn--view">Voir</button>
+                        <button type="button" class="btn btn--edit">Modifier</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</body>
+</html>
