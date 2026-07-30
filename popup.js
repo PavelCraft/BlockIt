@@ -103,6 +103,99 @@ function getDomainFromUrl(url) {
   return domain;
 }
 
+function findElements(selector, type) {
+  const selType = type || 'css';
+  let results = [];
+
+  function findShadowHosts(root) {
+    const hosts = [];
+    const elements = root.querySelectorAll('*');
+
+    elements.forEach(el => {
+      if (el.shadowRoot) {
+        hosts.push(el);
+        hosts.push(...findShadowHosts(el.shadowRoot));
+      }
+    });
+
+    return hosts;
+  }
+
+  function findInShadowDOM(selector, root = document) {
+    const found = [];
+
+    try {
+      found.push(...root.querySelectorAll(selector));
+    } catch (e) {}
+
+    for (const host of findShadowHosts(root)) {
+      if (host.shadowRoot) {
+        found.push(...findInShadowDOM(selector, host.shadowRoot));
+      }
+    }
+
+    return found;
+  }
+
+  function findXPathInShadowDOM(xpath, root = document) {
+    const found = [];
+
+    try {
+      const result = document.evaluate(
+        xpath,
+        root,
+        null,
+        XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
+        null
+      );
+
+      for (let i = 0; i < result.snapshotLength; i++) {
+        found.push(result.snapshotItem(i));
+      }
+    } catch (e) {}
+
+    for (const host of findShadowHosts(root)) {
+      if (host.shadowRoot) {
+        found.push(...findXPathInShadowDOM(xpath, host.shadowRoot));
+      }
+    }
+
+    return found;
+  }
+
+  if (selType === 'xpath') {
+    const xpath = selector.replace(/^xpath:/i, '');
+
+    try {
+      const result = document.evaluate(
+        xpath,
+        document,
+        null,
+        XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
+        null
+      );
+
+      for (let i = 0; i < result.snapshotLength; i++) {
+        results.push(result.snapshotItem(i));
+      }
+    } catch (e) {}
+
+    if (results.length === 0) {
+      results = findXPathInShadowDOM(xpath);
+    }
+  } else {
+    try {
+      results = Array.from(document.querySelectorAll(selector));
+    } catch (e) {}
+
+    if (results.length === 0) {
+      results = findInShadowDOM(selector);
+    }
+  }
+
+  return results;
+}
+
 // ============================================================
 //  SELECTOR / XPATH DETECTION
 // ============================================================
@@ -264,6 +357,10 @@ function updateSelector(tag, attributes) {
   checkSelectorCount(selector);
 }
 
+// ============================================================
+//  CHECK SELECTOR COUNT — using chrome.storage.local
+// ============================================================
+
 function checkSelectorCount(selector) {
   const trimmed = selector.trim();
 
@@ -295,53 +392,112 @@ function checkSelectorCount(selector) {
       return;
     }
 
-    chrome.scripting.executeScript({
-      target: { tabId: tabs[0].id },
-      func: (sel, selType) => {
-        try {
-          if (selType === 'xpath') {
-            const xpath = sel.replace(/^xpath:/i, '');
-            const result = document.evaluate(
-              xpath,
-              document,
-              null,
-              XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
-              null
-            );
-            return result.snapshotLength;
+    // 1. Очищаем хранилище от старых данных
+    chrome.storage.local.remove('countResult', () => {
+      console.log('[BlockIt] Storage cleared, sending count request...');
+
+      // 2. Отправляем запрос на подсчёт во все фреймы
+      chrome.tabs.sendMessage(
+        tabs[0].id,
+        {
+          action: 'countElements',
+          selector: trimmed,
+          type: type
+        },
+        (response) => {
+          if (chrome.runtime.lastError) {
+            console.log('[BlockIt] sendMessage error:', chrome.runtime.lastError.message);
           } else {
-            return document.querySelectorAll(sel).length;
+            console.log('[BlockIt] Message sent, response:', response);
           }
-        } catch (e) {
-          return -1;
         }
-      },
-      args: [trimmed, type]
-    }, (results) => {
-      if (chrome.runtime.lastError) {
-        elementCount.textContent = chrome.i18n.getMessage('checkError');
-        elementCount.style.color = 'orange';
-        return;
+      );
+
+      // 3. Пытаемся прочитать результат несколько раз
+      let attempts = 0;
+      const maxAttempts = 10; // 10 попыток по 500 мс = 5 секунд максимум
+
+      function tryReadStorage() {
+        attempts++;
+        console.log(`[BlockIt] Attempt ${attempts}/${maxAttempts} to read storage`);
+
+        chrome.storage.local.get(['countResult'], (result) => {
+          const data = result.countResult;
+          
+          if (data && typeof data === 'object' && data.count !== undefined) {
+            // Проверяем, что данные свежие (не старше 3 секунд)
+            if (Date.now() - data.timestamp < 3000) {
+              console.log('[BlockIt] Fresh data from:', data.href, '=>', data.count);
+              const total = data.count;
+              updateElementCount(total);
+              chrome.storage.local.remove('countResult');
+              return;
+            } else {
+              console.log('[BlockIt] Data is too old, ignoring');
+            }
+          }
+
+          // Если данные не найдены и попытки не закончились — повторяем
+          if (attempts < maxAttempts) {
+            setTimeout(tryReadStorage, 500);
+          } else {
+            // Попытки закончились — показываем 0
+            console.log('[BlockIt] Max attempts reached, showing 0');
+            updateElementCount(0);
+          }
+        });
       }
 
-      const count = results?.[0]?.result ?? -1;
-
-      if (count === -1) {
-        elementCount.textContent = chrome.i18n.getMessage('selectorInvalid');
-        elementCount.style.color = 'red';
-      } else if (count === 0) {
-        elementCount.textContent = chrome.i18n.getMessage('foundZero');
-        elementCount.style.color = 'orange';
-      } else if (count === 1) {
-        elementCount.textContent = chrome.i18n.getMessage('foundOne');
-        elementCount.style.color = 'green';
-      } else {
-        const msg = chrome.i18n.getMessage('foundMultiple').replace('{count}', count);
-        elementCount.textContent = msg;
-        elementCount.style.color = 'red';
-      }
+      // Начинаем чтение через 300 мс (даём время content.js на обработку)
+      setTimeout(tryReadStorage, 300);
     });
   });
+}
+
+// ============================================================
+//  UPDATE ELEMENT COUNT — helper function
+// ============================================================
+
+function updateElementCount(total) {
+  console.log('[BlockIt] Final total count:', total);
+  
+  if (total === -1) {
+    elementCount.textContent = chrome.i18n.getMessage('selectorInvalid');
+    elementCount.style.color = 'red';
+  } else if (total === 0) {
+    elementCount.textContent = chrome.i18n.getMessage('foundZero');
+    elementCount.style.color = 'orange';
+  } else if (total === 1) {
+    elementCount.textContent = chrome.i18n.getMessage('foundOne');
+    elementCount.style.color = 'green';
+  } else {
+    const msg = chrome.i18n.getMessage('foundMultiple').replace('{count}', total);
+    elementCount.textContent = msg;
+    elementCount.style.color = 'red';
+  }
+}
+
+// ============================================================
+//  UPDATE ELEMENT COUNT — helper function
+// ============================================================
+
+function updateElementCount(total) {
+  console.log('[BlockIt] Final total count:', total);
+  
+  if (total === -1) {
+    elementCount.textContent = chrome.i18n.getMessage('selectorInvalid');
+    elementCount.style.color = 'red';
+  } else if (total === 0) {
+    elementCount.textContent = chrome.i18n.getMessage('foundZero');
+    elementCount.style.color = 'orange';
+  } else if (total === 1) {
+    elementCount.textContent = chrome.i18n.getMessage('foundOne');
+    elementCount.style.color = 'green';
+  } else {
+    const msg = chrome.i18n.getMessage('foundMultiple').replace('{count}', total);
+    elementCount.textContent = msg;
+    elementCount.style.color = 'red';
+  }
 }
 
 // ============================================================
@@ -587,70 +743,90 @@ addRuleBtn.addEventListener('click', () => {
       currentDomain = getDomainFromUrl(tabs[0].url);
     }
 
-    chrome.scripting.executeScript({
-      target: { tabId: tabs[0].id },
-      func: (sel, selType) => {
-        try {
-          if (selType === 'xpath') {
-            const xpath = sel.replace(/^xpath:/i, '');
-            const result = document.evaluate(
-              xpath,
-              document,
-              null,
-              XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
-              null
-            );
-            return result.snapshotLength;
-          } else {
-            return document.querySelectorAll(sel).length;
-          }
-        } catch (e) {
-          return -1;
-        }
-      },
-      args: [selector, type]
-    }, (results) => {
-      if (chrome.runtime.lastError) {
-        alert(chrome.i18n.getMessage('alertCheckError'));
-        return;
-      }
+    // ============================================================
+    //  ПРОВЕРКА КОЛИЧЕСТВА ЭЛЕМЕНТОВ через storage.local
+    //  (аналогично checkSelectorCount)
+    // ============================================================
 
-      const count = results?.[0]?.result ?? -1;
+    // 1. Очищаем старое значение в хранилище
+    chrome.storage.local.remove('countResult', () => {
+      console.log('[BlockIt] Storage cleared for addRule');
 
-      if (count === -1) {
-        alert(chrome.i18n.getMessage('alertInvalidSelector'));
-        return;
-      }
-
-      if (count === 0) {
-        if (!confirm(chrome.i18n.getMessage('confirmZeroElements'))) return;
-      }
-
-      if (count > 1) {
-        const msg = chrome.i18n.getMessage('confirmMultipleElements').replace('{count}', count);
-        if (!confirm(msg)) return;
-      }
-
-      chrome.storage.local.get(['rules'], (res) => {
-        const rules = res.rules || [];
-        if (rules.some(r => r.selector === selector && r.domain === currentDomain)) {
-          alert(chrome.i18n.getMessage('alertRuleExists'));
-          return;
-        }
-
-        rules.push({
+      // 2. Отправляем запрос на подсчёт во все фреймы
+      chrome.tabs.sendMessage(
+        tabs[0].id,
+        {
+          action: 'countElements',
           selector: selector,
-          type: type,
-          mode: blockMode,
-          domain: currentDomain
-        });
+          type: type
+        },
+        (response) => {
+          console.log('[BlockIt] Message sent for addRule');
+        }
+      );
 
-        chrome.storage.local.set({ rules }, () => {
-          statusDiv.textContent = chrome.i18n.getMessage('ruleAdded');
-          statusDiv.style.color = 'green';
-          renderRulesList();
+      // 3. Через 500 мс читаем результат из хранилища
+      setTimeout(() => {
+        chrome.storage.local.get(['countResult'], (result) => {
+          const data = result.countResult;
+          console.log('[BlockIt] Data from storage (addRule):', data);
+
+          let totalCount = 0;
+
+          if (data && typeof data === 'object' && data.count !== undefined) {
+            if (Date.now() - data.timestamp < 2000) {
+              console.log('[BlockIt] Fresh data from:', data.href, '=>', data.count);
+              totalCount = data.count;
+            } else {
+              console.log('[BlockIt] Data is too old, ignoring');
+            }
+          }
+
+          // 4. Очищаем хранилище
+          chrome.storage.local.remove('countResult');
+
+          // 5. Проверяем результат
+          if (totalCount === -1) {
+            alert(chrome.i18n.getMessage('alertInvalidSelector'));
+            return;
+          }
+
+          if (totalCount === 0) {
+            if (!confirm(chrome.i18n.getMessage('confirmZeroElements'))) {
+              return;
+            }
+          }
+
+          if (totalCount > 1) {
+            const msg = chrome.i18n.getMessage('confirmMultipleElements').replace('{count}', totalCount);
+            if (!confirm(msg)) {
+              return;
+            }
+          }
+
+          // 6. Сохраняем правило
+          chrome.storage.local.get(['rules'], (res) => {
+            const rules = res.rules || [];
+            if (rules.some(r => r.selector === selector && r.domain === currentDomain)) {
+              alert(chrome.i18n.getMessage('alertRuleExists'));
+              return;
+            }
+
+            rules.push({
+              selector: selector,
+              type: type,
+              mode: blockMode,
+              domain: currentDomain
+            });
+
+            chrome.storage.local.set({ rules }, () => {
+              statusDiv.textContent = chrome.i18n.getMessage('ruleAdded');
+              statusDiv.style.color = 'green';
+              renderRulesList();
+            });
+          });
         });
-      });
+      }, 500);
     });
   });
 });
@@ -743,4 +919,12 @@ document.addEventListener('DOMContentLoaded', () => {
   localizeUI();
   updateToggleButton();
   renderRulesList();
+});
+
+// ============================================================
+//  CLEANUP — Clear storage when popup closes
+// ============================================================
+
+window.addEventListener('unload', function() {
+  chrome.storage.local.remove('countResult');
 });

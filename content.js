@@ -1,6 +1,7 @@
 // ============================================================
 //  BLOCKIT — CONTENT SCRIPT
 //  Applies blocking rules to pages using CSS selectors or XPath
+//  Supports Shadow DOM and nested shadow roots
 // ============================================================
 
 // ============================================================
@@ -20,37 +21,176 @@ function isExtensionContextValid() {
 }
 
 /**
- * Find elements using CSS selector or XPath
- * @param {string} selector - CSS selector or XPath expression
- * @param {string} type - 'css' or 'xpath'
- * @returns {NodeList|Array} Array-like collection of DOM elements
+ * Recursively find all elements with shadowRoot
+ * @param {Node} root - Root node to search from
+ * @returns {Array} Array of elements that have shadowRoot
  */
-function findElements(selector, type) {
-  const selType = type || 'css';
+function findShadowHosts(root) {
+  const hosts = [];
+  const elements = root.querySelectorAll('*');
 
-  if (selType === 'xpath') {
-    const xpath = selector.replace(/^xpath:/i, '');
+  elements.forEach(el => {
+    if (el.shadowRoot) {
+      hosts.push(el);
+      // Recursively search inside shadowRoot for nested shadow hosts
+      const nested = findShadowHosts(el.shadowRoot);
+      hosts.push(...nested);
+    }
+  });
+
+  return hosts;
+}
+
+/**
+ * Find elements inside Shadow DOM using CSS selector
+ * @param {string} selector - CSS selector
+ * @param {Node} root - Root node to search from (default: document)
+ * @returns {Array} Array of matching elements
+ */
+function findInShadowDOM(selector, root = document) {
+  const results = [];
+
+  // Search in current root
+  try {
+    const found = root.querySelectorAll(selector);
+    if (found.length > 0) {
+      results.push(...found);
+    }
+  } catch (e) {
+    // Invalid selector, ignore
+  }
+
+  // Find all shadow hosts and search inside them
+  const shadowHosts = findShadowHosts(root);
+  shadowHosts.forEach(host => {
+    if (host.shadowRoot) {
+      const nested = findInShadowDOM(selector, host.shadowRoot);
+      results.push(...nested);
+    }
+  });
+
+  return results;
+}
+
+/**
+ * Find elements inside Shadow DOM using XPath
+ * @param {string} xpath - XPath expression
+ * @param {Node} root - Root node to search from (default: document)
+ * @returns {Array} Array of matching elements
+ */
+function findXPathInShadowDOM(xpath, root = document) {
+  const results = [];
+
+  // Search in current root
+  try {
     const result = document.evaluate(
       xpath,
-      document,
+      root,
       null,
       XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
       null
     );
-    const elements = [];
     for (let i = 0; i < result.snapshotLength; i++) {
-      elements.push(result.snapshotItem(i));
+      results.push(result.snapshotItem(i));
     }
-    return elements;
+  } catch (e) {
+    // Invalid XPath, ignore
   }
 
-  // CSS selector
-  try {
-    return document.querySelectorAll(selector);
-  } catch (e) {
-    return [];
-  }
+  // Find all shadow hosts and search inside them
+  const shadowHosts = findShadowHosts(root);
+  shadowHosts.forEach(host => {
+    if (host.shadowRoot) {
+      const nested = findXPathInShadowDOM(xpath, host.shadowRoot);
+      results.push(...nested);
+    }
+  });
+
+  return results;
 }
+
+/**
+ * Find elements using CSS selector or XPath
+ * Searches main DOM first, then falls back to Shadow DOM
+ * @param {string} selector - CSS selector or XPath expression
+ * @param {string} type - 'css' or 'xpath'
+ * @returns {Array} Array of DOM elements
+ */
+function findElements(selector, type) {
+  const selType = type || 'css';
+  let results = [];
+
+  if (selType === 'xpath') {
+    const xpath = selector.replace(/^xpath:/i, '');
+
+    // First, search in main DOM
+    try {
+      const result = document.evaluate(
+        xpath,
+        document,
+        null,
+        XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
+        null
+      );
+      for (let i = 0; i < result.snapshotLength; i++) {
+        results.push(result.snapshotItem(i));
+      }
+    } catch (e) {
+      // Invalid XPath, ignore
+    }
+
+    // If nothing found, search in Shadow DOM
+    if (results.length === 0) {
+      results = findXPathInShadowDOM(xpath);
+    }
+  } else {
+    // CSS selector
+
+    // First, search in main DOM
+    try {
+      results = Array.from(document.querySelectorAll(selector));
+    } catch (e) {
+      // Invalid selector, ignore
+    }
+
+    // If nothing found, search in Shadow DOM
+    if (results.length === 0) {
+      results = findInShadowDOM(selector);
+    }
+  }
+
+  return results;
+}
+
+// ============================================================
+//  MESSAGE HANDLER — Count elements and save to storage
+// ============================================================
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.action === 'countElements') {
+    console.log('[BlockIt] countElements request received in frame:', window.location.href);
+    
+    // Используем ту же функцию findElements, что и в applyRules
+    const elements = findElements(message.selector, message.type);
+    const count = elements.length;
+    
+    console.log('[BlockIt] Found', count, 'elements in this frame');
+    
+    // Сохраняем результат в общее хранилище
+    chrome.storage.local.set({
+      countResult: {
+        count: count,
+        href: window.location.href,
+        timestamp: Date.now()
+      }
+    }, () => {
+      console.log('[BlockIt] Result saved to storage:', count);
+      sendResponse({ status: 'saved', count: count });
+    });
+    
+    return true; // Важно для асинхронного ответа
+  }
+});
 
 /**
  * Apply a single rule to the page
