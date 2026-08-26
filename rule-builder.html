@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>BlockIt — Конструктор правила</title>
+  <link rel="stylesheet" href="rule-builder.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand"><span class="logo">BI</span>Block<i>It</i></div>
+    <div class="top-actions">
+      <button id="reloadCheck" class="btn">↻ <span>Проверить после обновления</span></button>
+      <button id="saveRule" class="btn primary">＋ <span>Создать правило</span></button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="head">
+      <div>
+        <h1>Конструктор правила</h1>
+        <p>Опишите элемент и его окружение — BlockIt соберёт правило без ручного CSS.</p>
+      </div>
+    </section>
+
+    <section class="workspace"><div id="rootEditor" class="tree"></div></section>
+
+    <aside class="rail">
+      <section class="surface match" aria-live="polite">
+        <div class="eyebrow">Совпадения на странице</div>
+        <div class="status">
+          <strong id="countStatus" class="count">—</strong>
+          <div><strong id="countTitle">Совпадения</strong><small id="countDetail">Заполняйте правило</small></div>
+        </div>
+        <div id="matchSelection" class="match-selection" hidden>
+          <label for="matchPositions">Блокировать совпадения №</label>
+          <input id="matchPositions" type="text" inputmode="numeric" placeholder="Например: 1, 2">
+          <small>Номера в порядке элементов на странице, через запятую</small>
+        </div>
+        <div class="state-row"><span class="state active">Проверка в реальном времени</span><button id="checkNow" class="btn small">↻ Проверить сейчас</button></div>
+      </section>
+
+      <section class="surface preview">
+        <h3>Предпросмотр правила</h3>
+        <div id="ruleSummary" class="human">Сначала вставьте HTML элемента.</div>
+        <div class="code">
+          <code id="ruleCode">—</code>
+          <button id="copyRule" class="copy" title="Копировать правило" aria-label="Копировать правило">⧉</button>
+        </div>
+        <div id="reloadResult" class="reload-result"></div>
+      </section>
+
+      <section class="surface legend">
+        <h3>Как читать дерево</h3>
+        <p><i class="guide-sample"></i>Вертикаль показывает уровень вложенности</p>
+        <p><i class="line-sample"></i>Сплошная ветвь — непосредственная связь</p>
+        <p><i class="line-sample dashed"></i>Пунктир — связь через любое число поколений</p>
+      </section>
+    </aside>
+  </main>
+
+  <script src="blockit-rule-model.js"></script>
+  <script src="rule-builder.js"></script>
+</body>
+</html>

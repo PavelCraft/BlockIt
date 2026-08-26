@@ -4,7 +4,9 @@
   "version": "1.0.0",
   "description": "__MSG_extensionDescription__",
   "default_locale": "en",
+  "incognito": "split",
   "permissions": ["storage", "activeTab", "scripting"],
+  "host_permissions": ["<all_urls>"],
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
@@ -16,9 +18,20 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
+      "js": ["blockit-rule-model.js", "blockit-selector-engine.js", "blockit-shadow-hook.js"],
+      "run_at": "document_start",
+      "all_frames": true,
+      "match_about_blank": true,
+      "match_origin_as_fallback": true,
+      "world": "MAIN"
+    },
+    {
+      "matches": ["<all_urls>"],
       "js": ["content.js"],
       "run_at": "document_end",
-      "all_frames": true
+      "all_frames": true,
+      "match_about_blank": true,
+      "match_origin_as_fallback": true
     }
   ],
   "web_accessible_resources": [

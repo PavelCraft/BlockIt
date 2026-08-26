@@ -348,11 +348,11 @@
     "description": "Кнопка скрытия расширенного режима"
   },
   "selectorLabel": {
-    "message": "Введите CSS-селектор или XPath:",
+    "message": "Введите CSS-селектор, XPath или правило StableHTMLFinder:",
     "description": "Метка для поля ввода селектора"
   },
   "selectorPlaceholder": {
-    "message": "Например: #ad-container или //div[@id='ad']",
+    "message": "Например: #ad-container, //div[@id='ad'] или SHF1:{...}",
     "description": "Плейсхолдер для поля ввода селектора"
   },
   "toolsDivider": {

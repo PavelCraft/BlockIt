@@ -162,57 +162,18 @@ function findElements(selector, type) {
   return results;
 }
 
-// ============================================================
-//  MESSAGE HANDLER — Count elements and save to storage
-// ============================================================
-
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.action === 'countElements') {
-    console.log('[BlockIt] countElements request received in frame:', window.location.href);
-    
-    // Используем ту же функцию findElements, что и в applyRules
-    const elements = findElements(message.selector, message.type);
-    const count = elements.length;
-    
-    console.log('[BlockIt] Found', count, 'elements in this frame');
-    
-    // Сохраняем результат в общее хранилище
-    chrome.storage.local.set({
-      countResult: {
-        count: count,
-        href: window.location.href,
-        timestamp: Date.now()
-      }
-    }, () => {
-      console.log('[BlockIt] Result saved to storage:', count);
-      sendResponse({ status: 'saved', count: count });
-    });
-    
-    return true; // Важно для асинхронного ответа
-  }
-});
-
 /**
  * Apply a single rule to the page
  * @param {Object} rule - Rule object with selector, type, mode
  */
 function applyRule(rule) {
-  try {
-    const type = rule.type || 'css';
-    const mode = rule.mode || 'hide';
-    const elements = findElements(rule.selector, type);
-
-    elements.forEach(el => {
-      if (mode === 'remove') {
-        el.remove();
-      } else {
-        el.style.setProperty('visibility', 'hidden', 'important');
-        el.style.setProperty('pointer-events', 'none', 'important');
-      }
-    });
-  } catch (e) {
-    console.debug('[BlockIt] Error applying rule:', rule.selector, e.message);
-  }
+  // Actual querying happens in the MAIN world. That side owns references to
+  // closed Shadow Roots captured at document_start.
+  window.postMessage({
+    source: 'blockit',
+    action: 'apply-rules',
+    rules: [rule]
+  }, '*');
 }
 
 // ============================================================
@@ -234,8 +195,22 @@ function applyRules() {
       return;
     }
 
-    const rules = result.rules || [];
-    rules.forEach(applyRule);
+    let auditSuspended = false, excludedIds = [];
+    try { auditSuspended = sessionStorage.getItem('blockit-rule-audit-suspended') === '1'; excludedIds = JSON.parse(sessionStorage.getItem('blockit-editor-excluded-rules') || '[]'); } catch {}
+    let host = location.hostname.replace(/^www\./, '').toLowerCase();
+    if (!host) {
+      try { host = new URL(location.ancestorOrigins?.[0]).hostname.replace(/^www\./, '').toLowerCase(); } catch {}
+    }
+    const domainMatches = rule => {
+      const ruleDomain = String(rule.domain || '').replace(/^www\./, '').toLowerCase();
+      return !ruleDomain || host === ruleDomain || host.endsWith(`.${ruleDomain}`);
+    };
+    const rules = auditSuspended ? [] : (result.rules || []).filter(rule => rule.enabled !== false && domainMatches(rule) && (!rule.id || !excludedIds.includes(rule.id)));
+    window.postMessage({
+      source: 'blockit',
+      action: 'apply-rules',
+      rules
+    }, '*');
   });
 }
 
@@ -344,3 +319,9 @@ try {
 } catch (e) {
   // Extension already disconnected, ignore
 }
+
+chrome.runtime.onMessage.addListener(message => {
+  if (message?.action !== 'blockit-audit-resume' && message?.action !== 'blockit-editor-resume') return;
+  try { if (message.action === 'blockit-audit-resume') sessionStorage.removeItem('blockit-rule-audit-suspended'); } catch {}
+  applyRules();
+});

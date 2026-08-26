@@ -1,0 +1,130 @@
+.controls button.primary {
+  position: relative;
+}
+
+.stability-control {
+  display: flex !important;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.toggle { position: relative; display: inline-block; width: 34px; height: 19px; flex: 0 0 auto; }
+.toggle input { width: 0; height: 0; margin: 0; opacity: 0; }
+.toggle i { position: absolute; inset: 0; border-radius: 99px; background: #cbd2dc; transition: .2s; }
+.toggle i::after { content: ""; position: absolute; left: 3px; top: 3px; width: 13px; height: 13px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px #718; transition: .2s; }
+.toggle input:checked + i { background: #3f6df6; }
+.toggle input:checked + i::after { transform: translateX(15px); }
+.toggle input:focus-visible + i { outline: 2px solid rgba(63,109,246,.35); outline-offset: 2px; }
+.toggle input:disabled + i { opacity: .55; cursor: wait; }
+
+.reload-control { display: grid !important; gap: 4px; margin: 0 !important; color: #657083; font-size: 10px; font-weight: 700 !important; }
+.reload-control select { width: 100%; }
+.reload-control:has(select:disabled) { opacity: .48; }
+
+.controls button.primary:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 9px);
+  right: 0;
+  width: 310px;
+  padding: 9px 11px;
+  border-radius: 8px;
+  background: #202a3b;
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(20, 29, 43, .22);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: left;
+}
+
+.result-row {
+  grid-template-columns: minmax(300px, 1fr) calc(var(--runs) * 84px) 165px 360px;
+  min-width: calc(825px + var(--runs) * 84px);
+  gap: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+.result-row > .rule-code,
+.result-row > .badge,
+.result-row > .result-actions {
+  align-self: stretch;
+  border-right: 1px solid #e2e6ed;
+  border-radius: 0;
+}
+
+.result-row > .rule-code { padding: 12px; }
+.result-row > .badge { display: grid; place-items: center; margin: 8px 10px; border: 0; border-radius: 99px; }
+.result-row > .result-actions { align-items: center; padding: 8px 10px; border-right: 0; }
+.result-row > .load-grid { border-right: 1px solid #e2e6ed; }
+
+.results-list { overflow-x: auto; }
+
+.result-table-head {
+  display: grid;
+  grid-template-columns: minmax(300px, 1fr) calc(var(--runs) * 84px) 165px 360px;
+  min-width: calc(825px + var(--runs) * 84px);
+  overflow: hidden;
+  border: 1px solid #d7dde7;
+  border-radius: 11px 11px 0 0;
+  background: #eef2f7;
+  color: #4c596c;
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.result-table-head > div { display: flex; align-items: center; padding: 10px 12px; border-right: 1px solid #d7dde7; }
+.result-table-head > div:last-child { border-right: 0; }
+.result-table-head .head-loads { display: block; padding: 0; text-align: center; }
+.head-loads > strong { display: block; padding: 7px 8px; border-bottom: 1px solid #d7dde7; }
+
+.load-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--runs), minmax(0, 1fr));
+  align-self: stretch;
+}
+
+.load-grid span {
+  display: grid;
+  min-height: 42px;
+  place-items: center;
+  padding: 6px;
+  border-right: 1px solid #e2e6ed;
+  font-size: 12px;
+  text-align: center;
+}
+
+.load-grid span:last-child { border-right: 0; }
+.load-grid-head span { min-height: 34px; color: #657083; font-size: 10px; line-height: 1.2; }
+
+.result-row.disabled .rule-code {
+  opacity: .55;
+  text-decoration: line-through;
+}
+
+.result-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.result-actions button {
+  padding: 5px 8px;
+  border: 1px solid #ccd4df;
+  border-radius: 7px;
+  background: #fff;
+  color: #4c596c;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.result-actions .edit { border-color: #b9c8ef; color: #3158ca; }
+.result-actions .bind { border-color: #9fd8c2; background: #eefaf5; color: #08744d; }
+.result-actions .bind:disabled { opacity: .7; cursor: default; }
+.result-actions .delete { border-color: #efc6cc; color: #a6293a; }
+
+@media (max-width: 760px) {
+  .controls button.primary:hover::after { right: auto; left: 0; width: min(310px, 80vw); }
+}

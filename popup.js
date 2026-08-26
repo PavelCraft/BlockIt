@@ -10,6 +10,9 @@
 let currentTag = '';
 let currentAttributes = {};
 let advancedVisible = false;
+let countRequestId = 0;
+const STABLE_HTML_FINDER_PREFIX = 'SHF1:';
+const RULE_BUILDER_PREFIX = 'BIR1:';
 
 // ============================================================
 //  DOM REFS
@@ -31,6 +34,7 @@ const hintContainer = document.getElementById('hintContainer');
 const toolsContainer = document.getElementById('toolsContainer');
 const htmlInput = document.getElementById('htmlInput');
 const parseBtn = document.getElementById('parseBtn');
+const openRuleBuilderBtn = document.getElementById('openRuleBuilder');
 const tagDisplay = document.getElementById('tagDisplay');
 const attributesContainer = document.getElementById('attributesContainer');
 const newAttrName = document.getElementById('newAttrName');
@@ -204,6 +208,9 @@ function detectSelectorType(input) {
   const trimmed = input.trim();
   if (!trimmed) return null;
 
+  if (trimmed.startsWith(STABLE_HTML_FINDER_PREFIX)) return 'stablehtmlfinder';
+  if (trimmed.startsWith(RULE_BUILDER_PREFIX)) return 'blockitbuilder';
+
   if (/^xpath:/i.test(trimmed)) return 'xpath';
   if (trimmed.startsWith('/') || trimmed.startsWith('//')) return 'xpath';
   if (trimmed.startsWith('(')) return 'xpath';
@@ -221,9 +228,161 @@ function detectSelectorType(input) {
 
   if (trimmed.includes('text()') || trimmed.includes('node()')) return 'xpath';
   if (trimmed.includes('@') && !trimmed.includes('@keyframes') && !trimmed.includes('@import')) return 'xpath';
+  // A CSS attribute selector can legitimately contain an URL with //.
+  if (/^[a-zA-Z*][\w-]*(?:\s|[.#[:>+~]|$)/.test(trimmed)) return 'css';
   if (trimmed.includes('//')) return 'xpath';
 
   return 'css';
+}
+
+function normalizeCssSelector(selector) {
+  return String(selector).replace(/(['"])\[([^\]\n]+)\]\((https?:\/\/[^)\s]+)\)\1/g, '$1$2$1');
+}
+
+/**
+ * Re-send saved rules in a form understood by both the current hook and a
+ * hook which was injected before an extension reload. This also repairs old
+ * CSS rules that an earlier popup accidentally saved with type "xpath".
+ */
+async function repairLegacyRulesInActiveTab() {
+  const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+  if (!tab?.id) return;
+  const { rules = [] } = await chrome.storage.local.get(['rules']);
+  if (!rules.length) return;
+
+  await chrome.scripting.executeScript({
+    target: { tabId: tab.id, allFrames: true },
+    world: 'MAIN',
+    args: [rules],
+    func: savedRules => {
+      const isCss = value => /^[a-zA-Z*][\w-]*(?:\s|[.#[:>+~]|$)/.test(String(value || '').trim());
+      const normalize = value => String(value).replace(/(['"])\[([^\]\n]+)\]\((https?:\/\/[^)\s]+)\)\1/g, '$1$2$1');
+      const repaired = savedRules.map(rule => (
+        rule?.type === 'xpath' && isCss(rule.selector)
+          ? { ...rule, type: 'css', selector: normalize(rule.selector) }
+          : rule?.type === 'css'
+            ? { ...rule, selector: normalize(rule.selector) }
+            : rule
+      ));
+      window.postMessage({ source: 'blockit', action: 'apply-rules', rules: repaired }, '*');
+    }
+  });
+}
+
+/** Parse the interchange format emitted by StableHTMLFinder.
+ * Example: SHF1:{"version":1,"target":{"type":"css","selector":".ad"}} */
+function parseRuleInput(input) {
+  const raw = input.trim();
+  const type = detectSelectorType(raw);
+  if (!type) throw new Error('empty');
+
+  if (type === 'stablehtmlfinder') {
+    const stableRule = JSON.parse(raw.slice(STABLE_HTML_FINDER_PREFIX.length));
+    const target = stableRule.target || stableRule;
+    const targetType = target.type || 'css';
+    if (!target.selector || !['css', 'xpath'].includes(targetType)) throw new Error('invalid StableHTMLFinder rule');
+    return {
+      type,
+      selector: raw,
+      stableRule,
+      query: { type: targetType, selector: target.selector }
+    };
+  }
+
+  if (type === 'blockitbuilder') {
+    const builderModel = JSON.parse(raw.slice(RULE_BUILDER_PREFIX.length));
+    if (!builderModel?.root) throw new Error('invalid Rule Builder rule');
+    return {
+      type,
+      selector: raw,
+      stableRule: null,
+      builderModel,
+      query: { type, model: builderModel }
+    };
+  }
+
+  return {
+    type,
+    selector: type === 'xpath' ? raw.replace(/^xpath:/i, '') : normalizeCssSelector(raw),
+    stableRule: null,
+    query: { type, selector: type === 'xpath' ? raw.replace(/^xpath:/i, '') : normalizeCssSelector(raw) }
+  };
+}
+
+/** Runs in every accessible frame in the MAIN world. */
+function countRuleInFrame(query) {
+  if (query.type === 'blockitbuilder') {
+    const engine = globalThis.__blockItRuleModel;
+    if (!engine) return { count: 0, invalid: true };
+    try { return { count: engine.find(query.model).length, invalid: false }; }
+    catch { return { count: 0, invalid: true }; }
+  }
+  const rule = query.type === 'stablehtmlfinder'
+    ? query.stableRule?.target || query.stableRule
+    : query;
+  const selector = rule?.selector;
+  const type = rule?.type || 'css';
+  if (!selector || !['css', 'xpath'].includes(type)) return { count: 0, invalid: true };
+
+  const elements = new Set();
+  try {
+    if (type === 'css') {
+      const engine = globalThis.__blockItSelectorEngine;
+      if (!engine) return { count: 0, invalid: true };
+      engine.find(selector).forEach(element => elements.add(element));
+    } else {
+      const engine = globalThis.__blockItSelectorEngine;
+      for (const root of engine?.roots?.() || [document]) {
+        const result = document.evaluate(selector, root, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+        for (let index = 0; index < result.snapshotLength; index++) elements.add(result.snapshotItem(index));
+      }
+    }
+  } catch {
+    return { count: 0, invalid: true };
+  }
+
+  return { count: elements.size, invalid: false };
+}
+
+/** Sends inner selector probes upward so :frame-has(...) also works before a rule is saved. */
+function probeFrameHasInFrame(query) {
+  const rule = query.type === 'stablehtmlfinder'
+    ? query.stableRule?.target || query.stableRule
+    : query;
+  if ((rule?.type || 'css') !== 'css') return;
+  const engine = globalThis.__blockItSelectorEngine;
+  if (!engine) return;
+  engine.getFrameHasFilters(rule.selector).forEach(inner => engine.reportFrameMatches(inner, inner));
+}
+
+async function countRuleInActiveTab(query) {
+  const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+  if (!tab?.id) throw new Error('no-tab');
+
+  const selector = query.type === 'stablehtmlfinder'
+    ? query.stableRule?.target?.selector || query.stableRule?.selector
+    : query.selector;
+  if (query.type !== 'xpath' && /:frame-has\(/i.test(selector || '')) {
+    await chrome.scripting.executeScript({
+      target: { tabId: tab.id, allFrames: true },
+      world: 'MAIN',
+      func: probeFrameHasInFrame,
+      args: [query]
+    });
+    await new Promise(resolve => setTimeout(resolve, 80));
+  }
+
+  const results = await chrome.scripting.executeScript({
+    target: { tabId: tab.id, allFrames: true },
+    world: 'MAIN',
+    func: countRuleInFrame,
+    args: [query]
+  });
+
+  return {
+    count: results.reduce((total, item) => total + (item.result?.count || 0), 0),
+    invalid: results.some(item => item.result?.invalid)
+  };
 }
 
 // ============================================================
@@ -278,7 +437,7 @@ function parseOuterTag(html) {
 function buildSelector(tag, attributes) {
   let selector = tag;
   for (const [key, value] of Object.entries(attributes)) {
-    selector += `[${key}="${value}"]`;
+    selector += `[${CSS.escape(key)}="${CSS.escape(value)}"]`;
   }
   return selector;
 }
@@ -361,7 +520,7 @@ function updateSelector(tag, attributes) {
 //  CHECK SELECTOR COUNT — using chrome.storage.local
 // ============================================================
 
-function checkSelectorCount(selector) {
+async function checkSelectorCount(selector) {
   const trimmed = selector.trim();
 
   if (!trimmed) {
@@ -372,7 +531,16 @@ function checkSelectorCount(selector) {
     return;
   }
 
-  const type = detectSelectorType(trimmed);
+  let parsed;
+  try {
+    parsed = parseRuleInput(trimmed);
+  } catch {
+    updateElementCount(-1);
+    selectorTypeIndicator.textContent = 'StableHTMLFinder';
+    selectorTypeIndicator.style.color = '#6f42c1';
+    return;
+  }
+  const type = parsed.type;
 
   if (type === 'css') {
     selectorTypeIndicator.textContent = 'CSS ' + chrome.i18n.getMessage('selectorTypeCSS');
@@ -380,100 +548,26 @@ function checkSelectorCount(selector) {
   } else if (type === 'xpath') {
     selectorTypeIndicator.textContent = chrome.i18n.getMessage('selectorTypeXPath');
     selectorTypeIndicator.style.color = '#d13438';
+  } else if (type === 'stablehtmlfinder') {
+    selectorTypeIndicator.textContent = 'StableHTMLFinder';
+    selectorTypeIndicator.style.color = '#6f42c1';
+  } else if (type === 'blockitbuilder') {
+    selectorTypeIndicator.textContent = 'Конструктор BlockIt';
+    selectorTypeIndicator.style.color = '#397837';
   } else {
     selectorTypeIndicator.textContent = chrome.i18n.getMessage('selectorTypeUnknown');
     selectorTypeIndicator.style.color = '#999';
   }
 
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    if (!tabs || !tabs[0]) {
+  const requestId = ++countRequestId;
+  try {
+    const result = await countRuleInActiveTab(parsed.query);
+    if (requestId === countRequestId) updateElementCount(result.invalid ? -1 : result.count);
+  } catch {
+    if (requestId === countRequestId) {
       elementCount.textContent = chrome.i18n.getMessage('checkError');
       elementCount.style.color = 'orange';
-      return;
     }
-
-    // 1. Очищаем хранилище от старых данных
-    chrome.storage.local.remove('countResult', () => {
-      console.log('[BlockIt] Storage cleared, sending count request...');
-
-      // 2. Отправляем запрос на подсчёт во все фреймы
-      chrome.tabs.sendMessage(
-        tabs[0].id,
-        {
-          action: 'countElements',
-          selector: trimmed,
-          type: type
-        },
-        (response) => {
-          if (chrome.runtime.lastError) {
-            console.log('[BlockIt] sendMessage error:', chrome.runtime.lastError.message);
-          } else {
-            console.log('[BlockIt] Message sent, response:', response);
-          }
-        }
-      );
-
-      // 3. Пытаемся прочитать результат несколько раз
-      let attempts = 0;
-      const maxAttempts = 10; // 10 попыток по 500 мс = 5 секунд максимум
-
-      function tryReadStorage() {
-        attempts++;
-        console.log(`[BlockIt] Attempt ${attempts}/${maxAttempts} to read storage`);
-
-        chrome.storage.local.get(['countResult'], (result) => {
-          const data = result.countResult;
-          
-          if (data && typeof data === 'object' && data.count !== undefined) {
-            // Проверяем, что данные свежие (не старше 3 секунд)
-            if (Date.now() - data.timestamp < 3000) {
-              console.log('[BlockIt] Fresh data from:', data.href, '=>', data.count);
-              const total = data.count;
-              updateElementCount(total);
-              chrome.storage.local.remove('countResult');
-              return;
-            } else {
-              console.log('[BlockIt] Data is too old, ignoring');
-            }
-          }
-
-          // Если данные не найдены и попытки не закончились — повторяем
-          if (attempts < maxAttempts) {
-            setTimeout(tryReadStorage, 500);
-          } else {
-            // Попытки закончились — показываем 0
-            console.log('[BlockIt] Max attempts reached, showing 0');
-            updateElementCount(0);
-          }
-        });
-      }
-
-      // Начинаем чтение через 300 мс (даём время content.js на обработку)
-      setTimeout(tryReadStorage, 300);
-    });
-  });
-}
-
-// ============================================================
-//  UPDATE ELEMENT COUNT — helper function
-// ============================================================
-
-function updateElementCount(total) {
-  console.log('[BlockIt] Final total count:', total);
-  
-  if (total === -1) {
-    elementCount.textContent = chrome.i18n.getMessage('selectorInvalid');
-    elementCount.style.color = 'red';
-  } else if (total === 0) {
-    elementCount.textContent = chrome.i18n.getMessage('foundZero');
-    elementCount.style.color = 'orange';
-  } else if (total === 1) {
-    elementCount.textContent = chrome.i18n.getMessage('foundOne');
-    elementCount.style.color = 'green';
-  } else {
-    const msg = chrome.i18n.getMessage('foundMultiple').replace('{count}', total);
-    elementCount.textContent = msg;
-    elementCount.style.color = 'red';
   }
 }
 
@@ -517,7 +611,7 @@ function renderRulesList() {
       return;
     }
 
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
       let currentDomain = '';
       if (tabs?.[0]?.url) {
         currentDomain = getDomainFromUrl(tabs[0].url);
@@ -525,9 +619,11 @@ function renderRulesList() {
 
       const currentSite = [];
       const other = [];
+      const withoutDomain = [];
 
       rules.forEach(rule => {
         const ruleDomain = rule.domain || '';
+        if (!ruleDomain) withoutDomain.push(rule);
         if (ruleDomain && currentDomain && currentDomain.endsWith(ruleDomain)) {
           currentSite.push(rule);
         } else {
@@ -535,10 +631,10 @@ function renderRulesList() {
         }
       });
 
-      if (currentSite.length > 0) {
+      if (currentSite.length > 0 || withoutDomain.length > 0) {
         const label = currentDomain || chrome.i18n.getMessage('thisSite');
         const title = chrome.i18n.getMessage('rulesForThisSite').replace('{site}', label);
-        renderRuleGroup(rulesContainer, title, currentSite);
+        renderRuleGroup(rulesContainer, title, currentSite, { auditDomain: currentDomain, auditRules: [...currentSite, ...withoutDomain] });
       }
 
       if (other.length > 0) {
@@ -549,13 +645,19 @@ function renderRulesList() {
   });
 }
 
-function renderRuleGroup(container, title, rules) {
+function renderRuleGroup(container, title, rules, options = {}) {
   const group = document.createElement('div');
   group.className = 'rules-group';
 
   const header = document.createElement('div');
   header.className = 'group-title';
-  header.textContent = `${title} (${rules.length})`;
+  const headerText = document.createElement('span'); headerText.textContent = `${title} (${rules.length})`;
+  header.append(headerText);
+  if (options.auditDomain) {
+    const audit = document.createElement('button'); audit.className = 'rules-audit-open'; audit.textContent = '↻ Проверить правила';
+    audit.addEventListener('click', () => openRulesAudit(options.auditDomain, options.auditRules || rules));
+    header.append(audit);
+  }
   group.appendChild(header);
 
   const ul = document.createElement('ul');
@@ -563,8 +665,35 @@ function renderRuleGroup(container, title, rules) {
   rules.forEach((rule) => {
     const li = document.createElement('li');
     const icon = rule.mode === 'remove' ? '🗑️' : '👻';
-    const typeLabel = rule.type === 'xpath' ? '[XP] ' : '';
-    li.textContent = `${icon} ${typeLabel}${rule.selector}`;
+    const isBuilder = rule.type === 'blockitbuilder';
+    const typeLabel = rule.type === 'xpath' ? '[XP] ' : rule.type === 'stablehtmlfinder' ? '[SHF] ' : '';
+    let displaySelector = rule.selector;
+    if (isBuilder) {
+      const builderModel = rule.builderModel || (() => { try { return globalThis.__blockItRuleModel.parse(rule.selector); } catch { return null; } })();
+      displaySelector = rule.displaySelector || (builderModel ? globalThis.__blockItRuleModel.toDisplaySelector(builderModel) : 'Некорректное правило конструктора');
+    }
+    const text = document.createElement('span'); text.className = 'rule-text'; text.textContent = `${icon} ${typeLabel}${displaySelector}`;
+    if (rule.enabled === false) { li.classList.add('rule-disabled'); const mark = document.createElement('span'); mark.className = 'disabled-mark'; mark.textContent = 'Отключено'; text.append(document.createTextNode(' '), mark); }
+    const actions = document.createElement('span'); actions.className = 'rule-list-actions';
+
+    if (isBuilder) {
+      const edit = document.createElement('button'); edit.className = 'rule-edit'; edit.textContent = 'Редактировать';
+      edit.addEventListener('click', async () => {
+        const builderModel = rule.builderModel || (() => { try { return globalThis.__blockItRuleModel.parse(rule.selector); } catch { return null; } })();
+        if (!builderModel) return alert('Не удалось открыть модель этого правила.');
+        await openRuleBuilderDraft({ model: builderModel, editingRule: { id: rule.id || null, selector: rule.selector, domain: rule.domain || '', enabled: rule.enabled !== false }, expectedDomain: rule.domain || '' });
+      });
+      actions.append(edit);
+    }
+    const toggle = document.createElement('button'); toggle.className = 'rule-toggle'; toggle.textContent = rule.enabled === false ? 'Включить' : 'Отключить';
+    toggle.addEventListener('click', () => {
+      chrome.storage.local.get(['rules'], res => {
+        const all = res.rules || []; const index = all.findIndex(item => item.id && rule.id ? item.id === rule.id : item.selector === rule.selector && item.domain === rule.domain);
+        if (index < 0) return; all[index] = { ...all[index], id: all[index].id || crypto.randomUUID(), enabled: all[index].enabled === false };
+        chrome.storage.local.set({ rules: all }, renderRulesList);
+      });
+    });
+    actions.append(toggle);
 
     const del = document.createElement('button');
     del.textContent = chrome.i18n.getMessage('deleteBtn');
@@ -579,12 +708,33 @@ function renderRuleGroup(container, title, rules) {
       });
     });
 
-    li.appendChild(del);
+    actions.append(del); li.append(text, actions);
     ul.appendChild(li);
   });
 
   group.appendChild(ul);
   container.appendChild(group);
+}
+
+async function openRuleBuilderDraft(draft = {}) {
+  const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+  const tabMatches = !draft.expectedDomain || (tab?.url && getDomainFromUrl(tab.url).endsWith(draft.expectedDomain));
+  const sourceTabId = tabMatches ? tab?.id || null : null;
+  if (sourceTabId && draft.editingRule?.id) {
+    await chrome.scripting.executeScript({ target:{ tabId:sourceTabId }, world:'ISOLATED', func:id=>{let ids=[];try{ids=JSON.parse(sessionStorage.getItem('blockit-editor-excluded-rules')||'[]')}catch{}if(!ids.includes(id))ids.push(id);sessionStorage.setItem('blockit-editor-excluded-rules',JSON.stringify(ids))}, args:[draft.editingRule.id] });
+  }
+  await chrome.storage.session.set({ ruleBuilderDraft: { ...draft, sourceTabId, sourceUrl: tabMatches ? tab?.url || '' : '', createdAt: Date.now() } });
+  const createProperties = { url: chrome.runtime.getURL('rule-builder.html') };
+  if (Number.isInteger(tab?.windowId)) createProperties.windowId = tab.windowId;
+  await chrome.tabs.create(createProperties);
+}
+
+async function openRulesAudit(domainName, rules) {
+  const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+  await chrome.storage.session.set({ ruleAuditDraft: { domain: domainName, tabId: tab?.id || null, tabUrl: tab?.url || '', rules, createdAt: Date.now() } });
+  const properties = { url: chrome.runtime.getURL('rule-audit.html') };
+  if (Number.isInteger(tab?.windowId)) properties.windowId = tab.windowId;
+  await chrome.tabs.create(properties);
 }
 
 // ============================================================
@@ -661,6 +811,10 @@ parseBtn.addEventListener('click', () => {
   updateSelector(currentTag, currentAttributes);
 });
 
+openRuleBuilderBtn.addEventListener('click', async () => {
+  await openRuleBuilderDraft({ html: htmlInput.value.trim() });
+});
+
 // ============================================================
 //  HANDLERS — Manual Attribute Addition
 // ============================================================
@@ -713,15 +867,12 @@ addRuleBtn.addEventListener('click', () => {
     return;
   }
 
-  const type = detectSelectorType(rawSelector);
-  if (!type) {
+  let parsed;
+  try {
+    parsed = parseRuleInput(rawSelector);
+  } catch {
     alert(chrome.i18n.getMessage('alertInvalidSelector'));
     return;
-  }
-
-  let selector = rawSelector;
-  if (type === 'xpath') {
-    selector = rawSelector.replace(/^xpath:/i, '');
   }
 
   let blockMode = 'remove';
@@ -732,8 +883,8 @@ addRuleBtn.addEventListener('click', () => {
     }
   }
 
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    if (!tabs || !tabs[0]) {
+  chrome.tabs.query({ active: true, lastFocusedWindow: true }, async (tabs) => {
+    if (!tabs?.[0]) {
       alert(chrome.i18n.getMessage('alertNoTab'));
       return;
     }
@@ -743,90 +894,48 @@ addRuleBtn.addEventListener('click', () => {
       currentDomain = getDomainFromUrl(tabs[0].url);
     }
 
-    // ============================================================
-    //  ПРОВЕРКА КОЛИЧЕСТВА ЭЛЕМЕНТОВ через storage.local
-    //  (аналогично checkSelectorCount)
-    // ============================================================
+    let totalCount;
+    try {
+      const result = await countRuleInActiveTab(parsed.query);
+      if (result.invalid) {
+        alert(chrome.i18n.getMessage('alertInvalidSelector'));
+        return;
+      }
+      totalCount = result.count;
+    } catch {
+      alert(chrome.i18n.getMessage('alertCheckError'));
+      return;
+    }
 
-    // 1. Очищаем старое значение в хранилище
-    chrome.storage.local.remove('countResult', () => {
-      console.log('[BlockIt] Storage cleared for addRule');
+    if (totalCount === 0 && !confirm(chrome.i18n.getMessage('confirmZeroElements'))) return;
+    if (totalCount > 1) {
+      const msg = chrome.i18n.getMessage('confirmMultipleElements').replace('{count}', totalCount);
+      if (!confirm(msg)) return;
+    }
 
-      // 2. Отправляем запрос на подсчёт во все фреймы
-      chrome.tabs.sendMessage(
-        tabs[0].id,
-        {
-          action: 'countElements',
-          selector: selector,
-          type: type
-        },
-        (response) => {
-          console.log('[BlockIt] Message sent for addRule');
-        }
-      );
+    chrome.storage.local.get(['rules'], (res) => {
+      const rules = res.rules || [];
+      if (rules.some(r => r.selector === parsed.selector && r.domain === currentDomain)) {
+        alert(chrome.i18n.getMessage('alertRuleExists'));
+        return;
+      }
 
-      // 3. Через 500 мс читаем результат из хранилища
-      setTimeout(() => {
-        chrome.storage.local.get(['countResult'], (result) => {
-          const data = result.countResult;
-          console.log('[BlockIt] Data from storage (addRule):', data);
+      rules.push({
+        id: crypto.randomUUID(),
+        selector: parsed.selector,
+        type: parsed.type,
+        stableRule: parsed.stableRule,
+        builderModel: parsed.builderModel,
+        mode: blockMode,
+        enabled: true,
+        domain: currentDomain
+      });
 
-          let totalCount = 0;
-
-          if (data && typeof data === 'object' && data.count !== undefined) {
-            if (Date.now() - data.timestamp < 2000) {
-              console.log('[BlockIt] Fresh data from:', data.href, '=>', data.count);
-              totalCount = data.count;
-            } else {
-              console.log('[BlockIt] Data is too old, ignoring');
-            }
-          }
-
-          // 4. Очищаем хранилище
-          chrome.storage.local.remove('countResult');
-
-          // 5. Проверяем результат
-          if (totalCount === -1) {
-            alert(chrome.i18n.getMessage('alertInvalidSelector'));
-            return;
-          }
-
-          if (totalCount === 0) {
-            if (!confirm(chrome.i18n.getMessage('confirmZeroElements'))) {
-              return;
-            }
-          }
-
-          if (totalCount > 1) {
-            const msg = chrome.i18n.getMessage('confirmMultipleElements').replace('{count}', totalCount);
-            if (!confirm(msg)) {
-              return;
-            }
-          }
-
-          // 6. Сохраняем правило
-          chrome.storage.local.get(['rules'], (res) => {
-            const rules = res.rules || [];
-            if (rules.some(r => r.selector === selector && r.domain === currentDomain)) {
-              alert(chrome.i18n.getMessage('alertRuleExists'));
-              return;
-            }
-
-            rules.push({
-              selector: selector,
-              type: type,
-              mode: blockMode,
-              domain: currentDomain
-            });
-
-            chrome.storage.local.set({ rules }, () => {
-              statusDiv.textContent = chrome.i18n.getMessage('ruleAdded');
-              statusDiv.style.color = 'green';
-              renderRulesList();
-            });
-          });
-        });
-      }, 500);
+      chrome.storage.local.set({ rules }, () => {
+        statusDiv.textContent = chrome.i18n.getMessage('ruleAdded');
+        statusDiv.style.color = 'green';
+        renderRulesList();
+      });
     });
   });
 });
@@ -919,6 +1028,7 @@ document.addEventListener('DOMContentLoaded', () => {
   localizeUI();
   updateToggleButton();
   renderRulesList();
+  repairLegacyRulesInActiveTab().catch(() => {});
 });
 
 // ============================================================

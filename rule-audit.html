@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="ru">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Проверка правил — BlockIt</title><link rel="stylesheet" href="rule-audit.css"><link rel="stylesheet" href="rule-audit-extra.css"></head>
+<body>
+  <header class="top"><div class="brand"><span class="logo">BI</span>Block<i>It</i></div></header>
+  <main>
+    <section class="intro"><div><div class="eyebrow">Диагностика</div><h1>Проверка правил сайта</h1><p id="siteText">Загружаю сведения…</p></div></section>
+    <section class="panel controls">
+      <div><label class="stability-control"><span class="toggle"><input id="stabilityEnabled" type="checkbox"><i></i></span><span>Проверить стабильность</span></label><p>Правила временно не применяются во время измерений.</p></div>
+      <label class="reload-control" for="reloadCount"><span>Перезагрузок</span><select id="reloadCount" aria-label="Количество перезагрузок"></select></label>
+      <button id="startAudit" class="primary">↻ Начать проверку</button>
+    </section>
+    <section class="panel progress-panel" id="progressPanel" hidden><div class="progress-copy"><strong id="progressTitle">Подготовка…</strong><span id="progressDetail"></span></div><div class="progress"><i id="progressBar"></i></div></section>
+    <section class="panel results"><div class="results-head"><h2>Результаты</h2><span id="summary"></span></div><div id="resultsList" class="results-list"></div></section>
+  </main>
+  <script src="blockit-rule-model.js"></script>
+  <script src="rule-audit.js"></script>
+</body>
+</html>

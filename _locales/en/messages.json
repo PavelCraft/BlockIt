@@ -348,11 +348,11 @@
     "description": "Button to hide advanced mode"
   },
   "selectorLabel": {
-    "message": "Enter CSS selector or XPath:",
+    "message": "Enter a CSS selector, XPath, or StableHTMLFinder rule:",
     "description": "Label for selector input"
   },
   "selectorPlaceholder": {
-    "message": "e.g., #ad-container or //div[@id='ad']",
+    "message": "e.g., #ad-container, //div[@id='ad'], or SHF1:{...}",
     "description": "Placeholder for selector input"
   },
   "toolsDivider": {

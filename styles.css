@@ -132,6 +132,37 @@ button:disabled {
   background: #4a8f46;
 }
 
+.advanced-action-row {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.advanced-action-row button {
+  flex: 1;
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.2;
+}
+
+.advanced-action-row #parseBtn {
+  margin-top: 0;
+}
+
+.rule-builder-open {
+  gap: 5px;
+}
+
+.external-tab-icon {
+  width: 15px;
+  height: 15px;
+  fill: currentColor;
+  flex: 0 0 15px;
+}
+
 .btn-danger {
   background: #d13438;
   color: #fff;
@@ -567,6 +598,10 @@ body.import {
 }
 
 .rules-group .group-title {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
   font-weight: 600;
   font-size: 13px;
   color: #333;
@@ -587,17 +622,26 @@ body.import {
 }
 
 .rules-group ul li {
-  margin: 4px 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: start;
+  margin: 6px 0;
   font-family: 'Courier New', monospace;
   font-size: 12px;
-  word-break: break-all;
+  word-break: break-word;
 }
+.rules-group .group-title .rules-audit-open { padding:4px 8px; border:1px solid #b9c8df; border-radius:6px; background:#fff; color:#3158ca; font-size:10px; cursor:pointer; }
+
+.rule-text { min-width: 0; overflow-wrap: anywhere; }
+.rule-list-actions { display:flex; gap:5px; }
+.rule-disabled .rule-text { opacity:.58; text-decoration:line-through; }.disabled-mark { display:inline-block; padding:1px 5px; border-radius:99px; background:#e7e9ed; color:#626b78; font-family:Arial,sans-serif; font-size:9px; font-weight:700; text-decoration:none; }
 
 .rules-group ul li button {
   padding: 2px 10px;
   font-size: 11px;
   background: #d13438;
-  margin-left: 8px;
+  margin-left: 0;
   border: none;
   border-radius: 3px;
   color: #fff;
@@ -659,3 +703,7 @@ body.import {
   color: #999;
   font-style: italic;
 }
+
+.rules-group ul li button.rule-edit { background:#3f6df6; }
+.rules-group ul li button.rule-edit:hover { background:#3158ca; }
+.rules-group ul li button.rule-toggle { background:#687588; }.rules-group ul li button.rule-toggle:hover { background:#4f5b6d; }

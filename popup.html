@@ -22,7 +22,10 @@
   <div id="advancedPanel" class="advanced-panel hidden">
     <label for="htmlInput" data-i18n="pasteHtmlLabel">Paste copied HTML element:</label>
     <textarea id="htmlInput" data-i18n-placeholder="pasteHtmlPlaceholder"></textarea>
-    <button id="parseBtn" class="btn-primary" data-i18n="parseBtn">Parse</button>
+    <div class="advanced-action-row">
+      <button id="parseBtn" class="btn-primary" data-i18n="parseBtn">Parse</button>
+      <button id="openRuleBuilder" class="btn-secondary rule-builder-open" type="button"><span>Конструктор правила</span><svg class="external-tab-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 1h5v5h-1.8V4.1L8.5 8.8 7.2 7.5 11.9 2.8H10V1zM2 3h5v2H4v7h7V9h2v5H2V3z"></path></svg></button>
+    </div>
 
     <h4 data-i18n="tagLabel">Tag:</h4>
     <div id="tagDisplay" data-i18n="tagNotDefined">(not defined)</div>
@@ -41,7 +44,7 @@
   </div>
 
   <!-- ===== SELECTOR INPUT ===== -->
-  <label for="selectorInput" data-i18n="selectorLabel">Enter CSS selector or XPath:</label>
+  <label for="selectorInput" data-i18n="selectorLabel">Введите CSS-селектор, XPath или правило StableHTMLFinder:</label>
   <input type="text" id="selectorInput" class="selector-input" data-i18n-placeholder="selectorPlaceholder">
 
   <div class="selector-info">
@@ -93,6 +96,7 @@
   <!-- ===== CLEAR ALL ===== -->
   <button id="clearRules" class="btn-clear-all" data-i18n="clearRulesBtn">Clear all rules</button>
 
+  <script src="blockit-rule-model.js"></script>
   <script src="popup.js"></script>
 </body>
 </html>
