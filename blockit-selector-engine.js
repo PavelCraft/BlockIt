@@ -33,6 +33,27 @@
     return result;
   }
 
+  // Chromium's XPath implementation only accepts a Document (or a regular
+  // node inside it) as the context. ShadowRoot is a DocumentFragment and must
+  // never be passed to document.evaluate. Keep the context hard-coded instead
+  // of accepting a generic root: this code runs in the page's MAIN world,
+  // where page scripts can also replace globals such as `Node`.
+  function findXPath(selector) {
+    const expression = String(selector).replace(/^xpath:/i, '');
+    const result = document.evaluate(
+      expression,
+      document,
+      null,
+      XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
+      null
+    );
+    const found = [];
+    for (let index = 0; index < result.snapshotLength; index++) {
+      found.push(result.snapshotItem(index));
+    }
+    return found;
+  }
+
   function readCall(text, start) {
     let depth = 1, quote = '', escaped = false, regex = false;
     for (let index = start; index < text.length; index++) {
@@ -307,7 +328,7 @@
   });
 
   globalThis.__blockItSelectorEngine = {
-    parse, find: matchesInRoots, matches: matchesSelector, reportFrameMatches,
+    parse, find: matchesInRoots, findXPath, matches: matchesSelector, reportFrameMatches,
     normalizeCssSelector, looksLikeCssSelector,
     getFrameHasFilters(selector) {
       return parse(selector).filters.flatMap(filter => {

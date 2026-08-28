@@ -574,8 +574,10 @@ function domain(url) { try { const parts = new URL(url).hostname.replace(/^www\.
 
 async function saveRule() {
   if (!sourceTabId) return alert('Для проверки и сохранения откройте вкладку сайта правила, затем заново откройте редактор. BlockIt не открывает сайт автоматически.');
-  if (editingNeedsReload) return alert('Сначала нажмите «Проверить после обновления»: ранее применённое правило могло уже удалить элементы со страницы.');
-  const count = await recount(); if (count === null || !model) return;
+  if (!model) return;
+  if (editingNeedsReload && !confirm('Страница ещё не обновлялась: текущее число совпадений может быть неверным, потому что старое правило уже могло скрыть или удалить элементы. Всё равно сохранить изменения?')) return;
+  const count = editingNeedsReload ? null : await recount();
+  if (!editingNeedsReload && count === null) return;
   if (count === 0 && !confirm('Сейчас правило не находит элементов. Всё равно сохранить?')) return;
   if (count > 1 && !confirm(`Правило находит ${count} элементов. Сохранить его?`)) return;
   const selector = globalThis.__blockItRuleModel.stringify(model); const rule = { id: editingRule?.id || crypto.randomUUID(), selector, displaySelector: ruleCode.textContent, type: 'blockitbuilder', builderModel: model, mode: 'remove', enabled: editingRule?.enabled ?? true, domain: domain((await chrome.tabs.get(sourceTabId)).url) };
@@ -602,6 +604,25 @@ document.getElementById('reloadCheck').addEventListener('click', checkAfterReloa
 document.getElementById('checkNow').addEventListener('click', () => editingNeedsReload ? alert('Сначала обновите страницу: правило уже могло удалить подходящие элементы, поэтому текущий подсчёт будет неточным.') : recount());
 document.getElementById('saveRule').addEventListener('click', saveRule);
 document.getElementById('copyRule').addEventListener('click', async () => { if (ruleCode.textContent && ruleCode.textContent !== '—') await navigator.clipboard.writeText(ruleCode.textContent); });
+document.getElementById('openFeedback').addEventListener('click', async () => {
+  const draft = {
+    source: 'rule-builder',
+    sourceLabel: 'Конструктор правила',
+    tabId: sourceTabId,
+    pageUrl: sourceUrl,
+    editingRule,
+    rule: {
+      displaySelector: ruleCode.textContent === '—' ? '' : ruleCode.textContent,
+      model,
+      matchCount: countStatus.textContent,
+      matchStatus: countTitle.textContent,
+      matchDetail: countDetail.textContent
+    },
+    createdAt: Date.now()
+  };
+  await chrome.storage.session.set({ feedbackDraft: draft });
+  await chrome.tabs.create({ url: chrome.runtime.getURL('feedback.html') });
+});
 matchPositions.addEventListener('input', () => { model.resultPositions ||= newPosition('', false); model.resultPositions.value = matchPositions.value; model.resultPositions.enabled = !!matchPositions.value.trim(); updatePreview(); scheduleCount(); });
 (async () => {
   const { ruleBuilderDraft } = await chrome.storage.session.get(['ruleBuilderDraft']);

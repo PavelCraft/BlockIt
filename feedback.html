@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BlockIt — Сообщить о проблеме</title>
+  <link rel="stylesheet" href="feedback.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand"><span class="logo"><img src="icons/icon128.png" alt=""></span><span>Block<i>It</i></span></div>
+    <button id="closePage" class="quiet" type="button">Закрыть</button>
+  </header>
+
+  <main class="layout">
+    <section class="intro">
+      <div>
+        <div class="eyebrow">Обратная связь</div>
+        <h1>Сообщить о проблеме</h1>
+        <p>Опишите, что произошло. BlockIt подготовит технические сведения, чтобы вам не пришлось перечислять их вручную.</p>
+      </div>
+    </section>
+
+    <form id="feedbackForm" novalidate>
+      <div class="main-column">
+        <section class="card">
+          <div class="section-number">1</div>
+          <div class="section-content">
+            <h2>Что произошло?</h2>
+            <p class="hint">Выберите наиболее близкий вариант.</p>
+            <div class="problem-grid" id="problemTypes">
+              <label><input type="radio" name="problemType" value="rule-no-match" required><span>Правило ничего не блокирует</span></label>
+              <label><input type="radio" name="problemType" value="wrong-element"><span>Блокируется не тот элемент</span></label>
+              <label><input type="radio" name="problemType" value="too-many"><span>Блокируется слишком много элементов</span></label>
+              <label><input type="radio" name="problemType" value="unstable"><span>После обновления правило перестаёт работать</span></label>
+              <label><input type="radio" name="problemType" value="disabled-still-works"><span>Отключённое правило продолжает работать</span></label>
+              <label><input type="radio" name="problemType" value="html-parser"><span>HTML разобран неправильно</span></label>
+              <label><input type="radio" name="problemType" value="performance"><span>Расширение замедляет страницу</span></label>
+              <label><input type="radio" name="problemType" value="extension-error"><span>Произошла ошибка</span></label>
+              <label><input type="radio" name="problemType" value="other"><span>Другая проблема</span></label>
+            </div>
+            <label class="field description-field">
+              <span>Описание <em>необязательно</em></span>
+              <textarea id="description" maxlength="5000" placeholder="Что вы ожидали увидеть и что произошло на самом деле?"></textarea>
+              <small><span id="descriptionCount">0</span> / 5000</small>
+            </label>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="section-number">2</div>
+          <div class="section-content">
+            <h2>Скриншоты</h2>
+            <p class="hint">Сделайте снимки самостоятельно и прикрепите их здесь. До 5 изображений, не более 10 МБ суммарно.</p>
+            <label class="upload-zone" for="screenshots">
+              <input id="screenshots" type="file" accept="image/*" multiple>
+              <span class="upload-icon">＋</span>
+              <strong>Выбрать изображения</strong>
+              <small>PNG, JPEG, WebP и другие форматы изображений</small>
+            </label>
+            <div class="upload-summary"><span id="fileCount">Файлы не выбраны</span><span id="fileSize">0 из 10 МБ</span></div>
+            <div id="attachmentList" class="attachments"></div>
+            <div id="fileError" class="message error" role="alert" hidden></div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="section-number">3</div>
+          <div class="section-content">
+            <h2>Контакт для ответа</h2>
+            <p class="hint">Можно оставить адрес, если вы хотите получить уточняющий вопрос или сообщение об исправлении.</p>
+            <label class="field">
+              <span>Email <em>необязательно</em></span>
+              <input id="contactEmail" type="email" maxlength="254" placeholder="you@example.com">
+            </label>
+          </div>
+        </section>
+      </div>
+
+      <aside class="side-column">
+        <section class="card context-card">
+          <div class="eyebrow">Контекст отчёта</div>
+          <h2 id="sourceLabel">BlockIt</h2>
+          <dl>
+            <div><dt>Версия</dt><dd id="extensionVersion">—</dd></div>
+            <div><dt>Страница</dt><dd id="pageDomain">Не определена</dd></div>
+            <div><dt>Источник</dt><dd id="sourceName">—</dd></div>
+          </dl>
+          <label class="data-toggle"><input id="includeTechnical" type="checkbox" checked><span><b>Приложить технические сведения</b><small>Правила, статусы и сведения о версии</small></span></label>
+          <label class="data-toggle"><input id="includeFullUrl" type="checkbox" checked><span><b>Приложить полный адрес страницы</b><small>Помогает точно воспроизвести условия проблемы</small></span></label>
+          <details>
+            <summary>Предпросмотр технических данных</summary>
+            <pre id="technicalPreview">—</pre>
+          </details>
+        </section>
+
+        <section class="card submit-card">
+          <button id="sendReport" class="primary" type="submit">Отправить</button>
+          <p>Сообщение, технические сведения и прикреплённые изображения будут отправлены разработчику BlockIt.</p>
+          <div id="formMessage" class="message" role="status" hidden></div>
+        </section>
+      </aside>
+    </form>
+  </main>
+  <script src="feedback.js"></script>
+</body>
+</html>

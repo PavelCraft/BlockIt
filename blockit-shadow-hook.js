@@ -27,12 +27,9 @@
       );
     }
     if (type !== 'xpath') return globalThis.__blockItSelectorEngine.find(selector);
-    const found = new Set();
-    for (const root of globalThis.__blockItSelectorEngine.roots()) {
-      const result = document.evaluate(selector, root, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
-      for (let index = 0; index < result.snapshotLength; index++) found.add(result.snapshotItem(index));
-    }
-    return [...found];
+    /* XPath stays inside this frame's Document. CSS and BlockIt rules are the
+       supported way to traverse open or closed Shadow DOM. */
+    return globalThis.__blockItSelectorEngine.findXPath(selector);
   }
 
   function normalizeRule(rule) {
@@ -76,7 +73,12 @@
         const key = `${rule.type}:${JSON.stringify(rule.selector)}`;
         if (!reportedInvalidRules.has(key)) {
           reportedInvalidRules.add(key);
-          console.warn('[BlockIt] Invalid rule:', JSON.stringify(rule.selector), `${error.name}: ${error.message}`);
+          console.warn('[BlockIt] Invalid rule:', {
+            id: originalRule.id || null,
+            domain: originalRule.domain || null,
+            type: rule.type || 'css',
+            selector: rule.selector
+          }, `${error.name}: ${error.message}`);
         }
       }
       for (const element of elements) {

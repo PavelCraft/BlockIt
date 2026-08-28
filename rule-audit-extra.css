@@ -1,3 +1,17 @@
+.logo { display: block; overflow: hidden; background: transparent; box-shadow: none; }
+.logo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+.top {
+  position: sticky;
+  z-index: 20;
+  top: 0;
+}
+
+.panel { border-color: #dfe4ec; box-shadow: 0 12px 34px rgba(27, 39, 63, .08); }
+.controls select { outline: none; }
+.controls select:focus { border-color: #3f6df6; box-shadow: 0 0 0 3px rgba(63, 109, 246, .12); }
+.controls button.primary:hover { border-color: #3158ca; background: #3158ca; }
+
 .controls button.primary {
   position: relative;
 }
@@ -119,6 +133,8 @@
   font-size: 11px;
   cursor: pointer;
 }
+
+.result-actions button:hover { border-color: #9eabba; background: #f4f6f9; }
 
 .result-actions .edit { border-color: #b9c8ef; color: #3158ca; }
 .result-actions .bind { border-color: #9fd8c2; background: #eefaf5; color: #08744d; }

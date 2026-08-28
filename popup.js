@@ -141,13 +141,13 @@ function findElements(selector, type) {
     return found;
   }
 
-  function findXPathInShadowDOM(xpath, root = document) {
+  function findXPathInDocument(xpath) {
     const found = [];
 
     try {
       const result = document.evaluate(
         xpath,
-        root,
+        document,
         null,
         XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
         null
@@ -157,12 +157,6 @@ function findElements(selector, type) {
         found.push(result.snapshotItem(i));
       }
     } catch (e) {}
-
-    for (const host of findShadowHosts(root)) {
-      if (host.shadowRoot) {
-        found.push(...findXPathInShadowDOM(xpath, host.shadowRoot));
-      }
-    }
 
     return found;
   }
@@ -185,7 +179,7 @@ function findElements(selector, type) {
     } catch (e) {}
 
     if (results.length === 0) {
-      results = findXPathInShadowDOM(xpath);
+      results = findXPathInDocument(xpath);
     }
   } else {
     try {
@@ -332,10 +326,8 @@ function countRuleInFrame(query) {
       engine.find(selector).forEach(element => elements.add(element));
     } else {
       const engine = globalThis.__blockItSelectorEngine;
-      for (const root of engine?.roots?.() || [document]) {
-        const result = document.evaluate(selector, root, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
-        for (let index = 0; index < result.snapshotLength; index++) elements.add(result.snapshotItem(index));
-      }
+      if (!engine?.findXPath) return { count: 0, invalid: true };
+      engine.findXPath(selector).forEach(element => elements.add(element));
     }
   } catch {
     return { count: 0, invalid: true };
@@ -696,6 +688,7 @@ function renderRuleGroup(container, title, rules, options = {}) {
     actions.append(toggle);
 
     const del = document.createElement('button');
+    del.className = 'btn-danger';
     del.textContent = chrome.i18n.getMessage('deleteBtn');
     del.addEventListener('click', () => {
       chrome.storage.local.get(['rules'], (res) => {
@@ -733,6 +726,31 @@ async function openRulesAudit(domainName, rules) {
   const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
   await chrome.storage.session.set({ ruleAuditDraft: { domain: domainName, tabId: tab?.id || null, tabUrl: tab?.url || '', rules, createdAt: Date.now() } });
   const properties = { url: chrome.runtime.getURL('rule-audit.html') };
+  if (Number.isInteger(tab?.windowId)) properties.windowId = tab.windowId;
+  await chrome.tabs.create(properties);
+}
+
+async function openContactsPage() {
+  const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+  const { rules = [] } = await chrome.storage.local.get(['rules']);
+  await chrome.storage.session.set({
+    feedbackDraft: {
+      source: 'popup',
+      sourceLabel: 'Главное окно BlockIt',
+      tabId: tab?.id || null,
+      pageUrl: tab?.url || '',
+      rules: rules.map(rule => ({
+        id: rule.id || null,
+        selector: rule.displaySelector || rule.selector || '',
+        type: rule.type || 'css',
+        domain: rule.domain || '',
+        enabled: rule.enabled !== false,
+        mode: rule.mode || 'remove'
+      })),
+      createdAt: Date.now()
+    }
+  });
+  const properties = { url: chrome.runtime.getURL('contacts.html') };
   if (Number.isInteger(tab?.windowId)) properties.windowId = tab.windowId;
   await chrome.tabs.create(properties);
 }
@@ -1029,6 +1047,7 @@ document.addEventListener('DOMContentLoaded', () => {
   updateToggleButton();
   renderRulesList();
   repairLegacyRulesInActiveTab().catch(() => {});
+  document.getElementById('openContacts')?.addEventListener('click', openContactsPage);
 });
 
 // ============================================================

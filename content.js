@@ -73,19 +73,17 @@ function findInShadowDOM(selector, root = document) {
 }
 
 /**
- * Find elements inside Shadow DOM using XPath
+ * Find elements in this frame's document using XPath.
+ * Chromium does not support ShadowRoot as an XPath context node.
  * @param {string} xpath - XPath expression
- * @param {Node} root - Root node to search from (default: document)
  * @returns {Array} Array of matching elements
  */
-function findXPathInShadowDOM(xpath, root = document) {
+function findXPathInDocument(xpath) {
   const results = [];
-
-  // Search in current root
   try {
     const result = document.evaluate(
       xpath,
-      root,
+      document,
       null,
       XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
       null
@@ -96,16 +94,6 @@ function findXPathInShadowDOM(xpath, root = document) {
   } catch (e) {
     // Invalid XPath, ignore
   }
-
-  // Find all shadow hosts and search inside them
-  const shadowHosts = findShadowHosts(root);
-  shadowHosts.forEach(host => {
-    if (host.shadowRoot) {
-      const nested = findXPathInShadowDOM(xpath, host.shadowRoot);
-      results.push(...nested);
-    }
-  });
-
   return results;
 }
 
@@ -122,27 +110,7 @@ function findElements(selector, type) {
 
   if (selType === 'xpath') {
     const xpath = selector.replace(/^xpath:/i, '');
-
-    // First, search in main DOM
-    try {
-      const result = document.evaluate(
-        xpath,
-        document,
-        null,
-        XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
-        null
-      );
-      for (let i = 0; i < result.snapshotLength; i++) {
-        results.push(result.snapshotItem(i));
-      }
-    } catch (e) {
-      // Invalid XPath, ignore
-    }
-
-    // If nothing found, search in Shadow DOM
-    if (results.length === 0) {
-      results = findXPathInShadowDOM(xpath);
-    }
+    results = findXPathInDocument(xpath);
   } else {
     // CSS selector
 

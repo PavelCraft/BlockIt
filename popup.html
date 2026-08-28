@@ -3,11 +3,12 @@
 <head>
   <meta charset="utf-8">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="extension-theme.css">
 </head>
 <body class="popup">
   <!-- ===== HEADER ===== -->
   <div class="popup-header">
-    <h3 data-i18n="extensionName">BlockIt</h3>
+    <div class="brand"><span class="logo"><img src="icons/icon128.png" alt=""></span><span>Block<i>It</i></span></div>
     <a href="https://pavelcraft.github.io/BlockIt/" target="_blank" id="faqLink" class="faq-link" data-i18n="faqLink">!!! Instructions !!!</a>
   </div>
 
@@ -95,6 +96,11 @@
 
   <!-- ===== CLEAR ALL ===== -->
   <button id="clearRules" class="btn-clear-all" data-i18n="clearRulesBtn">Clear all rules</button>
+
+  <div class="feedback-entry">
+    <button id="openContacts" class="feedback-open" type="button">Обратная связь</button>
+    <small>Контакты, предложения и сообщения о проблемах</small>
+  </div>
 
   <script src="blockit-rule-model.js"></script>
   <script src="popup.js"></script>
