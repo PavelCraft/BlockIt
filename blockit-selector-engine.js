@@ -5,7 +5,15 @@
     'attr-name', 'attr', 'text', 'own-text', 'html', 'class-name', 'attrs',
     'within', 'near', 'children', 'accessible', 'visible', 'size', 'style',
     'property', 'in-frame', 'in-shadow', 'frame-has', 'has-frame',
-    'class-count', 'attribute-count'
+    'class-count', 'attribute-count', 'attr-count', 'matches-position', 'sibling-position',
+    // Text conditions emitted by the Rule Builder.  `:text(...)` and
+    // `:own-text(...)` mean exact equality; the suffixed forms correspond to
+    // the other modes offered in its text-condition controls.
+    'text-starts', 'text-ends', 'text-contains', 'text-matches',
+    'own-text-starts', 'own-text-ends', 'own-text-contains', 'own-text-matches',
+    // Always evaluate :has ourselves. Native CSS cannot evaluate BlockIt-only
+    // predicates placed inside it (for example :attr-count or :text-contains).
+    'has'
   ]);
 
   const closedRoot = element => globalThis.__blockItGetClosedShadowRoot?.(element) || null;
@@ -76,7 +84,7 @@
     throw new Error('Unclosed BlockIt pseudo class');
   }
 
-  function parse(selector) {
+  function legacyParse(selector) {
     const filters = [];
     let css = '', index = 0, quote = '', bracketDepth = 0;
     while (index < selector.length) {
@@ -118,6 +126,19 @@
     return { css, filters };
   }
 
+  /* Syntax is intentionally owned by the shared core.  Keep the legacy
+     implementation above only temporarily for a small, reviewable diff; it
+     is no longer called by BlockIt. */
+  function requireSharedCore() {
+    const core = globalThis.__blockItSelectorCore;
+    if (!core?.findInScopes) throw new Error('BlockIt selector core was not loaded');
+    return core;
+  }
+
+  function parse(selector) {
+    return requireSharedCore().parse(selector);
+  }
+
   function regex(value) {
     const match = value.trim().match(/^\/((?:\\.|[^/])*)\/([dgimsuvy]*)$/);
     if (!match) throw new Error('Expected /regular expression/');
@@ -155,12 +176,20 @@
   }
 
   function matchesInRoots(selector) {
-    const parsed = parse(selector), result = new Set();
-    for (const root of roots()) {
-      try { root.querySelectorAll(parsed.css).forEach(element => result.add(element)); }
-      catch { throw new Error(`Invalid CSS part: ${parsed.css}`); }
-    }
-    return [...result].filter(element => parsed.filters.every(filter => matchFilter(element, filter)));
+    return requireSharedCore().findInScopes(selector, roots(), { runtimeFilter: matchFilter });
+  }
+
+  function applyResultPositions(elements, filters) {
+    const positionFilters = filters.filter(filter => filter.name === 'matches-position');
+    if (!positionFilters.length) return elements;
+    return elements.filter((element, index) => positionFilters.every(filter =>
+      parsePositionList(filter.value).includes(index + 1)
+    ));
+  }
+
+  function parsePositionList(value) {
+    return [...new Set(String(value || '').split(/[,;\s]+/)
+      .map(Number).filter(position => Number.isInteger(position) && position > 0))];
   }
 
   function compare(actual, expression) {
@@ -195,9 +224,20 @@
       return [...element.attributes].some(attr => namePattern.test(attr.name) && valuePattern.test(attr.value));
     }
     if (filter.name === 'class-count') return compareCount(element.classList.length, value);
-    if (filter.name === 'attribute-count') return compareCount(element.attributes.length, value);
-    if (filter.name === 'text') return regex(value).test(textOf(element, false));
-    if (filter.name === 'own-text') return regex(value).test(textOf(element, true));
+    if (filter.name === 'attribute-count' || filter.name === 'attr-count') return compareCount(element.attributes.length, value);
+    if (filter.name === 'sibling-position') return parsePositionList(value).includes([...(element.parentElement?.children || [])].indexOf(element) + 1);
+    if (filter.name === 'matches-position') return true;
+    if (filter.name === 'text') return textMatches(textOf(element, false), value);
+    if (filter.name === 'own-text') return textMatches(textOf(element, true), value);
+    if (filter.name === 'text-starts') return textMatches(textOf(element, false), value, 'prefix');
+    if (filter.name === 'text-ends') return textMatches(textOf(element, false), value, 'suffix');
+    if (filter.name === 'text-contains') return textMatches(textOf(element, false), value, 'contains');
+    if (filter.name === 'text-matches') return textMatches(textOf(element, false), value, 'regex');
+    if (filter.name === 'own-text-starts') return textMatches(textOf(element, true), value, 'prefix');
+    if (filter.name === 'own-text-ends') return textMatches(textOf(element, true), value, 'suffix');
+    if (filter.name === 'own-text-contains') return textMatches(textOf(element, true), value, 'contains');
+    if (filter.name === 'own-text-matches') return textMatches(textOf(element, true), value, 'regex');
+    if (filter.name === 'has') return matchHas(element, value);
     if (filter.name === 'html') return regex(value).test(element.outerHTML);
     if (filter.name === 'class-name') return [...element.classList].some(name => regex(value).test(name));
     if (filter.name === 'attrs') return attributeTerms(value).every(term => term.pattern
@@ -251,6 +291,46 @@
     return true;
   }
 
+  function textMatches(actual, expression, mode = 'exact') {
+    const source = String(expression || '').trim();
+    if (mode === 'regex' || /^\/.+\/[dgimsuvy]*$/.test(source)) {
+      try { return regex(source).test(actual); } catch { return false; }
+    }
+    const exact = source.replace(/^['"]|['"]$/g, '');
+    if (mode === 'prefix') return actual.startsWith(exact);
+    if (mode === 'suffix') return actual.endsWith(exact);
+    if (mode === 'contains') return actual.includes(exact);
+    return actual === exact;
+  }
+
+  /*
+   * `:has()` has to be evaluated recursively rather than handed to the
+   * browser.  Otherwise a BlockIt-only predicate inside :has(), such as
+   * `:has(~ div:attr-count(>=1))`, is either rejected by CSS or accidentally
+   * applied to the outer element.  The relative combinators deliberately
+   * mirror CSS: `~` means following siblings only, not every sibling.
+   */
+  function matchHas(element, value) {
+    const relation = String(value || '').trim();
+    if (!relation) return false;
+    let selector = relation, candidates;
+    if (relation.startsWith('>')) {
+      selector = relation.slice(1).trim();
+      candidates = [...element.children];
+    } else if (relation.startsWith('+')) {
+      selector = relation.slice(1).trim();
+      candidates = element.nextElementSibling ? [element.nextElementSibling] : [];
+    } else if (relation.startsWith('~')) {
+      selector = relation.slice(1).trim();
+      const siblings = [...(element.parentElement?.children || [])];
+      const index = siblings.indexOf(element);
+      candidates = index < 0 ? [] : siblings.slice(index + 1);
+    } else {
+      candidates = [...element.querySelectorAll('*')];
+    }
+    return !!selector && candidates.some(candidate => matchesSelector(candidate, selector));
+  }
+
   function compareCount(count, expression) {
     const match = String(expression).trim().match(/^(<=|>=|=|<|>)?\s*(\d+)$/);
     if (!match) throw new Error('Expected child count such as >=1');
@@ -259,9 +339,7 @@
   }
 
   function matchesSelector(element, selector) {
-    const parsed = parse(selector);
-    try { return element.matches(parsed.css) && parsed.filters.every(filter => matchFilter(element, filter)); }
-    catch { return false; }
+    return requireSharedCore().matches(element, selector, { runtimeFilter: matchFilter, scopes: roots() });
   }
 
   function matchAccessible(element, value) {
@@ -308,8 +386,7 @@
   }
 
   function matchesInDocument(doc, selector) {
-    const parsed = parse(selector);
-    try { return [...doc.querySelectorAll(parsed.css)].filter(element => parsed.filters.every(filter => matchFilter(element, filter))); }
+    try { return requireSharedCore().findInScopes(selector, [doc], { runtimeFilter: matchFilter }); }
     catch { return []; }
   }
 
@@ -331,11 +408,15 @@
     parse, find: matchesInRoots, findXPath, matches: matchesSelector, reportFrameMatches,
     normalizeCssSelector, looksLikeCssSelector,
     getFrameHasFilters(selector) {
-      return parse(selector).filters.flatMap(filter => {
+      const collect = filter => {
+        if (filter.name === 'selector-tree') return filter.branches.flatMap(steps => steps.flatMap(step => step.filters.flatMap(collect)));
         if (filter.name === 'frame-has') return [filter.value];
         if (filter.name === 'has-frame') return splitArgs(filter.value).slice(1, 2);
+        if (['has', 'is', 'where', 'not', 'within', 'near'].includes(filter.name)) return parse(filter.value).filters.flatMap(collect);
+        if (filter.name === 'children') return parse(splitArgs(filter.value)[0]).filters.flatMap(collect);
         return [];
-      });
+      };
+      return [...new Set(parse(selector).filters.flatMap(collect))];
     },
     roots
   };

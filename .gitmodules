@@ -1,0 +1,3 @@
+[submodule "shared/blockit-selector-core"]
+	path = shared/blockit-selector-core
+	url = git@github.com:PavelCraft/blockit-selector-core.git

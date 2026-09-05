@@ -7,6 +7,7 @@ const matchPositions = document.getElementById('matchPositions');
 const ruleCode = document.getElementById('ruleCode');
 const ruleSummary = document.getElementById('ruleSummary');
 const reloadResult = document.getElementById('reloadResult');
+const builderModeRadios = [...document.querySelectorAll('input[name="builderBlockMode"]')];
 
 let sourceTabId = null;
 let model = null;
@@ -16,6 +17,7 @@ let countRequest = 0;
 let editingRule = null;
 let editingNeedsReload = false;
 let sourceUrl = '';
+let ruleMode = 'remove';
 const relationSources = new WeakMap();
 const collapsedNodes = new WeakMap();
 
@@ -580,14 +582,14 @@ async function saveRule() {
   if (!editingNeedsReload && count === null) return;
   if (count === 0 && !confirm('Сейчас правило не находит элементов. Всё равно сохранить?')) return;
   if (count > 1 && !confirm(`Правило находит ${count} элементов. Сохранить его?`)) return;
-  const selector = globalThis.__blockItRuleModel.stringify(model); const rule = { id: editingRule?.id || crypto.randomUUID(), selector, displaySelector: ruleCode.textContent, type: 'blockitbuilder', builderModel: model, mode: 'remove', enabled: editingRule?.enabled ?? true, domain: domain((await chrome.tabs.get(sourceTabId)).url) };
+  const selector = globalThis.__blockItRuleModel.stringify(model); const rule = { id: editingRule?.id || crypto.randomUUID(), selector, displaySelector: ruleCode.textContent, type: 'blockitbuilder', builderModel: model, mode: ruleMode, enabled: editingRule?.enabled ?? true, domain: domain((await chrome.tabs.get(sourceTabId)).url) };
   const { rules = [] } = await chrome.storage.local.get(['rules']);
   const editingIndex = editingRule ? rules.findIndex(item => editingRule.id ? item.id === editingRule.id : item.selector === editingRule.selector && (item.domain || '') === editingRule.domain) : -1;
   if (rules.some((item, index) => index !== editingIndex && item.selector === selector && item.domain === rule.domain)) return alert('Такое правило уже есть.');
   if (editingIndex >= 0) rules[editingIndex] = rule; else rules.push(rule);
   await chrome.storage.local.set({ rules });
   await releaseEditedRule(rule.id);
-  editingRule = { id: rule.id, selector: rule.selector, domain: rule.domain || '', enabled: rule.enabled !== false };
+  editingRule = { id: rule.id, selector: rule.selector, domain: rule.domain || '', enabled: rule.enabled !== false, mode: rule.mode };
   document.getElementById('saveRule').querySelector('span').textContent = 'Сохранить изменения';
   countDetail.textContent = editingIndex >= 0 ? 'Изменения сохранены и применены.' : 'Правило сохранено и применено.';
 }
@@ -603,6 +605,7 @@ async function releaseEditedRule(ruleId = editingRule?.id) {
 document.getElementById('reloadCheck').addEventListener('click', checkAfterReload);
 document.getElementById('checkNow').addEventListener('click', () => editingNeedsReload ? alert('Сначала обновите страницу: правило уже могло удалить подходящие элементы, поэтому текущий подсчёт будет неточным.') : recount());
 document.getElementById('saveRule').addEventListener('click', saveRule);
+builderModeRadios.forEach(radio => radio.addEventListener('change', () => { if (radio.checked) ruleMode = radio.value; }));
 document.getElementById('copyRule').addEventListener('click', async () => { if (ruleCode.textContent && ruleCode.textContent !== '—') await navigator.clipboard.writeText(ruleCode.textContent); });
 document.getElementById('openFeedback').addEventListener('click', async () => {
   const draft = {
@@ -633,6 +636,8 @@ matchPositions.addEventListener('input', () => { model.resultPositions ||= newPo
     if (ruleBuilderDraft.model?.root) {
       model = ruleBuilderDraft.model;
       editingRule = ruleBuilderDraft.editingRule || null;
+      ruleMode = editingRule?.mode === 'hide' ? 'hide' : 'remove';
+      builderModeRadios.forEach(radio => { radio.checked = radio.value === ruleMode; });
       editingNeedsReload = !!(editingRule && sourceTabId);
       const reloadButton = document.getElementById('reloadCheck');
       reloadButton.title = sourceTabId ? `Страница ${sourceUrl || editingRule?.domain || 'сайта'} будет перезагружена. Редактируемое правило временно не применяется.` : `Нет открытой вкладки сайта ${editingRule?.domain || ''}. BlockIt не будет открывать её автоматически.`;

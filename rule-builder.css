@@ -16,6 +16,11 @@ input,select,textarea { min-width:0; outline:none; border:1px solid #ccd4df; bor
 .builder-feedback .feedback-open { justify-content:center; width:100%; border-color:#b9c8ef; color:#3158ca; font-weight:750; }
 .builder-feedback .feedback-open:hover { border-color:var(--blue); background:var(--blue2); }
 .builder-feedback small { color:var(--muted); font-size:10px; text-align:center; }
+.apply-mode { display:grid; gap:9px; padding:16px; }
+.apply-mode h3 { margin:0 0 2px; font-size:13px; }
+.apply-mode label { display:flex; align-items:center; gap:7px; color:#354257; font-size:12px; font-weight:700; }
+.apply-mode input { accent-color:var(--blue); }
+.apply-mode small { color:var(--muted); font-size:11px; }
 
 /* Tree and cards follow the visual system of rule-builder-concept.html. */
 .tree { --tree-indent:0px; position:relative; padding-left:0; }.node { position:relative; margin-bottom:14px; }.node.target { margin-left:var(--tree-indent); }.node.target.has-ancestors::before { content:""; position:absolute; left:-30px; top:43px; width:30px; border-top:2px solid #8997aa; }.relation-entry { margin-bottom:18px; }.relation-entry::before { content:""; position:absolute; left:-30px; top:43px; width:30px; border-top:2px solid #8997aa; }.relation-entry.relation-ancestor-any::before,.relation-entry.relation-descendant::before { border-top-style:dashed; border-top-color:#557f74; }.relation-entry.root-relation.relation-ancestor-nearest,.relation-entry.root-relation.relation-ancestor-any { max-width:none; }.relation-entry.root-relation.relation-sibling::before { border-top-color:#b07a3f; }.relation-entry:not(.root-relation) { margin-left:40px; }.ancestor-node:first-child::before { display:none; }.ancestor-node.has-next-node::after { content:""; position:absolute; left:30px; top:100%; height:61px; border-left:2px solid #8997aa; z-index:1; }.ancestor-node.relation-ancestor-any.has-next-node::after { border-left-style:dashed; border-left-color:#557f74; }

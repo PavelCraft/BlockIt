@@ -6,6 +6,12 @@
   let activeRules = [];
   let scheduled = false;
   const reportedInvalidRules = new Set();
+  /* A positional selector describes a place in the DOM as it existed when
+     the rule first ran. If its target is physically removed, re-evaluating
+     `:nth-child(2)` would turn the former third child into a new target.
+     Keep the initial selection for this document so BlockIt never creates a
+     deletion cascade from its own DOM changes. */
+  const frozenPositionalMatches = new Map();
 
   Element.prototype.attachShadow = function(init) {
     const root = originalAttachShadow.call(this, init);
@@ -53,6 +59,27 @@
     return { ...rule, selector: target.selector, type: target.type || 'css' };
   }
 
+  function hasPositionDependentCondition(rule) {
+    if (rule.type === 'blockitbuilder') {
+      const model = rule.selector;
+      return !!(model?.resultPositions?.enabled || containsSiblingPosition(model?.root || model));
+    }
+    return /:(?:nth-(?:last-)?(?:child|of-type)|first-child|last-child|only-child|matches-position|sibling-position)\b/i
+      .test(String(rule.selector || ''));
+  }
+
+  function containsSiblingPosition(node) {
+    if (!node || typeof node !== 'object') return false;
+    if (node.siblingPosition?.enabled) return true;
+    return (node.relationGroups || []).some(group =>
+      (group.entries || []).some(entry => containsSiblingPosition(entry.node))
+    );
+  }
+
+  function positionalRuleKey(originalRule, rule) {
+    return `${originalRule.id || ''}\u0000${rule.type || 'css'}\u0000${typeof rule.selector === 'string' ? rule.selector : originalRule.selector || ''}`;
+  }
+
   function applyRules() {
     globalThis.__blockItRuleModel?.captureSiblingPositions?.();
     for (const originalRule of activeRules) {
@@ -60,7 +87,7 @@
       const rule = normalizeRule(originalRule);
       if (!rule) continue;
 
-      if ((rule.type || 'css') === 'css') {
+      if (['css', 'blockitrule'].includes(rule.type || 'css')) {
         for (const innerSelector of globalThis.__blockItSelectorEngine.getFrameHasFilters(rule.selector)) {
           globalThis.__blockItSelectorEngine.reportFrameMatches(innerSelector, innerSelector);
         }
@@ -68,7 +95,21 @@
 
       let elements = [];
       try {
-        elements = findElements(rule.selector, rule.type || 'css');
+        const positional = hasPositionDependentCondition(rule);
+        const key = positional ? positionalRuleKey(originalRule, rule) : null;
+        const frozen = key ? frozenPositionalMatches.get(key) : null;
+        if (frozen) {
+          /* Removed nodes stay in the frozen Set only as a record that this
+             rule has already selected them. Do not replace them with a new
+             element which merely inherited the same ordinal position. */
+          elements = [...frozen].filter(element => element.isConnected);
+        } else {
+          elements = findElements(rule.selector, rule.type || 'css');
+          /* If nothing exists yet, keep watching: a late-loaded target may
+             still legitimately appear. Once a positional match is found, its
+             identity is frozen for the rest of this document. */
+          if (key && elements.length) frozenPositionalMatches.set(key, new Set(elements));
+        }
       } catch (error) {
         const key = `${rule.type}:${JSON.stringify(rule.selector)}`;
         if (!reportedInvalidRules.has(key)) {

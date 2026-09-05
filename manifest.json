@@ -18,7 +18,7 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["blockit-rule-model.js", "blockit-selector-engine.js", "blockit-shadow-hook.js"],
+      "js": ["shared/blockit-selector-core/blockit-selector-core.js", "blockit-rule-model.js", "blockit-selector-engine.js", "blockit-shadow-hook.js"],
       "run_at": "document_start",
       "all_frames": true,
       "match_about_blank": true,

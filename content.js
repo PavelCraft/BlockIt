@@ -14,9 +14,21 @@
  */
 function isExtensionContextValid() {
   try {
-    return !!(chrome.runtime && chrome.runtime.id);
+    return !!(chrome.runtime && chrome.runtime.id && chrome.storage && chrome.storage.local);
   } catch (e) {
     return false;
+  }
+}
+
+/* During an extension reload Chromium can leave a content script running for
+   a moment after its extension APIs have disappeared. Accessing
+   chrome.storage.onChanged unconditionally then throws instead of simply
+   letting the obsolete script die. */
+function getStorageChangeEvent() {
+  try {
+    return chrome.storage?.onChanged || null;
+  } catch (e) {
+    return null;
   }
 }
 
@@ -157,11 +169,13 @@ function applyRules() {
     return;
   }
 
-  chrome.storage.local.get(['rules'], (result) => {
-    if (chrome.runtime.lastError) {
-      console.warn('[BlockIt] Error getting rules:', chrome.runtime.lastError.message);
-      return;
-    }
+  try {
+    chrome.storage.local.get(['rules'], (result) => {
+      if (!isExtensionContextValid()) return;
+      if (chrome.runtime.lastError) {
+        console.warn('[BlockIt] Error getting rules:', chrome.runtime.lastError.message);
+        return;
+      }
 
     let auditSuspended = false, excludedIds = [];
     try { auditSuspended = sessionStorage.getItem('blockit-rule-audit-suspended') === '1'; excludedIds = JSON.parse(sessionStorage.getItem('blockit-editor-excluded-rules') || '[]'); } catch {}
@@ -179,7 +193,10 @@ function applyRules() {
       action: 'apply-rules',
       rules
     }, '*');
-  });
+    });
+  } catch (e) {
+    // The extension was reloaded between the validity check and storage.get.
+  }
 }
 
 // ============================================================
@@ -190,9 +207,12 @@ function applyRules() {
 let storageListener = null;
 
 function initStorageListener() {
+  const changeEvent = getStorageChangeEvent();
+  if (!changeEvent) return;
+
   // Clean up old listener
   if (storageListener) {
-    chrome.storage.onChanged.removeListener(storageListener);
+    changeEvent.removeListener(storageListener);
     storageListener = null;
   }
 
@@ -202,7 +222,7 @@ function initStorageListener() {
     }
   };
 
-  chrome.storage.onChanged.addListener(storageListener);
+  changeEvent.addListener(storageListener);
 }
 
 // ============================================================
@@ -249,7 +269,7 @@ function cleanup() {
     observer = null;
   }
   if (storageListener) {
-    chrome.storage.onChanged.removeListener(storageListener);
+    getStorageChangeEvent()?.removeListener(storageListener);
     storageListener = null;
   }
 }
@@ -288,8 +308,12 @@ try {
   // Extension already disconnected, ignore
 }
 
-chrome.runtime.onMessage.addListener(message => {
-  if (message?.action !== 'blockit-audit-resume' && message?.action !== 'blockit-editor-resume') return;
-  try { if (message.action === 'blockit-audit-resume') sessionStorage.removeItem('blockit-rule-audit-suspended'); } catch {}
-  applyRules();
-});
+try {
+  chrome.runtime?.onMessage?.addListener(message => {
+    if (message?.action !== 'blockit-audit-resume' && message?.action !== 'blockit-editor-resume') return;
+    try { if (message.action === 'blockit-audit-resume') sessionStorage.removeItem('blockit-rule-audit-suspended'); } catch {}
+    applyRules();
+  });
+} catch (e) {
+  // The content script belongs to an extension context which has just ended.
+}

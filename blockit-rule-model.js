@@ -206,7 +206,10 @@
       const relations = (node.relationGroups || []).flatMap(group => group.entries || []);
       for (const relation of relations.filter(item => item.kind?.startsWith('ancestor'))) value = `${build(relation.node)}${relation.kind === 'ancestor-nearest' ? ' > ' : ' '}${value}`;
       for (const relation of relations.filter(item => item.kind === 'child' || item.kind === 'descendant')) value += `:has(${relation.kind === 'child' ? '> ' : ''}${build(relation.node)})`;
-      for (const relation of relations.filter(item => item.kind === 'sibling')) value += `:has(~ ${build(relation.node)})`;
+      /* В модели «сиблинг» — любой элемент с тем же родителем. CSS `~`
+         означает только следующего сиблинга, поэтому для строкового правила
+         используем собственный симметричный псевдокласс BlockIt. */
+      for (const relation of relations.filter(item => item.kind === 'sibling')) value += `:near(${build(relation.node)})`;
       return value;
     };
     const value = build(model.root || model);

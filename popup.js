@@ -13,6 +13,10 @@ let advancedVisible = false;
 let countRequestId = 0;
 const STABLE_HTML_FINDER_PREFIX = 'SHF1:';
 const RULE_BUILDER_PREFIX = 'BIR1:';
+/* These pseudo-classes are understood by blockit-selector-engine.js, not by
+   the browser's native CSS parser. Keeping a separate type prevents the UI
+   from calling such a rule “invalid CSS”. */
+const BLOCKIT_RULE_PSEUDO = /:(?:attr-name|attr|text(?:-(?:starts|ends|contains|matches))?|own-text(?:-(?:starts|ends|contains|matches))?|html|class-name|attrs|within|near|children|accessible|visible|size|style|property|in-frame|in-shadow|frame-has|has-frame|class-count|attribute-count|attr-count|matches-position|sibling-position)\s*\(/i;
 
 // ============================================================
 //  DOM REFS
@@ -205,6 +209,8 @@ function detectSelectorType(input) {
   if (trimmed.startsWith(STABLE_HTML_FINDER_PREFIX)) return 'stablehtmlfinder';
   if (trimmed.startsWith(RULE_BUILDER_PREFIX)) return 'blockitbuilder';
 
+  if (BLOCKIT_RULE_PSEUDO.test(trimmed) || /\[[a-zA-Z_][\w-]*-\*(?:[\]\^$*~|=]|$)/.test(trimmed)) return 'blockitrule';
+
   if (/^xpath:/i.test(trimmed)) return 'xpath';
   if (trimmed.startsWith('/') || trimmed.startsWith('//')) return 'xpath';
   if (trimmed.startsWith('(')) return 'xpath';
@@ -316,11 +322,11 @@ function countRuleInFrame(query) {
     : query;
   const selector = rule?.selector;
   const type = rule?.type || 'css';
-  if (!selector || !['css', 'xpath'].includes(type)) return { count: 0, invalid: true };
+  if (!selector || !['css', 'blockitrule', 'xpath'].includes(type)) return { count: 0, invalid: true };
 
   const elements = new Set();
   try {
-    if (type === 'css') {
+    if (type === 'css' || type === 'blockitrule') {
       const engine = globalThis.__blockItSelectorEngine;
       if (!engine) return { count: 0, invalid: true };
       engine.find(selector).forEach(element => elements.add(element));
@@ -341,7 +347,7 @@ function probeFrameHasInFrame(query) {
   const rule = query.type === 'stablehtmlfinder'
     ? query.stableRule?.target || query.stableRule
     : query;
-  if ((rule?.type || 'css') !== 'css') return;
+  if (!['css', 'blockitrule'].includes(rule?.type || 'css')) return;
   const engine = globalThis.__blockItSelectorEngine;
   if (!engine) return;
   engine.getFrameHasFilters(rule.selector).forEach(inner => engine.reportFrameMatches(inner, inner));
@@ -546,6 +552,9 @@ async function checkSelectorCount(selector) {
   } else if (type === 'blockitbuilder') {
     selectorTypeIndicator.textContent = 'Конструктор BlockIt';
     selectorTypeIndicator.style.color = '#397837';
+  } else if (type === 'blockitrule') {
+    selectorTypeIndicator.textContent = 'Правило BlockIt';
+    selectorTypeIndicator.style.color = '#397837';
   } else {
     selectorTypeIndicator.textContent = chrome.i18n.getMessage('selectorTypeUnknown');
     selectorTypeIndicator.style.color = '#999';
@@ -673,7 +682,7 @@ function renderRuleGroup(container, title, rules, options = {}) {
       edit.addEventListener('click', async () => {
         const builderModel = rule.builderModel || (() => { try { return globalThis.__blockItRuleModel.parse(rule.selector); } catch { return null; } })();
         if (!builderModel) return alert('Не удалось открыть модель этого правила.');
-        await openRuleBuilderDraft({ model: builderModel, editingRule: { id: rule.id || null, selector: rule.selector, domain: rule.domain || '', enabled: rule.enabled !== false }, expectedDomain: rule.domain || '' });
+        await openRuleBuilderDraft({ model: builderModel, editingRule: { id: rule.id || null, selector: rule.selector, domain: rule.domain || '', enabled: rule.enabled !== false, mode: rule.mode || 'remove' }, expectedDomain: rule.domain || '' });
       });
       actions.append(edit);
     }
