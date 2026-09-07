@@ -13,10 +13,11 @@ let advancedVisible = false;
 let countRequestId = 0;
 const STABLE_HTML_FINDER_PREFIX = 'SHF1:';
 const RULE_BUILDER_PREFIX = 'BIR1:';
+const BLOCKIT_SYNTAX_VERSION = globalThis.__blockItSelectorCore?.SYNTAX_VERSION || 1;
 /* These pseudo-classes are understood by blockit-selector-engine.js, not by
    the browser's native CSS parser. Keeping a separate type prevents the UI
    from calling such a rule “invalid CSS”. */
-const BLOCKIT_RULE_PSEUDO = /:(?:attr-name|attr|text(?:-(?:starts|ends|contains|matches))?|own-text(?:-(?:starts|ends|contains|matches))?|html|class-name|attrs|within|near|children|accessible|visible|size|style|property|in-frame|in-shadow|frame-has|has-frame|class-count|attribute-count|attr-count|matches-position|sibling-position)\s*\(/i;
+const BLOCKIT_RULE_PSEUDO = /:(?:attr-name|attr|text(?:-(?:starts|ends|contains|matches))?|own-text(?:-(?:starts|ends|contains|matches))?|html|class-name|attrs|within|near|children|accessible|visible|size|style|style-property|property|in-frame|in-shadow|frame-has|has-frame|class-count|attribute-count|attr-count|matches-position|sibling-position|sibling-distance)\s*\(/i;
 
 // ============================================================
 //  DOM REFS
@@ -208,6 +209,8 @@ function detectSelectorType(input) {
 
   if (trimmed.startsWith(STABLE_HTML_FINDER_PREFIX)) return 'stablehtmlfinder';
   if (trimmed.startsWith(RULE_BUILDER_PREFIX)) return 'blockitbuilder';
+
+  if (globalThis.__blockItSelectorCore?.isBlockItRule(trimmed)) return 'blockitrule';
 
   if (BLOCKIT_RULE_PSEUDO.test(trimmed) || /\[[a-zA-Z_][\w-]*-\*(?:[\]\^$*~|=]|$)/.test(trimmed)) return 'blockitrule';
 
@@ -951,6 +954,9 @@ addRuleBtn.addEventListener('click', () => {
         id: crypto.randomUUID(),
         selector: parsed.selector,
         type: parsed.type,
+        ...(parsed.type === 'blockitrule' || parsed.type === 'blockitbuilder'
+          ? { syntaxVersion: BLOCKIT_SYNTAX_VERSION }
+          : {}),
         stableRule: parsed.stableRule,
         builderModel: parsed.builderModel,
         mode: blockMode,

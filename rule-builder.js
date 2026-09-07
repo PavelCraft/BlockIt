@@ -582,7 +582,7 @@ async function saveRule() {
   if (!editingNeedsReload && count === null) return;
   if (count === 0 && !confirm('Сейчас правило не находит элементов. Всё равно сохранить?')) return;
   if (count > 1 && !confirm(`Правило находит ${count} элементов. Сохранить его?`)) return;
-  const selector = globalThis.__blockItRuleModel.stringify(model); const rule = { id: editingRule?.id || crypto.randomUUID(), selector, displaySelector: ruleCode.textContent, type: 'blockitbuilder', builderModel: model, mode: ruleMode, enabled: editingRule?.enabled ?? true, domain: domain((await chrome.tabs.get(sourceTabId)).url) };
+  const selector = globalThis.__blockItRuleModel.stringify(model); const rule = { id: editingRule?.id || crypto.randomUUID(), selector, displaySelector: ruleCode.textContent, type: 'blockitbuilder', syntaxVersion: globalThis.__blockItSelectorCore?.SYNTAX_VERSION || 1, builderModel: model, mode: ruleMode, enabled: editingRule?.enabled ?? true, domain: domain((await chrome.tabs.get(sourceTabId)).url) };
   const { rules = [] } = await chrome.storage.local.get(['rules']);
   const editingIndex = editingRule ? rules.findIndex(item => editingRule.id ? item.id === editingRule.id : item.selector === editingRule.selector && (item.domain || '') === editingRule.domain) : -1;
   if (rules.some((item, index) => index !== editingIndex && item.selector === selector && item.domain === rule.domain)) return alert('Такое правило уже есть.');

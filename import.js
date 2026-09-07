@@ -8,6 +8,7 @@
 // ============================================================
 
 let importedRules = [];
+const BLOCKIT_SYNTAX_VERSION = globalThis.__blockItSelectorCore?.SYNTAX_VERSION || 1;
 
 // ============================================================
 //  DOM REFS
@@ -79,7 +80,11 @@ function parseRules(jsonText) {
     }
   });
 
-  return rules;
+  return rules.map(rule => (
+    rule.syntaxVersion == null && ['blockitrule', 'blockitbuilder'].includes(rule.type)
+      ? { ...rule, syntaxVersion: BLOCKIT_SYNTAX_VERSION }
+      : rule
+  ));
 }
 
 // ============================================================
