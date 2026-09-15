@@ -7,6 +7,34 @@
     "message": "Blockieren Sie HTML-Elemente auf jeder Website mit Selektoren",
     "description": "Beschreibung der Erweiterung"
   },
+  "welcomeTitle": { "message": "Willkommen bei BlockIt", "description": "Titel der Willkommensseite" },
+  "welcomeGuide": { "message": "Anleitung öffnen", "description": "Link zur Anleitung" },
+  "welcomeEyebrow": { "message": "Erweiterung installiert", "description": "Willkommensseiten-Marke" },
+  "welcomeHeroTitle": { "message": "Willkommen bei BlockIt", "description": "Überschrift der Willkommensseite" },
+  "welcomeHeroDescription": { "message": "Heften Sie die Erweiterung an die Chrome-Leiste, um unerwünschte Elemente mit wenigen Klicks zu blockieren.", "description": "Beschreibung der Willkommensseite" },
+  "welcomeMenuTitle": { "message": "Erweiterungen", "description": "Überschrift des Erweiterungsmenüs" },
+  "welcomeStep1Title": { "message": "Erweiterungsmenü öffnen", "description": "Erster Schritt zum Anheften" },
+  "welcomeStep1Description": { "message": "Klicken Sie rechts in der Chrome-Leiste auf das Erweiterungssymbol.", "description": "Beschreibung des ersten Schritts" },
+  "welcomeStep2Title": { "message": "BlockIt anheften", "description": "Zweiter Schritt zum Anheften" },
+  "welcomeStep2Description": { "message": "Klicken Sie neben dem Erweiterungsnamen auf die Stecknadel. Das Symbol erscheint in der Browserleiste.", "description": "Beschreibung des zweiten Schritts" },
+  "welcomeStep3Title": { "message": "Blockieren beginnen", "description": "Dritter Schritt zum Anheften" },
+  "welcomeStep3Description": { "message": "Öffnen Sie eine Seite, klicken Sie auf BlockIt und fügen Sie einen Selektor oder eine Regel hinzu.", "description": "Beschreibung des dritten Schritts" },
+  "welcomeClose": { "message": "Verstanden", "description": "Schaltfläche zum Schließen" },
+  "welcomeInstructions": { "message": "Mehr über die Erweiterung erfahren", "description": "Link zur ausführlichen Anleitung" },
+  "htmlRuleTitle": { "message": "Regel aus HTML erstellen", "description": "Titel des HTML-Regelbereichs" },
+  "htmlRuleHelp": { "message": "Kopieren Sie das gewünschte Element in DevTools und fügen Sie es hier ein.", "description": "Hilfe zum HTML-Regelbereich" },
+  "quickRuleTitle": { "message": "Schnelle Regel", "description": "Titel der schnellen Regel" },
+  "quickRuleHelp": { "message": "Tag und ausgewählte Attribute verwenden.", "description": "Beschreibung der schnellen Regel" },
+  "parseHtmlBtn": { "message": "HTML analysieren", "description": "Schaltfläche zum Analysieren von HTML" },
+  "parsedRuleTitle": { "message": "Einstellungen der schnellen Regel", "description": "Titel des Analyseergebnisses" },
+  "parsedRuleReady": { "message": "HTML analysiert", "description": "HTML-Analysestatus" },
+  "builderFollowup": { "message": "Benötigen Sie Text, Position oder umgebende Elemente?", "description": "Hinweis zum Regelkonstruktor" },
+  "openThisInBuilder": { "message": "Dieses HTML im Konstruktor öffnen →", "description": "HTML im Regelkonstruktor öffnen" },
+  "exactRuleTitle": { "message": "Präzise Regel", "description": "Titel der präzisen Regel" },
+  "exactRuleHelp": { "message": "Bedingungen für Text, Anzahl, Position und umgebende Elemente hinzufügen.", "description": "Beschreibung der präzisen Regel" },
+  "openBuilderBtn": { "message": "Konstruktor öffnen", "description": "Schaltfläche zum Öffnen des Konstruktors" },
+  "generatedRuleLabel": { "message": "Fertige Regel", "description": "Bezeichnung der generierten Regel" },
+  "generatedRuleHelp": { "message": "Bearbeiten Sie den erstellten Selektor bei Bedarf.", "description": "Hilfe zum erstellten Selektor" },
   "pasteHtmlLabel": {
     "message": "Kopiertes HTML-Element einfügen:",
     "description": "Beschriftung für das HTML-Eingabefeld"
@@ -76,7 +104,7 @@
     "description": "Hinweis für den Entfernen-Modus"
   },
   "addRuleBtn": {
-    "message": "➕ Regel hinzufügen",
+    "message": "Regel hinzufügen",
     "description": "Regel-hinzufügen-Button-Text"
   },
   "noAttributes": {
@@ -348,11 +376,11 @@
     "description": "Button zum Ausblenden des erweiterten Modus"
   },
   "selectorLabel": {
-    "message": "CSS-Selektor oder XPath eingeben:",
+    "message": "CSS-Selektor, XPath oder eine BlockIt-Regel eingeben:",
     "description": "Beschriftung für das Selektoreingabefeld"
   },
   "selectorPlaceholder": {
-    "message": "Z.B. #ad-container oder //div[@id='ad']",
+    "message": "Beispiel: #ad-container, //div[@id='ad'] oder div:attr-count(=2)",
     "description": "Platzhalter für das Selektoreingabefeld"
   },
   "toolsDivider": {

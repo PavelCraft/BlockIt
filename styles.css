@@ -422,6 +422,59 @@ body.import {
   transition: border-color 0.2s ease;
 }
 
+.selector-input-wrap {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.selector-input-wrap .selector-input {
+  position: relative;
+  z-index: 1;
+  background: var(--surface, #fff);
+}
+
+.selector-input::placeholder {
+  color: transparent;
+}
+
+.selector-placeholder-marquee {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  overflow: hidden;
+  padding: 8px 10px;
+  color: #777;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  line-height: normal;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.15s ease;
+}
+
+.selector-placeholder-marquee-text {
+  display: inline-block;
+  transform: translateX(0);
+}
+
+.selector-input-wrap.is-overflowing:hover .selector-placeholder-marquee-text,
+.selector-input-wrap.is-overflowing:focus-within .selector-placeholder-marquee-text {
+  animation: selector-placeholder-marquee 10s ease-in-out infinite;
+}
+
+.selector-input-wrap.has-value .selector-placeholder-marquee {
+  opacity: 0;
+}
+
+@keyframes selector-placeholder-marquee {
+  /* 0.7s pause at the start, 2s at the far edge and 2s after returning. */
+  0%, 7% { transform: translateX(0); }
+  40%, 60% { transform: translateX(var(--selector-marquee-distance)); }
+  80%, 100% { transform: translateX(0); }
+}
+
 .selector-input:focus {
   outline: none;
   border-color: #69B064;

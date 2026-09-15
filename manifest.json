@@ -6,6 +6,9 @@
   "default_locale": "en",
   "incognito": "split",
   "permissions": ["storage", "activeTab", "scripting"],
+  "background": {
+    "service_worker": "background.js"
+  },
   "host_permissions": ["<all_urls>"],
   "action": {
     "default_popup": "popup.html",

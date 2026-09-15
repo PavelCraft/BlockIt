@@ -7,6 +7,34 @@
     "message": "Bloqueie elementos HTML em qualquer site usando seletores",
     "description": "Descrição da extensão"
   },
+  "welcomeTitle": { "message": "Boas-vindas ao BlockIt", "description": "Título da página de boas-vindas" },
+  "welcomeGuide": { "message": "Abrir instruções", "description": "Link para as instruções" },
+  "welcomeEyebrow": { "message": "Extensão instalada", "description": "Etiqueta da página de boas-vindas" },
+  "welcomeHeroTitle": { "message": "Boas-vindas ao BlockIt", "description": "Título da página de boas-vindas" },
+  "welcomeHeroDescription": { "message": "Fixe a extensão na barra do Chrome para bloquear elementos indesejados com poucos cliques.", "description": "Descrição da página de boas-vindas" },
+  "welcomeMenuTitle": { "message": "Extensões", "description": "Título do menu de extensões" },
+  "welcomeStep1Title": { "message": "Abra o menu de extensões", "description": "Primeiro passo" },
+  "welcomeStep1Description": { "message": "Clique no ícone Extensões no lado direito da barra do Chrome.", "description": "Descrição do primeiro passo" },
+  "welcomeStep2Title": { "message": "Fixe o BlockIt", "description": "Segundo passo" },
+  "welcomeStep2Description": { "message": "Clique no ícone de alfinete ao lado do nome. O ícone aparecerá na barra do navegador.", "description": "Descrição do segundo passo" },
+  "welcomeStep3Title": { "message": "Comece a bloquear", "description": "Terceiro passo" },
+  "welcomeStep3Description": { "message": "Abra uma página, clique no BlockIt e adicione um seletor ou crie uma regra.", "description": "Descrição do terceiro passo" },
+  "welcomeClose": { "message": "Entendi", "description": "Botão de fechar" },
+  "welcomeInstructions": { "message": "Saiba mais sobre a extensão", "description": "Link para o guia detalhado" },
+  "htmlRuleTitle": { "message": "Criar uma regra a partir do HTML", "description": "Título da seção de regra HTML" },
+  "htmlRuleHelp": { "message": "Copie o elemento desejado no DevTools e cole-o aqui.", "description": "Ajuda da seção HTML" },
+  "quickRuleTitle": { "message": "Regra rápida", "description": "Título da regra rápida" },
+  "quickRuleHelp": { "message": "Usar a tag e os atributos selecionados.", "description": "Descrição da regra rápida" },
+  "parseHtmlBtn": { "message": "Analisar HTML", "description": "Botão para analisar HTML" },
+  "parsedRuleTitle": { "message": "Configuração da regra rápida", "description": "Título do resultado analisado" },
+  "parsedRuleReady": { "message": "HTML analisado", "description": "Estado da análise HTML" },
+  "builderFollowup": { "message": "Precisa de texto, posição ou elementos ao redor?", "description": "Dica para o construtor" },
+  "openThisInBuilder": { "message": "Abrir este HTML no construtor →", "description": "Abrir HTML no construtor" },
+  "exactRuleTitle": { "message": "Regra precisa", "description": "Título da regra precisa" },
+  "exactRuleHelp": { "message": "Adicionar condições de texto, quantidade, posição e elementos ao redor.", "description": "Descrição da regra precisa" },
+  "openBuilderBtn": { "message": "Abrir construtor", "description": "Botão para abrir o construtor" },
+  "generatedRuleLabel": { "message": "Regra pronta", "description": "Rótulo da regra gerada" },
+  "generatedRuleHelp": { "message": "Edite o seletor gerado, se necessário.", "description": "Ajuda do seletor gerado" },
   "pasteHtmlLabel": {
     "message": "Cole o elemento HTML copiado:",
     "description": "Etiqueta do campo HTML"
@@ -76,7 +104,7 @@
     "description": "Dica do modo Remover"
   },
   "addRuleBtn": {
-    "message": "➕ Adicionar regra",
+    "message": "Adicionar regra",
     "description": "Botão Adicionar regra"
   },
   "noAttributes": {
@@ -348,11 +376,11 @@
     "description": "Botão para ocultar o modo avançado"
   },
   "selectorLabel": {
-    "message": "Digite o seletor CSS ou XPath:",
+    "message": "Digite um seletor CSS, XPath ou uma regra do BlockIt:",
     "description": "Etiqueta para o campo de entrada do seletor"
   },
   "selectorPlaceholder": {
-    "message": "Ex: #ad-container ou //div[@id='ad']",
+    "message": "Exemplo: #ad-container, //div[@id='ad'] ou div:attr-count(=2)",
     "description": "Espaço reservado para o campo de entrada do seletor"
   },
   "toolsDivider": {

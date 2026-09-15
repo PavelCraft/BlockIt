@@ -7,6 +7,34 @@
     "message": "Bloquea elementos HTML en cualquier sitio web usando selectores",
     "description": "Descripción de la extensión"
   },
+  "welcomeTitle": { "message": "Te damos la bienvenida a BlockIt", "description": "Título de la página de bienvenida" },
+  "welcomeGuide": { "message": "Abrir instrucciones", "description": "Enlace a las instrucciones" },
+  "welcomeEyebrow": { "message": "Extensión instalada", "description": "Etiqueta de bienvenida" },
+  "welcomeHeroTitle": { "message": "Te damos la bienvenida a BlockIt", "description": "Título de bienvenida" },
+  "welcomeHeroDescription": { "message": "Fija la extensión en la barra de Chrome para bloquear elementos no deseados con unos pocos clics.", "description": "Descripción de bienvenida" },
+  "welcomeMenuTitle": { "message": "Extensiones", "description": "Título del menú de extensiones" },
+  "welcomeStep1Title": { "message": "Abre el menú de extensiones", "description": "Primer paso" },
+  "welcomeStep1Description": { "message": "Haz clic en el icono de Extensiones a la derecha de la barra de Chrome.", "description": "Descripción del primer paso" },
+  "welcomeStep2Title": { "message": "Fija BlockIt", "description": "Segundo paso" },
+  "welcomeStep2Description": { "message": "Haz clic en el icono de la chincheta junto al nombre. El icono aparecerá en la barra del navegador.", "description": "Descripción del segundo paso" },
+  "welcomeStep3Title": { "message": "Empieza a bloquear", "description": "Tercer paso" },
+  "welcomeStep3Description": { "message": "Abre una página, haz clic en BlockIt y añade un selector o crea una regla.", "description": "Descripción del tercer paso" },
+  "welcomeClose": { "message": "Entendido", "description": "Botón de cierre" },
+  "welcomeInstructions": { "message": "Más información sobre la extensión", "description": "Enlace a la guía" },
+  "htmlRuleTitle": { "message": "Crear una regla desde HTML", "description": "Título de la sección de reglas HTML" },
+  "htmlRuleHelp": { "message": "Copia el elemento necesario en DevTools y pégalo aquí.", "description": "Ayuda de la sección HTML" },
+  "quickRuleTitle": { "message": "Regla rápida", "description": "Título de la regla rápida" },
+  "quickRuleHelp": { "message": "Usa la etiqueta y los atributos seleccionados.", "description": "Descripción de la regla rápida" },
+  "parseHtmlBtn": { "message": "Analizar HTML", "description": "Botón para analizar HTML" },
+  "parsedRuleTitle": { "message": "Configuración de regla rápida", "description": "Título del resultado analizado" },
+  "parsedRuleReady": { "message": "HTML analizado", "description": "Estado del análisis HTML" },
+  "builderFollowup": { "message": "¿Necesitas texto, posición o elementos relacionados?", "description": "Sugerencia del constructor" },
+  "openThisInBuilder": { "message": "Abrir este HTML en el constructor →", "description": "Abrir HTML en el constructor" },
+  "exactRuleTitle": { "message": "Regla precisa", "description": "Título de la regla precisa" },
+  "exactRuleHelp": { "message": "Añade condiciones de texto, cantidad, posición y elementos relacionados.", "description": "Descripción de la regla precisa" },
+  "openBuilderBtn": { "message": "Abrir el constructor", "description": "Botón para abrir el constructor" },
+  "generatedRuleLabel": { "message": "Regla lista", "description": "Etiqueta de la regla generada" },
+  "generatedRuleHelp": { "message": "Edita el selector generado si es necesario.", "description": "Ayuda del selector generado" },
   "pasteHtmlLabel": {
     "message": "Pega el elemento HTML copiado:",
     "description": "Etiqueta del campo HTML"
@@ -76,7 +104,7 @@
     "description": "Ayuda del modo Eliminar"
   },
   "addRuleBtn": {
-    "message": "➕ Añadir regla",
+    "message": "Añadir regla",
     "description": "Botón Añadir regla"
   },
   "noAttributes": {
@@ -348,11 +376,11 @@
     "description": "Botón para ocultar el modo avanzado"
   },
   "selectorLabel": {
-    "message": "Introduce el selector CSS o XPath:",
+    "message": "Introduce un selector CSS, XPath o una regla de BlockIt:",
     "description": "Etiqueta para el campo de entrada del selector"
   },
   "selectorPlaceholder": {
-    "message": "Ej: #ad-container o //div[@id='ad']",
+    "message": "Ejemplo: #ad-container, //div[@id='ad'] o div:attr-count(=2)",
     "description": "Marcador de posición para el campo de entrada del selector"
   },
   "toolsDivider": {

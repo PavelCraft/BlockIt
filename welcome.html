@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Добро пожаловать в BlockIt</title>
+  <link rel="stylesheet" href="welcome.css">
+</head>
+<body>
+  <header class="welcome-top">
+    <a class="welcome-brand" href="welcome.html" aria-label="BlockIt">
+      <img src="icons/icon128.png" alt="">
+      <span>Block<i>It</i></span>
+    </a>
+    <a class="guide-link" href="docs/index.html" data-i18n="welcomeGuide">Открыть инструкцию</a>
+  </header>
+
+  <main class="welcome-layout">
+    <section class="welcome-hero">
+      <div class="installed-mark" aria-hidden="true">✓</div>
+      <div class="eyebrow" data-i18n="welcomeEyebrow">Расширение установлено</div>
+      <h1 data-i18n="welcomeHeroTitle">Добро пожаловать в BlockIt</h1>
+      <p data-i18n="welcomeHeroDescription">Закрепите расширение на панели Chrome, чтобы блокировать нежелательные элементы на странице в несколько кликов.</p>
+    </section>
+
+    <section class="pin-card">
+      <div class="pin-visual" aria-hidden="true">
+        <div class="pin-state">
+          <span class="state-number">1</span>
+          <div class="browser-bar">
+            <span class="address-line"></span>
+            <span class="puzzle-symbol"><svg viewBox="0 0 24 24"><path d="M8 3.5h3v2a2 2 0 1 0 4 0v-2h3A1.5 1.5 0 0 1 19.5 5v3h-2a2 2 0 1 0 0 4h2v6.5A1.5 1.5 0 0 1 18 20h-3v-2a2 2 0 1 0-4 0v2H6a1.5 1.5 0 0 1-1.5-1.5V15h2a2 2 0 1 0 0-4h-2V5A1.5 1.5 0 0 1 6 3.5h2Z"/></svg></span>
+          </div>
+          <div class="extensions-menu">
+            <div class="menu-heading" data-i18n="welcomeMenuTitle">Расширения</div>
+            <div class="extension-row">
+              <img src="icons/icon128.png" alt="">
+              <strong>BlockIt</strong>
+              <span class="pin-symbol unpinned"><svg viewBox="0 0 24 24"><path d="M7 3v2h1v7l-2 2v2h5v6l1 1 1-1v-6h5v-2l-2-2V5h1V3H7Zm3 2h4v7.83L15.17 14H8.83L10 12.83V5Z"/></svg></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="state-change"><svg viewBox="0 0 24 24"><path d="M12 4v14m-5-5 5 5 5-5"/></svg></div>
+
+        <div class="pin-state">
+          <span class="state-number">2</span>
+          <div class="browser-bar">
+            <span class="address-line"></span>
+            <span class="puzzle-symbol"><svg viewBox="0 0 24 24"><path d="M8 3.5h3v2a2 2 0 1 0 4 0v-2h3A1.5 1.5 0 0 1 19.5 5v3h-2a2 2 0 1 0 0 4h2v6.5A1.5 1.5 0 0 1 18 20h-3v-2a2 2 0 1 0-4 0v2H6a1.5 1.5 0 0 1-1.5-1.5V15h2a2 2 0 1 0 0-4h-2V5A1.5 1.5 0 0 1 6 3.5h2Z"/></svg></span>
+            <span class="extension-symbol"><img src="icons/icon128.png" alt=""></span>
+          </div>
+          <div class="extensions-menu">
+            <div class="menu-heading" data-i18n="welcomeMenuTitle">Расширения</div>
+            <div class="extension-row">
+              <img src="icons/icon128.png" alt="">
+              <strong>BlockIt</strong>
+              <span class="pin-symbol pinned"><svg viewBox="0 0 24 24"><path d="M9.25 4h5.5M10 5v5.25L7.5 13v2h9v-2L14 10.25V5M12 15v5"/><path class="pin-slash" d="M5 3 19 21"/></svg></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pin-instructions">
+        <div class="step"><span>1</span><div><h2 data-i18n="welcomeStep1Title">Откройте меню расширений</h2><p data-i18n="welcomeStep1Description">Нажмите значок «Расширения» в правой части панели Chrome.</p></div></div>
+        <div class="step"><span>2</span><div><h2 data-i18n="welcomeStep2Title">Закрепите BlockIt</h2><p data-i18n="welcomeStep2Description">Нажмите значок булавки рядом с названием расширения. Иконка появится на панели браузера.</p></div></div>
+        <div class="step"><span>3</span><div><h2 data-i18n="welcomeStep3Title">Начните блокировать</h2><p data-i18n="welcomeStep3Description">Откройте нужную страницу, нажмите иконку BlockIt и добавьте селектор или создайте правило.</p></div></div>
+        <div class="welcome-actions"><button id="closeWelcome" type="button" data-i18n="welcomeClose">Понятно</button><a href="docs/index.html" data-i18n="welcomeInstructions">Подробнее о работе расширения</a></div>
+      </div>
+    </section>
+  </main>
+  <script src="welcome.js"></script>
+</body>
+</html>

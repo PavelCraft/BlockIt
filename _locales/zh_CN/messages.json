@@ -7,6 +7,34 @@
     "message": "使用选择器在任何网站上屏蔽 HTML 元素",
     "description": "扩展描述"
   },
+  "welcomeTitle": { "message": "欢迎使用 BlockIt", "description": "欢迎页面标题" },
+  "welcomeGuide": { "message": "打开使用说明", "description": "使用说明链接" },
+  "welcomeEyebrow": { "message": "扩展程序已安装", "description": "欢迎页面标签" },
+  "welcomeHeroTitle": { "message": "欢迎使用 BlockIt", "description": "欢迎页面标题" },
+  "welcomeHeroDescription": { "message": "将扩展程序固定到 Chrome 工具栏，即可通过几次点击屏蔽页面上的不需要元素。", "description": "欢迎页面说明" },
+  "welcomeMenuTitle": { "message": "扩展程序", "description": "扩展程序菜单标题" },
+  "welcomeStep1Title": { "message": "打开扩展程序菜单", "description": "固定步骤一" },
+  "welcomeStep1Description": { "message": "点击 Chrome 工具栏右侧的“扩展程序”图标。", "description": "步骤一说明" },
+  "welcomeStep2Title": { "message": "固定 BlockIt", "description": "固定步骤二" },
+  "welcomeStep2Description": { "message": "点击扩展程序名称旁边的图钉图标，图标就会出现在浏览器工具栏中。", "description": "步骤二说明" },
+  "welcomeStep3Title": { "message": "开始屏蔽", "description": "固定步骤三" },
+  "welcomeStep3Description": { "message": "打开页面，点击 BlockIt 图标，然后添加选择器或创建规则。", "description": "步骤三说明" },
+  "welcomeClose": { "message": "知道了", "description": "关闭欢迎页按钮" },
+  "welcomeInstructions": { "message": "详细了解扩展程序", "description": "详细说明链接" },
+  "htmlRuleTitle": { "message": "从 HTML 创建规则", "description": "HTML 规则区域标题" },
+  "htmlRuleHelp": { "message": "在 DevTools 中复制所需元素，然后粘贴到这里。", "description": "HTML 规则区域说明" },
+  "quickRuleTitle": { "message": "快速规则", "description": "快速规则标题" },
+  "quickRuleHelp": { "message": "使用标签和选定的属性。", "description": "快速规则说明" },
+  "parseHtmlBtn": { "message": "解析 HTML", "description": "解析 HTML 按钮" },
+  "parsedRuleTitle": { "message": "快速规则设置", "description": "解析结果标题" },
+  "parsedRuleReady": { "message": "HTML 已解析", "description": "HTML 解析状态" },
+  "builderFollowup": { "message": "需要文本、位置或周边元素条件吗？", "description": "规则构造器提示" },
+  "openThisInBuilder": { "message": "在构造器中打开此 HTML →", "description": "在构造器中打开 HTML" },
+  "exactRuleTitle": { "message": "精确规则", "description": "精确规则标题" },
+  "exactRuleHelp": { "message": "添加文本、数量、位置和周边元素条件。", "description": "精确规则说明" },
+  "openBuilderBtn": { "message": "打开构造器", "description": "打开构造器按钮" },
+  "generatedRuleLabel": { "message": "已生成的规则", "description": "生成规则标签" },
+  "generatedRuleHelp": { "message": "如有需要，可以编辑生成的选择器。", "description": "生成选择器说明" },
   "pasteHtmlLabel": {
     "message": "粘贴复制的 HTML 元素：",
     "description": "HTML 输入字段标签"
@@ -76,7 +104,7 @@
     "description": "删除模式提示"
   },
   "addRuleBtn": {
-    "message": "➕ 添加规则",
+    "message": "添加规则",
     "description": "添加规则按钮文本"
   },
   "noAttributes": {
@@ -348,11 +376,11 @@
     "description": "隐藏高级模式的按钮"
   },
   "selectorLabel": {
-    "message": "输入 CSS 选择器或 XPath：",
+    "message": "输入 CSS 选择器、XPath 或 BlockIt 规则：",
     "description": "选择器输入字段的标签"
   },
   "selectorPlaceholder": {
-    "message": "例如：#ad-container 或 //div[@id='ad']",
+    "message": "例如：#ad-container、//div[@id='ad'] 或 div:attr-count(=2)",
     "description": "选择器输入字段的占位符"
   },
   "toolsDivider": {

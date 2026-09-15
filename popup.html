@@ -21,61 +21,95 @@
 
   <!-- ===== ADVANCED PANEL (HTML parser + attributes) ===== -->
   <div id="advancedPanel" class="advanced-panel hidden">
-    <label for="htmlInput" data-i18n="pasteHtmlLabel">Paste copied HTML element:</label>
+    <div class="html-rule-heading">
+      <h3 data-i18n="htmlRuleTitle">Create a rule from HTML</h3>
+      <p data-i18n="htmlRuleHelp">Copy the required element in DevTools and paste it here.</p>
+    </div>
+    <label for="htmlInput" class="visually-hidden" data-i18n="pasteHtmlLabel">Paste copied HTML element:</label>
     <textarea id="htmlInput" data-i18n-placeholder="pasteHtmlPlaceholder"></textarea>
-    <div class="advanced-action-row">
-      <button id="parseBtn" class="btn-primary" data-i18n="parseBtn">Parse</button>
-      <button id="openRuleBuilder" class="btn-secondary rule-builder-open" type="button"><span>Конструктор правила</span><svg class="external-tab-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 1h5v5h-1.8V4.1L8.5 8.8 7.2 7.5 11.9 2.8H10V1zM2 3h5v2H4v7h7V9h2v5H2V3z"></path></svg></button>
+
+    <div class="html-method-card html-method-card-quick">
+      <div class="html-method-copy">
+        <span class="html-method-icon" aria-hidden="true">⚡</span>
+        <div><h4 data-i18n="quickRuleTitle">Quick rule</h4><p data-i18n="quickRuleHelp">Use the tag and selected attributes.</p></div>
+      </div>
+      <button id="parseBtn" class="btn-primary html-method-action" disabled data-i18n="parseHtmlBtn">Parse HTML</button>
+
+      <div id="parsedHtmlResult" class="parsed-html-result hidden">
+        <div class="parsed-result-heading"><strong data-i18n="parsedRuleTitle">Quick rule settings</strong><span data-i18n="parsedRuleReady">HTML parsed</span></div>
+        <h4 data-i18n="tagLabel">Tag:</h4>
+        <div id="tagDisplay" data-i18n="tagNotDefined">(not defined)</div>
+
+        <h4 data-i18n="attributesLabel">Attributes (click ✏️ to edit, 🗑️ to delete):</h4>
+        <div id="attributesContainer">
+          <div class="empty-message" data-i18n="noAttributes">No attributes</div>
+        </div>
+
+        <h4 data-i18n="addAttrLabel">Add attribute:</h4>
+        <div class="attr-add-row">
+          <input type="text" id="newAttrName" data-i18n-placeholder="attrNamePlaceholder">
+          <input type="text" id="newAttrValue" data-i18n-placeholder="attrValuePlaceholder">
+        </div>
+        <button id="addAttrBtn" class="btn-primary add-attr-btn" disabled data-i18n="addAttrBtn">Add</button>
+
+        <div id="advancedRuleSlot"></div>
+
+        <div class="builder-followup">
+          <span data-i18n="builderFollowup">Need text, position or surrounding elements?</span>
+          <button id="openRuleBuilderAfterParse" class="builder-followup-link" type="button" data-i18n="openThisInBuilder">Open this HTML in the builder</button>
+        </div>
+      </div>
     </div>
 
-    <h4 data-i18n="tagLabel">Tag:</h4>
-    <div id="tagDisplay" data-i18n="tagNotDefined">(not defined)</div>
-
-    <h4 data-i18n="attributesLabel">Attributes (click ✏️ to edit, 🗑️ to delete):</h4>
-    <div id="attributesContainer">
-      <div class="empty-message" data-i18n="noAttributes">No attributes</div>
+    <div class="html-method-card html-method-card-builder">
+      <div class="html-method-copy">
+        <span class="html-method-icon builder-icon" aria-hidden="true">⌘</span>
+        <div><h4 data-i18n="exactRuleTitle">Precise rule</h4><p data-i18n="exactRuleHelp">Add conditions for text, quantity, position and surrounding elements.</p></div>
+      </div>
+      <button id="openRuleBuilder" class="btn-secondary rule-builder-open html-method-action" type="button" disabled><span data-i18n="openBuilderBtn">Open builder</span><svg class="external-tab-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 1h5v5h-1.8V4.1L8.5 8.8 7.2 7.5 11.9 2.8H10V1zM2 3h5v2H4v7h7V9h2v5H2V3z"></path></svg></button>
     </div>
+  </div>
 
-    <h4 data-i18n="addAttrLabel">Add attribute:</h4>
-    <div class="attr-add-row">
-      <input type="text" id="newAttrName" data-i18n-placeholder="attrNamePlaceholder">
-      <input type="text" id="newAttrValue" data-i18n-placeholder="attrValuePlaceholder">
+  <div id="basicRuleSlot">
+    <div id="finalRuleSection" class="final-rule-section">
+      <!-- ===== SELECTOR INPUT ===== -->
+      <label id="selectorLabel" for="selectorInput" data-i18n="selectorLabel">Введите CSS-селектор, XPath или правило StableHTMLFinder:</label>
+      <p id="selectorContextHelp" class="selector-context-help hidden" data-i18n="generatedRuleHelp">При необходимости отредактируйте сформированный селектор.</p>
+      <div id="selectorInputWrap" class="selector-input-wrap">
+        <input type="text" id="selectorInput" class="selector-input" data-i18n-placeholder="selectorPlaceholder">
+        <span class="selector-placeholder-marquee" aria-hidden="true"><span id="selectorPlaceholderText" class="selector-placeholder-marquee-text"></span></span>
+      </div>
+
+      <div class="selector-info">
+        <span id="selectorTypeIndicator"></span>
+        <span id="elementCount"></span>
+      </div>
+
+      <!-- ===== HINT (visible only in basic mode) ===== -->
+      <div id="hintContainer" class="hint">
+        <span data-i18n="copyHint"></span>
+      </div>
+
+      <!-- ===== BLOCKING MODE ===== -->
+      <div class="block-mode-container">
+        <label data-i18n="blockModeLabel">Blocking mode:</label>
+        <div class="block-mode-options">
+          <label>
+            <input type="radio" name="blockMode" value="remove" checked>
+            <span data-i18n="modeRemove">Remove (free space)</span>
+          </label>
+          <label>
+            <input type="radio" name="blockMode" value="hide">
+            <span data-i18n="modeHide">Hide (keep space)</span>
+          </label>
+        </div>
+        <div id="modeHint" data-i18n="modeRemoveHint">Element is completely removed from HTML. Layout may shift, but space is freed.</div>
+      </div>
+
+      <button id="addRule" class="btn-primary"><svg class="add-rule-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2.5v11M2.5 8h11"></path></svg><span data-i18n="addRuleBtn">Add Rule</span></button>
+      <div id="status"></div>
     </div>
-    <button id="addAttrBtn" class="btn-primary add-attr-btn" disabled data-i18n="addAttrBtn">Add</button>
   </div>
-
-  <!-- ===== SELECTOR INPUT ===== -->
-  <label for="selectorInput" data-i18n="selectorLabel">Введите CSS-селектор, XPath или правило StableHTMLFinder:</label>
-  <input type="text" id="selectorInput" class="selector-input" data-i18n-placeholder="selectorPlaceholder">
-
-  <div class="selector-info">
-    <span id="selectorTypeIndicator"></span>
-    <span id="elementCount"></span>
-  </div>
-
-  <!-- ===== HINT (visible only in basic mode) ===== -->
-  <div id="hintContainer" class="hint">
-    <span data-i18n="copyHint"></span>
-  </div>
-
-  <!-- ===== BLOCKING MODE ===== -->
-  <div class="block-mode-container">
-    <label data-i18n="blockModeLabel">Blocking mode:</label>
-    <div class="block-mode-options">
-      <label>
-        <input type="radio" name="blockMode" value="remove" checked>
-        <span data-i18n="modeRemove">Remove (free space)</span>
-      </label>
-      <label>
-        <input type="radio" name="blockMode" value="hide">
-        <span data-i18n="modeHide">Hide (keep space)</span>
-      </label>
-    </div>
-    <div id="modeHint" data-i18n="modeRemoveHint">Element is completely removed from HTML. Layout may shift, but space is freed.</div>
-  </div>
-
-  <button id="addRule" class="btn-primary" data-i18n="addRuleBtn">Add Rule</button>
-  <div id="status"></div>
 
   <!-- ===== TOOLS (export/import - visible only in advanced mode) ===== -->
   <div id="toolsContainer" class="tools-container hidden">

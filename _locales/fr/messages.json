@@ -7,6 +7,34 @@
     "message": "Bloquez des éléments HTML sur n'importe quel site avec des sélecteurs",
     "description": "Description de l'extension"
   },
+  "welcomeTitle": { "message": "Bienvenue dans BlockIt", "description": "Titre de la page d’accueil" },
+  "welcomeGuide": { "message": "Ouvrir le guide", "description": "Lien vers le guide" },
+  "welcomeEyebrow": { "message": "Extension installée", "description": "Libellé de bienvenue" },
+  "welcomeHeroTitle": { "message": "Bienvenue dans BlockIt", "description": "Titre de bienvenue" },
+  "welcomeHeroDescription": { "message": "Épinglez l’extension à la barre Chrome pour bloquer les éléments indésirables en quelques clics.", "description": "Description de bienvenue" },
+  "welcomeMenuTitle": { "message": "Extensions", "description": "Titre du menu des extensions" },
+  "welcomeStep1Title": { "message": "Ouvrez le menu des extensions", "description": "Première étape" },
+  "welcomeStep1Description": { "message": "Cliquez sur l’icône Extensions à droite de la barre Chrome.", "description": "Description de la première étape" },
+  "welcomeStep2Title": { "message": "Épinglez BlockIt", "description": "Deuxième étape" },
+  "welcomeStep2Description": { "message": "Cliquez sur l’icône d’épingle à côté du nom. L’icône apparaîtra dans la barre du navigateur.", "description": "Description de la deuxième étape" },
+  "welcomeStep3Title": { "message": "Commencez à bloquer", "description": "Troisième étape" },
+  "welcomeStep3Description": { "message": "Ouvrez une page, cliquez sur BlockIt, puis ajoutez un sélecteur ou créez une règle.", "description": "Description de la troisième étape" },
+  "welcomeClose": { "message": "Compris", "description": "Bouton de fermeture" },
+  "welcomeInstructions": { "message": "En savoir plus sur l’extension", "description": "Lien vers le guide détaillé" },
+  "htmlRuleTitle": { "message": "Créer une règle à partir du HTML", "description": "Titre de la section de règle HTML" },
+  "htmlRuleHelp": { "message": "Copiez l’élément souhaité dans DevTools et collez-le ici.", "description": "Aide de la section HTML" },
+  "quickRuleTitle": { "message": "Règle rapide", "description": "Titre de la règle rapide" },
+  "quickRuleHelp": { "message": "Utiliser la balise et les attributs sélectionnés.", "description": "Description de la règle rapide" },
+  "parseHtmlBtn": { "message": "Analyser le HTML", "description": "Bouton d’analyse HTML" },
+  "parsedRuleTitle": { "message": "Paramètres de la règle rapide", "description": "Titre du résultat analysé" },
+  "parsedRuleReady": { "message": "HTML analysé", "description": "État de l’analyse HTML" },
+  "builderFollowup": { "message": "Besoin du texte, de la position ou des éléments environnants ?", "description": "Conseil vers le constructeur" },
+  "openThisInBuilder": { "message": "Ouvrir ce HTML dans le constructeur →", "description": "Ouvrir le HTML dans le constructeur" },
+  "exactRuleTitle": { "message": "Règle précise", "description": "Titre de la règle précise" },
+  "exactRuleHelp": { "message": "Ajouter des conditions sur le texte, le nombre, la position et les éléments environnants.", "description": "Description de la règle précise" },
+  "openBuilderBtn": { "message": "Ouvrir le constructeur", "description": "Bouton d’ouverture du constructeur" },
+  "generatedRuleLabel": { "message": "Règle prête", "description": "Libellé de la règle générée" },
+  "generatedRuleHelp": { "message": "Modifiez le sélecteur créé si nécessaire.", "description": "Aide du sélecteur créé" },
   "pasteHtmlLabel": {
     "message": "Collez l'élément HTML copié :",
     "description": "Étiquette du champ HTML"
@@ -76,7 +104,7 @@
     "description": "Astuce du mode Supprimer"
   },
   "addRuleBtn": {
-    "message": "➕ Ajouter une règle",
+    "message": "Ajouter une règle",
     "description": "Bouton Ajouter une règle"
   },
   "noAttributes": {
@@ -348,11 +376,11 @@
     "description": "Bouton pour masquer le mode avancé"
   },
   "selectorLabel": {
-    "message": "Entrez le sélecteur CSS ou XPath :",
+    "message": "Entrez un sélecteur CSS, XPath ou une règle BlockIt :",
     "description": "Étiquette pour le champ de saisie du sélecteur"
   },
   "selectorPlaceholder": {
-    "message": "Ex: #ad-container ou //div[@id='ad']",
+    "message": "Exemple : #ad-container, //div[@id='ad'] ou div:attr-count(=2)",
     "description": "Espace réservé pour le champ de saisie du sélecteur"
   },
   "toolsDivider": {

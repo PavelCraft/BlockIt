@@ -7,6 +7,34 @@
     "message": "セレクタを使用して任意のWebサイトでHTML要素をブロックします",
     "description": "拡張機能の説明"
   },
+  "welcomeTitle": { "message": "BlockItへようこそ", "description": "ウェルカムページのタイトル" },
+  "welcomeGuide": { "message": "使い方を開く", "description": "使い方へのリンク" },
+  "welcomeEyebrow": { "message": "拡張機能がインストールされました", "description": "ウェルカムページのラベル" },
+  "welcomeHeroTitle": { "message": "BlockItへようこそ", "description": "ウェルカムページの見出し" },
+  "welcomeHeroDescription": { "message": "Chromeのツールバーに拡張機能を固定すると、数回のクリックで不要な要素をブロックできます。", "description": "ウェルカムページの説明" },
+  "welcomeMenuTitle": { "message": "拡張機能", "description": "拡張機能メニューの見出し" },
+  "welcomeStep1Title": { "message": "拡張機能メニューを開く", "description": "固定の手順1" },
+  "welcomeStep1Description": { "message": "Chromeのツールバー右側にある拡張機能アイコンをクリックします。", "description": "手順1の説明" },
+  "welcomeStep2Title": { "message": "BlockItを固定する", "description": "固定の手順2" },
+  "welcomeStep2Description": { "message": "拡張機能名の横にあるピンアイコンをクリックします。ブラウザーのツールバーにアイコンが表示されます。", "description": "手順2の説明" },
+  "welcomeStep3Title": { "message": "ブロックを始める", "description": "固定の手順3" },
+  "welcomeStep3Description": { "message": "ページを開き、BlockItアイコンをクリックして、セレクターを追加するかルールを作成します。", "description": "手順3の説明" },
+  "welcomeClose": { "message": "了解", "description": "ウェルカムページを閉じるボタン" },
+  "welcomeInstructions": { "message": "拡張機能について詳しく見る", "description": "詳しい使い方へのリンク" },
+  "htmlRuleTitle": { "message": "HTMLからルールを作成", "description": "HTMLルールセクションのタイトル" },
+  "htmlRuleHelp": { "message": "DevToolsで必要な要素をコピーして、ここに貼り付けます。", "description": "HTMLルールセクションの説明" },
+  "quickRuleTitle": { "message": "クイックルール", "description": "クイックルールのタイトル" },
+  "quickRuleHelp": { "message": "タグと選択した属性を使用します。", "description": "クイックルールの説明" },
+  "parseHtmlBtn": { "message": "HTMLを解析", "description": "HTML解析ボタン" },
+  "parsedRuleTitle": { "message": "クイックルールの設定", "description": "解析結果のタイトル" },
+  "parsedRuleReady": { "message": "HTMLを解析しました", "description": "HTML解析ステータス" },
+  "builderFollowup": { "message": "テキスト、位置、周辺要素の条件が必要ですか？", "description": "ルールコンストラクターへの案内" },
+  "openThisInBuilder": { "message": "このHTMLをコンストラクターで開く →", "description": "HTMLをコンストラクターで開く" },
+  "exactRuleTitle": { "message": "詳細ルール", "description": "詳細ルールのタイトル" },
+  "exactRuleHelp": { "message": "テキスト、数、位置、周辺要素の条件を追加します。", "description": "詳細ルールの説明" },
+  "openBuilderBtn": { "message": "コンストラクターを開く", "description": "コンストラクターを開くボタン" },
+  "generatedRuleLabel": { "message": "完成したルール", "description": "生成されたルールのラベル" },
+  "generatedRuleHelp": { "message": "必要に応じて生成されたセレクターを編集してください。", "description": "生成されたセレクターの説明" },
   "pasteHtmlLabel": {
     "message": "コピーしたHTML要素を貼り付け：",
     "description": "HTML入力フィールドのラベル"
@@ -76,7 +104,7 @@
     "description": "削除モードのヒント"
   },
   "addRuleBtn": {
-    "message": "➕ ルールを追加",
+    "message": "ルールを追加",
     "description": "ルール追加ボタンのテキスト"
   },
   "noAttributes": {
@@ -348,11 +376,11 @@
     "description": "詳細モードを非表示にするボタン"
   },
   "selectorLabel": {
-    "message": "CSSセレクタまたはXPathを入力：",
+    "message": "CSSセレクター、XPath、またはBlockItルールを入力：",
     "description": "セレクタ入力フィールドのラベル"
   },
   "selectorPlaceholder": {
-    "message": "例：#ad-container または //div[@id='ad']",
+    "message": "例：#ad-container、//div[@id='ad']、または div:attr-count(=2)",
     "description": "セレクタ入力フィールドのプレースホルダー"
   },
   "toolsDivider": {

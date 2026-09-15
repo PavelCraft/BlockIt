@@ -24,6 +24,8 @@ const BLOCKIT_RULE_PSEUDO = /:(?:attr-name|attr|text(?:-(?:starts|ends|contains|
 // ============================================================
 
 const selectorInput = document.getElementById('selectorInput');
+const selectorInputWrap = document.getElementById('selectorInputWrap');
+const selectorPlaceholderText = document.getElementById('selectorPlaceholderText');
 const selectorTypeIndicator = document.getElementById('selectorTypeIndicator');
 const elementCount = document.getElementById('elementCount');
 const addRuleBtn = document.getElementById('addRule');
@@ -37,9 +39,16 @@ const toggleAdvancedBtn = document.getElementById('toggleAdvanced');
 const advancedPanel = document.getElementById('advancedPanel');
 const hintContainer = document.getElementById('hintContainer');
 const toolsContainer = document.getElementById('toolsContainer');
+const basicRuleSlot = document.getElementById('basicRuleSlot');
+const advancedRuleSlot = document.getElementById('advancedRuleSlot');
+const finalRuleSection = document.getElementById('finalRuleSection');
+const selectorLabel = document.getElementById('selectorLabel');
+const selectorContextHelp = document.getElementById('selectorContextHelp');
 const htmlInput = document.getElementById('htmlInput');
 const parseBtn = document.getElementById('parseBtn');
 const openRuleBuilderBtn = document.getElementById('openRuleBuilder');
+const openRuleBuilderAfterParseBtn = document.getElementById('openRuleBuilderAfterParse');
+const parsedHtmlResult = document.getElementById('parsedHtmlResult');
 const tagDisplay = document.getElementById('tagDisplay');
 const attributesContainer = document.getElementById('attributesContainer');
 const newAttrName = document.getElementById('newAttrName');
@@ -62,6 +71,8 @@ function localizeUI() {
     const msg = chrome.i18n.getMessage(key);
     if (msg) el.placeholder = msg;
   });
+
+  syncSelectorPlaceholder();
 
   if (!currentTag) {
     const msg = chrome.i18n.getMessage('tagNotDefined');
@@ -207,9 +218,6 @@ function detectSelectorType(input) {
   const trimmed = input.trim();
   if (!trimmed) return null;
 
-  if (trimmed.startsWith(STABLE_HTML_FINDER_PREFIX)) return 'stablehtmlfinder';
-  if (trimmed.startsWith(RULE_BUILDER_PREFIX)) return 'blockitbuilder';
-
   if (globalThis.__blockItSelectorCore?.isBlockItRule(trimmed)) return 'blockitrule';
 
   if (BLOCKIT_RULE_PSEUDO.test(trimmed) || /\[[a-zA-Z_][\w-]*-\*(?:[\]\^$*~|=]|$)/.test(trimmed)) return 'blockitrule';
@@ -236,6 +244,19 @@ function detectSelectorType(input) {
   if (trimmed.includes('//')) return 'xpath';
 
   return 'css';
+}
+
+function syncSelectorPlaceholder() {
+  if (!selectorInput || !selectorInputWrap || !selectorPlaceholderText) return;
+  selectorPlaceholderText.textContent = chrome.i18n.getMessage('selectorPlaceholder') || selectorInput.placeholder || '';
+  selectorInputWrap.classList.toggle('has-value', Boolean(selectorInput.value.trim()));
+  requestAnimationFrame(() => {
+    // Leave a little extra room at the right edge so the final characters are
+    // not hidden by the input's padding and border.
+    const distance = Math.max(0, selectorPlaceholderText.scrollWidth - selectorInputWrap.clientWidth + 18);
+    selectorInputWrap.style.setProperty('--selector-marquee-distance', `-${distance}px`);
+    selectorInputWrap.classList.toggle('is-overflowing', distance > 0);
+  });
 }
 
 function normalizeCssSelector(selector) {
@@ -272,37 +293,15 @@ async function repairLegacyRulesInActiveTab() {
   });
 }
 
-/** Parse the interchange format emitted by StableHTMLFinder.
- * Example: SHF1:{"version":1,"target":{"type":"css","selector":".ad"}} */
+/** Parse the selector-like formats accepted in the manual rule field. */
 function parseRuleInput(input) {
   const raw = input.trim();
+  // JSON interchange formats are for internal storage, not manual entry.
+  if (raw.startsWith(STABLE_HTML_FINDER_PREFIX) || raw.startsWith(RULE_BUILDER_PREFIX)) {
+    throw new Error('internal rule format');
+  }
   const type = detectSelectorType(raw);
   if (!type) throw new Error('empty');
-
-  if (type === 'stablehtmlfinder') {
-    const stableRule = JSON.parse(raw.slice(STABLE_HTML_FINDER_PREFIX.length));
-    const target = stableRule.target || stableRule;
-    const targetType = target.type || 'css';
-    if (!target.selector || !['css', 'xpath'].includes(targetType)) throw new Error('invalid StableHTMLFinder rule');
-    return {
-      type,
-      selector: raw,
-      stableRule,
-      query: { type: targetType, selector: target.selector }
-    };
-  }
-
-  if (type === 'blockitbuilder') {
-    const builderModel = JSON.parse(raw.slice(RULE_BUILDER_PREFIX.length));
-    if (!builderModel?.root) throw new Error('invalid Rule Builder rule');
-    return {
-      type,
-      selector: raw,
-      stableRule: null,
-      builderModel,
-      query: { type, model: builderModel }
-    };
-  }
 
   return {
     type,
@@ -537,8 +536,8 @@ async function checkSelectorCount(selector) {
     parsed = parseRuleInput(trimmed);
   } catch {
     updateElementCount(-1);
-    selectorTypeIndicator.textContent = 'StableHTMLFinder';
-    selectorTypeIndicator.style.color = '#6f42c1';
+    selectorTypeIndicator.textContent = chrome.i18n.getMessage('selectorTypeUnknown');
+    selectorTypeIndicator.style.color = '#999';
     return;
   }
   const type = parsed.type;
@@ -781,6 +780,14 @@ function updateToggleButton() {
     advancedPanel.classList.remove('hidden');
     hintContainer.classList.add('hidden');
     toolsContainer.classList.remove('hidden');
+    if (parsedHtmlResult.classList.contains('hidden')) {
+      finalRuleSection.classList.add('hidden');
+    } else {
+      advancedRuleSlot.appendChild(finalRuleSection);
+      finalRuleSection.classList.remove('hidden');
+      selectorLabel.textContent = chrome.i18n.getMessage('generatedRuleLabel') || 'Готовое правило';
+      selectorContextHelp.classList.remove('hidden');
+    }
   } else {
     toggleAdvancedBtn.innerHTML = `
       <span class="toggle-icon toggle-icon-down"></span>
@@ -790,6 +797,10 @@ function updateToggleButton() {
     advancedPanel.classList.add('hidden');
     hintContainer.classList.remove('hidden');
     toolsContainer.classList.add('hidden');
+    basicRuleSlot.appendChild(finalRuleSection);
+    finalRuleSection.classList.remove('hidden');
+    selectorLabel.textContent = chrome.i18n.getMessage('selectorLabel') || selectorLabel.textContent;
+    selectorContextHelp.classList.add('hidden');
   }
 }
 
@@ -805,6 +816,7 @@ toggleAdvancedBtn.addEventListener('click', toggleAdvancedMode);
 // ============================================================
 
 selectorInput.addEventListener('input', () => {
+  syncSelectorPlaceholder();
   const manual = selectorInput.value.trim();
   if (manual) {
     checkSelectorCount(manual);
@@ -839,10 +851,34 @@ parseBtn.addEventListener('click', () => {
   tagDisplay.textContent = currentTag;
   renderAttributes(currentTag, currentAttributes);
   updateSelector(currentTag, currentAttributes);
+  parsedHtmlResult.classList.remove('hidden');
+  advancedRuleSlot.appendChild(finalRuleSection);
+  finalRuleSection.classList.remove('hidden');
+  selectorLabel.textContent = chrome.i18n.getMessage('generatedRuleLabel') || 'Готовое правило';
+  selectorContextHelp.classList.remove('hidden');
 });
 
-openRuleBuilderBtn.addEventListener('click', async () => {
+window.addEventListener('resize', syncSelectorPlaceholder);
+
+async function openBuilderFromHtml() {
   await openRuleBuilderDraft({ html: htmlInput.value.trim() });
+}
+
+openRuleBuilderBtn.addEventListener('click', openBuilderFromHtml);
+openRuleBuilderAfterParseBtn.addEventListener('click', openBuilderFromHtml);
+
+function updateHtmlMethodActions() {
+  const hasHtml = Boolean(htmlInput.value.trim());
+  parseBtn.disabled = !hasHtml;
+  openRuleBuilderBtn.disabled = !hasHtml;
+}
+
+htmlInput.addEventListener('input', () => {
+  updateHtmlMethodActions();
+  if (!parsedHtmlResult.classList.contains('hidden')) {
+    parsedHtmlResult.classList.add('hidden');
+    finalRuleSection.classList.add('hidden');
+  }
 });
 
 // ============================================================
@@ -1059,6 +1095,7 @@ chrome.runtime.onMessage.addListener((message) => {
 
 document.addEventListener('DOMContentLoaded', () => {
   localizeUI();
+  updateHtmlMethodActions();
   updateToggleButton();
   renderRulesList();
   repairLegacyRulesInActiveTab().catch(() => {});

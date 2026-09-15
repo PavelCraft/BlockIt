@@ -1,0 +1,682 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>BlockIt — черновик инструкции</title>
+  <link rel="stylesheet" href="instruction-draft.css">
+</head>
+<body>
+  <main class="page">
+    <header class="hero" id="top">
+      <div class="eyebrow">BlockIt · черновик</div>
+      <h1>Инструкция к расширению BlockIt</h1>
+      <p>Создавайте правила для блокировки нежелательных элементов: от простого CSS-селектора до точного правила с условиями по структуре страницы.</p>
+    </header>
+
+    <nav class="contents" aria-label="Содержание">
+      <div>
+        <h2>Содержание</h2>
+        <ul>
+          <li>
+<a href="#what-is">Что такое BlockIt</a>
+</li>
+          <li>
+<a href="#quick-start">Быстрое начало</a>
+</li>
+          <li>
+<a href="#methods">Способы создания правила</a>
+</li>
+          <li>
+<a href="#selector-tips">Советы по выбору элемента</a>
+</li>
+          <li>
+<a href="#selectors">Конспект по селекторам</a>
+</li>
+          <li>
+<a href="#rules">Управление правилами</a>
+</li>
+          <li>
+<a href="#faq">Решение проблем</a>
+</li>
+        </ul>
+      </div>
+      <span class="draft-mark">Черновик · оригинал не изменён</span>
+    </nav>
+
+    <section class="chapter" id="what-is">
+      <h2>Что такое BlockIt? <a class="top-link" href="#top">В начало</a>
+</h2>
+      <p>Сайты, показывающие рекламу, и популярные блокировщики ведут постоянную «гонку вооружений»: разработчики сайтов постоянно ищут новые способы показать вам рекламу, а блокировщики — способы её скрыть.</p>
+      <p>
+<strong>BlockIt</strong> предлагает иной подход. Вместо того чтобы полагаться на общие списки фильтров, вы сами создаёте правила для блокировки конкретных элементов. Ваши правила остаются известны только вам, если вы сами не решите ими поделиться, что делает их гораздо более устойчивыми к обходу.</p>
+      <h3>Ключевые особенности</h3>
+      <ul class="feature-list">
+        <li>
+<strong>Простота использования:</strong> иногда достаточно скопировать селектор из инструментов разработчика и вставить его в расширение.</li>
+        <li>
+<strong>Гибкость:</strong>
+          <ul>
+            <li>Вы сами решаете, удалить элемент или скрыть</li>
+            <li>Вы сами решаете, какие элементы блокировать, какие нет</li>
+            <li>Вы решаете, какие правила блокировки оставить, какие удалить</li>
+            <li>Поддерживаются как CSS-селекторы, так и XPath-выражения</li>
+            <li>Правила применяются также внутри <a href="#embedded-contexts">iframe и Shadow DOM</a>
+</li>
+          </ul>
+        </li>
+        <li>
+<strong>Приватность:</strong> все правила хранятся только локально в браузере и никуда не отправляются.</li>
+        <li>
+<strong>Синтаксис BlockIt:</strong> для сложных случаев доступен синтаксис, расширяющий стандартный синтаксис CSS-селекторов. <a href="../rules/ru/index.html">Открыть документацию по синтаксису BlockIt</a>.</li>
+        <li>
+<strong>Группировка правил по сайтам:</strong> правила автоматически группируются для текущего сайта и для всех остальных. Это упрощает управление ими.</li>
+        <li>
+<strong>Обмен настройками:</strong> вы можете поделиться своими правилами с другими пользователями, экспортировав их в файл.</li>
+        <li>
+<strong>Поддержка нескольких языков:</strong> интерфейс расширения автоматически переключается на язык, установленный в вашем браузере. Поддерживаются: русский, английский, французский, немецкий, испанский, португальский, китайский и японский. Если ваш язык не поддерживается, интерфейс отобразится на английском.</li>
+        <li>
+<strong>Открытый исходный код:</strong> расширение разрабатывается под лицензией BSD-3-Clause. Вы можете участвовать в развитии проекта, предлагать улучшения и изучать код на <a href="https://github.com/PavelCraft/BlockIt" target="_blank" rel="noopener noreferrer">GitHub</a>.</li>
+      </ul>
+    </section>
+
+    <section class="chapter" id="quick-start">
+      <h2>Быстрое начало <a class="top-link" href="#top">В начало</a>
+</h2>
+      <p>Этот путь подходит, если вы хотите сначала попробовать готовый CSS-селектор или XPath из DevTools.</p>
+      <div class="note">
+<strong>Проверяйте счётчик совпадений.</strong> Одно совпадение обычно является хорошим результатом. Ноль означает, что правило ничего не находит. Несколько совпадений стоит проверить, чтобы не заблокировать лишнее.</div>
+      <div class="gallery" data-gallery>
+        <div class="gallery-stage">
+          <button class="gallery-control prev" type="button" aria-label="Предыдущий шаг">‹</button>
+          <figure class="gallery-slide active" data-title="Откройте DevTools" data-caption="Нажмите правой кнопкой по нужному элементу страницы и выберите «Посмотреть код» или Inspect.">
+<img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/2.png" alt="Открытие DevTools через контекстное меню">
+</figure>
+          <figure class="gallery-slide" data-title="Проверьте выбранный элемент" data-caption="Наводите курсор на строки HTML: Chrome подсветит соответствующий участок страницы. Выберите внешний контейнер, который покрывает только нужный блок.">
+<img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/3.png" alt="Подсветка элемента в DevTools">
+</figure>
+          <figure class="gallery-slide" data-title="Скопируйте CSS-селектор или XPath" data-caption="В дереве HTML: «Копировать» → «Копировать selector» либо «Копировать XPath».">
+<img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/4.png" alt="Копирование селектора в DevTools">
+</figure>
+          <figure class="gallery-slide" data-title="Вставьте правило в BlockIt" data-caption="Откройте BlockIt, вставьте скопированный результат в основное поле и посмотрите на количество совпадений.">
+<img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/5.png" alt="Вставка селектора в BlockIt">
+</figure>
+          <figure class="gallery-slide" data-title="Добавьте правило" data-caption="Выберите «Удалить» или «Скрыть», затем нажмите «Добавить правило». После этого правило появится в списке.">
+<img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/6.png" alt="Список правил BlockIt">
+</figure>
+          <button class="gallery-control next" type="button" aria-label="Следующий шаг">›</button>
+        </div>
+        <div class="gallery-caption">
+<span class="gallery-caption-number">1</span>
+<div>
+<b>
+</b>
+<span>
+</span>
+</div>
+</div>
+        <div class="gallery-dots" aria-label="Шаги быстрого начала">
+</div>
+      </div>
+      <div id="selector-tips">
+        <h3>Советы по выбору элемента для блокировки</h3>
+        <p>Прежде чем копировать селектор или HTML, важно правильно определить, какой именно элемент нужно заблокировать.</p>
+        <ul>
+          <li>
+<strong>Используйте подсветку в DevTools.</strong> Когда вы наводите курсор на строки HTML-кода, соответствующие элементы на странице подсвечиваются. Это помогает точно понять, какой участок страницы будет заблокирован.</li>
+          <li>
+<strong>Выбирайте самый внешний элемент, но без лишнего.</strong> Найдите максимально внешний контейнер, который содержит ровно нужный блок и ничего больше. Слишком глубокий элемент может оставить часть рекламы видимой, а слишком внешний — скрыть полезное содержимое.</li>
+          <li>
+<strong>Следите за счётчиком элементов.</strong> После вставки правила BlockIt показывает количество найденных элементов. Идеальный результат обычно — <strong>1</strong>. Если элементов больше, есть риск заблокировать лишнее; если <strong>0</strong> — правило ничего не найдёт.</li>
+        </ul>
+        <p>Если после добавления правила блокируется слишком много или, наоборот, ничего не блокируется, удалите правило и попробуйте выбрать другой элемент — выше или ниже по дереву HTML.</p>
+      </div>
+      <h3>Режимы блокировки</h3>
+      <ul>
+        <li>
+<strong>Удалить:</strong> элемент удаляется из HTML, а его место освобождается. Это подходит для большинства случаев, но иногда может изменить вёрстку.</li>
+        <li>
+<strong>Скрыть:</strong> элемент становится невидимым, но сохраняет занимаемое место. Используйте этот вариант, если после удаления страница выглядит хуже.</li>
+      </ul>
+    </section>
+
+    <section class="chapter" id="methods">
+      <h2>Способы создания правила <a class="top-link" href="#top">В начало</a>
+</h2>
+      <p>Сначала найдите нужный элемент в DevTools и посмотрите на его тег, классы и атрибуты. Не обязательно сразу что-то копировать: выберите путь, который удобнее для вашей задачи.</p>
+      <div class="method-advisor" id="methodAdvisor">
+        <h3>Что может помочь?</h3>
+        <p>Включите подходящие подсказки. Подсветка ниже не скрывает другие способы: она лишь показывает, с чего разумнее начать.</p>
+        <div class="method-options method-switches">
+          <label class="guide-switch">
+<input id="unstableTraits" type="checkbox">
+<span class="guide-switch-control" aria-hidden="true">
+</span>
+<span>
+<b>Признаки нестабильны</b>
+<small>Классы, id или атрибуты выглядят случайными либо меняются после обновления.</small>
+</span>
+</label>
+          <label class="guide-switch">
+<input id="unstablePath" type="checkbox">
+<span class="guide-switch-control" aria-hidden="true">
+</span>
+<span>
+<b>Путь к элементу нестабилен</b>
+<small>Положение элемента в HTML-структуре меняется после обновления страницы.</small>
+</span>
+</label>
+          <label class="guide-switch">
+<input id="methodsFailed" type="checkbox">
+<span class="guide-switch-control" aria-hidden="true">
+</span>
+<span>
+<b>CSS-селектор и XPath не сработали</b>
+<small>Простые способы уже проверены, но не находят нужный элемент устойчиво.</small>
+</span>
+</label>
+        </div>
+        <p class="advisor-hint">Рекомендуемые способы выделяются ниже. Нажмите на любой способ, чтобы раскрыть подробную инструкцию.</p>
+      </div>
+
+      <div class="method-list">
+        <details id="method-css" data-method="css">
+<summary>
+<span class="method-index">1</span>Скопировать CSS-селектор из DevTools <span class="expand-hint">Нажмите, чтобы прочитать</span>
+</summary>
+<div class="method-body">
+<p>Начните с этого способа, если хотите быстро проверить, можно ли заблокировать элемент обычным селектором. DevTools создаёт его автоматически: выберите элемент, затем «Копировать» → «Копировать selector».</p>
+<p>Вставьте селектор в основное поле BlockIt, проверьте счётчик и добавьте правило. Если результат нестабилен после обновления, переходите к <a class="product-link" href="https://formacode.dev/ru/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> или конструктору.</p>
+</div>
+</details>
+        <details id="method-xpath" data-method="xpath">
+<summary>
+<span class="method-index">2</span>Скопировать XPath из DevTools <span class="expand-hint">Нажмите, чтобы прочитать</span>
+</summary>
+<div class="method-body">
+<p>XPath — альтернативный способ описать путь к элементу по структуре страницы. Он может помочь, если классы и другие атрибуты нестабильны, но сам путь к элементу остаётся неизменным. В DevTools выберите «Копировать XPath», затем вставьте выражение в основное поле BlockIt.</p>
+<div class="note">
+<strong>Проверьте полученное выражение.</strong> Chrome может построить XPath через <code>id</code>. Если этот id меняется, такой XPath тоже будет нестабильным. Абсолютный путь с порядковыми номерами, в свою очередь, сломается при перестройке HTML.</div>
+<p>BlockIt проверяет XPath отдельно в основном документе и в каждом <a href="#embedded-contexts">iframe</a>, поэтому XPath элемента внутри iframe может сработать. Через границу <a href="#embedded-contexts">Shadow DOM</a> браузер не выполняет XPath. В таком случае используйте способ, который строит правило на основе CSS-селектора или расширенного синтаксиса BlockIt: например, конструктор правила либо <a class="product-link" href="https://formacode.dev/ru/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a>.</p>
+</div>
+</details>
+        <details id="method-html" data-method="html">
+<summary>
+<span class="method-index">3</span>Создать быстрое правило из HTML <span class="expand-hint">Нажмите, чтобы прочитать</span>
+</summary>
+<div class="method-body">
+<p>Этот путь удобен, если вы хотите сами выбрать тег и несколько атрибутов, но не хотите писать селектор вручную. В DevTools скопируйте HTML элемента: «Копировать» → «Копировать элемент».</p>
+<ol>
+<li>В BlockIt откройте «Продвинутый режим».</li>
+<li>Вставьте HTML в блок «Создать правило из HTML».</li>
+<li>Нажмите «Разобрать HTML».</li>
+<li>Оставьте только осмысленные и, по возможности, устойчивые атрибуты.</li>
+<li>Проверьте сформированное правило и счётчик совпадений.</li>
+</ol>
+<div class="gallery compact-gallery" data-gallery>
+<div class="gallery-stage">
+<button class="gallery-control prev" type="button" aria-label="Предыдущий шаг">‹</button>
+<figure class="gallery-slide active" data-title="Скопируйте HTML элемента" data-caption="В DevTools нажмите правой кнопкой по строке элемента и выберите «Копировать» → «Копировать элемент». Если вы хотите использовать только отдельный атрибут, можно скопировать его значение.">
+<img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/7.png" alt="Копирование HTML-элемента">
+</figure>
+<figure class="gallery-slide" data-title="Вставьте HTML" data-caption="Откройте продвинутый режим BlockIt и вставьте скопированный элемент в блок «Создать правило из HTML».">
+<img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/8.png" alt="Вставка HTML-элемента в продвинутом режиме">
+</figure>
+<figure class="gallery-slide" data-title="Проверьте атрибуты" data-caption="После разбора удалите неустойчивые или ненужные признаки, затем проверьте сформированное правило и количество совпадений.">
+<img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/9.png" alt="Редактирование списка атрибутов">
+</figure>
+<button class="gallery-control next" type="button" aria-label="Следующий шаг">›</button>
+</div>
+<div class="gallery-caption">
+<span class="gallery-caption-number">1</span>
+<div>
+<b>
+</b>
+<span>
+</span>
+</div>
+</div>
+<div class="gallery-dots" aria-label="Шаги создания быстрого правила">
+</div>
+</div>
+<div class="note">
+<strong>Не оставляйте атрибут автоматически.</strong> Класс или id со случайным набором символов может измениться после следующей загрузки страницы.</div>
+</div>
+</details>
+        <details id="method-stable" data-method="stable">
+<summary>
+<span class="method-index">4</span>Использовать <a class="product-link summary-link" href="https://formacode.dev/ru/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> <span class="expand-hint">Нажмите, чтобы прочитать</span>
+</summary>
+<div class="method-body">
+<p>
+<a class="product-link" href="https://formacode.dev/ru/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> полезен, когда классы и id обфусцированы, меняются между загрузками или на странице много похожих блоков. Он часто проще, чем ручной разбор HTML, но анализ занимает время: расширению нужно несколько раз загрузить страницу.</p>
+<ol>
+<li>Запустите анализ нужной страницы в <a class="product-link" href="https://formacode.dev/ru/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a>.</li>
+<li>После анализа выберите тот же элемент в DevTools и скопируйте его HTML.</li>
+<li>Вставьте HTML в строку поиска карты стабильности.</li>
+<li>Найдите элемент на карте и изучите устойчивые признаки и структуру.</li>
+<li>Скопируйте готовый селектор или правило BlockIt.</li>
+<li>Вставьте результат в основное поле BlockIt, прочитайте словесное описание и проверьте счётчик совпадений.</li>
+</ol>
+<p>
+<a class="product-link" href="https://formacode.dev/ru/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> не блокирует элементы сам. Он создаёт более надёжную основу для правила BlockIt и показывает стабильную структуру, которую можно использовать в конструкторе.</p>
+</div>
+</details>
+        <details id="method-builder" data-method="builder">
+<summary>
+<span class="method-index">5</span>Открыть конструктор правила <span class="expand-hint">Нажмите, чтобы прочитать</span>
+</summary>
+<div class="method-body">
+<p>Конструктор правила — мощный инструмент для создания точных правил без знания CSS, XPath или синтаксиса BlockIt. Он подходит и для стабильных, и для нестабильных элементов: правило может опираться не на конкретный класс, а на текст, количество атрибутов или классов, положение среди сиблингов и окружающие элементы.</p>
+<p>В DevTools скопируйте HTML нужного элемента, откройте «Продвинутый режим» BlockIt, вставьте HTML в соответствующее поле и нажмите «Открыть конструктор».</p>
+<div class="builder-map">
+<article>
+<h4>Карточка элемента</h4>
+<p>Каждая карточка описывает один HTML-элемент: тег, количество атрибутов, условия по атрибутам, тексту и позиции.</p>
+</article>
+<article>
+<h4>Дерево связей</h4>
+<p>Предки находятся выше. Потомки располагаются ниже с большим отступом. Сиблинги находятся на одном уровне вложенности.</p>
+</article>
+<article>
+<h4>Устойчивые признаки</h4>
+<p>Автоматически подставленные значения можно отключать. Не используйте меняющиеся id и классы только потому, что они были найдены в HTML.</p>
+</article>
+<article>
+<h4>Проверка</h4>
+<p>Смотрите количество совпадений сразу, затем используйте «Проверить после обновления», чтобы убедиться в устойчивости результата.</p>
+</article>
+</div>
+<h4>Что можно указать в карточке</h4>
+<ul>
+<li>
+<strong>Тег:</strong> можно указать или оставить пустым, если он не важен.</li>
+<li>
+<strong>Количество атрибутов:</strong> ровно, не менее или не более указанного числа.</li>
+<li>
+<strong>Атрибуты:</strong> условия на имя и значение; для <code>class</code> — дополнительно количество классов.</li>
+<li>
+<strong>Текст:</strong> собственный текст элемента или любой текст внутри него; точное совпадение, начало, конец, часть текста или регулярное выражение.</li>
+<li>
+<strong>Позиция среди сиблингов:</strong> порядковый номер элемента среди соседей с тем же родителем.</li>
+</ul>
+<h4>Связанные элементы</h4>
+<p>У цели и предков можно добавить непосредственного родителя или просто предка. У цели можно добавить дочерний элемент, потомка или сиблинга; у сиблингов также могут быть потомки. Для связанного элемента доступен переключатель «Допускается отсутствие».</p>
+<p>
+<strong>Порядковый номер среди сиблингов</strong> — это место элемента среди детей одного родителя. <strong>Порядковый номер в результатах правила</strong> — это место среди всех элементов, которые уже нашло полностью сформированное правило. Это разные условия.</p>
+<h4>Предпросмотр и проверка</h4>
+<p>В блоке «Предпросмотр правила» прочитайте словесное описание: оно помогает заметить случайно включённый атрибут, текст или связь. Затем проверьте количество совпадений на текущей странице и после обновления страницы.</p>
+<div class="note">
+<strong>Скриншоты для этого пункта:</strong> открытие конструктора, разбор HTML, добавление предка, добавление потомка или сиблинга, настройка текста и позиции, проверка и сохранение.</div>
+</div>
+</details>
+      </div>
+      <h3>Когда переходить к другому способу</h3>
+      <p>Начните с CSS-селектора из DevTools, если нужен быстрый результат. Если он нестабилен, атрибуты выглядят случайными или на странице много похожих блоков, попробуйте <a class="product-link" href="https://formacode.dev/ru/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a>, быстрое правило из HTML или конструктор.</p>
+    </section>
+
+    <section class="chapter" id="selectors">
+      <h2>Конспект по CSS-селекторам <a class="top-link" href="#top">В начало</a>
+</h2>
+      <h3>Что такое селекторы?</h3>
+      <p>
+<strong>Селекторы</strong> — это способ найти нужный элемент на веб-странице по его свойствам: тегу, классу, идентификатору, атрибутам или положению в структуре HTML.</p>
+      <p>В отличие от CSS-стилей, где селекторы используются для применения оформления, в BlockIt селекторы нужны <strong>только для поиска</strong>. Мы не задаём цвета, шрифты или отступы — мы просто <strong>находим элемент</strong>, чтобы его заблокировать.</p>
+      <p>Эти примеры помогут читать и немного редактировать обычные CSS-селекторы. Для расширенного синтаксиса BlockIt используйте <a href="../rules/ru/index.html">отдельную документацию</a>.</p>
+      <h3>Как открыть и настроить DevTools</h3>
+      <table class="cheatsheet-table">
+<thead>
+<tr>
+<th>Действие</th>
+<th>Результат</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<kbd>F12</kbd>
+</td>
+<td>Открывается панель DevTools.</td>
+</tr>
+<tr>
+<td>
+<kbd>Ctrl + Shift + I</kbd>
+</td>
+<td>Открывается та же панель.</td>
+</tr>
+<tr>
+<td>Правый клик по элементу → <strong>«Посмотреть код»</strong> / Inspect</td>
+<td>DevTools открывается с подсвеченным элементом.</td>
+</tr>
+</tbody>
+</table>
+      <h4>Язык интерфейса</h4>
+      <ol>
+<li>Откройте DevTools.</li>
+<li>Нажмите шестерёнку ⚙ в правом верхнем углу → Settings.</li>
+<li>В разделе Language выберите нужный язык.</li>
+<li>Закройте и снова откройте DevTools.</li>
+</ol>
+      <h4>Расположение панели</h4>
+      <p>Нажмите ⋮ в правом верхнем углу DevTools и выберите расположение: справа, снизу, слева или в отдельном окне. Нижнее расположение удобно на широком мониторе, а отдельное окно — при работе с двумя экранами.</p>
+      <h3>Как проверить селектор</h3>
+      <ol>
+<li>В DevTools откройте вкладку Elements.</li>
+<li>Нажмите <kbd>Ctrl + F</kbd> или <kbd>Cmd + F</kbd> на Mac.</li>
+<li>Вставьте селектор в строку поиска.</li>
+<li>DevTools подсветит все совпадения и покажет их количество, например <code>1 of 3</code>.</li>
+</ol>
+      <div class="gallery" data-gallery>
+        <div class="gallery-stage">
+          <button class="gallery-control prev" type="button" aria-label="Предыдущий скриншот">‹</button>
+          <figure class="gallery-slide active" data-title="Измените язык DevTools" data-caption="Откройте Settings, найдите раздел Language, выберите язык и перезапустите DevTools.">
+<img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/13.png" alt="Смена языка в DevTools">
+</figure>
+          <figure class="gallery-slide" data-title="Выберите расположение панели" data-caption="Через меню DevTools можно закрепить панель справа, снизу, слева или открыть её в отдельном окне.">
+<img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/14.png" alt="Изменение расположения панели DevTools">
+</figure>
+          <figure class="gallery-slide" data-title="Проверьте селектор" data-caption="Нажмите Ctrl + F на вкладке Elements, вставьте селектор и проверьте количество найденных элементов.">
+<img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/15.png" alt="Поиск селектора через Ctrl+F">
+</figure>
+          <button class="gallery-control next" type="button" aria-label="Следующий скриншот">›</button>
+        </div>
+        <div class="gallery-caption">
+<span class="gallery-caption-number">1</span>
+<div>
+<b>
+</b>
+<span>
+</span>
+</div>
+</div>
+        <div class="gallery-dots" aria-label="Скриншоты DevTools">
+</div>
+      </div>
+      <h3>Типы селекторов</h3>
+      <div class="syntax-grid">
+        <article class="syntax-example">
+<h4>Универсальный селектор (<code>*</code>)</h4>
+<p>Находит <strong>все</strong> элементы на странице. Используйте с осторожностью — он вернёт всё, что есть в HTML.</p>
+<p>
+<strong>Селектор:</strong> <code>*</code>
+</p>
+<p>
+<strong>Что найдёт:</strong> все элементы без исключения.</p>
+</article>
+        <article class="syntax-example">
+<h4>Селектор по тегу</h4>
+<p>Находит все элементы с указанным HTML-тегом.</p>
+<p>
+<strong>Селекторы:</strong> <code>h1</code>, <code>p</code>, <code>button</code>, <code>div</code>
+</p>
+<p>
+<strong>Что найдёт:</strong>
+</p>
+<ul>
+<li>
+<code>h1</code> — все заголовки первого уровня;</li>
+<li>
+<code>p</code> — все абзацы;</li>
+<li>
+<code>button</code> — все кнопки;</li>
+<li>
+<code>div</code> — все контейнеры <code>&lt;div&gt;</code>.</li>
+</ul>
+</article>
+        <article class="syntax-example">
+<h4>Селектор по классу (<code>.класс</code>)</h4>
+<p>Находит все элементы с указанным классом в атрибуте <code>class</code>. Несколько классов записываются подряд, без пробела.</p>
+<p>
+<strong>Селекторы:</strong> <code>.card</code>, <code>.card__title</code>, <code>.card.featured</code>
+</p>
+<p>
+<strong>Что найдёт:</strong>
+</p>
+<ul>
+<li>
+<code>.card</code> — все элементы с классом <code>card</code>;</li>
+<li>
+<code>.card__title</code> — все элементы с классом <code>card__title</code>;</li>
+<li>
+<code>.card.featured</code> — элементы, у которых одновременно есть классы <code>card</code> и <code>featured</code>.</li>
+</ul>
+<p>Элемент может содержать и другие классы: например, <code>class="card featured compact"</code> тоже соответствует селектору <code>.card.featured</code>. Для точного совпадения всей строки классов можно использовать <code>[class="card featured"]</code>, но такой селектор зависит от порядка классов и не допускает дополнительных классов.</p>
+</article>
+        <article class="syntax-example">
+<h4>Селектор по идентификатору (<code>#id</code>)</h4>
+<p>Находит элемент с уникальным идентификатором <code>id</code>. На странице должен быть только один такой элемент.</p>
+<p>
+<strong>Селекторы:</strong> <code>#salad-cat</code>, <code>#confused-cat</code>, <code>#bread-cat</code>
+</p>
+<p>
+<strong>Что найдёт:</strong>
+</p>
+<ul>
+<li>
+<code>#salad-cat</code> — элемент с <code>id="salad-cat"</code>;</li>
+<li>
+<code>#confused-cat</code> — элемент с <code>id="confused-cat"</code>;</li>
+<li>
+<code>#bread-cat</code> — элемент с <code>id="bread-cat"</code>.</li>
+</ul>
+</article>
+        <article class="syntax-example">
+<h4>Селектор по атрибуту (<code>[атрибут="значение"]</code>)</h4>
+<p>Атрибут можно проверять с точным значением или только по наличию. Несколько условий записываются подряд.</p>
+<p>
+<strong>Селекторы:</strong> <code>[data-type]</code>, <code>[data-type="description"]</code>, <code>[data-type="description"][aria-label="Карточка"]</code>, <code>[class~="card"]</code>, <code>[class="card featured"]</code>
+</p>
+<p>
+<strong>Что найдёт:</strong>
+</p>
+<ul>
+<li>
+<code>[data-type]</code> — элементы, у которых есть атрибут <code>data-type</code> с любым значением;</li>
+<li>
+<code>[data-type="description"]</code> — элементы, у которых значение <code>data-type</code> в точности равно <code>description</code>;</li>
+<li>
+<code>[data-type="description"][aria-label="Карточка"]</code> — элементы, у которых одновременно совпадают оба атрибута;</li>
+<li>
+<code>[class~="card"]</code> — элементы, в списке классов которых есть отдельный класс <code>card</code>;</li>
+<li>
+<code>[class="card featured"]</code> — элементы, у которых вся строка атрибута <code>class</code> в точности совпадает с указанной.</li>
+</ul>
+<div class="operator-reference">
+<h5>Способы сравнения значения</h5>
+<dl>
+<div><dt><code>[href^="https://"]</code></dt><dd>значение начинается с <code>https://</code></dd></div>
+<div><dt><code>[src$=".png"]</code></dt><dd>значение заканчивается на <code>.png</code></dd></div>
+<div><dt><code>[class*="advert"]</code></dt><dd>значение содержит строку <code>advert</code> в любом месте</dd></div>
+<div><dt><code>[class~="card"]</code></dt><dd>список слов, разделённых пробелами, содержит отдельное слово <code>card</code></dd></div>
+<div><dt><code>[lang|="ru"]</code></dt><dd>значение равно <code>ru</code> или начинается с <code>ru-</code>, например <code>ru-RU</code></dd></div>
+<div><dt><code>[aria-label*="реклама" i]</code></dt><dd>значение содержит слово «реклама» без учёта регистра</dd></div>
+</dl>
+</div>
+<p>Селектор проверяет только перечисленные в нём атрибуты и не запрещает остальные. Например, <code>[data-type="description"][aria-label="Карточка"]</code> найдёт элемент <code>&lt;div data-type="description" aria-label="Карточка" title="Подробнее"&gt;</code>: дополнительный атрибут <code>title</code> не мешает совпадению. Обычный CSS-селектор не умеет потребовать, чтобы у элемента не было никаких других атрибутов.</p>
+</article>
+        <article class="syntax-example">
+<h4>Комбинированные селекторы</h4>
+<p>Тег, класс, идентификатор и условия по атрибутам можно объединять без пробелов, чтобы все признаки относились к одному элементу.</p>
+<p>
+<strong>Селекторы:</strong> <code>h2.card__title</code>, <code>div.card.featured</code>, <code>div[data-type="description"]</code>, <code>article.card[data-type="advertisement"][aria-label="Реклама"]</code>
+</p>
+<p>
+<strong>Что найдёт:</strong>
+</p>
+<ul>
+<li>
+<code>h2.card__title</code> — <code>&lt;h2&gt;</code> с классом <code>card__title</code>;</li>
+<li>
+<code>div.card.featured</code> — <code>&lt;div&gt;</code> с классами <code>card</code> и <code>featured</code>, при этом другие классы разрешены;</li>
+<li>
+<code>div[data-type="description"]</code> — <code>&lt;div&gt;</code> с указанным атрибутом, при этом другие атрибуты разрешены;</li>
+<li>
+<code>article.card[data-type="advertisement"][aria-label="Реклама"]</code> — <code>&lt;article&gt;</code> с классом <code>card</code>, у которого значения атрибутов в точности равны <code>data-type="advertisement"</code> и <code>aria-label="Реклама"</code>.</li>
+</ul>
+</article>
+        <article class="syntax-example">
+<h4>Селектор потомка (пробел)</h4>
+<p>Находит элементы, которые находятся <strong>внутри</strong> другого элемента на любом уровне вложенности.</p>
+<p>
+<strong>Селектор:</strong> <code>.card .btn</code>
+</p>
+<p>
+<strong>Что найдёт:</strong> все элементы с классом <code>btn</code>, которые находятся внутри элемента с классом <code>card</code>.</p>
+</article>
+        <article class="syntax-example">
+<h4>Селектор дочернего элемента (<code>&gt;</code>)</h4>
+<p>Находит элементы, которые являются <strong>непосредственными</strong> потомками другого элемента. Поиск идёт только на один уровень вглубь.</p>
+<p>
+<strong>Селектор:</strong> <code>.card__body &gt; .card__title</code>
+</p>
+<p>
+<strong>Что найдёт:</strong> элементы с классом <code>card__title</code>, которые являются прямыми детьми элемента с классом <code>card__body</code>.</p>
+</article>
+        <article class="syntax-example">
+<h4>Селектор соседнего элемента (<code>+</code>)</h4>
+<p>Находит элемент, который является <strong>следующим соседним</strong> для другого элемента на том же уровне вложенности.</p>
+<p>
+<strong>Селектор:</strong> <code>#confused-cat + .card__description</code>
+</p>
+<p>
+<strong>Что найдёт:</strong> абзац <code>&lt;p&gt;</code>, который идёт сразу за элементом с <code>id="confused-cat"</code>.</p>
+</article>
+        <article class="syntax-example">
+<h4>Псевдокласс для выбора по позиции</h4>
+<p>Позволяет выбирать элементы по их положению среди «братьев и сестёр».</p>
+<p>
+<strong>Селектор:</strong> <code>.card__actions :nth-child(2)</code>
+</p>
+<p>
+<strong>Что найдёт:</strong> второй дочерний элемент внутри элемента с классом <code>card__actions</code>.</p>
+</article>
+      </div>
+      <p class="selector-limit">
+<strong>У обычных CSS-селекторов есть ограничения.</strong> Они не умеют описывать количество атрибутов или классов без их перечисления, собственный текст элемента, произвольный текст внутри него, регулярные выражения и шаблоны имён атрибутов. Например, запись <code>[data-*]</code> не является стандартным CSS-селектором. Для таких случаев можно использовать правила BlockIt — расширение стандартного синтаксиса CSS-селекторов, в котором доступны конструкции <code>[data-*]</code>, <code>:attr-name(/^data-/)</code> и другие дополнительные условия. <a href="../rules/ru/index.html">Открыть документацию по синтаксису BlockIt</a>.</p>
+
+      <div class="embedded-contexts" id="embedded-contexts">
+        <h3>Что такое iframe и Shadow DOM</h3>
+        <p>
+<strong>iframe</strong> — это отдельная веб-страница, встроенная внутрь другой страницы. Её содержимое находится в собственном документе, поэтому обычный поиск из родительской страницы не может просто пройти внутрь.</p>
+        <div class="structure-example">
+          <span>Как iframe выглядит в HTML</span>
+          <pre><code>&lt;main&gt;
+  &lt;h1&gt;Основная страница&lt;/h1&gt;
+  &lt;iframe src="advertisement.html"&gt;&lt;/iframe&gt;
+&lt;/main&gt;</code></pre>
+          <p>Разметка из <code>advertisement.html</code> загружается как отдельный документ внутри <code>&lt;iframe&gt;</code>.</p>
+        </div>
+        <p>
+<strong>Shadow DOM</strong> — это изолированное внутреннее дерево компонента. Сайт использует его, чтобы отделить разметку компонента от остальной страницы; закрытый теневой корень дополнительно скрывает это дерево от обычного кода страницы.</p>
+        <div class="structure-example">
+          <span>Как Shadow DOM выглядит в DevTools</span>
+          <pre><code>&lt;video-player&gt;
+  #shadow-root (open)
+    &lt;button class="play"&gt;Воспроизвести&lt;/button&gt;
+&lt;/video-player&gt;</code></pre>
+          <p>Кнопка находится внутри теневого корня компонента <code>&lt;video-player&gt;</code>, а не в обычном дереве основной страницы.</p>
+        </div>
+        <p>Для блокировщиков это создаёт границы поиска: правило нужно выполнять не только в основном документе, но и внутри каждого доступного iframe и теневого корня. Не все блокировщики это делают. BlockIt применяет CSS-селекторы и расширенные правила внутри iframe и Shadow DOM, однако XPath работает только в документах: через границу Shadow DOM он не проходит.</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="rules">
+      <h2>Управление правилами <a class="top-link" href="#top">В начало</a>
+</h2>
+      <p>Созданные правила отображаются в списке для текущего сайта и в списке правил без привязки к домену. Для правил из конструктора доступны редактирование и удаление; отключённые правила остаются в списке с соответствующей пометкой.</p>
+      <h3>Экспорт и импорт</h3>
+      <p>Экспорт сохраняет правила в файл, а импорт добавляет правила из такого файла или заменяет ими текущий список. Эта функция нужна для переноса настроек и обмена ими между устройствами.</p>
+      <div class="gallery" data-gallery>
+        <div class="gallery-stage">
+          <button class="gallery-control prev" type="button" aria-label="Предыдущий шаг">‹</button>
+          <figure class="gallery-slide active" data-title="Выберите файл" data-caption="В продвинутом режиме нажмите «Импортировать», затем «Выбрать файл» и укажите файл с правилами.">
+<img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/10.png" alt="Выбор файла с правилами для импорта">
+</figure>
+          <figure class="gallery-slide" data-title="Выберите способ импорта" data-caption="Добавьте импортируемые правила к текущему списку или замените список целиком.">
+<img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/11.png" alt="Окно импорта правил">
+</figure>
+          <figure class="gallery-slide" data-title="Проверьте результат" data-caption="После успешного импорта появится сообщение, а новые правила будут видны в списке.">
+<img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/12.png" alt="Результат импорта правил">
+</figure>
+          <button class="gallery-control next" type="button" aria-label="Следующий шаг">›</button>
+        </div>
+        <div class="gallery-caption">
+<span class="gallery-caption-number">1</span>
+<div>
+<b>
+</b>
+<span>
+</span>
+</div>
+</div>
+        <div class="gallery-dots" aria-label="Шаги импорта правил">
+</div>
+      </div>
+    </section>
+
+    <section class="chapter faq" id="faq">
+      <h2>Решение проблем <a class="top-link" href="#top">В начало</a>
+</h2>
+      <h4>Вместе с рекламой заблокировалось что-то лишнее</h4>
+      <p>Это происходит, когда выбранный селектор оказался слишком «широким» и находит не только рекламный блок, но и другие элементы на странице.</p>
+      <p>
+<strong>Что делать:</strong>
+</p>
+      <ul>
+        <li>Удалите созданное правило (см. следующий пункт).</li>
+        <li>Выберите более точный элемент: поднимитесь или опуститесь по дереву HTML, чтобы найти контейнер, который содержит <em>только</em> рекламный блок.</li>
+        <li>Проверьте количество найденных элементов в расширении перед добавлением правила — идеально, чтобы было <strong>1</strong>.</li>
+      </ul>
+      <h4>Как удалить правило?</h4>
+      <p>Откройте расширение BlockIt, найдите правило в списке «Активные правила» и нажмите кнопку «Удалить» рядом с ним. Чтобы изменения вступили в силу, нужно <strong>перезагрузить страницу</strong> (нажмите <kbd>F5</kbd> или обновите вкладку).</p>
+      <h4>Созданное правило не сработало</h4>
+      <ul>
+        <li>
+<strong>Возможная причина №1. Выбран не самый внешний элемент:</strong> Попробуйте подняться по дереву HTML выше и скопировать селектор для родительского контейнера.</li>
+        <li>
+<strong>Возможная причина №2. Сайт использует динамические классы (обфускацию):</strong> В этом случае скопированный селектор может перестать работать. Используйте XPath или напишите селектор вручную.</li>
+        <li>
+<strong>Возможная причина №3. Страница изменила структуру после создания правила:</strong> Проверьте актуальный HTML элемента и счётчик совпадений. Если сайт перестроил блок, заново скопируйте селектор или уточните правило в конструкторе.</li>
+        <li>
+<strong>Возможная причина №4. Правило создано для другого домена:</strong> Проверьте, что правило находится в группе «Для этого сайта» или «Для остальных сайтов».</li>
+      </ul>
+      <h4>Селектор не находит ни одного элемента</h4>
+      <ul>
+        <li>
+<strong>Проверьте ваш селектор:</strong> Откройте DevTools (F12) и перейдите на вкладку «Elements» (или «Элементы»). Нажмите Ctrl + F (или Cmd + F на Mac), введите ваш селектор в строку поиска. Если строка поиска не находит ни одного элемента, значит, ваш селектор неверен.</li>
+        <li>
+<strong>Элемент подгружается после выполнения скрипта:</strong> Некоторые элементы появляются с задержкой. Попробуйте обновить страницу или подождать.</li>
+      </ul>
+      <h4>После удаления элемента вёрстка «поехала» и выглядит хуже, чем с рекламой</h4>
+      <ul>
+        <li>
+<strong>Решение:</strong> Удалите созданное правило и создайте его заново, но выберите режим <strong>«Скрыть»</strong>. Это позволит сохранить место на странице и не нарушить вёрстку.</li>
+      </ul>
+      <h4>Селектор находит слишком много элементов</h4>
+      <p>Сначала проверьте счётчик и убедитесь, какие именно элементы попали в результаты. Если у нужного элемента есть устойчивый класс или атрибут, добавьте его в селектор. Если простого селектора недостаточно, откройте конструктор правила: в нём можно учитывать текст, количество классов и атрибутов, позицию среди сиблингов или связи с окружающими элементами. После уточнения снова проверьте правило на текущей странице и после обновления.</p>
+      <h4>Ничего не помогает</h4>
+      <p>
+<a class="product-link" href="https://formacode.dev/ru/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> помогает найти признаки и части структуры, которые остаются стабильными после нескольких загрузок страницы. Используйте найденные признаки в конструкторе BlockIt, чтобы вручную собрать более устойчивое правило.</p>
+      <p>Если вы уже проверили разные способы, но правило всё равно не срабатывает или расширение работает с ошибками, отправьте обращение через <a href="../../feedback.html">форму «Обратная связь»</a> в BlockIt. Укажите адрес страницы, приложите правило и, если возможно, скриншоты — это поможет разобраться в проблеме.</p>
+    </section>
+    <div class="image-lightbox" id="imageLightbox" hidden role="dialog" aria-modal="true" aria-label="Просмотр скриншота">
+      <button class="lightbox-close" type="button" aria-label="Закрыть просмотр">×</button>
+      <button class="lightbox-nav lightbox-prev" type="button" aria-label="Предыдущий скриншот">‹</button>
+      <div class="lightbox-content">
+<img alt="">
+<div class="lightbox-caption">
+<b>
+</b>
+<span>
+</span>
+</div>
+</div>
+      <button class="lightbox-nav lightbox-next" type="button" aria-label="Следующий скриншот">›</button>
+    </div>
+    <footer class="footer">Черновая версия инструкции BlockIt. Страница создана отдельно от оригинальной инструкции для согласования структуры и текста.</footer>
+  </main>
+  <script src="instruction-draft.js">
+</script>
+</body>
+</html>

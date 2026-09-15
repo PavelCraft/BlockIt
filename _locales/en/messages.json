@@ -7,6 +7,34 @@
     "message": "Block HTML elements on any website using selectors",
     "description": "Description of the extension"
   },
+  "welcomeTitle": { "message": "Welcome to BlockIt", "description": "Welcome page title" },
+  "welcomeGuide": { "message": "Open instructions", "description": "Instructions link" },
+  "welcomeEyebrow": { "message": "Extension installed", "description": "Welcome page label" },
+  "welcomeHeroTitle": { "message": "Welcome to BlockIt", "description": "Welcome page heading" },
+  "welcomeHeroDescription": { "message": "Pin the extension to your Chrome toolbar to block unwanted elements on a page in just a few clicks.", "description": "Welcome page description" },
+  "welcomeMenuTitle": { "message": "Extensions", "description": "Extensions menu heading" },
+  "welcomeStep1Title": { "message": "Open the extensions menu", "description": "First pinning step" },
+  "welcomeStep1Description": { "message": "Click the Extensions icon on the right side of the Chrome toolbar.", "description": "First step description" },
+  "welcomeStep2Title": { "message": "Pin BlockIt", "description": "Second pinning step" },
+  "welcomeStep2Description": { "message": "Click the pin icon next to the extension name. Its icon will appear on the browser toolbar.", "description": "Second step description" },
+  "welcomeStep3Title": { "message": "Start blocking", "description": "Third pinning step" },
+  "welcomeStep3Description": { "message": "Open a page, click the BlockIt icon, then add a selector or create a rule.", "description": "Third step description" },
+  "welcomeClose": { "message": "Got it", "description": "Welcome close button" },
+  "welcomeInstructions": { "message": "Learn more about the extension", "description": "Detailed instructions link" },
+  "htmlRuleTitle": { "message": "Create a rule from HTML", "description": "HTML rule section title" },
+  "htmlRuleHelp": { "message": "Copy the required element in DevTools and paste it here.", "description": "HTML rule section help" },
+  "quickRuleTitle": { "message": "Quick rule", "description": "Quick HTML rule title" },
+  "quickRuleHelp": { "message": "Use the tag and selected attributes.", "description": "Quick HTML rule description" },
+  "parseHtmlBtn": { "message": "Parse HTML", "description": "Parse HTML button" },
+  "parsedRuleTitle": { "message": "Quick rule settings", "description": "Parsed HTML result title" },
+  "parsedRuleReady": { "message": "HTML parsed", "description": "Parsed HTML status" },
+  "builderFollowup": { "message": "Need text, position or surrounding elements?", "description": "Rule builder follow-up hint" },
+  "openThisInBuilder": { "message": "Open this HTML in the builder →", "description": "Open parsed HTML in rule builder" },
+  "exactRuleTitle": { "message": "Precise rule", "description": "Precise HTML rule title" },
+  "exactRuleHelp": { "message": "Add conditions for text, quantity, position and surrounding elements.", "description": "Precise HTML rule description" },
+  "openBuilderBtn": { "message": "Open builder", "description": "Open rule builder button" },
+  "generatedRuleLabel": { "message": "Ready rule", "description": "Generated rule label" },
+  "generatedRuleHelp": { "message": "Edit the generated selector if necessary.", "description": "Generated selector help" },
   "pasteHtmlLabel": {
     "message": "Paste copied HTML element:",
     "description": "Label for HTML input"
@@ -76,7 +104,7 @@
     "description": "Hint for remove mode"
   },
   "addRuleBtn": {
-    "message": "➕ Add Rule",
+    "message": "Add Rule",
     "description": "Add rule button text"
   },
   "noAttributes": {
@@ -348,11 +376,11 @@
     "description": "Button to hide advanced mode"
   },
   "selectorLabel": {
-    "message": "Enter a CSS selector, XPath, or StableHTMLFinder rule:",
+    "message": "Enter a CSS selector, XPath, or a BlockIt rule:",
     "description": "Label for selector input"
   },
   "selectorPlaceholder": {
-    "message": "e.g., #ad-container, //div[@id='ad'], or SHF1:{...}",
+    "message": "Example: #ad-container, //div[@id='ad'], or div:attr-count(=2)",
     "description": "Placeholder for selector input"
   },
   "toolsDivider": {
