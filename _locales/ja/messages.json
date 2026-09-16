@@ -271,6 +271,8 @@
     "message": "無効な形式です。ルールの配列または 'rules' フィールドを持つオブジェクトが必要です。",
     "description": "無効な形式エラー"
   },
+  "importSettings": { "message": "設定" },
+  "errorInvalidJSON": { "message": "JSON が無効です。ファイルの内容を確認してください。" },
   "errorMissingSelector": {
     "message": "ルール #{index} に 'selector' フィールドがありません。",
     "description": "セレクタフィールド欠落エラー"

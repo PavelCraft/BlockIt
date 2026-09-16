@@ -4,9 +4,10 @@ const MAX_TOTAL_BYTES = 10 * 1024 * 1024;
 const FEEDBACK_ENDPOINT = '';
 let attachments = [];
 let context = {};
+const tr = (source, values) => globalThis.BlockItUI18n?.t(source, values) || source;
 
 const $ = selector => document.querySelector(selector);
-const formatBytes = bytes => bytes < 1024 * 1024 ? `${Math.max(1, Math.round(bytes / 1024))} КБ` : `${(bytes / 1024 / 1024).toFixed(2)} МБ`;
+const formatBytes = bytes => bytes < 1024 * 1024 ? `${Math.max(1, Math.round(bytes / 1024))} ${tr('КБ')}` : `${(bytes / 1024 / 1024).toFixed(2)} ${tr('МБ')}`;
 
 function safeDomain(rawUrl) {
   try { return new URL(rawUrl).hostname || ''; } catch { return ''; }
@@ -61,15 +62,15 @@ function renderAttachments() {
   const list = $('#attachmentList');
   list.replaceChildren();
   const total = attachments.reduce((sum, item) => sum + item.file.size, 0);
-  $('#fileCount').textContent = attachments.length ? `${attachments.length} из ${MAX_FILES} файлов` : 'Файлы не выбраны';
-  $('#fileSize').textContent = `${formatBytes(total)} из 10 МБ`;
+  $('#fileCount').textContent = attachments.length ? tr('{count} из {max} файлов', { count: attachments.length, max: MAX_FILES }) : tr('Файлы не выбраны');
+  $('#fileSize').textContent = tr('{size} из 10 МБ', { size: formatBytes(total) });
   attachments.forEach((item, index) => {
     const row = document.createElement('div'); row.className = 'attachment';
     const image = document.createElement('img'); image.src = item.previewUrl; image.alt = '';
     const info = document.createElement('div');
     const name = document.createElement('strong'); name.textContent = item.file.name;
-    const size = document.createElement('small'); size.textContent = `${formatBytes(item.file.size)} · ${item.file.type || 'изображение'}`;
-    const remove = document.createElement('button'); remove.type = 'button'; remove.textContent = 'Удалить';
+    const size = document.createElement('small'); size.textContent = `${formatBytes(item.file.size)} · ${item.file.type || tr('изображение')}`;
+    const remove = document.createElement('button'); remove.type = 'button'; remove.textContent = tr('Удалить');
     remove.addEventListener('click', () => { revokeAttachment(item); attachments.splice(index, 1); showFileError(); renderAttachments(); });
     info.append(name, size); row.append(image, info, remove); list.append(row);
   });
@@ -78,10 +79,10 @@ function renderAttachments() {
 function addFiles(files) {
   showFileError();
   for (const file of files) {
-    if (!file.type.startsWith('image/')) { showFileError(`«${file.name}» не является изображением.`); continue; }
-    if (attachments.length >= MAX_FILES) { showFileError('Можно прикрепить не более 5 изображений.'); break; }
+    if (!file.type.startsWith('image/')) { showFileError(tr('«{name}» не является изображением.', { name: file.name })); continue; }
+    if (attachments.length >= MAX_FILES) { showFileError(tr('Можно прикрепить не более 5 изображений.')); break; }
     const currentSize = attachments.reduce((sum, item) => sum + item.file.size, 0);
-    if (currentSize + file.size > MAX_TOTAL_BYTES) { showFileError('Общий размер изображений не должен превышать 10 МБ.'); continue; }
+    if (currentSize + file.size > MAX_TOTAL_BYTES) { showFileError(tr('Общий размер изображений не должен превышать 10 МБ.')); continue; }
     attachments.push({ file, previewUrl: URL.createObjectURL(file) });
   }
   renderAttachments();
@@ -95,12 +96,12 @@ async function prepareReport(event) {
   event.preventDefault();
   if (!FEEDBACK_ENDPOINT) return;
   const type = new FormData(event.currentTarget).get('problemType');
-  if (!type) return showFormMessage('Выберите, что произошло.', true);
+  if (!type) return showFormMessage(tr('Выберите, что произошло.'), true);
   const email = $('#contactEmail').value.trim();
-  if (email && !$('#contactEmail').checkValidity()) return showFormMessage('Проверьте адрес электронной почты.', true);
+  if (email && !$('#contactEmail').checkValidity()) return showFormMessage(tr('Проверьте адрес электронной почты.'), true);
   const button = $('#sendReport');
   button.disabled = true;
-  button.textContent = 'Отправляем…';
+  button.textContent = tr('Отправляем…');
   try {
     const body = new FormData();
     body.append('report', new Blob([JSON.stringify({
@@ -117,18 +118,21 @@ async function prepareReport(event) {
     })], { type: 'application/json' }), 'report.json');
     attachments.forEach(({ file }) => body.append('screenshots', file, file.name));
     const response = await fetch(FEEDBACK_ENDPOINT, { method: 'POST', body });
-    if (!response.ok) throw new Error(`сервер ответил с кодом ${response.status}`);
-    showFormMessage('Сообщение отправлено. Спасибо, что помогаете улучшать BlockIt.');
+    if (!response.ok) throw Object.assign(new Error(tr('сервер ответил с кодом {status}', { status: response.status })), { localized: true });
+    showFormMessage(tr('Сообщение отправлено. Спасибо, что помогаете улучшать BlockIt.'));
     event.currentTarget.reset();
     attachments.forEach(revokeAttachment);
     attachments = [];
     renderAttachments();
     $('#descriptionCount').textContent = '0';
   } catch (error) {
-    showFormMessage(`Не удалось отправить сообщение: ${error.message}`, true);
+    const detail = error?.localized
+      ? error.message
+      : tr('Не удалось связаться с сервером. Проверьте подключение и повторите попытку.');
+    showFormMessage(tr('Не удалось отправить сообщение: {message}', { message: detail }), true);
   } finally {
     button.disabled = false;
-    button.textContent = 'Отправить';
+    button.textContent = tr('Отправить');
   }
 }
 
@@ -138,9 +142,9 @@ async function init() {
   await chrome.storage.session.remove('feedbackDraft');
   const manifest = chrome.runtime.getManifest();
   $('#extensionVersion').textContent = manifest.version;
-  $('#pageDomain').textContent = safeDomain(context.pageUrl) || 'Не определена';
+  $('#pageDomain').textContent = safeDomain(context.pageUrl) || tr('Не определена');
   $('#sourceName').textContent = context.sourceLabel || 'BlockIt';
-  $('#sourceLabel').textContent = context.source === 'rule-builder' ? 'Текущее правило' : 'Состояние расширения';
+  $('#sourceLabel').textContent = context.source === 'rule-builder' ? tr('Текущее правило') : tr('Состояние расширения');
   updateTechnicalPreview();
 }
 
@@ -151,4 +155,7 @@ $('#includeFullUrl').addEventListener('change', updateTechnicalPreview);
 $('#closePage').addEventListener('click', () => window.close());
 $('#feedbackForm').addEventListener('submit', prepareReport);
 window.addEventListener('beforeunload', () => attachments.forEach(revokeAttachment));
-init().catch(error => showFormMessage(`Не удалось загрузить контекст: ${error.message}`, true));
+init().catch(error => {
+  console.warn('[BlockIt] Feedback context:', error);
+  showFormMessage(tr('Не удалось загрузить контекст.'), true);
+});

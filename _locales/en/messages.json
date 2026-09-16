@@ -271,6 +271,8 @@
     "message": "Invalid format. Expected an array of rules or an object with a 'rules' field.",
     "description": "Error when format is invalid"
   },
+  "importSettings": { "message": "Settings" },
+  "errorInvalidJSON": { "message": "Invalid JSON. Check the file contents." },
   "errorMissingSelector": {
     "message": "Rule #{index} does not contain a 'selector' field.",
     "description": "Error when rule is missing selector field"

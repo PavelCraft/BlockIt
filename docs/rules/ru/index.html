@@ -1,4 +1,4 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Синтаксис правил BlockIt 1</title><link rel="stylesheet" href="../styles.css"></head><body><main><a class="toplink" href="../en/">English version</a><h1>Синтаксис правил BlockIt</h1><p class="version">Версия синтаксиса 1</p><p>Правила BlockIt расширяют CSS-селекторы условиями, которые невозможно или неудобно надёжно выразить обычным CSS. Правило остаётся похожим на селектор: сначала указывается CSS-часть, затем псевдоклассы BlockIt.</p><pre><code>div.card:attr-count(=2):has(> span:own-text("Реклама"))</code></pre>
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Синтаксис правил BlockIt 1</title><link rel="stylesheet" href="../styles.css"></head><body><main><a class="toplink" href="../en/index.html" lang="en">English version</a><h1>Синтаксис правил BlockIt</h1><p class="version">Версия синтаксиса 1</p><p>Правила BlockIt расширяют CSS-селекторы условиями, которые невозможно или неудобно надёжно выразить обычным CSS. Правило остаётся похожим на селектор: сначала указывается CSS-часть, затем псевдоклассы BlockIt.</p><pre><code>div.card:attr-count(=2):has(> span:own-text("Реклама"))</code></pre>
 <h2>Основа CSS</h2><p>Поддерживаются теги, идентификаторы, классы, атрибуты, списки селекторов и стандартные комбинаторы:</p><pre><code>div.notice
 #banner
 section[data-kind="ad"]
@@ -6,15 +6,79 @@ main > section
 .anchor + .target
 .anchor ~ .target
 article, aside</code></pre><p>Можно использовать нативные псевдоклассы CSS, которые поддерживает браузер. Расширения BlockIt могут находиться внутри <code>:has()</code>, <code>:is()</code>, <code>:where()</code> и <code>:not()</code>.</p>
-<h2>Значения и регулярные выражения</h2><p>Текстовые значения рекомендуется записывать как строки JSON. Псевдоклассы для шаблонов принимают регулярные выражения JavaScript, например <code>/^data-[a-z]+$/i</code>. Нумерация позиций и результатов начинается с единицы.</p>
-<h2>Атрибуты и классы</h2><table><tr><th>Синтаксис</th><th>Значение</th></tr><tr><td><code>:attr-count(=3)</code></td><td>Ровно три атрибута. Операторы: <code>=</code>, <code>&lt;</code>, <code>&lt;=</code>, <code>&gt;</code>, <code>&gt;=</code>. <code>:attribute-count()</code> — синоним.</td></tr><tr><td><code>:class-count(&gt;=2)</code></td><td>Количество отдельных классов.</td></tr><tr><td><code>:attr-name(/^data-/)</code></td><td>Имя хотя бы одного атрибута соответствует регулярному выражению.</td></tr><tr><td><code>:attr(/^data-/, /^ad-/)</code></td><td>Имя и значение одного атрибута соответствуют двум выражениям.</td></tr><tr><td><code>[data-*]</code></td><td>Существует атрибут, имя которого начинается с <code>data-</code>. Можно добавить оператор значения.</td></tr><tr><td><code>:class-name(/^card-/)</code></td><td>Хотя бы один класс соответствует выражению.</td></tr><tr><td><code>:attrs(["id", /^data-/])</code></td><td>Существуют все перечисленные точные имена или шаблоны имён.</td></tr><tr><td><code>:style-property("--adaptive-width")</code></td><td>В inline-атрибуте <code>style</code> существует указанное CSS-свойство; значение игнорируется.</td></tr></table>
+<h2>Значения и регулярные выражения</h2><p>Текстовые значения заключаются в двойные кавычки, например <code>:text("Реклама")</code>. Чтобы записать двойную кавычку или обратную косую черту внутри значения, поставьте перед ней обратную косую черту: <code>\"</code> или <code>\\</code>. Псевдоклассы для шаблонов принимают регулярные выражения JavaScript, например <code>/^data-[a-z]+$/i</code>. Нумерация позиций и результатов начинается с единицы.</p>
+<h2>Атрибуты и классы</h2>
+<table>
+<tr><th>Синтаксис</th><th>Значение</th></tr>
+<tr><td><code>:attr-count(=3)</code></td><td>Ровно три атрибута. Операторы: <code>=</code>, <code>&lt;</code>, <code>&lt;=</code>, <code>&gt;</code>, <code>&gt;=</code>. <code>:attribute-count()</code> — синоним.</td></tr>
+<tr><td><code>:class-count(&gt;=2)</code></td><td>Количество отдельных классов.</td></tr>
+<tr><td><code>:attr-name(/^data-/)</code></td><td>Имя хотя бы одного атрибута соответствует регулярному выражению.</td></tr>
+<tr><td><code>:attr(/^data-/, /^ad-/)</code></td><td>Имя и значение одного атрибута соответствуют двум выражениям.</td></tr>
+<tr><td><code>[data-*]</code></td><td>Существует атрибут, имя которого начинается с <code>data-</code>. После шаблона имени можно указать условие для значения атрибута.</td></tr>
+<tr><td><code>:class-name(/^card-/)</code></td><td>Хотя бы один класс соответствует выражению.</td></tr>
+<tr><td><code>:attrs(["id", /^data-/])</code></td><td>Существуют все перечисленные точные имена или шаблоны имён.</td></tr>
+<tr><td><code>:style-property("--adaptive-width")</code></td><td>В inline-атрибуте <code>style</code> существует указанное CSS-свойство; значение игнорируется.</td></tr>
+</table>
 <h2>Текст и HTML</h2><table><tr><th>Синтаксис</th><th>Значение</th></tr><tr><td><code>:text("Реклама")</code></td><td>Точное совпадение нормализованного текста элемента и потомков.</td></tr><tr><td><code>:own-text("Реклама")</code></td><td>Точное совпадение только собственного текста.</td></tr><tr><td><code>:text-starts()</code>, <code>:text-ends()</code>, <code>:text-contains()</code>, <code>:text-matches()</code></td><td>Начало, конец, подстрока или регулярное выражение для всего текста.</td></tr><tr><td><code>:own-text-starts()</code>, <code>:own-text-ends()</code>, <code>:own-text-contains()</code>, <code>:own-text-matches()</code></td><td>Те же режимы только для собственных текстовых узлов.</td></tr><tr><td><code>:html(/шаблон/)</code></td><td>Сериализованный HTML элемента соответствует выражению.</td></tr></table>
-<h2>Структура и связи</h2><table><tr><th>Синтаксис</th><th>Значение</th></tr><tr><td><code>:has(селектор)</code></td><td>Есть подходящий потомок или элемент относительного селектора.</td></tr><tr><td><code>:within(селектор)</code></td><td>Есть подходящий предок; возможен переход через host Shadow DOM.</td></tr><tr><td><code>:near(селектор)</code></td><td>Есть подходящий sibling в любом направлении и на любом расстоянии.</td></tr><tr><td><code>:sibling-distance(previous, 2, селектор)</code></td><td>Второй предыдущий sibling соответствует селектору.</td></tr><tr><td><code>:sibling-distance(next, 3, селектор)</code></td><td>Третий следующий sibling соответствует селектору.</td></tr><tr><td><code>:children(селектор, &gt;=2)</code></td><td>Количество подходящих непосредственных детей удовлетворяет условию.</td></tr><tr><td><code>:sibling-position(2)</code></td><td>Элемент является вторым ребёнком родителя.</td></tr><tr><td><code>:matches-position(2)</code></td><td>Оставить второй результат полного правила. Несколько номеров разделяются запятыми или пробелами.</td></tr></table>
+<h2>Структура и связи</h2><table><tr><th>Синтаксис</th><th>Значение</th></tr><tr><td><code>:has(селектор)</code></td><td>Есть подходящий потомок или элемент относительного селектора.</td></tr><tr><td><code>:within(селектор)</code></td><td>Есть подходящий предок; возможен переход через host Shadow DOM.</td></tr><tr><td><code>:near(селектор)</code></td><td>Есть подходящий sibling в любом направлении и на любом расстоянии.</td></tr><tr><td><code>:sibling-distance(previous, 2, селектор)</code></td><td>Второй предыдущий sibling соответствует селектору.</td></tr><tr><td><code>:sibling-distance(next, 3, селектор)</code></td><td>Третий следующий sibling соответствует селектору.</td></tr><tr><td><code>:children(селектор, &gt;=2)</code></td><td>Количество подходящих непосредственных детей удовлетворяет условию.</td></tr><tr><td><code>:sibling-position(2)</code></td><td>Элемент является вторым ребёнком родителя.</td></tr><tr><td><code>:matches-position(2)</code></td><td>Из всех элементов, найденных полным правилом, блокировать только второй. Несколько номеров разделяются запятыми или пробелами.</td></tr></table>
 <h2>Условия живой страницы и доступности</h2><table><tr><th>Синтаксис</th><th>Значение</th></tr><tr><td><code>:visible(...)</code></td><td>Проверяет видимость на живой странице.</td></tr><tr><td><code>:size(...)</code></td><td>Проверяет отображаемый размер.</td></tr><tr><td><code>:style(...)</code></td><td>Проверяет вычисленный стиль.</td></tr><tr><td><code>:property(...)</code></td><td>Проверяет JavaScript-свойство DOM.</td></tr><tr><td><code>:accessible(...)</code></td><td>Проверяет признаки доступности.</td></tr></table><p>Эти условия зависят от состояния браузера и могут быть недоступны при поиске по сохранённому DOM-снимку.</p>
 <h2>Iframe и Shadow DOM</h2><table><tr><th>Синтаксис</th><th>Значение</th></tr><tr><td><code>:in-frame(...)</code></td><td>Ограничивает поиск содержимым iframe.</td></tr><tr><td><code>:in-shadow(...)</code></td><td>Ограничивает поиск Shadow DOM.</td></tr><tr><td><code>:frame-has(селектор)</code></td><td>Документ iframe содержит совпадение.</td></tr><tr><td><code>:has-frame(...)</code></td><td>Элемент содержит iframe, удовлетворяющий условию.</td></tr></table><p>Для cross-origin iframe и закрытых Shadow Root действуют ограничения браузера и разрешений расширения.</p>
-<h2>Примеры</h2><pre><code>div[class]:text-contains("Скрыть рекламу"):near(div.new-menu)
-div.target:sibling-distance(previous, 2, div.new-menu)
-div:style-property("--rc-adaptive-width")
-section:has(> div:attr-count(=2) > span:own-text("Реклама"))
-div:attr-count(=1):class-count(=2):matches-position(2)</code></pre>
+<h2>Примеры правил</h2>
+<p>Примеры ниже показывают, как объединять обычную CSS-часть с условиями BlockIt. Правило может содержать несколько условий одновременно: элемент будет найден, только если выполняются все условия.</p>
+
+<h3>Обычные CSS-селекторы</h3>
+<table>
+<tr><th>Правило</th><th>Что найдёт</th></tr>
+<tr><td><code>article.card[data-type="advertisement"]</code></td><td>Элементы <code>&lt;article&gt;</code>, у которых есть класс <code>card</code> и атрибут <code>data-type</code> с точным значением <code>advertisement</code>. Другие классы и атрибуты не мешают совпадению.</td></tr>
+<tr><td><code>main &gt; aside.promo, section[data-kind="sponsor"]</code></td><td>Либо непосредственные дочерние <code>&lt;aside class="promo"&gt;</code> внутри <code>&lt;main&gt;</code>, либо любые <code>&lt;section&gt;</code> с указанным атрибутом.</td></tr>
+</table>
+
+<h3>Атрибуты и классы</h3>
+<table>
+<tr><th>Правило</th><th>Что найдёт</th></tr>
+<tr><td><code>[data-*]</code></td><td>Элементы с любым атрибутом, имя которого начинается с <code>data-</code>, например <code>&lt;div data-zone="sidebar"&gt;</code>. Значение атрибута может быть любым.</td></tr>
+<tr><td><code>[data-*="advert"]</code></td><td>Элементы, у которых хотя бы один атрибут <code>data-*</code> имеет точное значение <code>advert</code>, например <code>&lt;aside data-kind="advert"&gt;</code>.</td></tr>
+<tr><td><code>[data-*^="ad-"]</code></td><td>Элементы, у которых значение хотя бы одного атрибута <code>data-*</code> начинается с <code>ad-</code>, например <code>&lt;div data-slot="ad-top"&gt;</code>.</td></tr>
+<tr><td><code>[data-*$="-banner"]</code></td><td>Элементы, у которых значение хотя бы одного атрибута <code>data-*</code> заканчивается на <code>-banner</code>, например <code>&lt;section data-kind="top-banner"&gt;</code>.</td></tr>
+<tr><td><code>[data-**="advert"]</code></td><td>Элементы, у которых значение хотя бы одного атрибута <code>data-*</code> содержит строку <code>advert</code>, например <code>&lt;div data-label="sidebar advertisement"&gt;</code>.</td></tr>
+<tr><td><code>div:attr-count(=3):class-count(&gt;=2)</code></td><td>Элементы <code>&lt;div&gt;</code> ровно с тремя атрибутами и как минимум с двумя отдельными классами.</td></tr>
+<tr><td><code>section:attrs(["id", /^data-/])</code></td><td>Элементы <code>&lt;section&gt;</code>, у которых одновременно есть атрибут <code>id</code> и хотя бы один атрибут с именем, начинающимся с <code>data-</code>.</td></tr>
+<tr><td><code>div:attr(/^data-/, /^ad-/)</code></td><td>Элементы <code>&lt;div&gt;</code>, у которых один и тот же атрибут имеет имя, начинающееся с <code>data-</code>, и значение, начинающееся с <code>ad-</code>.</td></tr>
+</table>
+
+<h3>Текст и HTML</h3>
+<table>
+<tr><th>Правило</th><th>Что найдёт</th></tr>
+<tr><td><code>button:own-text("Закрыть")</code></td><td>Кнопки, собственный текст которых после нормализации точно равен слову «Закрыть». Текст вложенных элементов не учитывается.</td></tr>
+<tr><td><code>div.notice:text-contains("Отключите блокировщик")</code></td><td>Элементы <code>&lt;div class="notice"&gt;</code>, в полном тексте которых, включая потомков, встречается указанная фраза.</td></tr>
+<tr><td><code>article:html(/data-slot="ad-[^"]+"/i)</code></td><td>Элементы <code>&lt;article&gt;</code>, в сериализованном HTML которых есть атрибут <code>data-slot</code> со значением, начинающимся с <code>ad-</code>. Регистр не учитывается.</td></tr>
+</table>
+
+<h3>Структура, связи и позиции</h3>
+<table>
+<tr><th>Правило</th><th>Что найдёт</th></tr>
+<tr><td><code>section:has(&gt; div:attr-count(=2) &gt; span:own-text("Реклама"))</code></td><td>Элементы <code>&lt;section&gt;</code> с непосредственным дочерним <code>&lt;div&gt;</code> ровно с двумя атрибутами, внутри которого находится непосредственный <code>&lt;span&gt;</code> с собственным текстом «Реклама».</td></tr>
+<tr><td><code>div.card:within(main.content):near(div.promo)</code></td><td>Элементы <code>&lt;div class="card"&gt;</code>, расположенные внутри <code>&lt;main class="content"&gt;</code> и имеющие сиблинга <code>&lt;div class="promo"&gt;</code>.</td></tr>
+<tr><td><code>div.target:sibling-distance(previous, 2, div.new-menu)</code></td><td>Элементы <code>&lt;div class="target"&gt;</code>, у которых второй предыдущий сиблинг соответствует <code>div.new-menu</code>.</td></tr>
+<tr><td><code>ul:children(li, &gt;=3)</code></td><td>Списки <code>&lt;ul&gt;</code>, содержащие не менее трёх непосредственных дочерних элементов <code>&lt;li&gt;</code>.</td></tr>
+<tr><td><code>article.card:matches-position(2, 4)</code></td><td>Второй и четвёртый элементы среди всех результатов, найденных правилом <code>article.card</code>.</td></tr>
+</table>
+
+<h3>Состояние страницы и доступность</h3>
+<table>
+<tr><th>Правило</th><th>Что найдёт</th></tr>
+<tr><td><code>button:visible():accessible(role="button", name=/закрыть/i)</code></td><td>Видимые кнопки с ролью <code>button</code>, доступное имя которых содержит слово «закрыть» без учёта регистра.</td></tr>
+<tr><td><code>div.banner:size(width&gt;=300, height&lt;250):style(display, "block")</code></td><td>Элементы <code>&lt;div class="banner"&gt;</code> шириной не менее 300 пикселей, высотой менее 250 пикселей и с вычисленным значением <code>display: block</code>.</td></tr>
+<tr><td><code>div:style-property("--adaptive-width")</code></td><td>Элементы <code>&lt;div&gt;</code>, в inline-атрибуте <code>style</code> которых объявлено CSS-свойство <code>--adaptive-width</code>; его значение может быть любым.</td></tr>
+<tr><td><code>input:property(disabled, "false")</code></td><td>Элементы <code>&lt;input&gt;</code>, JavaScript-свойство <code>disabled</code> которых имеет строковое представление <code>false</code>.</td></tr>
+</table>
+
+<h3>Iframe и Shadow DOM</h3>
+<table>
+<tr><th>Правило</th><th>Что найдёт</th></tr>
+<tr><td><code>*:in-frame(/docs\.example\.com/)</code></td><td>Элементы внутри iframe, адрес которого соответствует указанному регулярному выражению.</td></tr>
+<tr><td><code>button:in-shadow(video-player)</code></td><td>Кнопки внутри Shadow DOM, хост которого соответствует селектору <code>video-player</code>.</td></tr>
+<tr><td><code>iframe:frame-has(button:own-text("Закрыть"))</code></td><td>Элементы <code>&lt;iframe&gt;</code>, документ которых содержит кнопку с собственным текстом «Закрыть».</td></tr>
+<tr><td><code>div.viewer:has-frame(&gt; iframe, button:own-text("Закрыть"))</code></td><td>Элементы <code>&lt;div class="viewer"&gt;</code> с непосредственным дочерним iframe, внутри которого есть кнопка с собственным текстом «Закрыть».</td></tr>
+</table>
 <h2>Совместимость</h2><p>Сохранённые правила продолжат работать после обновлений BlockIt. Новые возможности могут добавляться без изменения смысла существующих конструкций.</p></main></body></html>

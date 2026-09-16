@@ -29,6 +29,7 @@ const fileInfo = document.getElementById('fileInfo');
 // ============================================================
 
 function localizeImport() {
+  document.documentElement.lang = chrome.i18n.getUILanguage();
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.dataset.i18n;
     const msg = chrome.i18n.getMessage(key);
@@ -69,14 +70,14 @@ function parseRules(jsonText) {
   } else if (Array.isArray(data)) {
     rules = data;
   } else {
-    throw new Error(chrome.i18n.getMessage('errorInvalidFormat'));
+    throw Object.assign(new Error(chrome.i18n.getMessage('errorInvalidFormat')), { localized: true });
   }
 
   rules.forEach((rule, index) => {
     if (!rule.selector) {
-      throw new Error(
+      throw Object.assign(new Error(
         chrome.i18n.getMessage('errorMissingSelector').replace('{index}', index + 1)
-      );
+      ), { localized: true });
     }
   });
 
@@ -142,7 +143,8 @@ function importRules(replace) {
     });
 
   } catch (error) {
-    const msg = chrome.i18n.getMessage('errorImport').replace('{message}', error.message);
+    const detail = error.localized ? error.message : chrome.i18n.getMessage(error instanceof SyntaxError ? 'errorInvalidJSON' : 'errorInvalidFormat');
+    const msg = chrome.i18n.getMessage('errorImport').replace('{message}', detail);
     showStatus(msg, 'error');
   }
 }
@@ -191,14 +193,16 @@ fileInput.addEventListener('change', (event) => {
           .replace('{size}', (file.size / 1024).toFixed(1))
           .replace('{count}', rules.length);
       } catch (parseError) {
+        const detail = parseError.localized ? parseError.message : chrome.i18n.getMessage(parseError instanceof SyntaxError ? 'errorInvalidJSON' : 'errorInvalidFormat');
         fileInfo.textContent = chrome.i18n.getMessage('fileInfoError')
           .replace('{name}', file.name)
-          .replace('{error}', parseError.message);
-        showStatus(chrome.i18n.getMessage('errorParse').replace('{message}', parseError.message), 'error');
+          .replace('{error}', detail);
+        showStatus(chrome.i18n.getMessage('errorParse').replace('{message}', detail), 'error');
       }
 
     } catch (error) {
-      showStatus(chrome.i18n.getMessage('errorReadFile').replace('{message}', error.message), 'error');
+      console.warn('[BlockIt] Could not read import file:', error);
+      showStatus(chrome.i18n.getMessage('errorReadFile'), 'error');
       fileInfo.textContent = chrome.i18n.getMessage('errorReadFile');
     }
   };

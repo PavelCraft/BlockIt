@@ -271,6 +271,8 @@
     "message": "Formato inválido. Se espera un array de reglas o un objeto con el campo 'rules'.",
     "description": "Error de formato inválido"
   },
+  "importSettings": { "message": "Configuración" },
+  "errorInvalidJSON": { "message": "JSON no válido. Compruebe el contenido del archivo." },
   "errorMissingSelector": {
     "message": "La regla #{index} no contiene el campo 'selector'.",
     "description": "Error de campo selector faltante"

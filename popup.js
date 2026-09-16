@@ -14,6 +14,7 @@ let countRequestId = 0;
 const STABLE_HTML_FINDER_PREFIX = 'SHF1:';
 const RULE_BUILDER_PREFIX = 'BIR1:';
 const BLOCKIT_SYNTAX_VERSION = globalThis.__blockItSelectorCore?.SYNTAX_VERSION || 1;
+const tr = (source, values) => globalThis.BlockItUI18n?.t(source, values) || source;
 /* These pseudo-classes are understood by blockit-selector-engine.js, not by
    the browser's native CSS parser. Keeping a separate type prevents the UI
    from calling such a rule “invalid CSS”. */
@@ -552,10 +553,10 @@ async function checkSelectorCount(selector) {
     selectorTypeIndicator.textContent = 'StableHTMLFinder';
     selectorTypeIndicator.style.color = '#6f42c1';
   } else if (type === 'blockitbuilder') {
-    selectorTypeIndicator.textContent = 'Конструктор BlockIt';
+    selectorTypeIndicator.textContent = tr('Конструктор BlockIt');
     selectorTypeIndicator.style.color = '#397837';
   } else if (type === 'blockitrule') {
-    selectorTypeIndicator.textContent = 'Правило BlockIt';
+    selectorTypeIndicator.textContent = tr('Правило BlockIt');
     selectorTypeIndicator.style.color = '#397837';
   } else {
     selectorTypeIndicator.textContent = chrome.i18n.getMessage('selectorTypeUnknown');
@@ -657,7 +658,7 @@ function renderRuleGroup(container, title, rules, options = {}) {
   const headerText = document.createElement('span'); headerText.textContent = `${title} (${rules.length})`;
   header.append(headerText);
   if (options.auditDomain) {
-    const audit = document.createElement('button'); audit.className = 'rules-audit-open'; audit.textContent = '↻ Проверить правила';
+    const audit = document.createElement('button'); audit.className = 'rules-audit-open'; audit.textContent = `↻ ${tr('Проверить правила')}`;
     audit.addEventListener('click', () => openRulesAudit(options.auditDomain, options.auditRules || rules));
     header.append(audit);
   }
@@ -673,22 +674,22 @@ function renderRuleGroup(container, title, rules, options = {}) {
     let displaySelector = rule.selector;
     if (isBuilder) {
       const builderModel = rule.builderModel || (() => { try { return globalThis.__blockItRuleModel.parse(rule.selector); } catch { return null; } })();
-      displaySelector = rule.displaySelector || (builderModel ? globalThis.__blockItRuleModel.toDisplaySelector(builderModel) : 'Некорректное правило конструктора');
+        displaySelector = rule.displaySelector || (builderModel ? globalThis.__blockItRuleModel.toDisplaySelector(builderModel) : tr('Некорректное правило конструктора'));
     }
     const text = document.createElement('span'); text.className = 'rule-text'; text.textContent = `${icon} ${typeLabel}${displaySelector}`;
-    if (rule.enabled === false) { li.classList.add('rule-disabled'); const mark = document.createElement('span'); mark.className = 'disabled-mark'; mark.textContent = 'Отключено'; text.append(document.createTextNode(' '), mark); }
+      if (rule.enabled === false) { li.classList.add('rule-disabled'); const mark = document.createElement('span'); mark.className = 'disabled-mark'; mark.textContent = tr('Отключено'); text.append(document.createTextNode(' '), mark); }
     const actions = document.createElement('span'); actions.className = 'rule-list-actions';
 
     if (isBuilder) {
-      const edit = document.createElement('button'); edit.className = 'rule-edit'; edit.textContent = 'Редактировать';
+        const edit = document.createElement('button'); edit.className = 'rule-edit'; edit.textContent = tr('Редактировать');
       edit.addEventListener('click', async () => {
         const builderModel = rule.builderModel || (() => { try { return globalThis.__blockItRuleModel.parse(rule.selector); } catch { return null; } })();
-        if (!builderModel) return alert('Не удалось открыть модель этого правила.');
+          if (!builderModel) return alert(tr('Не удалось открыть модель этого правила.'));
         await openRuleBuilderDraft({ model: builderModel, editingRule: { id: rule.id || null, selector: rule.selector, domain: rule.domain || '', enabled: rule.enabled !== false, mode: rule.mode || 'remove' }, expectedDomain: rule.domain || '' });
       });
       actions.append(edit);
     }
-    const toggle = document.createElement('button'); toggle.className = 'rule-toggle'; toggle.textContent = rule.enabled === false ? 'Включить' : 'Отключить';
+      const toggle = document.createElement('button'); toggle.className = 'rule-toggle'; toggle.textContent = tr(rule.enabled === false ? 'Включить' : 'Отключить');
     toggle.addEventListener('click', () => {
       chrome.storage.local.get(['rules'], res => {
         const all = res.rules || []; const index = all.findIndex(item => item.id && rule.id ? item.id === rule.id : item.selector === rule.selector && item.domain === rule.domain);
@@ -747,7 +748,7 @@ async function openContactsPage() {
   await chrome.storage.session.set({
     feedbackDraft: {
       source: 'popup',
-      sourceLabel: 'Главное окно BlockIt',
+      sourceLabel: tr('Главное окно BlockIt'),
       tabId: tab?.id || null,
       pageUrl: tab?.url || '',
       rules: rules.map(rule => ({
@@ -785,7 +786,7 @@ function updateToggleButton() {
     } else {
       advancedRuleSlot.appendChild(finalRuleSection);
       finalRuleSection.classList.remove('hidden');
-      selectorLabel.textContent = chrome.i18n.getMessage('generatedRuleLabel') || 'Готовое правило';
+      selectorLabel.textContent = chrome.i18n.getMessage('generatedRuleLabel') || tr('Готовое правило');
       selectorContextHelp.classList.remove('hidden');
     }
   } else {
@@ -854,7 +855,7 @@ parseBtn.addEventListener('click', () => {
   parsedHtmlResult.classList.remove('hidden');
   advancedRuleSlot.appendChild(finalRuleSection);
   finalRuleSection.classList.remove('hidden');
-  selectorLabel.textContent = chrome.i18n.getMessage('generatedRuleLabel') || 'Готовое правило';
+  selectorLabel.textContent = chrome.i18n.getMessage('generatedRuleLabel') || tr('Готовое правило');
   selectorContextHelp.classList.remove('hidden');
 });
 
@@ -1026,7 +1027,8 @@ clearRulesBtn.addEventListener('click', () => {
 
   chrome.storage.local.clear(() => {
     if (chrome.runtime.lastError) {
-      alert(chrome.i18n.getMessage('alertClearError') + ': ' + chrome.runtime.lastError.message);
+      console.warn('[BlockIt] Could not clear rules:', chrome.runtime.lastError);
+      alert(chrome.i18n.getMessage('alertClearError'));
       return;
     }
 

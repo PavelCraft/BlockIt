@@ -8,6 +8,7 @@ const ruleCode = document.getElementById('ruleCode');
 const ruleSummary = document.getElementById('ruleSummary');
 const reloadResult = document.getElementById('reloadResult');
 const builderModeRadios = [...document.querySelectorAll('input[name="builderBlockMode"]')];
+const tr = (source, values) => globalThis.BlockItUI18n?.t(source, values) || source;
 
 let sourceTabId = null;
 let model = null;
@@ -66,7 +67,7 @@ function smallButton(label, className = 'secondary') { const button = document.c
 
 function render() {
   rootEditor.innerHTML = '';
-  if (!model) { rootEditor.innerHTML = '<p class="note">Вставьте HTML и нажмите «Разобрать HTML».</p>'; updatePreview(); return; }
+  if (!model) { rootEditor.innerHTML = `<p class="note">${tr('Вставьте HTML и нажмите «Разобрать HTML».')}</p>`; updatePreview(); return; }
   model.resultPositions ||= newPosition('', false);
   matchPositions.value = model.resultPositions.value || '';
   const ancestorLevels = ancestorDepth(model.root);
@@ -86,9 +87,9 @@ function render() {
   const target = document.createElement('div'); target.className = 'node target';
   target.classList.toggle('has-ancestors', ancestorEntries.length > 0);
   target.classList.toggle('has-root-siblings', rootLowerRelations.some(relation => relation.kind === 'sibling'));
-  target.append(renderRelationCaption('target'), renderNode(model.root, 'Блокируемый элемент', sourceElement, true, true, true, true, true, element => { sourceElement = element; }));
+  target.append(renderRelationCaption('target'), renderNode(model.root, tr('Блокируемый элемент'), sourceElement, true, true, true, true, true, element => { sourceElement = element; }));
   rootEditor.append(target);
-  const lowerTree = renderLowerTree(model.root, sourceElement, 'Блокируемого элемента');
+  const lowerTree = renderLowerTree(model.root, sourceElement, tr('Блокируемого элемента'));
   if (lowerTree) rootEditor.append(lowerTree);
   updatePreview();
 }
@@ -100,7 +101,7 @@ function renderLowerTree(owner, source, ownerLabel) {
   const descendants = relations.filter(relation => relation.kind === 'child' || relation.kind === 'descendant');
   if (descendants.length) {
     const group = document.createElement('div'); group.className = 'descendants';
-    const caption = document.createElement('div'); caption.className = 'branch-caption'; caption.textContent = `Внутри ${ownerLabel.toLowerCase()}`;
+  const caption = document.createElement('div'); caption.className = 'branch-caption'; caption.textContent = tr('Внутри {owner}', { owner: ownerLabel.toLowerCase() });
     group.append(caption);
     descendants.forEach(relation => group.append(renderRelation(owner, relation, relationSources.get(relation))));
     branches.append(group);
@@ -138,12 +139,12 @@ function renderNode(node, title, source, isRoot = false, hideParentRelations = f
   const role = document.createElement('span'); role.className = 'role'; role.textContent = title;
   const summary = document.createElement('span'); summary.className = 'summary'; summary.textContent = nodeSummary(node);
   const spacer = document.createElement('span'); spacer.className = 'spacer';
-  const tag = textInput(node.tag); tag.placeholder = 'Любой тег';
+  const tag = textInput(node.tag); tag.placeholder = tr('Любой тег');
   // While typing we deliberately do not validate or re-render: an empty field
   // is a normal intermediate state, not an error.
   tag.addEventListener('blur', () => { node.tag = tag.value.trim(); scheduleRender(); });
   const body = document.createElement('div'); body.className = 'card-body';
-  const collapse = document.createElement('button'); collapse.type = 'button'; collapse.className = 'icon-btn collapse'; collapse.title = isCollapsed ? 'Развернуть' : 'Свернуть'; collapse.setAttribute('aria-label', collapse.title); collapse.innerHTML = '<span class="chev">⌃</span>';
+  const collapse = document.createElement('button'); collapse.type = 'button'; collapse.className = 'icon-btn collapse'; collapse.title = tr(isCollapsed ? 'Развернуть' : 'Свернуть'); collapse.setAttribute('aria-label', collapse.title); collapse.innerHTML = '<span class="chev">⌃</span>';
   collapse.addEventListener('click', () => { collapsedNodes.set(node, !collapsedNodes.get(node)); scheduleRender(); });
   let ancestorMenu = null;
   if (allowAncestor) {
@@ -154,9 +155,9 @@ function renderNode(node, title, source, isRoot = false, hideParentRelations = f
     const addAncestor = document.createElement('button');
     addAncestor.type = 'button';
     addAncestor.className = 'btn small menu-trigger';
-    addAncestor.textContent = '↑ Добавить предка';
+  addAncestor.textContent = `↑ ${tr('Добавить предка')}`;
     const picker = document.createElement('div'); picker.className = 'menu';
-    addAncestor.addEventListener('click', () => { const opening = !picker.classList.contains('open'); document.querySelectorAll('.menu.open').forEach(menu => menu.classList.remove('open')); if (opening) { renderRelationKinds(picker, node, source, [['ancestor-nearest', 'Непосредственный родитель'], ['ancestor-any', 'Просто предок']]); picker.classList.add('open'); } });
+  addAncestor.addEventListener('click', () => { const opening = !picker.classList.contains('open'); document.querySelectorAll('.menu.open').forEach(menu => menu.classList.remove('open')); if (opening) { renderRelationKinds(picker, node, source, [['ancestor-nearest', tr('Непосредственный родитель')], ['ancestor-any', tr('Просто предок')]]); picker.classList.add('open'); } });
     ancestorMenu.append(addAncestor, picker);
   }
   header.append(tagPill, role, summary, spacer);
@@ -167,26 +168,26 @@ function renderNode(node, title, source, isRoot = false, hideParentRelations = f
   body.append(renderHtmlImporter(node, sourceChanged));
 
   const tagEdit = document.createElement('div'); tagEdit.className = 'tag-edit';
-  const tagLabel = document.createElement('label'); tagLabel.className = 'label'; tagLabel.textContent = 'Имя тега';
-  const hint = document.createElement('span'); hint.className = 'hint'; hint.textContent = 'Можно оставить пустым, если тег не важен';
+  const tagLabel = document.createElement('label'); tagLabel.className = 'label'; tagLabel.textContent = tr('Имя тега');
+  const hint = document.createElement('span'); hint.className = 'hint'; hint.textContent = tr('Можно оставить пустым, если тег не важен');
   tagEdit.append(tagLabel, tag, hint); body.append(tagEdit);
 
-  const counts = section('Количество', 'структурные признаки');
-  counts.append(renderCount(node.attributeCount, 'Количество атрибутов', () => scheduleUpdate()));
+  const counts = section(tr('Количество'), tr('структурные признаки'));
+  counts.append(renderCount(node.attributeCount, tr('Количество атрибутов'), () => scheduleUpdate()));
   node.siblingPosition ||= newPosition('', false);
   counts.append(renderPosition(node.siblingPosition));
   body.append(counts);
 
-  const attributes = section('Атрибуты', 'совпадут все включённые');
-  if (!node.attributes.length) attributes.append(note('У этого элемента пока нет добавленных атрибутов.'));
+  const attributes = section(tr('Атрибуты'), tr('совпадут все включённые'));
+  if (!node.attributes.length) attributes.append(note(tr('У этого элемента пока нет добавленных атрибутов.')));
   node.attributes.forEach((attribute, index) => attributes.append(renderAttribute(node, attribute, index)));
-  const addAttribute = smallButton('+ Добавить атрибут'); addAttribute.classList.add('add');
+  const addAttribute = smallButton(`+ ${tr('Добавить атрибут')}`); addAttribute.classList.add('add');
   addAttribute.addEventListener('click', () => { node.attributes.push({ enabled: true, name: newStringCondition('', true), value: newStringCondition('', false) }); scheduleRender(); });
   attributes.append(addAttribute); body.append(attributes);
 
-  const texts = section('Текст', 'содержимое элемента');
-  texts.append(renderTextCondition(node.ownText, 'Текст самого элемента', () => scheduleUpdate()));
-  texts.append(renderTextCondition(node.text, 'Текст внутри элемента', () => scheduleUpdate()));
+  const texts = section(tr('Текст'), tr('содержимое элемента'));
+  texts.append(renderTextCondition(node.ownText, tr('Текст самого элемента'), () => scheduleUpdate()));
+  texts.append(renderTextCondition(node.text, tr('Текст внутри элемента'), () => scheduleUpdate()));
   body.append(texts);
 
   if (allowLower) body.append(renderRootAdder(node, source, 'lower'));
@@ -197,14 +198,14 @@ function renderNode(node, title, source, isRoot = false, hideParentRelations = f
 function renderHtmlImporter(node, sourceChanged) {
   const importer = document.createElement('div'); importer.className = 'html-importer';
   const copy = document.createElement('div'); copy.className = 'html-importer-copy';
-  const title = document.createElement('strong'); title.textContent = 'Заполнить из HTML';
-  const hint = document.createElement('span'); hint.textContent = 'Тег, атрибуты и текст заполнятся автоматически';
+  const title = document.createElement('strong'); title.textContent = tr('Заполнить из HTML');
+  const hint = document.createElement('span'); hint.textContent = tr('Тег, атрибуты и текст заполнятся автоматически');
   copy.append(title, hint);
   const html = document.createElement('textarea'); html.className = 'html-import-input'; html.placeholder = '<div class="banner" data-ad="true">…</div>';
-  const parse = document.createElement('button'); parse.type = 'button'; parse.className = 'btn small primary'; parse.textContent = 'Разобрать';
+  const parse = document.createElement('button'); parse.type = 'button'; parse.className = 'btn small primary'; parse.textContent = tr('Разобрать');
   parse.addEventListener('click', () => {
     const element = parseHtmlElement(html.value);
-    if (!element) return alert('Не удалось найти HTML-элемент. Вставьте разметку, начинающуюся с тега.');
+    if (!element) return alert(tr('Не удалось найти HTML-элемент. Вставьте разметку, начинающуюся с тега.'));
     const relationGroups = node.relationGroups;
     Object.assign(node, nodeFromElement(element));
     node.relationGroups = relationGroups;
@@ -219,12 +220,12 @@ function nodeSummary(node) {
   const enabled = (node.attributes || []).filter(attribute => attribute.enabled).length
     + Number(!!node.attributeCount?.enabled) + Number(!!node.classCount?.enabled)
     + Number(!!node.ownText?.enabled) + Number(!!node.text?.enabled);
-  return enabled ? `${enabled} ${enabled === 1 ? 'условие' : 'условия'}` : 'без условий';
+  return enabled ? `${enabled} ${tr(enabled === 1 ? 'условие' : 'условия')}` : tr('без условий');
 }
 
 function renderRelationCaption(kind) {
   const caption = document.createElement('div'); caption.className = 'relation';
-  const labels = { target:['target', 'Цель', 'этот элемент будет заблокирован'], child:['child', 'Дочерний элемент', 'непосредственно внутри выбранного элемента'], descendant:['child', 'Потомок', 'внутри выбранного элемента на любом уровне'], 'ancestor-nearest':['', 'Родитель', 'непосредственный родитель выбранного элемента'], 'ancestor-any':['', 'Предок', 'предок выбранного элемента на любом уровне'], sibling:['sibling', 'Сиблинг', 'на одном уровне с выбранным элементом'] };
+  const labels = { target:['target', tr('Цель'), tr('этот элемент будет заблокирован')], child:['child', tr('Дочерний элемент'), tr('непосредственно внутри выбранного элемента')], descendant:['child', tr('Потомок'), tr('внутри выбранного элемента на любом уровне')], 'ancestor-nearest':['', tr('Родитель'), tr('непосредственный родитель выбранного элемента')], 'ancestor-any':['', tr('Предок'), tr('предок выбранного элемента на любом уровне')], sibling:['sibling', tr('Сиблинг'), tr('на одном уровне с выбранным элементом')] };
   const [tone, label, description] = labels[kind];
   const pill = document.createElement('span'); pill.className = `pill ${tone}`; pill.textContent = label;
   const text = document.createElement('span'); text.textContent = description;
@@ -239,7 +240,7 @@ function renderCount(condition, label, changed) {
   const toggle = document.createElement('label'); toggle.className = 'toggle';
   const enabled = checkbox(condition.enabled); const toggleVisual = document.createElement('i'); toggle.append(enabled, toggleVisual);
   const title = document.createElement('span'); title.textContent = label;
-  const operator = select([['=', 'ровно'], ['>=', 'не менее'], ['<=', 'не более']], condition.operator); const value = textInput(condition.value);
+  const operator = select([['=', tr('ровно')], ['>=', tr('не менее')], ['<=', tr('не более')]], condition.operator); const value = textInput(condition.value);
   value.type = 'number'; value.min = '0'; value.disabled = !condition.enabled; operator.disabled = !condition.enabled;
   enabled.addEventListener('change', () => { condition.enabled = enabled.checked; changed(); });
   operator.addEventListener('change', () => { condition.operator = operator.value; changed(); }); value.addEventListener('input', () => { condition.value = value.value; changed(); });
@@ -249,9 +250,9 @@ function renderCount(condition, label, changed) {
 function renderPosition(condition) {
   const row = document.createElement('div'); row.className = 'position-row toggle-row';
   const toggle = switchToggle(condition.enabled); const enabled = toggle.input;
-  const title = document.createElement('span'); title.textContent = 'Порядковый номер среди сиблингов';
-  const value = textInput(condition.value); value.inputMode = 'numeric'; value.placeholder = 'Например: 1 или 1, 3';
-  const hint = document.createElement('span'); hint.className = 'hint'; hint.textContent = 'Несколько номеров — через запятую';
+  const title = document.createElement('span'); title.textContent = tr('Порядковый номер среди сиблингов');
+  const value = textInput(condition.value); value.inputMode = 'numeric'; value.placeholder = tr('Например: 1 или 1, 3');
+  const hint = document.createElement('span'); hint.className = 'hint'; hint.textContent = tr('Несколько номеров — через запятую');
   const refresh = () => { value.disabled = !enabled.checked; row.classList.toggle('off', !enabled.checked); };
   enabled.addEventListener('change', () => { condition.enabled = enabled.checked; refresh(); scheduleUpdate(); });
   value.addEventListener('input', () => { condition.value = value.value; scheduleUpdate(); });
@@ -262,8 +263,8 @@ function renderAttribute(node, attribute, index) {
   const block = document.createElement('div'); block.className = 'attribute-block';
   const row = document.createElement('div'); row.className = `condition toggle-row${attribute.name.value.trim().toLowerCase() === 'class' ? ' class-row' : ''}`;
   const toggle = switchToggle(attribute.enabled); const enabled = toggle.input;
-  const name = textInput(attribute.name.value); const nameMode = select([['exact', 'имя: точно'], ['prefix', 'имя: начинается с'], ['regex', 'имя: рег. выражение']], attribute.name.mode);
-  const value = textInput(attribute.value.value); const valueMode = select([['exact', 'значение: точно'], ['prefix', 'значение: начинается с'], ['suffix', 'значение: заканчивается на'], ['contains', 'значение: содержит'], ['regex', 'значение: рег. выражение'], ['ignore', 'значение не важно']], attribute.value.mode);
+  const name = textInput(attribute.name.value); const nameMode = select([['exact', tr('имя: точно')], ['prefix', tr('имя: начинается с')], ['regex', tr('имя: рег. выражение')]], attribute.name.mode);
+  const value = textInput(attribute.value.value); const valueMode = select([['exact', tr('значение: точно')], ['prefix', tr('значение: начинается с')], ['suffix', tr('значение: заканчивается на')], ['contains', tr('значение: содержит')], ['regex', tr('значение: рег. выражение')], ['ignore', tr('значение не важно')]], attribute.value.mode);
   const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'icon-btn danger remove'; remove.textContent = '×';
   const refreshDisabled = () => { const disabled = !enabled.checked; name.disabled = nameMode.disabled = valueMode.disabled = disabled; value.disabled = disabled || valueMode.value === 'ignore'; row.classList.toggle('off', disabled); };
   enabled.addEventListener('change', () => { attribute.enabled = enabled.checked; refreshDisabled(); scheduleUpdate(); });
@@ -274,7 +275,7 @@ function renderAttribute(node, attribute, index) {
     refreshDisabled(); scheduleUpdate();
   }); value.addEventListener('input', () => { attribute.value.value = value.value; scheduleUpdate(); });
   remove.addEventListener('click', () => { node.attributes.splice(index, 1); scheduleRender(); }); refreshDisabled(); row.append(toggle.element, name, nameMode, value, valueMode, remove);
-  if (attribute.name.value.trim().toLowerCase() === 'class') { const classExtra = document.createElement('div'); classExtra.className = 'class-extra'; classExtra.append(renderCount(node.classCount, 'Количество классов в этом class', () => scheduleUpdate())); row.append(classExtra); }
+  if (attribute.name.value.trim().toLowerCase() === 'class') { const classExtra = document.createElement('div'); classExtra.className = 'class-extra'; classExtra.append(renderCount(node.classCount, tr('Количество классов в этом class'), () => scheduleUpdate())); row.append(classExtra); }
   block.append(row);
   return block;
 }
@@ -283,8 +284,8 @@ function renderTextCondition(condition, label, changed) {
   const row = document.createElement('div'); row.className = 'text-grid toggle-row';
   const toggle = switchToggle(condition.enabled); const enabled = toggle.input;
   const title = document.createElement('span'); title.className = 'label'; title.textContent = label;
-  const value = textInput(condition.value); const mode = select([['exact', 'точное совпадение'], ['prefix', 'начинается с'], ['suffix', 'заканчивается на'], ['contains', 'содержит'], ['regex', 'рег. выражение'], ['ignore', 'не учитывать']], condition.mode);
-  const caseLabel = document.createElement('label'); caseLabel.className = 'case'; const insensitive = checkbox(condition.ignoreCase); caseLabel.append(insensitive, document.createTextNode(' Без учёта регистра'));
+  const value = textInput(condition.value); const mode = select([['exact', tr('точное совпадение')], ['prefix', tr('начинается с')], ['suffix', tr('заканчивается на')], ['contains', tr('содержит')], ['regex', tr('рег. выражение')], ['ignore', tr('не учитывать')]], condition.mode);
+  const caseLabel = document.createElement('label'); caseLabel.className = 'case'; const insensitive = checkbox(condition.ignoreCase); caseLabel.append(insensitive, document.createTextNode(` ${tr('Без учёта регистра')}`));
   const refreshDisabled = () => { mode.disabled = value.disabled = insensitive.disabled = !enabled.checked; if (mode.value === 'ignore') value.disabled = true; row.classList.toggle('off', !enabled.checked); };
   enabled.addEventListener('change', () => { condition.enabled = enabled.checked; refreshDisabled(); changed(); }); mode.addEventListener('change', () => { condition.mode = mode.value; refreshDisabled(); changed(); }); value.addEventListener('input', () => { condition.value = value.value; changed(); }); insensitive.addEventListener('change', () => { condition.ignoreCase = insensitive.checked; changed(); }); refreshDisabled(); row.append(toggle.element, title, value, mode, caseLabel); return row;
 }
@@ -311,7 +312,7 @@ function newRelation(kind, element = null) {
   return relation;
 }
 function relationName(kind) {
-  return ({ child: 'Непосредственный дочерний элемент', descendant: 'Потомок внутри элемента', 'ancestor-nearest': 'Непосредственный родительский элемент', 'ancestor-any': 'Предок выше', sibling: 'Соседний элемент' })[kind];
+  return tr(({ child: 'Непосредственный дочерний элемент', descendant: 'Потомок внутри элемента', 'ancestor-nearest': 'Непосредственный родительский элемент', 'ancestor-any': 'Предок выше', sibling: 'Соседний элемент' })[kind]);
 }
 function candidatesFor(source, kind) {
   if (!source) return [];
@@ -331,14 +332,14 @@ function elementPreview(element) {
 }
 
 function renderEnvironment(node, source, hideParentRelations = false) {
-  const sectionElement = section('Элементы вокруг'); sectionElement.classList.add('relations');
+  const sectionElement = section(tr('Элементы вокруг')); sectionElement.classList.add('relations');
   const relations = allRelations(node);
   const parents = relations.filter(item => item.kind.startsWith('ancestor'));
   const others = relations.filter(item => !item.kind.startsWith('ancestor'));
   if (!hideParentRelations) parents.forEach(relation => sectionElement.append(renderRelation(node, relation, relationSources.get(relation))));
-  const add = document.createElement('button'); add.type = 'button'; add.className = 'add-environment'; add.textContent = 'Добавить потомка или сиблинга';
+  const add = document.createElement('button'); add.type = 'button'; add.className = 'add-environment'; add.textContent = tr('Добавить потомка или сиблинга');
   const picker = document.createElement('div'); picker.className = 'environment-picker'; picker.hidden = true;
-  add.addEventListener('click', () => { picker.hidden = !picker.hidden; if (!picker.hidden) renderRelationKinds(picker, node, source, [['child', 'Непосредственный дочерний элемент'], ['descendant', 'Просто потомок'], ['sibling', 'Сиблинг']]); });
+  add.addEventListener('click', () => { picker.hidden = !picker.hidden; if (!picker.hidden) renderRelationKinds(picker, node, source, [['child', tr('Непосредственный дочерний элемент')], ['descendant', tr('Просто потомок')], ['sibling', tr('Сиблинг')]]); });
   sectionElement.append(add, picker);
   others.forEach(relation => sectionElement.append(renderRelation(node, relation, relationSources.get(relation))));
   return sectionElement;
@@ -348,11 +349,11 @@ function renderRootAdder(owner, source, position) {
   const wrap = document.createElement('div'); wrap.className = 'relation-actions';
   const menuWrap = document.createElement('div'); menuWrap.className = 'menu-wrap';
   const button = document.createElement('button'); button.type = 'button'; button.className = 'btn small menu-trigger';
-  button.textContent = position === 'ancestor' ? '↑ Добавить предка' : '↓ Добавить потомка или сиблинга';
+  button.textContent = position === 'ancestor' ? `↑ ${tr('Добавить предка')}` : `↓ ${tr('Добавить потомка или сиблинга')}`;
   const picker = document.createElement('div'); picker.className = 'menu';
   const kinds = position === 'ancestor'
-    ? [['ancestor-nearest', 'Непосредственный родитель'], ['ancestor-any', 'Просто предок']]
-    : [['child', 'Непосредственный дочерний элемент'], ['descendant', 'Просто потомок'], ['sibling', 'Сиблинг']];
+    ? [['ancestor-nearest', tr('Непосредственный родитель')], ['ancestor-any', tr('Просто предок')]]
+    : [['child', tr('Непосредственный дочерний элемент')], ['descendant', tr('Просто потомок')], ['sibling', tr('Сиблинг')]];
   button.addEventListener('click', () => {
     const opening = !picker.classList.contains('open');
     document.querySelectorAll('.menu.open').forEach(menu => menu.classList.remove('open'));
@@ -363,8 +364,8 @@ function renderRootAdder(owner, source, position) {
 
 function renderRelationKinds(container, owner, source, allowedKinds = null) {
   container.innerHTML = '';
-  const intro = document.createElement('p'); intro.className = 'picker-title'; intro.textContent = 'Где находится этот элемент относительно текущего?';
-  const kinds = allowedKinds || [['ancestor-nearest', 'Непосредственно выше (родитель)'], ['ancestor-any', 'Где-то выше (предок)'], ['child', 'Непосредственно внутри (ребёнок)'], ['descendant', 'Где-то внутри (потомок)'], ['sibling', 'Рядом (соседний)']];
+  const intro = document.createElement('p'); intro.className = 'picker-title'; intro.textContent = tr('Где находится этот элемент относительно текущего?');
+  const kinds = allowedKinds || [['ancestor-nearest', tr('Непосредственно выше (родитель)')], ['ancestor-any', tr('Где-то выше (предок)')], ['child', tr('Непосредственно внутри (ребёнок)')], ['descendant', tr('Где-то внутри (потомок)')], ['sibling', tr('Рядом (соседний)')]];
   const choices = document.createElement('div'); choices.className = 'kind-choices';
   kinds.forEach(([kind, label]) => { const button = smallButton(label); button.addEventListener('click', () => renderCandidateChoices(container, owner, source, kind, kinds)); choices.append(button); });
   container.append(intro, choices);
@@ -372,7 +373,7 @@ function renderRelationKinds(container, owner, source, allowedKinds = null) {
 
 function renderCandidateChoices(container, owner, source, kind, allowedKinds = null) {
   container.innerHTML = '';
-  const intro = document.createElement('p'); intro.className = 'picker-title'; intro.textContent = `${relationName(kind)} — выберите вариант:`;
+  const intro = document.createElement('p'); intro.className = 'picker-title'; intro.textContent = tr('{relation} — выберите вариант:', { relation: relationName(kind) });
   const candidates = candidatesFor(source, kind).slice(0, 5);
   const choices = document.createElement('div'); choices.className = 'candidate-choices';
   candidates.forEach(candidate => {
@@ -380,17 +381,17 @@ function renderCandidateChoices(container, owner, source, kind, allowedKinds = n
     button.title = normalizeText(candidate.outerHTML);
     button.addEventListener('click', () => { addRelation(owner, newRelation(kind, candidate)); scheduleRender(); }); choices.append(button);
   });
-  const manual = smallButton('Добавить вручную'); manual.addEventListener('click', () => { addRelation(owner, newRelation(kind)); scheduleRender(); });
-  const back = smallButton('← Назад'); back.addEventListener('click', () => renderRelationKinds(container, owner, source, allowedKinds));
-  if (!candidates.length) choices.append(note('В этом фрагменте HTML нет подходящих вариантов. Можно добавить элемент вручную.'));
+  const manual = smallButton(tr('Добавить вручную')); manual.addEventListener('click', () => { addRelation(owner, newRelation(kind)); scheduleRender(); });
+  const back = smallButton(`← ${tr('Назад')}`); back.addEventListener('click', () => renderRelationKinds(container, owner, source, allowedKinds));
+  if (!candidates.length) choices.append(note(tr('В этом фрагменте HTML нет подходящих вариантов. Можно добавить элемент вручную.')));
   container.append(intro, choices, manual, back);
 }
 
 function renderRelation(owner, relation, source) {
   const entry = document.createElement('div'); entry.className = `node relation-entry relation-${relation.kind}${owner === model?.root ? ' root-relation' : ''}`;
   const caption = renderRelationCaption(relation.kind);
-  const absentLabel = document.createElement('label'); absentLabel.className = 'absent-toggle'; const absent = checkbox(relation.allowAbsent); absentLabel.append(absent, document.createTextNode(' Допускается отсутствие'));
-  const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'icon-btn danger'; remove.textContent = '×'; remove.title = 'Удалить элемент'; absent.addEventListener('change', () => { relation.allowAbsent = absent.checked; scheduleUpdate(); }); remove.addEventListener('click', () => { deleteRelation(owner, relation); scheduleRender(); });
+  const absentLabel = document.createElement('label'); absentLabel.className = 'absent-toggle'; const absent = checkbox(relation.allowAbsent); absentLabel.append(absent, document.createTextNode(` ${tr('Допускается отсутствие')}`));
+  const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'icon-btn danger'; remove.textContent = '×'; remove.title = tr('Удалить элемент'); absent.addEventListener('change', () => { relation.allowAbsent = absent.checked; scheduleUpdate(); }); remove.addEventListener('click', () => { deleteRelation(owner, relation); scheduleRender(); });
   entry.append(caption);
 
   const nested = document.createElement('div'); nested.className = 'nested';
@@ -467,11 +468,11 @@ function selectorLikeRule(node) {
   return value;
 }
 
-function comparisonLabel(operator) { return ({ '=': 'ровно', '>=': 'не менее', '<=': 'не более' })[operator] || operator; }
-function stringModeLabel(mode) { return ({ exact: 'равно', prefix: 'начинается с', suffix: 'заканчивается на', contains: 'содержит', regex: 'соответствует регулярному выражению' })[mode] || mode; }
-function nameModeLabel(mode) { return ({ exact: '', prefix: 'Имя начинается с', regex: 'Имя соответствует регулярному выражению' })[mode] || mode; }
-function relationRole(kind) { return ({ child: 'Дочерний элемент', descendant: 'Потомок', 'ancestor-nearest': 'Родитель', 'ancestor-any': 'Предок', sibling: 'Сиблинг' })[kind] || 'Связанный элемент'; }
-function relationDescription(kind) { return ({ child: 'непосредственно внутри родительского элемента', descendant: 'внутри родительского элемента на любом уровне', 'ancestor-nearest': 'непосредственный родитель', 'ancestor-any': 'предок на любом уровне выше', sibling: 'на одном уровне с исходным элементом' })[kind] || kind; }
+function comparisonLabel(operator) { return tr(({ '=': 'ровно', '>=': 'не менее', '<=': 'не более' })[operator] || operator); }
+function stringModeLabel(mode) { return tr(({ exact: 'равно', prefix: 'начинается с', suffix: 'заканчивается на', contains: 'содержит', regex: 'соответствует регулярному выражению' })[mode] || mode); }
+function nameModeLabel(mode) { return tr(({ exact: '', prefix: 'Имя начинается с', regex: 'Имя соответствует регулярному выражению' })[mode] || mode); }
+function relationRole(kind) { return tr(({ child: 'Дочерний элемент', descendant: 'Потомок', 'ancestor-nearest': 'Родитель', 'ancestor-any': 'Предок', sibling: 'Сиблинг' })[kind] || 'Связанный элемент'); }
+function relationDescription(kind) { return tr(({ child: 'непосредственно внутри родительского элемента', descendant: 'внутри родительского элемента на любом уровне', 'ancestor-nearest': 'непосредственный родитель', 'ancestor-any': 'предок на любом уровне выше', sibling: 'на одном уровне с исходным элементом' })[kind] || kind); }
 
 function structuredRuleDescription(ruleModel) {
   const fragment = document.createDocumentFragment();
@@ -484,40 +485,40 @@ function structuredRuleDescription(ruleModel) {
     const list = document.createElement('ul');
     const item = (label, value) => { const li = document.createElement('li'); const name = document.createElement('span'); name.textContent = `${label}: `; const detail = document.createElement('b'); detail.textContent = value; li.append(name, detail); list.append(li); };
     if (relation) {
-      item('Связь', relationDescription(relation.kind));
-      if (relation.allowAbsent) item('Отсутствие', 'допускается');
+    item(tr('Связь'), relationDescription(relation.kind));
+    if (relation.allowAbsent) item(tr('Отсутствие'), tr('допускается'));
     }
-    if (node.attributeCount?.enabled) item('Количество атрибутов', `${comparisonLabel(node.attributeCount.operator)} ${node.attributeCount.value}`);
-    if (node.classCount?.enabled) item('Количество классов', `${comparisonLabel(node.classCount.operator)} ${node.classCount.value}`);
-    if (node.siblingPosition?.enabled) item('Позиция среди сиблингов', node.siblingPosition.value || 'не указана');
+    if (node.attributeCount?.enabled) item(tr('Количество атрибутов'), `${comparisonLabel(node.attributeCount.operator)} ${node.attributeCount.value}`);
+    if (node.classCount?.enabled) item(tr('Количество классов'), `${comparisonLabel(node.classCount.operator)} ${node.classCount.value}`);
+    if (node.siblingPosition?.enabled) item(tr('Позиция среди сиблингов'), node.siblingPosition.value || tr('не указана'));
     for (const attribute of node.attributes || []) {
       if (!attribute.enabled || !attribute.name?.enabled) continue;
-      const name = attribute.name.value || 'атрибут';
+      const name = attribute.name.value || tr('атрибут');
       const namePrefix = attribute.name.mode === 'exact' ? name : `${nameModeLabel(attribute.name.mode)} «${name}»`;
       const value = attribute.value;
-      item('Атрибут', !value?.enabled || value.mode === 'ignore' ? `${namePrefix} — значение не важно` : `${namePrefix} ${stringModeLabel(value.mode)} «${value.value}»`);
+      item(tr('Атрибут'), !value?.enabled || value.mode === 'ignore' ? `${namePrefix} — ${tr('значение не важно')}` : `${namePrefix} ${stringModeLabel(value.mode)} «${value.value}»`);
     }
     const appendText = (condition, label) => {
       if (!condition?.enabled || condition.mode === 'ignore') return;
-      item(label, `${stringModeLabel(condition.mode)} «${condition.value}»${condition.ignoreCase ? ', без учёта регистра' : ''}`);
+      item(label, `${stringModeLabel(condition.mode)} «${condition.value}»${condition.ignoreCase ? `, ${tr('Без учёта регистра').toLowerCase()}` : ''}`);
     };
-    appendText(node.ownText, 'Собственный текст'); appendText(node.text, 'Любой текст внутри');
+    appendText(node.ownText, tr('Собственный текст')); appendText(node.text, tr('Любой текст внутри'));
     for (const group of node.relationGroups || []) {
-      if ((group.entries || []).length > 1 || group.mode === 'any') item('Связанные элементы', group.mode === 'any' ? 'достаточно любого из перечисленных' : 'обязательны все перечисленные');
+      if ((group.entries || []).length > 1 || group.mode === 'any') item(tr('Связанные элементы'), tr(group.mode === 'any' ? 'достаточно любого из перечисленных' : 'обязательны все перечисленные'));
     }
-    if (!list.children.length) item('Условия', 'не заданы');
+    if (!list.children.length) item(tr('Условия'), tr('не заданы'));
     block.append(list); fragment.append(block);
     for (const group of node.relationGroups || []) for (const entry of group.entries || []) appendNode(entry.node, relationRole(entry.kind), depth + 1, entry);
   };
-  appendNode(ruleModel.root, 'Блокируемый элемент', 0);
+  appendNode(ruleModel.root, tr('Блокируемый элемент'), 0);
   if (ruleModel.resultPositions?.enabled) {
-    const selection = document.createElement('div'); selection.className = 'summary-selection'; selection.textContent = `Блокировать совпадения №: ${ruleModel.resultPositions.value}`; fragment.append(selection);
+    const selection = document.createElement('div'); selection.className = 'summary-selection'; selection.textContent = tr('Блокировать совпадения №: {positions}', { positions: ruleModel.resultPositions.value }); fragment.append(selection);
   }
   return fragment;
 }
 
 function updatePreview() {
-  if (!model) { ruleCode.textContent = '—'; ruleSummary.textContent = 'Сначала вставьте HTML элемента.'; countStatus.textContent = '—'; countDetail.textContent = 'Заполняйте правило'; return; }
+  if (!model) { ruleCode.textContent = '—'; ruleSummary.textContent = tr('Сначала вставьте HTML элемента.'); countStatus.textContent = '—'; countDetail.textContent = tr('Заполняйте правило'); return; }
   ruleCode.textContent = globalThis.__blockItRuleModel.toDisplaySelector?.(model) || selectorLikeRule(model.root);
   ruleSummary.replaceChildren(structuredRuleDescription(model));
 }
@@ -529,33 +530,33 @@ function countModelInFrame(ruleModel) {
 }
 
 async function recount() {
-  if (!model || !sourceTabId) { countStatus.textContent = '—'; countTitle.textContent = 'Совпадения'; countDetail.textContent = model ? 'Нет исходной вкладки для проверки' : 'Заполняйте правило'; return null; }
-  const request = ++countRequest; countStatus.textContent = '…'; countTitle.textContent = 'Идёт проверка'; countDetail.textContent = 'Считаю совпадения…';
+  if (!model || !sourceTabId) { countStatus.textContent = '—'; countTitle.textContent = tr('Совпадения'); countDetail.textContent = model ? tr('Нет исходной вкладки для проверки') : tr('Заполняйте правило'); return null; }
+  const request = ++countRequest; countStatus.textContent = '…'; countTitle.textContent = tr('Идёт проверка'); countDetail.textContent = tr('Считаю совпадения…');
   try {
     const results = await chrome.scripting.executeScript({ target: { tabId: sourceTabId, allFrames: true }, world: 'MAIN', func: countModelInFrame, args: [model] });
     if (request !== countRequest) return null;
-    if (results.some(item => item.result?.invalid)) { countStatus.textContent = '—'; countTitle.textContent = 'Правило заполнено некорректно'; countDetail.textContent = 'Проверьте отмеченные поля'; countStatus.className = 'count error'; return null; }
+    if (results.some(item => item.result?.invalid)) { countStatus.textContent = '—'; countTitle.textContent = tr('Правило заполнено некорректно'); countDetail.textContent = tr('Проверьте отмеченные поля'); countStatus.className = 'count error'; return null; }
     const count = results.reduce((sum, item) => sum + (item.result?.count || 0), 0);
     const total = results.reduce((sum, item) => sum + (item.result?.total ?? item.result?.count ?? 0), 0);
     matchSelection.hidden = total <= 1;
-    countStatus.textContent = String(total); countTitle.textContent = total === 1 ? 'Найден ровно один элемент' : `Найдено ${total} элементов`;
-    countDetail.textContent = total > 1 && model.resultPositions?.enabled ? `Будет заблокировано: ${count}` : total === 1 ? 'Правило достаточно точное' : 'Можно уточнить условия или выбрать номера';
+    countStatus.textContent = String(total); countTitle.textContent = total === 1 ? tr('Найден ровно один элемент') : tr('Найдено {count} элементов', { count: total });
+    countDetail.textContent = total > 1 && model.resultPositions?.enabled ? tr('Будет заблокировано: {count}', { count }) : total === 1 ? tr('Правило достаточно точное') : tr('Можно уточнить условия или выбрать номера');
     countStatus.className = total === 1 ? 'count' : 'count warning'; return count;
-  } catch (error) { if (request === countRequest) { countStatus.textContent = '—'; countTitle.textContent = 'Не удалось проверить исходную вкладку'; countDetail.textContent = 'Повторите проверку позже'; countStatus.className = 'count error'; } return null; }
+  } catch (error) { if (request === countRequest) { countStatus.textContent = '—'; countTitle.textContent = tr('Не удалось проверить исходную вкладку'); countDetail.textContent = tr('Повторите проверку позже'); countStatus.className = 'count error'; } return null; }
 }
 
 function scheduleCount() { clearTimeout(countTimer); countTimer = setTimeout(recount, 300); }
 
 async function parseSource(html) {
   const element = parseHtmlElement(html);
-  if (!element) return alert('Не удалось найти HTML-элемент. Вставьте разметку, начинающуюся с тега.');
+  if (!element) return alert(tr('Не удалось найти HTML-элемент. Вставьте разметку, начинающуюся с тега.'));
   sourceElement = element; model = { version: 1, root: nodeFromElement(element), resultPositions: newPosition('', false) }; reloadResult.textContent = ''; render(); scheduleCount();
 }
 
 async function checkAfterReload() {
-  if (!sourceTabId) { reloadResult.textContent = 'Откройте вкладку сайта правила и заново откройте редактор.'; reloadResult.className = 'reload-result error'; return; }
+  if (!sourceTabId) { reloadResult.textContent = tr('Откройте вкладку сайта правила и заново откройте редактор.'); reloadResult.className = 'reload-result error'; return; }
   const before = editingNeedsReload ? null : await recount(); if (!editingNeedsReload && before === null) return;
-  reloadResult.textContent = `${before === null ? 'Правило временно отключено для корректной проверки.' : `До обновления: ${before}`}\nПерезагружаю исходную вкладку…`; reloadResult.className = 'reload-result';
+    reloadResult.textContent = `${before === null ? tr('Правило временно отключено для корректной проверки.') : tr('До обновления: {count}', { count: before })}\n${tr('Перезагружаю исходную вкладку…')}`; reloadResult.className = 'reload-result';
   try {
     const completed = new Promise((resolve, reject) => {
       const timer = setTimeout(() => { chrome.tabs.onUpdated.removeListener(listener); reject(new Error('timeout')); }, 20000);
@@ -567,31 +568,31 @@ async function checkAfterReload() {
     await new Promise(resolve => setTimeout(resolve, 2500));
     editingNeedsReload = false;
     const after = await recount(); if (after === null) return;
-    reloadResult.textContent = before === null ? `После обновления: ${after}\nТеперь результат учитывает элементы, восстановленные страницей.` : `До обновления: ${before}\nПосле обновления: ${after}\n${before === after ? 'Количество совпадений не изменилось.' : 'Количество изменилось: проверьте динамические признаки.'}`;
+    reloadResult.textContent = before === null ? `${tr('После обновления: {count}', { count: after })}\n${tr('Теперь результат учитывает элементы, восстановленные страницей.')}` : `${tr('До обновления: {count}', { count: before })}\n${tr('После обновления: {count}', { count: after })}\n${tr(before === after ? 'Количество совпадений не изменилось.' : 'Количество изменилось: проверьте динамические признаки.')}`;
     reloadResult.className = before === null || before === after ? 'reload-result' : 'reload-result warning';
-  } catch { reloadResult.textContent = 'Не удалось дождаться перезагрузки исходной вкладки.'; reloadResult.className = 'reload-result error'; }
+  } catch { reloadResult.textContent = tr('Не удалось дождаться перезагрузки исходной вкладки.'); reloadResult.className = 'reload-result error'; }
 }
 
 function domain(url) { try { const parts = new URL(url).hostname.replace(/^www\./, '').split('.'); return parts.slice(-2).join('.'); } catch { return ''; } }
 
 async function saveRule() {
-  if (!sourceTabId) return alert('Для проверки и сохранения откройте вкладку сайта правила, затем заново откройте редактор. BlockIt не открывает сайт автоматически.');
+  if (!sourceTabId) return alert(tr('Для проверки и сохранения откройте вкладку сайта правила, затем заново откройте редактор. BlockIt не открывает сайт автоматически.'));
   if (!model) return;
-  if (editingNeedsReload && !confirm('Страница ещё не обновлялась: текущее число совпадений может быть неверным, потому что старое правило уже могло скрыть или удалить элементы. Всё равно сохранить изменения?')) return;
+  if (editingNeedsReload && !confirm(tr('Страница ещё не обновлялась: текущее число совпадений может быть неверным, потому что старое правило уже могло скрыть или удалить элементы. Всё равно сохранить изменения?'))) return;
   const count = editingNeedsReload ? null : await recount();
   if (!editingNeedsReload && count === null) return;
-  if (count === 0 && !confirm('Сейчас правило не находит элементов. Всё равно сохранить?')) return;
-  if (count > 1 && !confirm(`Правило находит ${count} элементов. Сохранить его?`)) return;
+  if (count === 0 && !confirm(tr('Сейчас правило не находит элементов. Всё равно сохранить?'))) return;
+  if (count > 1 && !confirm(tr('Правило находит {count} элементов. Сохранить его?', { count }))) return;
   const selector = globalThis.__blockItRuleModel.stringify(model); const rule = { id: editingRule?.id || crypto.randomUUID(), selector, displaySelector: ruleCode.textContent, type: 'blockitbuilder', syntaxVersion: globalThis.__blockItSelectorCore?.SYNTAX_VERSION || 1, builderModel: model, mode: ruleMode, enabled: editingRule?.enabled ?? true, domain: domain((await chrome.tabs.get(sourceTabId)).url) };
   const { rules = [] } = await chrome.storage.local.get(['rules']);
   const editingIndex = editingRule ? rules.findIndex(item => editingRule.id ? item.id === editingRule.id : item.selector === editingRule.selector && (item.domain || '') === editingRule.domain) : -1;
-  if (rules.some((item, index) => index !== editingIndex && item.selector === selector && item.domain === rule.domain)) return alert('Такое правило уже есть.');
+  if (rules.some((item, index) => index !== editingIndex && item.selector === selector && item.domain === rule.domain)) return alert(tr('Такое правило уже есть.'));
   if (editingIndex >= 0) rules[editingIndex] = rule; else rules.push(rule);
   await chrome.storage.local.set({ rules });
   await releaseEditedRule(rule.id);
   editingRule = { id: rule.id, selector: rule.selector, domain: rule.domain || '', enabled: rule.enabled !== false, mode: rule.mode };
-  document.getElementById('saveRule').querySelector('span').textContent = 'Сохранить изменения';
-  countDetail.textContent = editingIndex >= 0 ? 'Изменения сохранены и применены.' : 'Правило сохранено и применено.';
+    document.getElementById('saveRule').querySelector('span').textContent = tr('Сохранить изменения');
+    countDetail.textContent = tr(editingIndex >= 0 ? 'Изменения сохранены и применены.' : 'Правило сохранено и применено.');
 }
 
 async function releaseEditedRule(ruleId = editingRule?.id) {
@@ -603,14 +604,14 @@ async function releaseEditedRule(ruleId = editingRule?.id) {
 }
 
 document.getElementById('reloadCheck').addEventListener('click', checkAfterReload);
-document.getElementById('checkNow').addEventListener('click', () => editingNeedsReload ? alert('Сначала обновите страницу: правило уже могло удалить подходящие элементы, поэтому текущий подсчёт будет неточным.') : recount());
+document.getElementById('checkNow').addEventListener('click', () => editingNeedsReload ? alert(tr('Сначала обновите страницу: правило уже могло удалить подходящие элементы, поэтому текущий подсчёт будет неточным.')) : recount());
 document.getElementById('saveRule').addEventListener('click', saveRule);
 builderModeRadios.forEach(radio => radio.addEventListener('change', () => { if (radio.checked) ruleMode = radio.value; }));
 document.getElementById('copyRule').addEventListener('click', async () => { if (ruleCode.textContent && ruleCode.textContent !== '—') await navigator.clipboard.writeText(ruleCode.textContent); });
 document.getElementById('openFeedback').addEventListener('click', async () => {
   const draft = {
     source: 'rule-builder',
-    sourceLabel: 'Конструктор правила',
+    sourceLabel: tr('Конструктор правила'),
     tabId: sourceTabId,
     pageUrl: sourceUrl,
     editingRule,
@@ -640,8 +641,8 @@ matchPositions.addEventListener('input', () => { model.resultPositions ||= newPo
       builderModeRadios.forEach(radio => { radio.checked = radio.value === ruleMode; });
       editingNeedsReload = !!(editingRule && sourceTabId);
       const reloadButton = document.getElementById('reloadCheck');
-      reloadButton.title = sourceTabId ? `Страница ${sourceUrl || editingRule?.domain || 'сайта'} будет перезагружена. Редактируемое правило временно не применяется.` : `Нет открытой вкладки сайта ${editingRule?.domain || ''}. BlockIt не будет открывать её автоматически.`;
-      document.getElementById('saveRule').querySelector('span').textContent = editingRule ? 'Сохранить изменения' : 'Создать правило';
+  reloadButton.title = sourceTabId ? tr('Страница {site} будет перезагружена. Редактируемое правило временно не применяется.', { site: sourceUrl || editingRule?.domain || tr('сайта') }) : tr('Нет открытой вкладки сайта {site}. BlockIt не будет открывать её автоматически.', { site: editingRule?.domain || '' });
+  document.getElementById('saveRule').querySelector('span').textContent = tr(editingRule ? 'Сохранить изменения' : 'Создать правило');
       render(); scheduleCount(); return;
     }
     if (ruleBuilderDraft.html) return parseSource(ruleBuilderDraft.html);

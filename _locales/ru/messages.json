@@ -271,6 +271,8 @@
     "message": "Неверный формат. Ожидается массив правил или объект с полем 'rules'.",
     "description": "Ошибка неверного формата"
   },
+  "importSettings": { "message": "Настройки" },
+  "errorInvalidJSON": { "message": "Некорректный JSON. Проверьте содержимое файла." },
   "errorMissingSelector": {
     "message": "Правило #{index} не содержит поля 'selector'.",
     "description": "Ошибка отсутствия поля selector"

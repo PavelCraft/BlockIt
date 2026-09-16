@@ -86,7 +86,7 @@
         }
 
         // Redirect
-        window.location.href = targetUrl;
+        window.location.replace(targetUrl);
     }
 
     // ============================================================

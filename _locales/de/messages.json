@@ -271,6 +271,8 @@
     "message": "Ungültiges Format. Erwartet wird ein Array von Regeln oder ein Objekt mit dem Feld 'rules'.",
     "description": "Fehler bei ungültigem Format"
   },
+  "importSettings": { "message": "Einstellungen" },
+  "errorInvalidJSON": { "message": "Ungültiges JSON. Prüfen Sie den Dateiinhalt." },
   "errorMissingSelector": {
     "message": "Regel #{index} enthält kein 'selector'-Feld.",
     "description": "Fehler bei fehlendem Selector-Feld"

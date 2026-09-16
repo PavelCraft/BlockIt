@@ -9,7 +9,7 @@
   <!-- ===== HEADER ===== -->
   <div class="popup-header">
     <div class="brand"><span class="logo"><img src="icons/icon128.png" alt=""></span><span>Block<i>It</i></span></div>
-    <a href="https://pavelcraft.github.io/BlockIt/" target="_blank" id="faqLink" class="faq-link" data-i18n="faqLink">!!! Instructions !!!</a>
+    <a href="docs/index.html" target="_blank" id="faqLink" class="faq-link" data-i18n="faqLink">!!! Instructions !!!</a>
   </div>
 
   <!-- ===== ADVANCED MODE TOGGLE ===== -->
@@ -73,7 +73,7 @@
   <div id="basicRuleSlot">
     <div id="finalRuleSection" class="final-rule-section">
       <!-- ===== SELECTOR INPUT ===== -->
-      <label id="selectorLabel" for="selectorInput" data-i18n="selectorLabel">Введите CSS-селектор, XPath или правило StableHTMLFinder:</label>
+      <label id="selectorLabel" for="selectorInput" data-i18n="selectorLabel">Введите CSS-селектор, XPath или правило BlockIt:</label>
       <p id="selectorContextHelp" class="selector-context-help hidden" data-i18n="generatedRuleHelp">При необходимости отредактируйте сформированный селектор.</p>
       <div id="selectorInputWrap" class="selector-input-wrap">
         <input type="text" id="selectorInput" class="selector-input" data-i18n-placeholder="selectorPlaceholder">
@@ -138,6 +138,8 @@
 
   <script src="shared/blockit-selector-core/blockit-selector-core.js"></script>
   <script src="blockit-rule-model.js"></script>
+  <script src="blockit-ui-i18n-translations.js"></script>
+  <script src="blockit-ui-i18n.js"></script>
   <script src="popup.js"></script>
 </body>
 </html>

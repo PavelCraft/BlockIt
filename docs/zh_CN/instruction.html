@@ -1,527 +1,805 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="referrer" content="no-referrer">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BlockIt 扩展程序用户指南</title>
-    <link rel="stylesheet" href="../styles.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>BlockIt — 用户指南</title>
+  <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
-    <div class="container">
+  <main class="page">
+    <header class="hero" id="top">
+      <div class="eyebrow">BlockIt</div>
+      <h1>BlockIt 用户指南</h1>
+      <p>创建规则来屏蔽不需要的页面元素：既可以使用简单的 CSS 选择器，也可以创建基于页面结构的精确规则。</p>
+    </header>
 
-        <!-- ============================================================
-        页眉和导航
-        ============================================================ -->
-        <header>
-            <h1 id="top">BlockIt 扩展程序用户指南</h1>
-            <p>使用 CSS 选择器或 XPath 屏蔽任何网站上的元素</p>
-        </header>
+    <nav class="contents" aria-label="目录">
+      <div>
+        <h2>目录</h2>
+        <ul>
+          <li>
+<a href="#what-is">什么是 BlockIt？</a>
+</li>
+          <li>
+<a href="#quick-start">快速入门</a>
+</li>
+          <li>
+<a href="#selector-tips">选择元素的建议</a>
+</li>
+          <li>
+<a href="#methods">创建规则的方法</a>
+</li>
+          <li>
+<a href="#selectors">选择器速查</a>
+</li>
+          <li>
+<a href="#rules">管理规则</a>
+</li>
+          <li>
+<a href="#faq">问题排查</a>
+</li>
+        </ul>
+      </div>
+    </nav>
 
-        <nav>
-            <h2>目录</h2>
-            <ul>
-                <li><a href="#what-is">什么是 BlockIt？</a></li>
-                <li><a href="#quick-start">快速开始</a></li>
-                <li><a href="#advanced">高级功能</a></li>
-                <li><a href="#selector-tips">选择要屏蔽的元素的技巧</a></li>
-                <li><a href="#export-import">导出和导入规则</a></li>
-                <li><a href="#troubleshooting">问题排查（常见问题）</a></li>
-                <li><a href="#selectors-cheatsheet">选择器速查表</a></li>
-                <li><a href="#feedback">反馈和联系方式</a></li>
-            </ul>
-        </nav>
+    <section class="chapter" id="what-is">
+      <h2>什么是 BlockIt？</h2>
+      <p>展示广告的网站与常见拦截器一直在竞争：网站开发者设法绕过公开过滤列表，而拦截器开发者不断更新这些列表。</p>
+      <p>
+<strong>BlockIt</strong> 采用不同的方式。您可以为常用网站上的特定元素自行创建规则，而不是只依赖共享列表。只要不主动分享规则，网站就不知道规则依赖哪些特征，也更难故意使其失效。</p>
+      <h3>主要功能</h3>
+      <ul class="feature-list">
+        <li>
+<strong>易于使用：</strong>无需记住 CSS 选择器、XPath 或 BlockIt 规则语法。有时从开发者工具复制选择器并粘贴即可。</li>
+        <li>
+<strong>灵活：</strong>
+          <ul>
+            <li>自行选择删除元素还是将其隐藏</li>
+            <li>自行选择屏蔽或保留哪些元素</li>
+            <li>自行选择保留、禁用或删除哪些规则</li>
+            <li>支持 CSS 选择器和 XPath 表达式</li>
+            <li>规则也可应用于 <a href="#embedded-contexts">iframe 和 Shadow DOM</a> 内部
+</li>
+          </ul>
+        </li>
+        <li>
+<strong>隐私：</strong>所有规则都保存在浏览器本地，不会发送到任何地方。</li>
+        <li>
+<strong>BlockIt 语法：</strong>复杂情况可以使用扩展标准 CSS 的语法。需要时可查看 <a href="../rules/en/index.html">BlockIt 语法文档</a>。</li>
+        <li>
+<strong>按网站分组：</strong>规则自动分为当前网站和其他网站两组。</li>
+        <li>
+<strong>分享设置：</strong>可将规则导出到文件。</li>
+        <li>
+<strong>多语言：</strong>扩展程序跟随浏览器语言，支持俄语、英语、法语、德语、西班牙语、葡萄牙语、中文和日语；不支持时显示英语。</li>
+        <li>
+<strong>开源：</strong>采用 BSD-3-Clause 许可证开发。您可以在 <a href="https://github.com/PavelCraft/BlockIt" target="_blank" rel="noopener noreferrer">GitHub</a> 查看代码、参与开发或提出建议。</li>
+      </ul>
+    </section>
 
-        <hr>
-
-        <!-- ============================================================
-        第1部分：什么是 BlockIt？
-        ============================================================ -->
-        <section id="what-is">
-            <h2>什么是 BlockIt？ <a href="#top" class="back-link">回到顶部</a></h2>
-            <p>显示广告的网站和流行的广告拦截器之间存在着持续的“军备竞赛”：网站开发者不断寻找向您展示广告的新方法，而拦截器则不断寻找隐藏它们的方法。</p>
-            <p><strong>BlockIt</strong> 提供了一种不同的方法。您无需依赖常见的过滤列表，而是自己创建规则来屏蔽特定元素。您的规则只有您自己知道（除非您决定分享），这使得它们更难被绕过。</p>
-            <p><strong>主要功能：</strong></p>
-            <ul>
-                <li><strong>易于使用：</strong>只需从开发者工具中复制一个选择器，然后粘贴到扩展程序中即可。</li>
-                <li><strong>灵活性：</strong>
-                    <ul>
-                        <li>支持 CSS 选择器和 XPath 表达式</li>
-                        <li>您自己决定是移除还是隐藏元素</li>
-                        <li>您自己决定屏蔽哪些元素，保留哪些</li>
-                        <li>您自己决定保留或删除哪些屏蔽规则</li>
-                    </ul>
-                </li>
-                <li><strong>隐私保护：</strong>所有规则都仅存储在您的浏览器本地，不会发送到任何地方。</li>
-                <li><strong>按网站分组规则：</strong>规则会自动针对当前网站和其他所有网站进行分组。这使得管理更加方便。</li>
-                <li><strong>分享设置：</strong>您可以通过将规则导出到文件来与其他用户分享您的规则。</li>
-                <li><strong>多语言支持：</strong>扩展程序界面会自动切换到您浏览器中设置的语言。支持的语言：俄语、英语、法语、德语、西班牙语、葡萄牙语、中文和日语。如果您的语言不受支持，界面将默认显示为英语。</li>
-                <li><strong>开源：</strong>该扩展程序遵循 BSD-3-Clause 许可证开发。您可以在 <a href="https://github.com/PavelCraft/BlockIt" target="_blank">GitHub</a> 上参与项目开发、提出改进建议并查看代码。</li>
-            </ul>
-        </section>
-
-        <!-- ============================================================
-        第2部分：快速开始
-        ============================================================ -->
-        <section id="quick-start">
-            <h2>快速开始 <a href="#top" class="back-link">回到顶部</a></h2>
-
-            <h3 id="installation">安装</h3>
-            <p><strong>方法1（推荐）：</strong>前往 <a href="https://chrome.google.com/webstore" target="_blank">Chrome 网上应用店</a>，找到 BlockIt 扩展程序，然后点击“安装”。安装后，请务必通过点击地址栏旁边的拼图图标并选择 BlockIt 旁边的“固定”来将扩展程序固定到浏览器工具栏。</p>
-            <div class="screenshot">
-                <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/1.png" alt="将扩展程序固定到工具栏" class="screenshot-img">
+    <section class="chapter" id="quick-start">
+      <h2>快速入门 <a class="top-link" href="#top">返回顶部</a>
+</h2>
+      <p>如果想先尝试开发者工具生成的 CSS 选择器，请按以下步骤操作。</p>
+      <p>截图中的开发者工具界面为英语。您可以更改开发者工具的界面语言。</p>
+      <details class="devtools-setup">
+        <summary>自定义开发者工具 <span class="expand-hint">可选</span></summary>
+        <div class="devtools-setup-body">
+          <h4>如何打开开发者工具</h4>
+          <table class="cheatsheet-table">
+            <thead><tr><th>操作</th><th>结果</th></tr></thead>
+            <tbody>
+              <tr><td><kbd>F12</kbd></td><td>打开开发者工具。</td></tr>
+              <tr><td><kbd>Ctrl + Shift + I</kbd></td><td>打开同一面板。</td></tr>
+              <tr><td>右键单击元素 → <strong>“检查” / “Inspect”</strong></td><td>打开开发者工具并选中该元素。</td></tr>
+            </tbody>
+          </table>
+          <h4>界面语言</h4>
+          <ol>
+            <li>打开开发者工具。</li>
+            <li>单击右上角齿轮 ⚙，打开<strong>“设置” / “Settings”</strong>。</li>
+            <li>打开<strong>“偏好设置” / “Preferences”</strong>。</li>
+            <li>在<strong>“语言” / “Language”</strong>中选择语言。</li>
+            <li>关闭并重新打开开发者工具。</li>
+          </ol>
+          <h4>面板位置</h4>
+          <p>单击右上角 ⋮，在<strong>“停靠侧” / “Dock side”</strong>中选择右侧、底部、左侧或独立窗口。</p>
+          <div class="gallery compact-gallery" data-gallery>
+            <div class="gallery-stage">
+              <button class="gallery-control prev" type="button" aria-label="Previous screenshot">‹</button>
+              <figure class="gallery-slide active" data-title="Change the DevTools language" data-caption="Open Settings, go to Preferences, find Language, choose a language, and restart DevTools.">
+                <img loading="lazy" decoding="async" src="../../images/en/31.png" alt="Changing the DevTools language">
+              </figure>
+              <figure class="gallery-slide" data-title="Choose the panel placement" data-caption="Find Dock side in the DevTools menu and dock the panel on the right, bottom, or left, or open it in a separate window.">
+                <img loading="lazy" decoding="async" src="../../images/en/32.png" alt="Changing the DevTools panel placement">
+              </figure>
+              <button class="gallery-control next" type="button" aria-label="Next screenshot">›</button>
             </div>
+            <div class="gallery-caption"><span class="gallery-caption-number">1</span><div><b></b><span></span></div></div>
+            <div class="gallery-dots" aria-label="DevTools settings"></div>
+          </div>
+        </div>
+      </details>
+      <div class="note">
+<strong>检查匹配数量。</strong>通常 1 个匹配是较好的结果。0 表示没有找到内容。如果所有匹配都需要屏蔽，则多个匹配也可以。</div>
+      <div class="gallery" data-gallery>
+        <div class="gallery-stage">
+          <button class="gallery-control prev" type="button" aria-label="Previous step">‹</button>
+          <figure class="gallery-slide active" data-title="Open DevTools" data-caption="Right-click the page near the element you need and choose “Inspect”.">
+<img decoding="async" fetchpriority="high" src="../../images/en/1.png" alt="Opening DevTools from the context menu">
+</figure>
+          <figure class="gallery-slide" data-title="Select the element" data-caption="Find the outer container of the block in the HTML tree. Hovering over a row in DevTools highlights the corresponding area on the page.">
+<img loading="lazy" decoding="async" src="../../images/en/2.png" alt="Selecting and highlighting an element in DevTools">
+</figure>
+          <figure class="gallery-slide" data-title="Copy the CSS selector" data-caption="Right-click the selected row and choose “Copy” → “Copy selector”.">
+<img loading="lazy" decoding="async" src="../../images/en/3.png" alt="Copying a CSS selector in DevTools">
+</figure>
+          <figure class="gallery-slide" data-title="Paste the selector and add the rule" data-caption="Paste the selector into BlockIt’s main field and check the “Elements found” count below it. Choose a blocking mode and click “Add rule”.">
+<img loading="lazy" decoding="async" src="../../images/en/4.png" alt="Adding a CSS selector to BlockIt">
+</figure>
+          <figure class="gallery-slide" data-title="Check the result" data-caption="Make sure the success message appears, the rule is listed among active rules, and the unwanted element disappears from the page.">
+<img loading="lazy" decoding="async" src="../../images/en/5.png" alt="A rule successfully added to BlockIt">
+</figure>
+          <button class="gallery-control next" type="button" aria-label="Next step">›</button>
+        </div>
+        <div class="gallery-caption">
+<span class="gallery-caption-number">1</span>
+<div>
+<b>
+</b>
+<span>
+</span>
+</div>
+</div>
+        <div class="gallery-dots" aria-label="Quick-start steps">
+</div>
+      </div>
+      <div id="selector-tips">
+        <h3>选择要屏蔽元素的建议</h3>
+        <p>复制选择器或 HTML 前，请准确确定要屏蔽的元素。</p>
+        <ul>
+          <li>
+<strong>使用开发者工具的高亮。</strong>将鼠标移到 HTML 行上，查看对应区域。</li>
+          <li>
+<strong>选择不包含多余内容的最外层元素。</strong>层级太深可能留下部分广告，范围太大则可能隐藏有用内容。</li>
+          <li>
+<strong>留意元素数量。</strong>通常 1 个更安全；如果逐一检查过，也可以有多个；<strong>0</strong> 表示规则找不到内容。</li>
+        </ul>
+        <p>如果屏蔽过多或完全无效，请删除规则，并在 HTML 树中选择更高或更低层级的元素。</p>
+      </div>
+      <h3>屏蔽模式</h3>
+      <ul>
+        <li>
+<strong>删除：</strong>从 HTML 中移除元素并释放空间，有时会改变布局。</li>
+        <li>
+<strong>隐藏：</strong>保留空间但让元素不可见。删除后布局变差时使用。</li>
+      </ul>
+    </section>
 
-            <p><strong>方法 2（适用于开发者）：</strong>从 <a href="https://github.com/PavelCraft/BlockIt#english" target="_blank">GitHub</a> 下载源代码并加载未打包的扩展程序。</p>
+    <section class="chapter" id="methods">
+      <h2>创建规则的方法 <a class="top-link" href="#top">返回顶部</a>
+</h2>
+      <p>先在开发者工具中找到元素，并检查标签、类和属性。</p>
+      <div class="method-advisor" id="methodAdvisor">
+        <h3>哪种方法可能有用？</h3>
+        <p>启用符合情况的提示。高亮不会隐藏其他方法，只会建议合适的起点。</p>
+        <div class="method-options method-switches">
+          <label class="guide-switch">
+<input id="unstableTraits" type="checkbox">
+<span class="guide-switch-control" aria-hidden="true">
+</span>
+<span>
+<b>元素特征不稳定</b>
+<small>类、ID 或属性看起来随机，或刷新后发生变化。</small>
+</span>
+</label>
+          <label class="guide-switch">
+<input id="unstablePath" type="checkbox">
+<span class="guide-switch-control" aria-hidden="true">
+</span>
+<span>
+<b>元素路径不稳定</b>
+<small>元素在 HTML 结构中的位置刷新后发生变化。</small>
+</span>
+</label>
+          <label class="guide-switch">
+<input id="methodsFailed" type="checkbox">
+<span class="guide-switch-control" aria-hidden="true">
+</span>
+<span>
+<b>CSS 选择器和 XPath 均无效</b>
+<small>简单方法无法可靠找到元素。</small>
+</span>
+</label>
+        </div>
+        <p class="advisor-hint">推荐方法会在下方高亮。选择任意方法可查看详细说明。</p>
+      </div>
 
-            <h3 id="how-to-block">如何屏蔽一个元素</h3>
-            <ol>
-                <li>右键单击您要屏蔽的元素，然后选择“检查”（或“检查元素”）。此操作总是会直接将您带到 HTML 树中的该元素。</li>
-                <div class="screenshot">
-                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/2.png" alt="打开上下文菜单" class="screenshot-img">
-                </div>
-                <li>在 HTML 树中，找到您需要的元素。为了确保选择了正确的元素，请将鼠标悬停在代码行上——页面上的相应元素将被高亮显示。选择完全覆盖您要屏蔽的块的最外层元素。</li>
-                <div class="screenshot">
-                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/3.png" alt="找到元素" class="screenshot-img">
-                </div>
-                <li>右键单击树中的元素 → <strong>复制</strong> → <strong>复制选择器</strong>（或 <strong>Copy selector</strong>）。对于 XPath：<strong>复制 XPath</strong>（或 <strong>Copy XPath</strong>）。</li>
-                <div class="screenshot">
-                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/4.png" alt="复制元素" class="screenshot-img">
-                </div>
-                <li>打开 BlockIt 扩展程序，将复制的选择器粘贴到输入字段中，选择屏蔽模式，然后点击“添加规则”。
-                    <div class="screenshot">
-                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/5.png" alt="将选择器粘贴到字段中" class="screenshot-img">
-                    </div>
-                </li>
-                <li>完成！规则会出现在活动规则列表中，元素会从页面上消失。
-                    <div class="screenshot">
-                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/6.png" alt="活动规则列表" class="screenshot-img">
-                    </div>
-                </li>
-                <li>要关闭开发者工具，请按 <kbd>F12</kbd> 或点击 DevTools 面板右上角的关闭按钮。</li>
-            </ol>
+      <div class="method-list">
+        <details id="method-css" data-method="css">
+<summary>
+<span class="method-index">1</span>从开发者工具复制 CSS 选择器 <span class="expand-hint">选择以阅读</span>
+</summary>
+<div class="method-body">
+<p>先用标准选择器快速测试。选中元素，然后选择“复制” / “Copy” → “复制 selector” / “Copy selector”。</p>
+<p>粘贴到 BlockIt，检查匹配数并添加规则。如果刷新后不可靠，请使用 <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> 或规则构建器。</p>
+<div class="gallery compact-gallery" data-gallery>
+<div class="gallery-stage">
+<button class="gallery-control prev" type="button" aria-label="Previous step">‹</button>
+<figure class="gallery-slide active" data-title="Open DevTools" data-caption="Right-click the page near the element you need and choose “Inspect”."><img loading="lazy" decoding="async" src="../../images/en/1.png" alt="Opening DevTools from the context menu"></figure>
+<figure class="gallery-slide" data-title="Select the required element" data-caption="Find the outer container of the required block in the HTML tree. When you hover over a row, DevTools highlights the corresponding area of the page."><img loading="lazy" decoding="async" src="../../images/en/2.png" alt="Selecting and highlighting an element in DevTools"></figure>
+<figure class="gallery-slide" data-title="Copy the CSS selector" data-caption="Right-click the selected row and choose “Copy” → “Copy selector”."><img loading="lazy" decoding="async" src="../../images/en/3.png" alt="Copying a CSS selector in DevTools"></figure>
+<figure class="gallery-slide" data-title="Paste the selector and add the rule" data-caption="Paste the selector into BlockIt’s main field and note the “Elements found” message below it. Then choose a blocking mode and click “Add rule”."><img loading="lazy" decoding="async" src="../../images/en/4.png" alt="Adding a CSS selector to BlockIt"></figure>
+<figure class="gallery-slide" data-title="Check the result" data-caption="Make sure the success message appears, the rule is listed among active rules, and the unwanted element has disappeared from the page."><img loading="lazy" decoding="async" src="../../images/en/5.png" alt="A rule successfully added to BlockIt"></figure>
+<button class="gallery-control next" type="button" aria-label="Next step">›</button>
+</div>
+<div class="gallery-caption"><span class="gallery-caption-number">1</span><div><b></b><span></span></div></div>
+<div class="gallery-dots" aria-label="Creating a rule from a CSS selector"></div>
+</div>
+</div>
+</details>
+        <details id="method-xpath" data-method="xpath">
+<summary>
+<span class="method-index">2</span>从开发者工具复制 XPath <span class="expand-hint">选择以阅读</span>
+</summary>
+<div class="method-body">
+<p>XPath 描述页面结构中通往元素的路径。当属性不稳定但路径不变时很有用。选择“复制 XPath” / “Copy XPath”，然后粘贴到 BlockIt。</p>
+<div class="note">
+<strong>检查复制的表达式。</strong>Chrome 可能以 <code>id</code> 为基础；ID 变化时 XPath 也不稳定。带位置编号的绝对路径会因结构变化而失效。</div>
+<p>BlockIt 会在主文档和每个 <a href="#embedded-contexts">iframe</a> 中分别计算 XPath，因此从 iframe 内复制的 XPath 可能有效。XPath 无法跨越 <a href="#embedded-contexts">Shadow DOM</a> 边界；这时请使用规则构建器或 <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a>。</p>
+<div class="gallery compact-gallery" data-gallery>
+<div class="gallery-stage">
+<button class="gallery-control prev" type="button" aria-label="Previous step">‹</button>
+<figure class="gallery-slide active" data-title="Copy XPath" data-caption="Right-click the required element’s row in DevTools and choose “Copy” → “Copy XPath”. “Copy full XPath” usually creates an expression that depends more heavily on the entire page structure remaining unchanged.">
+<img loading="lazy" decoding="async" src="../../images/en/13.png" alt="Copying XPath in DevTools">
+</figure>
+<figure class="gallery-slide" data-title="Paste XPath and check the match count" data-caption="Paste the expression into BlockIt’s main field. Make sure the extension recognized it as XPath and note the “Elements found” message below the input.">
+<img loading="lazy" decoding="async" src="../../images/en/14.png" alt="Checking XPath in BlockIt">
+</figure>
+<figure class="gallery-slide" data-title="Add the rule" data-caption="Choose a blocking mode, click “Add rule,” and make sure the success message appears and the unwanted element disappears from the page.">
+<img loading="lazy" decoding="async" src="../../images/en/15.png" alt="Successfully adding an XPath rule">
+</figure>
+<button class="gallery-control next" type="button" aria-label="Next step">›</button>
+</div>
+<div class="gallery-caption"><span class="gallery-caption-number">1</span><div><b></b><span></span></div></div>
+<div class="gallery-dots" aria-label="Steps for creating an XPath rule"></div>
+</div>
+</div>
+</details>
+        <details id="method-html" data-method="html">
+<summary>
+<span class="method-index">3</span>从 HTML 创建快速规则 <span class="expand-hint">选择以阅读</span>
+</summary>
+<div class="method-body">
+<p>解析 HTML 后可自行选择要纳入选择器的属性，控制更充分。</p>
+<div class="gallery compact-gallery" data-gallery>
+<div class="gallery-stage">
+<button class="gallery-control prev" type="button" aria-label="Previous step">‹</button>
+<figure class="gallery-slide active" data-title="Copy the element’s HTML" data-caption="Right-click the element’s row in DevTools and choose “Copy” → “Copy element”.">
+<img loading="lazy" decoding="async" src="../../images/en/6.png" alt="Copying an HTML element">
+</figure>
+<figure class="gallery-slide" data-title="Click “Advanced mode”" data-caption="Open BlockIt and click “Advanced mode.” The “Create a rule from HTML” section will appear.">
+<img loading="lazy" decoding="async" src="../../images/en/33.png" alt="Opening BlockIt advanced mode">
+</figure>
+<figure class="gallery-slide" data-title="Paste and parse the HTML" data-caption="Paste the copied element into “Create a rule from HTML” and click “Parse HTML.” Keep only the stable attributes you need.">
+<img loading="lazy" decoding="async" src="../../images/en/7.png" alt="Parsing an HTML element in advanced mode">
+</figure>
+<figure class="gallery-slide" data-title="Check and add the rule" data-caption="Check the generated selector and match count, then add the rule. Make sure it works and the unwanted element disappears from the page.">
+<img loading="lazy" decoding="async" src="../../images/en/8.png" alt="Checking and adding a quick HTML rule">
+</figure>
+<button class="gallery-control next" type="button" aria-label="Next step">›</button>
+</div>
+<div class="gallery-caption">
+<span class="gallery-caption-number">1</span>
+<div>
+<b>
+</b>
+<span>
+</span>
+</div>
+</div>
+<div class="gallery-dots" aria-label="Steps for creating a quick rule">
+</div>
+</div>
+<div class="note">
+<strong>不要自动保留所有属性。</strong>看似随机的类或 ID 可能在下次加载时改变。</div>
+</div>
+</details>
+        <details id="method-stable" data-method="stable">
+<summary>
+<span class="method-index">4</span>使用 <a class="product-link summary-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> <span class="expand-hint">选择以阅读</span>
+</summary>
+<div class="method-body">
+<p>
+<a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> 适用于类和 ID 被混淆、每次加载都会变化或页面有大量相似区块的情况。它通常比手工分析 HTML 更简单，但多次加载需要时间。</p>
+<div class="gallery compact-gallery" data-gallery>
+<div class="gallery-stage">
+<button class="gallery-control prev" type="button" aria-label="Previous step">‹</button>
+<figure class="gallery-slide active" data-title="Start page analysis" data-caption="Open the required page, choose the number of loads in StableHTMLFinder, and click “Analyze page.” More loads identify unchanging traits more reliably, but take longer.">
+<img loading="lazy" decoding="async" src="../../images/en/25.png" alt="Starting page analysis in StableHTMLFinder">
+</figure>
+<figure class="gallery-slide" data-title="Copy the required element’s HTML" data-caption="When analysis finishes, the stability map opens in a separate tab. Select the required element in DevTools and copy it with “Copy” → “Copy element”.">
+<img loading="lazy" decoding="async" src="../../images/en/26.png" alt="Copying an HTML element for stability map search">
+</figure>
+<figure class="gallery-slide" data-title="Find the element on the map" data-caption="Switch to the stability map tab. Paste the copied element into map search and find it. Make sure it is the correct element. Click the nearby menu icon {{map-menu}}, open the selector card, and read the description of the traits used to build the CSS selector or BlockIt rule.">
+<img loading="lazy" decoding="async" src="../../images/en/27.png" alt="Finding an element on the stability map">
+</figure>
+<figure class="gallery-slide" data-title="Check the traits and copy the result" data-caption="Make sure the selector or rule uses genuinely relevant stable traits. Copy the CSS selector or BlockIt rule.">
+<img loading="lazy" decoding="async" src="../../images/en/28.png" alt="Checking traits and copying a selector in StableHTMLFinder">
+</figure>
+<figure class="gallery-slide" data-title="Add the result to BlockIt" data-caption="Paste the copied selector or rule into BlockIt’s main field, make sure it finds the correct number of elements, and click “Add rule”.">
+<img loading="lazy" decoding="async" src="../../images/en/29.png" alt="Checking a StableHTMLFinder selector in BlockIt">
+</figure>
+<figure class="gallery-slide" data-title="Check the page" data-caption="Make sure the rule worked and the unwanted element disappeared from the page.">
+<img loading="lazy" decoding="async" src="../../images/en/30.png" alt="Result of adding a rule from StableHTMLFinder">
+</figure>
+<button class="gallery-control next" type="button" aria-label="Next step">›</button>
+</div>
+<div class="gallery-caption"><span class="gallery-caption-number">1</span><div><b></b><span></span></div></div>
+<div class="gallery-dots" aria-label="Steps for using StableHTMLFinder"></div>
+</div>
+<p>
+<a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> 本身不屏蔽元素，而是帮助选择 BlockIt 规则的基础：</p>
+<ul class="stable-result-options">
+<li><strong>CSS 选择器：</strong>使用稳定特征并找到正确数量时最简单。</li>
+<li><strong>BlockIt 规则：</strong>需要标准 CSS 不具备的扩展条件时使用。</li>
+<li><strong>自行检查地图：</strong>查看元素及周围的稳定特征，再将其输入规则构建器。</li>
+</ul>
+</div>
+</details>
+        <details id="method-builder" data-method="builder">
+<summary>
+<span class="method-index">5</span>打开规则构建器 <span class="expand-hint">选择以阅读</span>
+</summary>
+<div class="method-body">
+<p>无需了解 CSS、XPath 或 BlockIt 语法即可创建精确规则。它可使用文本、属性或类的数量、兄弟位置和周围元素。</p>
+<p>在开发者工具中复制 HTML，打开 BlockIt 的“高级模式”，粘贴后单击“打开规则构建器”。</p>
+<div class="builder-map">
+<article>
+<h4>元素卡片</h4>
+<p>每张卡片描述一个 HTML 元素：标签、属性数量以及属性、文本和位置条件。</p>
+</article>
+<article>
+<h4>关系树</h4>
+<p>祖先显示在上方，后代缩进显示在下方，兄弟位于同一层级。</p>
+</article>
+<article>
+<h4>稳定特征</h4>
+<p>可以禁用自动填入的值。不要仅因为 HTML 中存在变化的 ID 或类就使用它们。</p>
+</article>
+<article>
+<h4>检查</h4>
+<p>先检查匹配数量，再用“刷新后检查”确认结果保持稳定。</p>
+</article>
+</div>
+<h4>卡片中可用的条件</h4>
+<ul>
+<li>
+<strong>标签：</strong>可以指定；如果不重要，也可以留空。</li>
+<li>
+<strong>属性数量：</strong>可以要求恰好、至少或至多为指定数量。</li>
+<li>
+<strong>属性：</strong>可为名称和值设置条件；对于 <code>class</code>，还可以指定类的数量。</li>
+<li>
+<strong>文本：</strong>可检查元素自身文本或内部全部文本，并使用精确匹配、前缀、后缀、子字符串或正则表达式。</li>
+<li>
+<strong>兄弟位置：</strong>元素在同一父元素的子元素中的位置。</li>
+</ul>
+<h4>关联元素</h4>
+<p>可以为目标元素及其祖先添加直接父元素或任意祖先。目标元素也可以包含子元素、后代或兄弟元素，兄弟元素还可拥有自己的后代。关联元素带有“允许不存在”开关。</p>
+<p>
+<strong>兄弟位置</strong>是元素在同一父元素的子元素中的位置；<strong>规则结果中的位置</strong>则是它在完整规则找到的所有元素中的位置。这是两个不同条件。</p>
+<h4>预览与检查</h4>
+<p>请阅读“规则预览”中的文字说明，它能帮助发现误加的属性、文本条件或关系。然后在当前页面和刷新后分别检查匹配数量。</p>
+<h4>示例：用一条规则配置多个元素</h4>
+<ol class="builder-steps">
+<li>启用“兄弟位置”，输入目标元素的位置；本例为 <strong>2、3 和 5</strong>。</li>
+<li>保留对 <code>class</code> 属性名称的精确匹配。</li>
+<li>删除类值中不可靠的部分，并将“值：精确”等改为<strong>“值：包含”</strong>。</li>
+<li>如果类数量并不重要且可能变化，请禁用“类数量”。</li>
+<li>阅读“规则预览”下的说明，确认每个条件都确有必要。</li>
+<li>关闭目标页面上的开发者工具，再单击“刷新后检查”。开发者工具打开时，某些网站会加载不同内容。</li>
+<li>确认刷新后匹配数量没有变化，这说明规则较为稳定。</li>
+<li>单击“创建规则”。</li>
+</ol>
+<div class="gallery compact-gallery" data-gallery>
+<div class="gallery-stage">
+<button class="gallery-control prev" type="button" aria-label="Previous step">‹</button>
+<figure class="gallery-slide active" data-title="Copy the element’s HTML" data-caption="Select the required block’s outer container in DevTools and copy it with “Copy” → “Copy element”.">
+<img loading="lazy" decoding="async" src="../../images/en/16.png" alt="Copying an HTML element for the rule builder">
+</figure>
+<figure class="gallery-slide" data-title="Click “Advanced mode”" data-caption="Open BlockIt and click “Advanced mode.” The “Create a rule from HTML” section will appear.">
+<img loading="lazy" decoding="async" src="../../images/en/33.png" alt="Opening BlockIt advanced mode">
+</figure>
+<figure class="gallery-slide" data-title="Open the builder" data-caption="Paste the HTML into “Create a rule from HTML” in BlockIt’s advanced mode and click “Open rule builder”.">
+<img loading="lazy" decoding="async" src="../../images/en/17.png" alt="Opening the rule builder from HTML">
+</figure>
+<figure class="gallery-slide" data-title="Review the initial result" data-caption="The builder fills the card from the copied HTML and immediately shows the match count.">
+<img loading="lazy" decoding="async" src="../../images/en/18.png" alt="Automatically filled element card in the builder">
+</figure>
+<figure class="gallery-slide" data-title="Find the first element’s position" data-caption="If necessary, return to DevTools to find traits that restrict the search to the elements you want to block. Here, the advertisement is the second sibling.">
+<img loading="lazy" decoding="async" src="../../images/en/19.png" alt="First similar element in DevTools">
+</figure>
+<figure class="gallery-slide" data-title="Find the second element’s position" data-caption="Another advertisement with the same classes is the third sibling.">
+<img loading="lazy" decoding="async" src="../../images/en/20.png" alt="Second similar sibling element">
+</figure>
+<figure class="gallery-slide" data-title="Find the third element’s position" data-caption="The last advertisement with the same classes is the fifth sibling.">
+<img loading="lazy" decoding="async" src="../../images/en/21.png" alt="Third similar sibling element">
+</figure>
+<figure class="gallery-slide" data-title="Configure and check the rule" data-caption="One rule blocks three advertisements with the same classes by specifying sibling positions 2, 3, and 5. The numbers in the screenshot correspond to the actions listed above the gallery.">
+<img loading="lazy" decoding="async" src="../../images/en/22.png" alt="Completed rule builder form with sibling positions">
+</figure>
+<figure class="gallery-slide" data-title="Confirm rule creation" data-caption="Click “Create rule.” If BlockIt says the rule finds multiple elements, check their number again and confirm saving.">
+<img loading="lazy" decoding="async" src="../../images/en/23.png" alt="Confirming a rule for multiple elements">
+</figure>
+<figure class="gallery-slide" data-title="Check the page" data-caption="After saving, make sure every selected block disappeared and useful page elements remained in place.">
+<img loading="lazy" decoding="async" src="../../images/en/24.png" alt="Page after applying a rule from the builder">
+</figure>
+<button class="gallery-control next" type="button" aria-label="Next step">›</button>
+</div>
+<div class="gallery-caption"><span class="gallery-caption-number">1</span><div><b></b><span></span></div></div>
+<div class="gallery-dots" aria-label="Steps for using the rule builder"></div>
+</div>
+</div>
+</details>
+      </div>
+      <h3>何时改用其他方法</h3>
+      <p>若想快速获得结果，可先尝试开发者工具中的 CSS 选择器。如果元素特征看起来稳定，但您想控制要使用哪些属性，可使用 HTML 快速规则。如果特征不稳定、像随机生成，或页面上有许多相似区块，请使用 <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> 或规则构建器。</p>
+    </section>
 
-            <h3 id="modes">屏蔽模式是什么意思？</h3>
-            <ul>
-                <li><strong>移除</strong>（适用于大多数情况）：元素会完全从页面 HTML 中移除，其空间会被释放给其他元素。但是，此选项有时可能会导致布局错乱。</li>
-                <li><strong>隐藏：</strong>元素变为不可见，但继续在页面上占据相同的空间。布局不会错乱。</li>
-            </ul>
-        </section>
+    <section class="chapter" id="selectors">
+      <h2>CSS 选择器速查 <a class="top-link" href="#top">返回顶部</a>
+</h2>
+      <h3>什么是选择器？</h3>
+      <p>
+<strong>选择器</strong>通过标签、类、标识符、属性或在 HTML 结构中的位置来查找网页元素。</p>
+      <p>在 CSS 样式中，选择器用于应用格式；在 BlockIt 中，选择器<strong>只负责查找元素</strong>。这里不会设置颜色、字体或间距，而只是<strong>找到元素</strong>并将其屏蔽。</p>
+      <p>下面的示例可帮助您读懂普通 CSS 选择器并进行简单修改。</p>
+      <h3>如何检查选择器</h3>
+      <ol>
+<li>在开发者工具中打开<strong>“元素” / “Elements”</strong>标签页。</li>
+<li>按 <kbd>Ctrl + F</kbd>；Mac 上按 <kbd>Cmd + F</kbd>。</li>
+<li>将选择器粘贴到搜索框。</li>
+<li>开发者工具会高亮所有匹配项并显示数量，例如 <code>1 of 3</code>。</li>
+</ol>
+      <div class="gallery" data-gallery>
+        <div class="gallery-stage">
+          <figure class="gallery-slide active" data-title="Check the selector" data-caption="Press Ctrl + F on the Elements tab, paste the selector, and check the number of matching elements.">
+<img loading="lazy" decoding="async" src="../../images/selector-check.png" alt="Searching for a selector with Ctrl+F">
+</figure>
+        </div>
+        <div class="gallery-caption">
+<span class="gallery-caption-number">1</span>
+<div>
+<b>
+</b>
+<span>
+</span>
+</div>
+</div>
+        <div class="gallery-dots" aria-label="Checking a selector in DevTools">
+</div>
+      </div>
+      <h3>选择器类型</h3>
+      <div class="syntax-grid">
+        <article class="syntax-example">
+<h4>通用选择器（<code>*</code>）</h4>
+<p>查找页面上的<strong>所有</strong>元素。请谨慎使用：它会返回 HTML 中的一切。</p>
+<p>
+<strong>选择器：</strong> <code>*</code>
+</p>
+<p>
+<strong>找到：</strong>所有元素，无一例外。</p>
+</article>
+        <article class="syntax-example">
+<h4>标签选择器</h4>
+<p>查找具有指定 HTML 标签的所有元素。</p>
+<p>
+<strong>选择器：</strong> <code>h1</code>、<code>p</code>、<code>button</code>、<code>div</code>
+</p>
+<p>
+<strong>找到：</strong>
+</p>
+<ul>
+<li>
+<code>h1</code> — 所有一级标题；</li>
+<li>
+<code>p</code> — 所有段落；</li>
+<li>
+<code>button</code> — 所有按钮；</li>
+<li>
+<code>div</code> — 所有 <code>&lt;div&gt;</code> 容器。</li>
+</ul>
+</article>
+        <article class="syntax-example">
+<h4>类选择器（<code>.class</code>）</h4>
+<p>查找 <code>class</code> 属性中包含指定类的所有元素。多个类之间不要加空格。</p>
+<p>
+<strong>选择器：</strong> <code>.card</code>、<code>.card__title</code>、<code>.card.featured</code>
+</p>
+<p>
+<strong>找到：</strong>
+</p>
+<ul>
+<li>
+<code>.card</code> — 所有带 <code>card</code> 类的元素；</li>
+<li>
+<code>.card__title</code> — 所有带 <code>card__title</code> 类的元素；</li>
+<li>
+<code>.card.featured</code> — 同时带 <code>card</code> 和 <code>featured</code> 类的元素。</li>
+</ul>
+<p>元素还可以有其他类：例如 <code>class="card featured compact"</code> 也符合 <code>.card.featured</code>。若要精确匹配完整类字符串，可使用 <code>[class="card featured"]</code>，但它依赖类的顺序，也不允许额外类。</p>
+</article>
+        <article class="syntax-example">
+<h4>ID 选择器（<code>#id</code>）</h4>
+<p>查找具有唯一 <code>id</code> 的元素。一个页面中应只有一个元素使用该 ID。</p>
+<p>
+<strong>选择器：</strong> <code>#salad-cat</code>、<code>#confused-cat</code>、<code>#bread-cat</code>
+</p>
+<p>
+<strong>找到：</strong>
+</p>
+<ul>
+<li>
+<code>#salad-cat</code> — <code>id="salad-cat"</code> 的元素；</li>
+<li>
+<code>#confused-cat</code> — <code>id="confused-cat"</code> 的元素；</li>
+<li>
+<code>#bread-cat</code> — <code>id="bread-cat"</code> 的元素。</li>
+</ul>
+</article>
+        <article class="syntax-example">
+<h4>属性选择器（<code>[attribute="value"]</code>）</h4>
+<p>既可以检查属性的精确值，也可以只检查属性是否存在。多个条件直接连写。</p>
+<p>
+<strong>选择器：</strong> <code>[data-type]</code>、<code>[data-type="description"]</code>、<code>[data-type="description"][aria-label="Card"]</code>、<code>[class~="card"]</code>、<code>[class="card featured"]</code>
+</p>
+<p>
+<strong>找到：</strong>
+</p>
+<ul>
+<li>
+<code>[data-type]</code> — 带有任意值的 <code>data-type</code> 属性的元素；</li>
+<li>
+<code>[data-type="description"]</code> — <code>data-type</code> 的值恰好是 <code>description</code> 的元素；</li>
+<li>
+<code>[data-type="description"][aria-label="Card"]</code> — 两个属性都匹配的元素；</li>
+<li>
+<code>[class~="card"]</code> — 类列表中包含独立的 <code>card</code> 类的元素；</li>
+<li>
+<code>[class="card featured"]</code> — 整个 <code>class</code> 属性恰好等于给定字符串的元素。</li>
+</ul>
+<div class="operator-reference">
+<h5>比较属性值的方法</h5>
+<dl>
+<div><dt><code>[href^="https://"]</code></dt><dd>值以 <code>https://</code> 开头</dd></div>
+<div><dt><code>[src$=".png"]</code></dt><dd>值以 <code>.png</code> 结尾</dd></div>
+<div><dt><code>[class*="advert"]</code></dt><dd>值中任意位置包含 <code>advert</code></dd></div>
+<div><dt><code>[class~="card"]</code></dt><dd>以空格分隔的词中包含独立的 <code>card</code></dd></div>
+<div><dt><code>[lang|="en"]</code></dt><dd>值为 <code>en</code>，或以 <code>en-</code> 开头，例如 <code>en-US</code></dd></div>
+<div><dt><code>[aria-label*="advertisement" i]</code></dt><dd>值包含 advertisement，不区分大小写</dd></div>
+</dl>
+</div>
+<p>选择器只检查列出的属性，不排除其他属性。例如，<code>[data-type="description"][aria-label="Card"]</code> 也会找到 <code>&lt;div data-type="description" aria-label="Card" title="Details"&gt;</code>：额外的 <code>title</code> 不影响匹配。标准 CSS 无法要求元素没有任何其他属性。</p>
+</article>
+        <article class="syntax-example">
+<h4>组合选择器</h4>
+<p>标签、类、ID 和属性条件可以不加空格直接组合，让所有条件作用于同一个元素。</p>
+<p>
+<strong>选择器：</strong> <code>h2.card__title</code>、<code>div.card.featured</code>、<code>div[data-type="description"]</code>、<code>article.card[data-type="advertisement"][aria-label="Advertisement"]</code>
+</p>
+<p>
+<strong>找到：</strong>
+</p>
+<ul>
+<li>
+<code>h2.card__title</code> — 带 <code>card__title</code> 类的 <code>&lt;h2&gt;</code>；</li>
+<li>
+<code>div.card.featured</code> — 同时带 <code>card</code> 和 <code>featured</code> 类的 <code>&lt;div&gt;</code>；可以有其他类；</li>
+<li>
+<code>div[data-type="description"]</code> — 带指定属性的 <code>&lt;div&gt;</code>；可以有其他属性；</li>
+<li>
+<code>article.card[data-type="advertisement"][aria-label="Advertisement"]</code> — 带 <code>card</code> 类、且两个属性值分别精确等于 <code>advertisement</code> 和 <code>Advertisement</code> 的 <code>&lt;article&gt;</code>。</li>
+</ul>
+</article>
+        <article class="syntax-example">
+<h4>后代选择器（空格）</h4>
+<p>查找位于另一元素<strong>内部</strong>任意层级的元素。</p>
+<p>
+<strong>选择器：</strong> <code>.card .btn</code>
+</p>
+<p>
+<strong>找到：</strong>位于带 <code>card</code> 类的元素内部、带 <code>btn</code> 类的所有元素。</p>
+</article>
+        <article class="syntax-example">
+<h4>直接子元素选择器（<code>&gt;</code>）</h4>
+<p>查找另一元素的<strong>直接</strong>子元素，只向下一层搜索。</p>
+<p>
+<strong>选择器：</strong> <code>.card__body &gt; .card__title</code>
+</p>
+<p>
+<strong>找到：</strong>作为带 <code>card__body</code> 类的元素直接子元素、且带 <code>card__title</code> 类的元素。</p>
+</article>
+        <article class="syntax-example">
+<h4>相邻兄弟选择器（<code>+</code>）</h4>
+<p>查找同一层级中紧跟在另一元素之后的<strong>兄弟元素</strong>。</p>
+<p>
+<strong>选择器：</strong> <code>#confused-cat + .card__description</code>
+</p>
+<p>
+<strong>找到：</strong>紧跟在 <code>id="confused-cat"</code> 元素之后、带 <code>card__description</code> 类的元素。</p>
+</article>
+        <article class="syntax-example">
+<h4>位置伪类</h4>
+<p>按元素在兄弟元素中的位置进行选择。</p>
+<p>
+<strong>选择器：</strong> <code>.card__actions :nth-child(2)</code>
+</p>
+<p>
+<strong>找到：</strong>带 <code>card__actions</code> 类的元素内部的第二个子元素。</p>
+</article>
+      </div>
+      <p class="selector-limit">
+<strong>标准 CSS 选择器有局限。</strong>它无法在不逐一列出的情况下描述属性或类的数量，也无法描述元素自身文本、任意内部文本、正则表达式或属性名称模式。例如，<code>[data-*]</code> 不是标准 CSS。此类情况可使用扩展 CSS 语法的 BlockIt 规则，例如 <code>[data-*]</code>、<code>:attr-name(/^data-/)</code> 等。<a href="../rules/en/index.html">阅读 BlockIt 语法文档</a>。</p>
 
-        <!-- ============================================================
-        第3部分：高级功能
-        ============================================================ -->
-        <section id="advanced">
-            <h2>高级功能 <a href="#top" class="back-link">回到顶部</a></h2>
+      <div class="embedded-contexts" id="embedded-contexts">
+        <h3 class="section-heading">什么是 iframe 和 Shadow DOM？<a class="top-link" href="#top">返回顶部</a></h3>
+        <p>
+<strong>iframe</strong> 是嵌入在另一网页中的独立网页。它有自己的文档，因此从父页面进行的普通搜索不能直接进入其中。</p>
+        <div class="structure-example">
+          <span>iframe 在 HTML 中的样子</span>
+          <pre><code>&lt;main&gt;
+  &lt;h1&gt;主页面&lt;/h1&gt;
+  &lt;iframe src="advertisement.html"&gt;&lt;/iframe&gt;
+&lt;/main&gt;</code></pre>
+          <p><code>advertisement.html</code> 的标记会作为独立文档加载到 <code>&lt;iframe&gt;</code> 中。</p>
+        </div>
+        <p>
+<strong>Shadow DOM</strong> 是组件内部隔离的元素树。网站用它将组件标记与页面其他部分分开；封闭的影子根还会对普通页面脚本隐藏该树。</p>
+        <div class="structure-example">
+          <span>Shadow DOM 在开发者工具中的样子</span>
+          <pre><code>&lt;video-player&gt;
+  #shadow-root (open)
+    &lt;button class="play"&gt;播放&lt;/button&gt;
+&lt;/video-player&gt;</code></pre>
+          <p>按钮位于 <code>&lt;video-player&gt;</code> 组件的影子根中，而非主页面的普通元素树中。</p>
+        </div>
+        <p>这些结构为拦截器形成搜索边界：规则不仅要在主文档中运行，还要在可访问的 iframe 和影子根中运行。并非所有拦截器都能做到。BlockIt 可在 iframe 和 Shadow DOM 中应用 CSS 选择器及扩展规则，但 XPath 只在文档中有效，不能跨越 Shadow DOM 边界。</p>
+      </div>
+    </section>
 
-            <h3 id="xpath">使用 XPath 屏蔽</h3>
-            <p>当 CSS 选择器不稳定时，XPath 在那些使用动态类（混淆）的网站上非常有用。</p>
-            <p><strong>如何复制 XPath：</strong></p>
-            <ol>
-                <li>通过“检查”找到元素。</li>
-                <li>右键单击代码中的元素 → <strong>复制</strong> → <strong>复制 XPath</strong>（或 <strong>Copy XPath</strong>）。</li>
-                <li>将复制好的表达式粘贴到 BlockIt 的输入字段中。扩展程序会自动识别出它是 XPath，并且您<strong>无需为此启用高级模式</strong>。</li>
-            </ol>
+    <section class="chapter" id="rules">
+      <h2>管理规则 <a class="top-link" href="#top">返回顶部</a>
+</h2>
+      <p>已创建的规则会显示在当前网站的列表中，或显示在不绑定域名的规则列表中。构建器创建的规则可以编辑或删除；禁用的规则仍保留在列表中，并带有相应标记。</p>
+      <h3>禁用与删除</h3>
+      <h4>如何禁用规则？</h4>
+      <p>在“活动规则”中找到该规则并单击“禁用”。规则仍保留，但不再应用，并显示“已禁用”标记。如果它已从当前页面删除某个元素，刷新页面即可恢复原始内容。</p>
+      <h4>如何删除规则？</h4>
+      <p>在“活动规则”中找到该规则并单击“删除”。若要恢复已从页面移除的元素，请按 <kbd>F5</kbd> 或单击标签页的刷新按钮。</p>
+      <h3>导出与导入</h3>
+      <p>导出会将规则保存到文件；导入可以从文件添加规则，也可以替换当前列表。您可以借此迁移设置或在设备间共享。</p>
+      <div class="gallery" data-gallery>
+        <div class="gallery-stage">
+          <button class="gallery-control prev" type="button" aria-label="Previous step">‹</button>
+          <figure class="gallery-slide active" data-title="Click “Advanced mode”" data-caption="Open BlockIt and click “Advanced mode.” The rule export and import tools will then become available.">
+<img loading="lazy" decoding="async" src="../../images/en/33.png" alt="Opening BlockIt advanced mode">
+</figure>
+          <figure class="gallery-slide" data-title="Open import" data-caption="Click “Import rules,” then “Choose file” in the dialog.">
+<img loading="lazy" decoding="async" src="../../images/en/9.png" alt="Opening the rule import dialog">
+</figure>
+          <figure class="gallery-slide" data-title="Choose the rules file" data-caption="Select the saved JSON file containing your rules and open it.">
+<img loading="lazy" decoding="async" src="../../images/en/10.png" alt="Selecting a JSON rules file">
+</figure>
+          <figure class="gallery-slide" data-title="Choose an import method" data-caption="Click “Replace all” to remove current rules, or “Add” to keep them and append the rules from the file.">
+<img loading="lazy" decoding="async" src="../../images/en/11.png" alt="Choosing a rule import method">
+</figure>
+          <figure class="gallery-slide" data-title="Check the result" data-caption="After a successful import, BlockIt shows how many new rules were added and how many are stored in total.">
+<img loading="lazy" decoding="async" src="../../images/en/12.png" alt="Successful rule import message">
+</figure>
+          <button class="gallery-control next" type="button" aria-label="Next step">›</button>
+        </div>
+        <div class="gallery-caption">
+<span class="gallery-caption-number">1</span>
+<div>
+<b>
+</b>
+<span>
+</span>
+</div>
+</div>
+        <div class="gallery-dots" aria-label="Rule import steps">
+</div>
+      </div>
+      <h3>检查规则</h3>
+      <p>打开要检查的页面，再打开 BlockIt。在“此网站：&lt;域名&gt;”分组标题中单击“检查规则”。</p>
+      <p>检查会显示已保存规则能否在当前页面找到元素。您可以检查一次，也可以启用“检查稳定性”并指定多次刷新。检查期间，BlockIt 会暂时停止应用规则、刷新页面，并显示每次加载时各规则的匹配数量。</p>
+      <ul>
+        <li><strong>有效：</strong>每次都找到相同且不为零的元素数量。</li>
+        <li><strong>不稳定：</strong>能找到元素，但数量随加载而变化。</li>
+        <li><strong>未生效：</strong>在测试页面上未找到匹配项。</li>
+        <li><strong>错误：</strong>无法执行该规则。</li>
+      </ul>
+      <p>检查包括当前基础域名的规则和不绑定域名的规则。BlockIt 保存普通域名绑定时不区分子域名：例如，在 <code>e.mail.ru</code> 创建的规则会保存为 <code>mail.ru</code> 的规则。但检查只针对启动诊断时打开的确切页面。因此，某个子域名或页面区域上有效的规则，在其他网址上可能显示“未生效”。请在创建规则时针对的页面上启动检查。</p>
+      <div class="note"><strong>检查只统计匹配项，不判断元素用途。</strong>非零结果说明规则找到了内容，却不保证只找到了您想屏蔽的元素。请结合页面实际效果检查匹配数量。</div>
+    </section>
 
-            <h3 id="advanced-mode">高级模式</h3>
-            <p>在基本模式下，扩展程序提供一个简单的字段来输入选择器。为了更精细地调整规则和使用额外工具，还有<strong>高级模式</strong>。要启用它，请点击扩展程序界面中的相应按钮。</p>
-            <p>在此模式下，您可以访问：</p>
-            <ul>
-                <li><strong>HTML 解析器：</strong>粘贴元素的 HTML 代码，扩展程序会自动建议一个由该元素属性组成的选择器。</li>
-                <li><strong>属性编辑：</strong>解析后，您将看到元素属性列表，并可以移除不可靠的属性（例如，动态生成的类）来优化选择器。</li>
-                <li><strong>手动添加属性：</strong>如果您想进一步优化选择器，可以手动添加一个属性及其值。</li>
-                <li><strong>导出和导入规则：</strong>与其他用户分享您的规则，或在设备之间传输规则。</li>
-            </ul>
-
-            <h4 id="html-parser">HTML 解析器、编辑和添加属性</h4>
-            <p>这三个工具协同工作，形成一个统一的工作流程，用于在不记忆语法的情况下创建精确的选择器：</p>
-            <ol>
-                <li><strong>复制元素的 HTML 代码</strong>（右键单击 → <strong>复制</strong> → <strong>复制元素</strong>（或 <strong>Copy element</strong>））。
-                    <div class="screenshot">
-                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/7.png" alt="复制 HTML 元素" class="screenshot-img">
-                    </div>
-                </li>
-                <li><strong>在扩展程序中启用高级模式，并将 HTML 代码粘贴到相应的字段中</strong>。点击“解析”。扩展程序会解析代码，并向您显示标签及其所有属性的列表。
-                </li>
-                <li><strong>编辑建议的属性列表。</strong>只保留那些未来不太可能更改的属性。例如，看起来像动态生成的乱码的 <code>id</code> 和 <code>class</code> 并不适合此目的。输入字段中的选择器会在您每次进行更改时自动更新。
-                    <div class="screenshot">
-                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/8.png" alt="在高级模式下粘贴 HTML" class="screenshot-img">
-                    </div>
-                </li>
-                <li><strong>如有需要，手动添加属性。</strong>如果建议的属性集不足以创建唯一的选择器，您可以添加自己的属性。</li>
-                <li><strong>点击“添加规则”，并确认它已被添加，且元素已从页面中移除。</strong>
-                    <div class="screenshot">
-                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/9.png" alt="编辑属性列表" class="screenshot-img">
-                    </div>
-                </li>
-            </ol>
-        </section>
-
-        <!-- ============================================================
-        第4部分：选择要屏蔽的元素的技巧
-        ============================================================ -->
-        <section id="selector-tips">
-            <h2>选择要屏蔽的元素的技巧 <a href="#top" class="back-link">回到顶部</a></h2>
-            <p>以下方法按从最简单到最复杂的顺序排列。从第一个开始，如果前一个方法不起作用，再尝试下一个。</p>
-
-            <h3>1. 从 DevTools 复制选择器</h3>
-            <p>这是最简单的方法，适用于大多数网站。说明在 <a href="#how-to-block">“如何屏蔽一个元素”</a> 部分。</p>
-
-            <h3>2. 从 DevTools 复制 XPath</h3>
-            <p>如果由于网站上的动态类导致复制的选择器不起作用，请使用此方法。复制 XPath 的说明在 <a href="#xpath">“使用 XPath 屏蔽”</a> 部分。</p>
-
-            <h3>3. 使用 HTML 解析器（在高级模式下）</h3>
-            <p>如果您了解选择器理论，但不记得确切的语法，这种方法很实用。您粘贴元素的 HTML 代码，扩展程序会根据其属性建议一个选择器。</p>
-
-            <h3>4. 编辑属性列表（在高级模式下）</h3>
-            <p>使用 HTML 解析器后，您将看到元素的所有属性列表。只保留那些未来不太可能更改的属性。为此目的，动态生成的类（乱码）不是好选择。</p>
-
-            <h3>5. 手动添加属性（在高级模式下）</h3>
-            <p>如果自动方法都无法提供稳定的选择器，您可以手动添加一个唯一属性及其值来缩小搜索范围。</p>
-
-            <h3>6. 手动编写选择器</h3>
-            <p>需要对 CSS 选择器语法有基本的了解。这给您更多的控制和稳定性。要学习基础知识，请参阅 <a href="#selectors-cheatsheet">选择器速查表</a> 或 <a href="https://docs.sherparpa.ru/sherpa-rpa/sherpa-designer/rabota-v-sherpa-designer/rukovodstvo-po-veb-selektoram/spravochnik-po-notacii-css-i-xpath-selektorov" target="_blank">CSS 和 XPath 选择器参考</a>（俄语）。</p>
-        </section>
-
-        <!-- ============================================================
-        第5部分：导出和导入规则
-        ============================================================ -->
-        <section id="export-import">
-            <h2>导出和导入规则 <a href="#top" class="back-link">回到顶部</a></h2>
-            <p>此功能允许您与其他用户分享规则或在计算机之间传输规则。可在<strong>高级模式</strong>下使用。</p>
-            <ul>
-                <li><strong>导出：</strong>将所有规则保存到一个 JSON 文件中。</li>
-                <li><strong>导入：</strong>从 JSON 文件加载规则。您可以替换所有当前规则或添加新规则（重复项将被跳过）。</li>
-            </ul>
-            <h3>如何导入规则？</h3>
-            <ul>
-                <li><strong>在高级模式下，点击“导入”按钮，将打开一个窗口，点击“选择文件”并选择文件。</strong>
-                    <div class="screenshot">
-                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/10.png" alt="选择要导入的规则文件" class="screenshot-img">
-                    </div>
-                </li>
-                <li><strong>选择选项：将导入的规则添加到您的列表中，或用导入的规则替换您的列表。根据您的需要，点击“全部替换”或“添加”。</strong>
-                    <div class="screenshot">
-                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/11.png" alt="导入窗口" class="screenshot-img">
-                    </div>
-                </li>
-                <li><strong>如果一切顺利，您将看到一条确认信息，并且新规则将出现在扩展程序窗口的规则列表中。</strong>
-                    <div class="screenshot">
-                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/12.png" alt="导入成功结果" class="screenshot-img">
-                    </div>
-                </li>
-            </ul>
-        </section>
-
-        <!-- ============================================================
-        第6部分：问题排查（常见问题）
-        ============================================================ -->
-        <section id="troubleshooting">
-            <h2>问题排查（常见问题） <a href="#top" class="back-link">回到顶部</a></h2>
-
-            <h4>我的规则不起作用</h4>
-            <ul>
-                <li><strong>可能原因 #1. 选择的元素不是最外层的：</strong>尝试在 HTML 树中向上移动，为父容器复制一个选择器。</li>
-                <li><strong>可能原因 #2. 网站使用动态类（混淆）：</strong>在这种情况下，复制的选择器可能会失效。请使用 XPath 或手动编写选择器。</li>
-                <li><strong>可能原因 #3. 元素是动态加载的：</strong>当页面发生变化时，扩展程序会自动重新应用规则。如果这不起作用，请尝试刷新页面。</li>
-                <li><strong>可能原因 #4. 规则是为其他域名创建的：</strong>检查规则是否在“为此网站”或“为其他网站”组中。</li>
-            </ul>
-
-            <h4>选择器找不到任何元素</h4>
-            <ul>
-                <li><strong>检查您的选择器：</strong>打开 DevTools (F12)，转到“Elements”选项卡，按 Ctrl+F（Mac 上为 Cmd+F），然后在搜索框中输入您的选择器。如果搜索没有找到任何内容，则您的选择器不正确。</li>
-                <li><strong>页面使用了 Shadow DOM：</strong>在这种情况下，标准选择器可能无法工作。请尝试使用 XPath 或在影子根内部搜索元素。</li>
-                <li><strong>元素在脚本执行后加载：</strong>某些元素会延迟出现。请尝试刷新页面或等待。</li>
-            </ul>
-
-            <h4>移除元素后，布局错乱，看起来比有广告时更糟</h4>
-            <ul>
-                <li><strong>解决方案：</strong>删除该规则并重新创建，但选择<strong>“隐藏”</strong>模式。这样可以保留页面上的空间并保持布局完整。</li>
-            </ul>
-
-            <h4>选择器找到了太多元素</h4>
-            <p>通过添加更多属性或使用更具体的路径来优化选择器。在高级模式下，您可以手动添加一个唯一属性来缩小搜索范围。</p>
-
-            <h4>什么都不起作用</h4>
-            <p>如果您已经尝试了所有方法，但该元素仍然顽固地拒绝被屏蔽，也许您能做的最好的事情就是<strong>忘记那个网站，然后离开它</strong>。😄</p>
-        </section>
-
-        <!-- ============================================================
-        第7部分：选择器速查表
-        ============================================================ -->
-        <section id="selectors-cheatsheet">
-            <h2>选择器速查表 <a href="#top" class="back-link">回到顶部</a></h2>
-
-            <h3>什么是选择器？</h3>
-            <p><strong>选择器</strong>是一种根据其属性：标签、类、标识符、属性或 HTML 结构中的位置来查找网页上特定元素的方法。</p>
-            <p>与用于应用样式的 CSS 选择器不同，在 BlockIt 中，选择器<strong>仅用于查找</strong>元素。我们不会设置颜色、字体或边距——我们只是<strong>找到元素</strong>来屏蔽它。</p>
-
-            <h3>如何打开开发者工具</h3>
-            <p>开发者工具 (DevTools) 是使用选择器的主要工具。打开方法如下：</p>
-            <table class="cheatsheet-table">
-                <thead>
-                    <tr>
-                        <th>操作</th>
-                        <th>结果</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>按 <kbd>F12</kbd></td>
-                        <td>打开 DevTools 面板</td>
-                    </tr>
-                    <tr>
-                        <td>或按 <kbd>Ctrl + Shift + I</kbd></td>
-                        <td>相同</td>
-                    </tr>
-                    <tr>
-                        <td>或右键单击元素 → <strong>“检查”</strong></td>
-                        <td>打开 DevTools 并高亮显示该元素</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h3>如何自定义开发者工具</h3>
-
-            <h4>界面语言</h4>
-            <ol>
-                <li>打开 DevTools (<kbd>F12</kbd>)。</li>
-                <li>点击右上角的齿轮图标 (⚙️) → <strong>设置</strong>。</li>
-                <li>在<strong>“语言”</strong>部分，从下拉菜单中选择您偏好的语言。</li>
-                <div class="screenshot">
-                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/13.png" alt="更改 DevTools 语言" class="screenshot-img">
-                </div>
-                <li>关闭并重新打开 DevTools。</li>
-            </ol>
-
-            <h4>面板停靠位置</h4>
-            <ol>
-                <li>点击 DevTools 右上角的三个点 (⋮)。</li>
-                <li>选择以下选项之一：
-                    <ul>
-                        <li><strong>停靠到右侧</strong>（默认）</li>
-                        <li><strong>停靠到底部</strong> — 如果您的显示器较宽，这很方便</li>
-                        <li><strong>停靠到左侧</strong> — 如果您喜欢不同的布局</li>
-                        <li><strong>取消停靠到单独窗口</strong> — 将其移动到另一个显示器</li>
-                    </ul>
-                </li>
-            </ol>
-            <div class="screenshot">
-                <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/14.png" alt="更改 DevTools 面板位置" class="screenshot-img">
-            </div>
-
-            <h3>如何在开发者工具中测试选择器</h3>
-            <p>检查选择器是否有效的最快方法是使用<strong>搜索 (<kbd>Ctrl + F</kbd>)</strong>：</p>
-            <ol>
-                <li>打开 DevTools (<kbd>F12</kbd>) 并转到 <strong>“Elements”</strong> 选项卡。</li>
-                <li>按 <kbd>Ctrl + F</kbd>（Mac 上为 <kbd>Cmd + F</kbd>）。</li>
-                <li>在搜索框中输入您的选择器。</li>
-                <li>DevTools 将高亮显示所有匹配该选择器的元素。</li>
-            </ol>
-            <p>搜索栏会显示找到了多少个元素（例如，<code>1 of 3</code>）。这有助于您了解选择器的精确度。</p>
-            <div class="screenshot">
-                <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/15.png" alt="使用 Ctrl+F 搜索选择器" class="screenshot-img">
-            </div>
-
-            <h3>实践示例：猫表情包画廊</h3>
-            <p>现在让我们将这些知识付诸实践。打开 <a href="example.html" target="_blank">example.html 页面</a> 并打开 DevTools。尝试输入下表中的选择器，看看它们能找到哪些元素。</p>
-
-            <h3>选择器类型</h3>
-
-            <h4>1. 通用选择器 (<code>*</code>)</h4>
-            <p>查找页面上的<strong>所有</strong>元素。请谨慎使用——它会返回 HTML 中的所有内容。</p>
-            <p><strong>选择器：</strong> <code>*</code></p>
-            <p><strong>查找内容：</strong>所有元素，无一例外。</p>
-
-            <h4>2. 类型选择器</h4>
-            <p>查找具有指定 HTML 标签的所有元素。</p>
-            <p><strong>选择器：</strong> <code>h1</code>, <code>p</code>, <code>button</code>, <code>div</code></p>
-            <p><strong>查找内容：</strong></p>
-            <ul>
-                <li><code>h1</code> — 所有一级标题</li>
-                <li><code>p</code> — 所有段落</li>
-                <li><code>button</code> — 所有按钮</li>
-                <li><code>div</code> — 所有 <code>&lt;div&gt;</code> 容器</li>
-            </ul>
-
-            <h4>3. 类选择器 (<code>.class</code>)</h4>
-            <p>查找 <code>class</code> 属性中具有指定类的所有元素。</p>
-            <p><strong>选择器：</strong> <code>.card</code>, <code>.card__title</code>, <code>.btn--view</code></p>
-            <p><strong>查找内容：</strong></p>
-            <ul>
-                <li><code>.card</code> — 所有具有类 <code>card</code> 的元素</li>
-                <li><code>.card__title</code> — 所有具有类 <code>card__title</code> 的元素</li>
-                <li><code>.btn--view</code> — 所有具有类 <code>btn--view</code> 的元素</li>
-            </ul>
-
-            <h4>4. ID 选择器 (<code>#id</code>)</h4>
-            <p>查找具有唯一 <code>id</code> 的元素。页面上应该只有一个这样的元素。</p>
-            <p><strong>选择器：</strong> <code>#salad-cat</code>, <code>#confused-cat</code>, <code>#bread-cat</code></p>
-            <p><strong>查找内容：</strong></p>
-            <ul>
-                <li><code>#salad-cat</code> — 具有 <code>id="salad-cat"</code> 的元素</li>
-                <li><code>#confused-cat</code> — 具有 <code>id="confused-cat"</code> 的元素</li>
-                <li><code>#bread-cat</code> — 具有 <code>id="bread-cat"</code> 的元素</li>
-            </ul>
-
-            <h4>5. 组合选择器</h4>
-            <p>您可以组合标签、类和 ID 以进行更精确的搜索。</p>
-            <p><strong>选择器：</strong> <code>h2.card__title</code>, <code>div.card</code>, <code>p.card__description</code>, <code>button.btn--edit</code></p>
-            <p><strong>查找内容：</strong></p>
-            <ul>
-                <li><code>h2.card__title</code> — 具有类 <code>card__title</code> 的 <code>&lt;h2&gt;</code></li>
-                <li><code>div.card</code> — 具有类 <code>card</code> 的 <code>&lt;div&gt;</code></li>
-                <li><code>p.card__description</code> — 具有类 <code>card__description</code> 的 <code>&lt;p&gt;</code></li>
-                <li><code>button.btn--edit</code> — 具有类 <code>btn--edit</code> 的 <code>&lt;button&gt;</code></li>
-            </ul>
-
-            <h4>6. 属性选择器 (<code>[attribute="value"]</code>)</h4>
-            <p>查找具有特定属性和值的元素。</p>
-            <p><strong>选择器：</strong> <code>[data-type="description"]</code>, <code>[data-type="title"]</code></p>
-            <p><strong>查找内容：</strong></p>
-            <ul>
-                <li><code>[data-type="description"]</code> — 所有具有 <code>data-type="description"</code> 的元素</li>
-                <li><code>[data-type="title"]</code> — 具有 <code>data-type="title"</code> 的元素</li>
-            </ul>
-
-            <h4>7. 后代选择器（空格）</h4>
-            <p>查找<strong>位于</strong>另一个元素<strong>内部</strong>的元素（在任何嵌套级别）。</p>
-            <p><strong>选择器：</strong> <code>.card .btn</code></p>
-            <p><strong>查找内容：</strong>所有具有类 <code>btn</code> 且位于具有类 <code>card</code> 的元素内部的元素。</p>
-
-            <h4>8. 子元素选择器 (<code>&gt;</code>)</h4>
-            <p>查找作为另一个元素的<strong>直接</strong>子元素的元素。搜索仅深入一层。</p>
-            <p><strong>选择器：</strong> <code>.card__body &gt; .card__title</code></p>
-            <p><strong>查找内容：</strong>具有类 <code>card__title</code> 且是类 <code>card__body</code> 元素的直接子元素的元素。</p>
-
-            <h4>9. 相邻兄弟选择器 (<code>+</code>)</h4>
-            <p>查找在同一嵌套级别上作为另一个元素的<strong>下一个兄弟</strong>的元素。</p>
-            <p><strong>选择器：</strong> <code>#confused-cat + .card__description</code></p>
-            <p><strong>查找内容：</strong>紧跟在具有 <code>id="confused-cat"</code> 的元素之后的段落 (<code>&lt;p&gt;</code>)。</p>
-
-            <h4>10. 位置伪类</h4>
-            <p>根据元素在其兄弟元素中的位置进行选择。</p>
-            <p><strong>选择器：</strong> <code>.card__actions :nth-child(2)</code></p>
-            <p><strong>查找内容：</strong>具有类 <code>card__actions</code> 的元素内的第二个子元素。</p>
-
-            <h3>🧠 练习任务</h3>
-            <p>打开 <a href="example.html" target="_blank">example.html 页面</a> 和 DevTools。尝试使用选择器找到以下元素。使用搜索栏 (<kbd>Ctrl + F</kbd>) 检查您的工作——它会显示找到了多少个元素。</p>
-
-            <table class="cheatsheet-table">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>任务</th>
-                        <th>要查找的内容</th>
-                        <th>提示</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>查找所有二级标题</td>
-                        <td><code>&lt;h2&gt;</code></td>
-                        <td>类型选择器</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>查找具有类 <code>subtitle</code> 的元素</td>
-                        <td>一个元素</td>
-                        <td>类选择器</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>查找具有 <code>id="confused-cat"</code> 的元素</td>
-                        <td>一个元素</td>
-                        <td>ID 选择器</td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>查找所有具有类 <code>card__description</code> 的段落</td>
-                        <td>多个元素</td>
-                        <td>组合选择器（标签 + 类）</td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td>查找所有具有类 <code>btn--edit</code> 的按钮</td>
-                        <td>多个元素</td>
-                        <td>组合选择器（标签 + 类）</td>
-                    </tr>
-                    <tr>
-                        <td>6</td>
-                        <td>查找所有具有属性 <code>data-type="description"</code> 的元素</td>
-                        <td>多个元素</td>
-                        <td>属性选择器</td>
-                    </tr>
-                    <tr>
-                        <td>7</td>
-                        <td>查找具有类 <code>card</code> 的元素内部的所有按钮</td>
-                        <td>多个元素</td>
-                        <td>后代选择器</td>
-                    </tr>
-                    <tr>
-                        <td>8</td>
-                        <td>查找 <code>card__actions</code> 内部紧跟在 <code>btn--view</code> 按钮之后的 <code>btn--edit</code> 按钮</td>
-                        <td>多个元素</td>
-                        <td>相邻兄弟选择器 (<code>+</code>)</td>
-                    </tr>
-                    <tr>
-                        <td>9</td>
-                        <td>查找具有类 <code>card__actions</code> 的元素内的第二个按钮</td>
-                        <td>多个元素</td>
-                        <td>伪类 <code>:nth-child</code></td>
-                    </tr>
-                    <tr>
-                        <td>10</td>
-                        <td>查找“面包猫”卡片内所有具有类 <code>card__image</code> 的元素</td>
-                        <td>一个元素</td>
-                        <td>选择器组合</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h3>🔍 如何检查您的答案</h3>
-            <p>编写好选择器后，将其粘贴到 DevTools 的搜索栏中 (<kbd>Ctrl + F</kbd>)。搜索栏会显示找到了多少个元素（例如，<code>1 of 3</code>）。</p>
-            <ul>
-                <li>如果您在查找<strong>单个特定元素</strong>（例如，通过 <code>id</code>），结果应为 <code>1 of 1</code>。</li>
-                <li>如果您在查找<strong>一组元素</strong>（例如，所有具有特定类的段落），结果可能为 <code>1 of 3</code> 或更多——这是正常的。</li>
-                <li>最重要的是，高亮显示的元素正是您要查找的元素。请视觉检查：页面上是否正确高亮显示了元素？</li>
-            </ul>
-            <p>如果高亮显示了错误的元素，请通过添加更多条件来优化选择器。</p>
-
-            <h3>🎮 额外练习</h3>
-            <p>为了巩固您的技能，您可以玩 <a href="https://flukeout.github.io/" target="_blank">CSS Diner</a> 游戏。您需要使用 CSS 选择器选择正确的盘子来摆桌子。任务会逐渐变难，并涵盖所有主要的选择器类型。</p>
-        </section>
-
-        <!-- ============================================================
-        第8部分：反馈和联系方式
-        ============================================================ -->
-        <section id="feedback">
-            <h2>反馈和联系方式 <a href="#top" class="back-link">回到顶部</a></h2>
-            <p>我始终欢迎您的建议和反馈！如果您发现了错误、想要提出改进建议、分享您的想法或向我提供工作机会——请随时与我联系。</p>
-            <ul>
-                <li><strong>GitHub：</strong> <a href="https://github.com/PavelCraft" target="_blank">PavelCraft</a></li>
-                <li><strong>Telegram：</strong> <a href="https://t.me/PavelCodeMaster" target="_blank">@PavelCodeMaster</a></li>
-                <li><strong>邮箱：</strong> <a href="mailto:pavelborisov@list.ru">pavelborisov@list.ru</a></li>
-            </ul>
-            <p>您也可以为项目做出贡献：帮助翻译、提出想法或测试新功能。</p>
-        </section>
-
-        <!-- ============================================================
-        页脚
-        ============================================================ -->
-        <hr>
-        <footer>
-            <p><a href="#top">回到顶部</a></p>
-        </footer>
-
-    </div> <!-- /.container -->
-
-    <!-- ===== 截图模态窗口 ===== -->
-    <div id="screenshotModal" class="modal">
-        <span class="modal-close">&times;</span>
-        <img class="modal-content" id="modalImage">
+    <section class="chapter faq" id="faq">
+      <h2>问题排查 <a class="top-link" href="#top">返回顶部</a>
+</h2>
+      <details>
+      <summary>广告之外的内容也被屏蔽了</summary>
+      <p>选择器范围过大时，不仅会找到广告，也会找到页面上的其他元素。</p>
+      <p>
+<strong>处理方法：</strong>
+</p>
+      <ul>
+        <li>按<a href="#rules">“管理规则”</a>中的说明删除规则。</li>
+        <li>在 HTML 树中向上或向下寻找更准确的容器，确保它<em>只</em>包含广告。</li>
+        <li>添加规则前检查匹配数量。只有所有匹配项都应被屏蔽时，多个匹配才是合适的。</li>
+      </ul>
+      </details>
+      <details>
+      <summary>规则没有生效</summary>
+      <ul>
+        <li>
+<strong>可能原因 1：选中的不是最外层元素。</strong>在 HTML 树中向上移动，复制父容器的选择器。</li>
+        <li>
+<strong>可能原因 2：网站使用动态类名（混淆）。</strong>复制的选择器可能在刷新后失效。请在<a href="#methods">“创建规则的方法”</a>中标记元素特征不稳定，并尝试建议的方法，例如 <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> 或规则构建器。</li>
+        <li>
+<strong>可能原因 3：创建规则后页面结构发生变化。</strong>检查元素当前的 HTML 和匹配数量。如果网站重建了区块，请重新复制选择器或在构建器中完善规则。</li>
+        <li>
+<strong>可能原因 4：规则为其他域名创建。</strong>检查它属于“此网站”还是“其他网站”。</li>
+      </ul>
+      </details>
+      <details>
+      <summary>选择器找不到任何元素</summary>
+      <ul>
+        <li>
+<strong>检查选择器：</strong>打开开发者工具（F12），转到“元素” / “Elements”标签页，按 Ctrl + F（Mac 上按 Cmd + F），在搜索框中输入选择器。如果仍找不到元素，则选择器有误。</li>
+      </ul>
+      </details>
+      <details>
+      <summary>删除元素后页面布局变差</summary>
+      <ul>
+        <li>
+<strong>解决方法：</strong>删除规则，并使用<strong>“隐藏”</strong>模式重新创建。这样会保留元素占用的空间，避免打乱布局。</li>
+      </ul>
+      </details>
+      <details>
+      <summary>选择器找到的元素太多</summary>
+      <p>先检查数量，并弄清哪些元素被匹配。如果目标元素有稳定的类或属性，请将其加入选择器。若简单选择器不够精确，可使用规则构建器：它能考虑文本、类和属性数量、兄弟位置以及周围元素的关系。完善规则后，在当前页面和刷新后再次检查。</p>
+      </details>
+      <details>
+      <summary>我看不懂页面的 HTML 结构</summary>
+      <p>可以使用 <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a>：它比较多次加载并生成稳定性地图。在地图中搜索目标元素，再检查其稳定特征和周围元素。</p>
+      <p>如果标记被严重混淆，网站可能向 VPN 连接提供不同的页面版本。情况允许时，可暂时关闭 VPN、刷新页面并重新分析。这并非对所有网站都有帮助，但可确认复杂标记是否与当前连接获得的页面版本有关。</p>
+      </details>
+      <details>
+      <summary>仍然无法解决</summary>
+      <p>尝试将 StableHTMLFinder 找到的稳定特征与 BlockIt 规则构建器结合，手动创建同时考虑元素及其周围结构的规则。</p>
+      <p>如果尝试多种方法后规则仍无效，或扩展程序出现错误，请通过 BlockIt 的<a href="../../feedback.html">反馈表单</a>报告问题。尽可能附上页面网址、规则和截图。</p>
+      </details>
+    </section>
+    <div class="image-lightbox" id="imageLightbox" hidden role="dialog" aria-modal="true" aria-label="截图查看器">
+      <button class="lightbox-close" type="button" aria-label="关闭查看器">×</button>
+      <button class="lightbox-nav lightbox-prev" type="button" aria-label="上一张截图">‹</button>
+      <div class="lightbox-content">
+<img alt="">
+<div class="lightbox-caption">
+<b>
+</b>
+<span>
+</span>
+</div>
+</div>
+      <button class="lightbox-nav lightbox-next" type="button" aria-label="下一张截图">›</button>
     </div>
-    <script src="../instruction.js"></script>
+    <footer class="footer">BlockIt 扩展程序指南</footer>
+  </main>
+  <script src="../instruction.js">
+</script>
 </body>
 </html>

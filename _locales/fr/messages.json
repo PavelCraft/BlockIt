@@ -271,6 +271,8 @@
     "message": "Format invalide. Tableau de règles ou objet avec le champ 'rules' attendu.",
     "description": "Erreur de format invalide"
   },
+  "importSettings": { "message": "Paramètres" },
+  "errorInvalidJSON": { "message": "JSON invalide. Vérifiez le contenu du fichier." },
   "errorMissingSelector": {
     "message": "La règle #{index} ne contient pas le champ 'selector'.",
     "description": "Erreur d'absence du champ selector"

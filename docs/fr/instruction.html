@@ -1,527 +1,805 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="referrer" content="no-referrer">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guide de l'extension BlockIt</title>
-    <link rel="stylesheet" href="../styles.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>BlockIt — Guide d’utilisation</title>
+  <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
-    <div class="container">
+  <main class="page">
+    <header class="hero" id="top">
+      <div class="eyebrow">BlockIt</div>
+      <h1>Guide d’utilisation de BlockIt</h1>
+      <p>Créez des règles pour bloquer les éléments indésirables, du simple sélecteur CSS à une règle précise fondée sur la structure de la page.</p>
+    </header>
 
-        <!-- ============================================================
-        EN-TÊTE ET NAVIGATION
-        ============================================================ -->
-        <header>
-            <h1 id="top">Guide de l'extension BlockIt</h1>
-            <p>Bloquez des éléments sur n'importe quel site web avec des sélecteurs CSS ou XPath</p>
-        </header>
+    <nav class="contents" aria-label="Sommaire">
+      <div>
+        <h2>Sommaire</h2>
+        <ul>
+          <li>
+<a href="#what-is">Qu’est-ce que BlockIt ?</a>
+</li>
+          <li>
+<a href="#quick-start">Démarrage rapide</a>
+</li>
+          <li>
+<a href="#selector-tips">Conseils pour choisir un élément</a>
+</li>
+          <li>
+<a href="#methods">Façons de créer une règle</a>
+</li>
+          <li>
+<a href="#selectors">Aide-mémoire des sélecteurs</a>
+</li>
+          <li>
+<a href="#rules">Gestion des règles</a>
+</li>
+          <li>
+<a href="#faq">Résolution des problèmes</a>
+</li>
+        </ul>
+      </div>
+    </nav>
 
-        <nav>
-            <h2>Sommaire</h2>
-            <ul>
-                <li><a href="#what-is">Qu'est-ce que BlockIt ?</a></li>
-                <li><a href="#quick-start">Démarrage rapide</a></li>
-                <li><a href="#advanced">Fonctionnalités avancées</a></li>
-                <li><a href="#selector-tips">Conseils pour choisir un élément à bloquer</a></li>
-                <li><a href="#export-import">Exporter et importer des règles</a></li>
-                <li><a href="#troubleshooting">Résolution des problèmes (FAQ)</a></li>
-                <li><a href="#selectors-cheatsheet">Aide-mémoire des sélecteurs</a></li>
-                <li><a href="#feedback">Commentaires et contacts</a></li>
-            </ul>
-        </nav>
+    <section class="chapter" id="what-is">
+      <h2>Qu’est-ce que BlockIt ?</h2>
+      <p>Les sites publicitaires et les bloqueurs populaires sont engagés dans une course permanente : les développeurs de sites cherchent à contourner les listes publiques de filtres, tandis que les développeurs de bloqueurs les mettent sans cesse à jour.</p>
+      <p>
+<strong>BlockIt</strong> adopte une autre approche pour bloquer les publicités et les éléments indésirables. Au lieu de dépendre uniquement de listes partagées, vous créez des règles pour des éléments précis des sites que vous utilisez. Tant que vous ne les partagez pas, le site ignore les caractéristiques sur lesquelles elles reposent et peut plus difficilement les neutraliser volontairement.</p>
+      <h3>Fonctionnalités principales</h3>
+      <ul class="feature-list">
+        <li>
+<strong>Simplicité :</strong> vous n’avez pas à mémoriser la syntaxe CSS, XPath ou BlockIt. Il suffit parfois de copier un sélecteur depuis DevTools et de le coller dans l’extension.</li>
+        <li>
+<strong>Souplesse :</strong>
+          <ul>
+            <li>Vous choisissez de supprimer ou de masquer un élément</li>
+            <li>Vous choisissez les éléments à bloquer ou à conserver</li>
+            <li>Vous choisissez les règles à conserver, désactiver ou supprimer</li>
+            <li>Les sélecteurs CSS et les expressions XPath sont pris en charge</li>
+            <li>Les règles s’appliquent aussi dans les <a href="#embedded-contexts">iframes et le Shadow DOM</a>
+</li>
+          </ul>
+        </li>
+        <li>
+<strong>Confidentialité :</strong> toutes les règles sont stockées localement dans votre navigateur et ne sont envoyées nulle part.</li>
+        <li>
+<strong>Syntaxe BlockIt :</strong> les cas complexes peuvent utiliser une syntaxe qui étend les sélecteurs CSS standard. Consultez au besoin la <a href="../rules/en/index.html">documentation de la syntaxe BlockIt</a>.</li>
+        <li>
+<strong>Regroupement par site :</strong> les règles sont automatiquement regroupées pour le site actuel et les autres sites.</li>
+        <li>
+<strong>Partage des réglages :</strong> exportez vos règles dans un fichier pour les partager.</li>
+        <li>
+<strong>Plusieurs langues :</strong> l’extension suit la langue du navigateur. Le russe, l’anglais, le français, l’allemand, l’espagnol, le portugais, le chinois et le japonais sont pris en charge. À défaut, l’interface est en anglais.</li>
+        <li>
+<strong>Code source ouvert :</strong> l’extension est développée sous licence BSD-3-Clause. Vous pouvez contribuer, proposer des améliorations et consulter le code sur <a href="https://github.com/PavelCraft/BlockIt" target="_blank" rel="noopener noreferrer">GitHub</a>.</li>
+      </ul>
+    </section>
 
-        <hr>
-
-        <!-- ============================================================
-        SECTION 1 : Qu'est-ce que BlockIt ?
-        ============================================================ -->
-        <section id="what-is">
-            <h2>Qu'est-ce que BlockIt ? <a href="#top" class="back-link">Haut de page</a></h2>
-            <p>Les sites web qui affichent des publicités et les bloqueurs de publicité populaires sont en constante « course aux armements » : les développeurs de sites trouvent sans cesse de nouveaux moyens de vous montrer des publicités, et les bloqueurs trouvent des moyens de les cacher.</p>
-            <p><strong>BlockIt</strong> propose une approche différente. Au lieu de vous fier à des listes de filtres communes, vous créez vous-même des règles pour bloquer des éléments spécifiques. Vos règles restent connues de vous seul, à moins que vous ne décidiez de les partager, ce qui les rend beaucoup plus résistantes aux contournements.</p>
-            <p><strong>Fonctionnalités clés :</strong></p>
-            <ul>
-                <li><strong>Facilité d'utilisation :</strong> Il suffit de copier un sélecteur depuis les outils de développement et de le coller dans l'extension.</li>
-                <li><strong>Flexibilité :</strong>
-                    <ul>
-                        <li>Supporte à la fois les sélecteurs CSS et les expressions XPath</li>
-                        <li>Vous décidez de supprimer ou de masquer un élément</li>
-                        <li>Vous décidez quels éléments bloquer et lesquels conserver</li>
-                        <li>Vous décidez quelles règles de blocage garder et lesquelles supprimer</li>
-                    </ul>
-                </li>
-                <li><strong>Respect de la vie privée :</strong> Toutes les règles sont stockées localement dans votre navigateur et ne sont envoyées nulle part.</li>
-                <li><strong>Regroupement des règles par site :</strong> Les règles sont automatiquement regroupées pour le site actuel et pour tous les autres. Cela facilite leur gestion.</li>
-                <li><strong>Partage des paramètres :</strong> Vous pouvez partager vos règles avec d'autres utilisateurs en les exportant dans un fichier.</li>
-                <li><strong>Prise en charge multilingue :</strong> L'interface de l'extension bascule automatiquement vers la langue définie dans votre navigateur. Langues prises en charge : russe, anglais, français, allemand, espagnol, portugais, chinois et japonais. Si votre langue n'est pas prise en charge, l'interface s'affichera en anglais (langue par défaut).</li>
-                <li><strong>Code source ouvert :</strong> L'extension est développée sous licence BSD-3-Clause. Vous pouvez participer au développement du projet, suggérer des améliorations et explorer le code sur <a href="https://github.com/PavelCraft/BlockIt" target="_blank">GitHub</a>.</li>
-            </ul>
-        </section>
-
-        <!-- ============================================================
-        SECTION 2 : Démarrage rapide
-        ============================================================ -->
-        <section id="quick-start">
-            <h2>Démarrage rapide <a href="#top" class="back-link">Haut de page</a></h2>
-
-            <h3 id="installation">Installation</h3>
-            <p><strong>Méthode 1 (recommandée) :</strong> Rendez-vous dans le <a href="https://chrome.google.com/webstore" target="_blank">Chrome Web Store</a>, trouvez l'extension BlockIt et cliquez sur « Installer ». Après l'installation, pensez à épingler l'extension dans la barre d'outils du navigateur en cliquant sur l'icône en forme de pièce de puzzle à côté de la barre d'adresse et en sélectionnant « Épingler » à côté de BlockIt.</p>
-            <div class="screenshot">
-                <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/1.png" alt="Épingler l'extension dans la barre d'outils" class="screenshot-img">
+    <section class="chapter" id="quick-start">
+      <h2>Démarrage rapide <a class="top-link" href="#top">Retour en haut</a>
+</h2>
+      <p>Suivez cette méthode pour commencer avec un sélecteur CSS fourni par DevTools.</p>
+      <p>L’interface DevTools des captures est en anglais. Vous pouvez modifier sa langue.</p>
+      <details class="devtools-setup">
+        <summary>Personnaliser DevTools <span class="expand-hint">Facultatif</span></summary>
+        <div class="devtools-setup-body">
+          <h4>Ouvrir DevTools</h4>
+          <table class="cheatsheet-table">
+            <thead><tr><th>Action</th><th>Résultat</th></tr></thead>
+            <tbody>
+              <tr><td><kbd>F12</kbd></td><td>Ouvre DevTools.</td></tr>
+              <tr><td><kbd>Ctrl + Shift + I</kbd></td><td>Ouvre le même panneau.</td></tr>
+              <tr><td>Clic droit sur un élément → <strong>« Inspecter » / “Inspect”</strong></td><td>Ouvre DevTools en surlignant cet élément.</td></tr>
+            </tbody>
+          </table>
+          <h4>Langue de l’interface</h4>
+          <ol>
+            <li>Ouvrez DevTools.</li>
+            <li>Cliquez sur la roue dentée ⚙ pour ouvrir <strong>« Paramètres » / “Settings”</strong>.</li>
+            <li>Ouvrez l’onglet <strong>« Préférences » / “Preferences”</strong>.</li>
+            <li>Choisissez une langue sous <strong>« Langue » / “Language”</strong>.</li>
+            <li>Fermez puis rouvrez DevTools.</li>
+          </ol>
+          <h4>Emplacement du panneau</h4>
+          <p>Cliquez sur ⋮ puis choisissez sous <strong>« Côté d'épinglage » / “Dock side”</strong> : droite, bas, gauche ou fenêtre séparée. La droite convient aux écrans larges, le bas si l’espace vertical le permet et la fenêtre séparée avec deux écrans.</p>
+          <div class="gallery compact-gallery" data-gallery>
+            <div class="gallery-stage">
+              <button class="gallery-control prev" type="button" aria-label="Capture précédente">‹</button>
+              <figure class="gallery-slide active" data-title="Modifier la langue de DevTools" data-caption="Ouvrez « Paramètres » / “Settings”, puis « Préférences » / “Preferences”, choisissez « Langue » / “Language” et redémarrez DevTools.">
+                <img loading="lazy" decoding="async" src="../../images/en/31.png" alt="Modification de la langue de DevTools">
+              </figure>
+              <figure class="gallery-slide" data-title="Choisir l’emplacement du panneau" data-caption="Dans le menu, cherchez « Côté d'épinglage » / “Dock side” et placez le panneau à droite, en bas, à gauche ou dans une autre fenêtre.">
+                <img loading="lazy" decoding="async" src="../../images/en/32.png" alt="Modification de l’emplacement de DevTools">
+              </figure>
+              <button class="gallery-control next" type="button" aria-label="Capture suivante">›</button>
             </div>
+            <div class="gallery-caption"><span class="gallery-caption-number">1</span><div><b></b><span></span></div></div>
+            <div class="gallery-dots" aria-label="DevTools settings"></div>
+          </div>
+        </div>
+      </details>
+      <div class="note">
+<strong>Vérifiez le nombre de correspondances.</strong> Une correspondance est généralement un bon résultat. Zéro signifie que la règle ne trouve rien. Plusieurs conviennent si tous les éléments trouvés doivent être bloqués.</div>
+      <div class="gallery" data-gallery>
+        <div class="gallery-stage">
+          <button class="gallery-control prev" type="button" aria-label="Étape précédente">‹</button>
+          <figure class="gallery-slide active" data-title="Ouvrez DevTools" data-caption="Faites un clic droit près de l’élément et choisissez « Inspecter » / “Inspect”.">
+<img decoding="async" fetchpriority="high" src="../../images/en/1.png" alt="Ouverture de DevTools depuis le menu contextuel">
+</figure>
+          <figure class="gallery-slide" data-title="Sélectionnez l’élément" data-caption="Repérez le conteneur extérieur dans l’arbre HTML. Le survol d’une ligne met en évidence la zone correspondante.">
+<img loading="lazy" decoding="async" src="../../images/en/2.png" alt="Sélection et surlignage dans DevTools">
+</figure>
+          <figure class="gallery-slide" data-title="Copiez le sélecteur CSS" data-caption="Clic droit sur la ligne, puis « Copier » / “Copy” → « Copier le selector » / “Copy selector”.">
+<img loading="lazy" decoding="async" src="../../images/en/3.png" alt="Copie d’un sélecteur CSS dans DevTools">
+</figure>
+          <figure class="gallery-slide" data-title="Collez le sélecteur et ajoutez la règle" data-caption="Collez le sélecteur dans BlockIt et vérifiez « Éléments trouvés ». Choisissez un mode et cliquez sur « Ajouter la règle ».">
+<img loading="lazy" decoding="async" src="../../images/en/4.png" alt="Ajout d’un sélecteur CSS à BlockIt">
+</figure>
+          <figure class="gallery-slide" data-title="Vérifiez le résultat" data-caption="Vérifiez le message de réussite, la présence de la règle active et la disparition de l’élément indésirable.">
+<img loading="lazy" decoding="async" src="../../images/en/5.png" alt="Règle ajoutée à BlockIt">
+</figure>
+          <button class="gallery-control next" type="button" aria-label="Étape suivante">›</button>
+        </div>
+        <div class="gallery-caption">
+<span class="gallery-caption-number">1</span>
+<div>
+<b>
+</b>
+<span>
+</span>
+</div>
+</div>
+        <div class="gallery-dots" aria-label="Étapes du démarrage rapide">
+</div>
+      </div>
+      <div id="selector-tips">
+        <h3>Conseils pour choisir l’élément à bloquer</h3>
+        <p>Avant de copier un sélecteur ou du HTML, déterminez précisément l’élément à bloquer.</p>
+        <ul>
+          <li>
+<strong>Utilisez le surlignage de DevTools.</strong> Survolez les lignes HTML pour voir les éléments correspondants et la zone qui sera bloquée.</li>
+          <li>
+<strong>Choisissez l’élément le plus extérieur sans rien inclure de plus.</strong> Un élément trop profond peut laisser une partie de la publicité visible ; un élément trop large peut masquer du contenu utile.</li>
+          <li>
+<strong>Surveillez le nombre d’éléments.</strong> BlockIt affiche les correspondances après le collage. Une est souvent plus sûre. Plusieurs conviennent si vous les avez toutes vérifiées ; <strong>0</strong> signifie que rien ne sera trouvé.</li>
+        </ul>
+        <p>Si la règle bloque trop ou rien du tout, supprimez-la et choisissez un autre élément plus haut ou plus bas dans l’arbre HTML.</p>
+      </div>
+      <h3>Modes de blocage</h3>
+      <ul>
+        <li>
+<strong>Supprimer :</strong> retire l’élément du HTML et libère son espace. Cela peut parfois modifier la mise en page.</li>
+        <li>
+<strong>Masquer :</strong> rend l’élément invisible tout en conservant son espace. Utilisez ce mode si la suppression dégrade la page.</li>
+      </ul>
+    </section>
 
-            <p><strong>Méthode 2 (pour les développeurs) :</strong> Téléchargez le code source depuis <a href="https://github.com/PavelCraft/BlockIt#english" target="_blank">GitHub</a> et chargez l'extension non empaquetée.</p>
+    <section class="chapter" id="methods">
+      <h2>Façons de créer une règle <a class="top-link" href="#top">Retour en haut</a>
+</h2>
+      <p>Repérez d’abord l’élément dans DevTools et examinez sa balise, ses classes et ses attributs.</p>
+      <div class="method-advisor" id="methodAdvisor">
+        <h3>Qu’est-ce qui peut aider ?</h3>
+        <p>Activez les indications pertinentes. Le surlignage ne masque pas les autres méthodes ; il suggère seulement un bon point de départ.</p>
+        <div class="method-options method-switches">
+          <label class="guide-switch">
+<input id="unstableTraits" type="checkbox">
+<span class="guide-switch-control" aria-hidden="true">
+</span>
+<span>
+<b>Les caractéristiques sont instables</b>
+<small>Les classes, identifiants ou attributs semblent aléatoires ou changent après actualisation.</small>
+</span>
+</label>
+          <label class="guide-switch">
+<input id="unstablePath" type="checkbox">
+<span class="guide-switch-control" aria-hidden="true">
+</span>
+<span>
+<b>Le chemin vers l’élément est instable</b>
+<small>Sa position dans la structure HTML change après actualisation.</small>
+</span>
+</label>
+          <label class="guide-switch">
+<input id="methodsFailed" type="checkbox">
+<span class="guide-switch-control" aria-hidden="true">
+</span>
+<span>
+<b>Le sélecteur CSS et XPath n’ont pas fonctionné</b>
+<small>Les méthodes simples ne trouvent pas l’élément de façon fiable.</small>
+</span>
+</label>
+        </div>
+        <p class="advisor-hint">Les méthodes recommandées sont surlignées ci-dessous. Sélectionnez-en une pour lire les instructions.</p>
+      </div>
 
-            <h3 id="how-to-block">Comment bloquer un élément</h3>
-            <ol>
-                <li>Cliquez avec le bouton droit sur l'élément que vous souhaitez bloquer et sélectionnez « Inspecter » (ou « Inspecter l'élément »). Cette action vous mène toujours directement à l'élément dans l'arborescence HTML.</li>
-                <div class="screenshot">
-                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/2.png" alt="Ouverture du menu contextuel" class="screenshot-img">
-                </div>
-                <li>Dans l'arborescence HTML, trouvez l'élément souhaité. Pour vous assurer d'avoir sélectionné le bon élément, passez votre curseur sur les lignes de code — les éléments correspondants sur la page seront mis en surbrillance. Choisissez l'élément le plus externe qui couvre entièrement le bloc que vous souhaitez bloquer.</li>
-                <div class="screenshot">
-                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/3.png" alt="Trouver l'élément" class="screenshot-img">
-                </div>
-                <li>Cliquez avec le bouton droit sur l'élément dans l'arborescence → <strong>Copier</strong> → <strong>Copier le sélecteur</strong> (ou <strong>Copy selector</strong>). Pour XPath : <strong>Copier XPath</strong> (ou <strong>Copy XPath</strong>).</li>
-                <div class="screenshot">
-                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/4.png" alt="Copier l'élément" class="screenshot-img">
-                </div>
-                <li>Ouvrez l'extension BlockIt, collez le sélecteur copié dans le champ de saisie, choisissez le mode de blocage et cliquez sur « Ajouter une règle ».
-                    <div class="screenshot">
-                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/5.png" alt="Coller le sélecteur dans le champ" class="screenshot-img">
-                    </div>
-                </li>
-                <li>Terminé ! La règle apparaît dans la liste des règles actives, et l'élément disparaît de la page.
-                    <div class="screenshot">
-                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/6.png" alt="Liste des règles actives" class="screenshot-img">
-                    </div>
-                </li>
-                <li>Pour fermer les outils de développement, appuyez sur <kbd>F12</kbd> ou cliquez sur la croix dans le coin supérieur droit du panneau DevTools.</li>
-            </ol>
+      <div class="method-list">
+        <details id="method-css" data-method="css">
+<summary>
+<span class="method-index">1</span>Copier un sélecteur CSS depuis DevTools <span class="expand-hint">Sélectionnez pour lire</span>
+</summary>
+<div class="method-body">
+<p>Commencez ici pour tester rapidement un sélecteur standard. DevTools le crée automatiquement : sélectionnez l’élément, puis « Copier » / “Copy” → « Copier le selector » / “Copy selector”.</p>
+<p>Collez-le dans BlockIt, vérifiez le nombre de correspondances et ajoutez la règle. Si elle devient peu fiable après actualisation, utilisez <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> ou le constructeur.</p>
+<div class="gallery compact-gallery" data-gallery>
+<div class="gallery-stage">
+<button class="gallery-control prev" type="button" aria-label="Étape précédente">‹</button>
+<figure class="gallery-slide active" data-title="Ouvrez DevTools" data-caption="Faites un clic droit près de l’élément et choisissez « Inspecter » / “Inspect”."><img loading="lazy" decoding="async" src="../../images/en/1.png" alt="Ouverture de DevTools depuis le menu contextuel"></figure>
+<figure class="gallery-slide" data-title="Sélectionnez l’élément voulu" data-caption="Repérez le conteneur extérieur dans l’arbre HTML. Le survol d’une ligne met en évidence la zone correspondante."><img loading="lazy" decoding="async" src="../../images/en/2.png" alt="Sélection et surlignage dans DevTools"></figure>
+<figure class="gallery-slide" data-title="Copiez le sélecteur CSS" data-caption="Clic droit sur la ligne, puis « Copier » / “Copy” → « Copier le selector » / “Copy selector”."><img loading="lazy" decoding="async" src="../../images/en/3.png" alt="Copie d’un sélecteur CSS dans DevTools"></figure>
+<figure class="gallery-slide" data-title="Collez le sélecteur et ajoutez la règle" data-caption="Collez le sélecteur dans BlockIt et observez « Éléments trouvés ». Choisissez un mode et cliquez sur « Ajouter la règle »."><img loading="lazy" decoding="async" src="../../images/en/4.png" alt="Ajout d’un sélecteur CSS à BlockIt"></figure>
+<figure class="gallery-slide" data-title="Vérifiez le résultat" data-caption="Vérifiez le message de réussite, la présence de la règle active et la disparition de l’élément indésirable."><img loading="lazy" decoding="async" src="../../images/en/5.png" alt="Règle ajoutée à BlockIt"></figure>
+<button class="gallery-control next" type="button" aria-label="Étape suivante">›</button>
+</div>
+<div class="gallery-caption"><span class="gallery-caption-number">1</span><div><b></b><span></span></div></div>
+<div class="gallery-dots" aria-label="Création d’une règle depuis un sélecteur CSS"></div>
+</div>
+</div>
+</details>
+        <details id="method-xpath" data-method="xpath">
+<summary>
+<span class="method-index">2</span>Copier le XPath depuis DevTools <span class="expand-hint">Sélectionnez pour lire</span>
+</summary>
+<div class="method-body">
+<p>XPath décrit un chemin jusqu’à l’élément dans la structure. Il peut aider quand les attributs sont instables mais que le chemin reste inchangé. Choisissez « Copier le XPath » / “Copy XPath”, puis collez l’expression dans BlockIt.</p>
+<div class="note">
+<strong>Examinez l’expression copiée.</strong> Chrome peut construire XPath autour d’un <code>id</code>. Si cet ID change, XPath est lui aussi instable. Un chemin absolu numéroté casse lorsque la structure HTML change.</div>
+<p>BlockIt évalue XPath séparément dans le document principal et dans chaque <a href="#embedded-contexts">iframe</a> ; un XPath copié dans un iframe peut donc fonctionner. Les navigateurs n’évaluent pas XPath au-delà d’une limite du <a href="#embedded-contexts">Shadow DOM</a>. Utilisez alors le constructeur ou <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> pour créer une règle CSS ou BlockIt étendue.</p>
+<div class="gallery compact-gallery" data-gallery>
+<div class="gallery-stage">
+<button class="gallery-control prev" type="button" aria-label="Étape précédente">‹</button>
+<figure class="gallery-slide active" data-title="Copiez XPath" data-caption="Clic droit sur la ligne, puis « Copier » / “Copy” → « Copier le XPath » / “Copy XPath”. « Copier le XPath complet » / “Copy full XPath” dépend davantage de l’ensemble de la structure.">
+<img loading="lazy" decoding="async" src="../../images/en/13.png" alt="Copie de XPath dans DevTools">
+</figure>
+<figure class="gallery-slide" data-title="Collez XPath et vérifiez les correspondances" data-caption="Collez l’expression dans BlockIt, vérifiez qu’elle est reconnue comme XPath et observez « Éléments trouvés ».">
+<img loading="lazy" decoding="async" src="../../images/en/14.png" alt="Vérification de XPath dans BlockIt">
+</figure>
+<figure class="gallery-slide" data-title="Ajoutez la règle" data-caption="Choisissez un mode, cliquez sur « Ajouter la règle » et vérifiez sa réussite et la disparition de l’élément.">
+<img loading="lazy" decoding="async" src="../../images/en/15.png" alt="Ajout réussi d’une règle XPath">
+</figure>
+<button class="gallery-control next" type="button" aria-label="Étape suivante">›</button>
+</div>
+<div class="gallery-caption"><span class="gallery-caption-number">1</span><div><b></b><span></span></div></div>
+<div class="gallery-dots" aria-label="Étapes de création d’une règle XPath"></div>
+</div>
+</div>
+</details>
+        <details id="method-html" data-method="html">
+<summary>
+<span class="method-index">3</span>Créer une règle rapide depuis le HTML <span class="expand-hint">Sélectionnez pour lire</span>
+</summary>
+<div class="method-body">
+<p>Cette méthode offre plus de contrôle qu’un sélecteur prêt à l’emploi : après analyse du HTML, vous choisissez les attributs à inclure.</p>
+<div class="gallery compact-gallery" data-gallery>
+<div class="gallery-stage">
+<button class="gallery-control prev" type="button" aria-label="Étape précédente">‹</button>
+<figure class="gallery-slide active" data-title="Copiez le HTML de l’élément" data-caption="Clic droit sur la ligne, puis « Copier » / “Copy” → « Copier l'élément » / “Copy element”.">
+<img loading="lazy" decoding="async" src="../../images/en/6.png" alt="Copie d’un élément HTML">
+</figure>
+<figure class="gallery-slide" data-title="Cliquez sur « Mode avancé »" data-caption="Ouvrez BlockIt et cliquez sur « Mode avancé ». La section « Créer une règle depuis le HTML » apparaît.">
+<img loading="lazy" decoding="async" src="../../images/en/33.png" alt="Ouverture du mode avancé de BlockIt">
+</figure>
+<figure class="gallery-slide" data-title="Collez et analysez le HTML" data-caption="Collez l’élément dans « Créer une règle depuis le HTML », cliquez sur « Analyser le HTML » et ne gardez que les attributs stables utiles.">
+<img loading="lazy" decoding="async" src="../../images/en/7.png" alt="Analyse d’un élément HTML">
+</figure>
+<figure class="gallery-slide" data-title="Vérifiez et ajoutez la règle" data-caption="Vérifiez le sélecteur et les correspondances, puis ajoutez la règle. Assurez-vous que l’élément disparaît.">
+<img loading="lazy" decoding="async" src="../../images/en/8.png" alt="Vérification et ajout d’une règle HTML rapide">
+</figure>
+<button class="gallery-control next" type="button" aria-label="Étape suivante">›</button>
+</div>
+<div class="gallery-caption">
+<span class="gallery-caption-number">1</span>
+<div>
+<b>
+</b>
+<span>
+</span>
+</div>
+</div>
+<div class="gallery-dots" aria-label="Étapes de création d’une règle rapide">
+</div>
+</div>
+<div class="note">
+<strong>Ne conservez pas automatiquement tous les attributs.</strong> Une classe ou un ID composé de caractères aléatoires peut changer au prochain chargement.</div>
+</div>
+</details>
+        <details id="method-stable" data-method="stable">
+<summary>
+<span class="method-index">4</span>Utiliser <a class="product-link summary-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> <span class="expand-hint">Sélectionnez pour lire</span>
+</summary>
+<div class="method-body">
+<p>
+<a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> aide lorsque les classes et ID sont masqués, changent entre les chargements ou que la page contient de nombreux blocs semblables. C’est souvent plus simple qu’une inspection manuelle, mais l’analyse prend du temps.</p>
+<div class="gallery compact-gallery" data-gallery>
+<div class="gallery-stage">
+<button class="gallery-control prev" type="button" aria-label="Étape précédente">‹</button>
+<figure class="gallery-slide active" data-title="Lancez l’analyse" data-caption="Ouvrez la page, choisissez le nombre de chargements et cliquez sur « Analyser la page ». Plus de chargements améliorent la fiabilité, mais prennent plus de temps.">
+<img loading="lazy" decoding="async" src="../../images/en/25.png" alt="Lancement de l’analyse">
+</figure>
+<figure class="gallery-slide" data-title="Copiez le HTML voulu" data-caption="À la fin de l’analyse, la carte s’ouvre dans un nouvel onglet. Sélectionnez l’élément dans DevTools et copiez-le via « Copier » / “Copy” → « Copier l'élément » / “Copy element”.">
+<img loading="lazy" decoding="async" src="../../images/en/26.png" alt="Copie du HTML pour la recherche sur la carte">
+</figure>
+<figure class="gallery-slide" data-title="Trouvez l’élément sur la carte" data-caption="Ouvrez l’onglet de la carte de stabilité. Collez l’élément dans la recherche et trouvez-le. Vérifiez qu’il s’agit du bon élément. Cliquez sur {{map-menu}}, ouvrez la fiche du sélecteur et lisez la description de ses caractéristiques.">
+<img loading="lazy" decoding="async" src="../../images/en/27.png" alt="Recherche d’un élément sur la carte">
+</figure>
+<figure class="gallery-slide" data-title="Vérifiez les caractéristiques et copiez le résultat" data-caption="Vérifiez que le sélecteur ou la règle utilise des caractéristiques stables pertinentes. Copiez le sélecteur CSS ou la règle BlockIt.">
+<img loading="lazy" decoding="async" src="../../images/en/28.png" alt="Vérification et copie du sélecteur">
+</figure>
+<figure class="gallery-slide" data-title="Ajoutez le résultat à BlockIt" data-caption="Collez le sélecteur ou la règle dans BlockIt, vérifiez le nombre d’éléments et cliquez sur « Ajouter la règle ».">
+<img loading="lazy" decoding="async" src="../../images/en/29.png" alt="Checking a StableHTMLFinder selector in BlockIt">
+</figure>
+<figure class="gallery-slide" data-title="Vérifiez la page" data-caption="Vérifiez que la règle fonctionne et que l’élément indésirable a disparu.">
+<img loading="lazy" decoding="async" src="../../images/en/30.png" alt="Résultat de l’ajout depuis StableHTMLFinder">
+</figure>
+<button class="gallery-control next" type="button" aria-label="Étape suivante">›</button>
+</div>
+<div class="gallery-caption"><span class="gallery-caption-number">1</span><div><b></b><span></span></div></div>
+<div class="gallery-dots" aria-label="Étapes d’utilisation de StableHTMLFinder"></div>
+</div>
+<p>
+<a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> ne bloque rien lui-même. Il aide à choisir la base d’une règle BlockIt :</p>
+<ul class="stable-result-options">
+<li><strong>Sélecteur CSS</strong> : le choix le plus simple s’il utilise des caractéristiques stables et trouve le bon nombre d’éléments.</li>
+<li><strong>Règle BlockIt</strong> : quand une correspondance précise exige une syntaxe étendue absente du CSS standard.</li>
+<li><strong>Examiner la carte</strong> : étudiez les caractéristiques stables de l’élément et de son environnement, puis saisissez-les dans le constructeur si les résultats générés manquent de précision.</li>
+</ul>
+</div>
+</details>
+        <details id="method-builder" data-method="builder">
+<summary>
+<span class="method-index">5</span>Ouvrir le constructeur de règles <span class="expand-hint">Sélectionnez pour lire</span>
+</summary>
+<div class="method-body">
+<p>Le constructeur crée des règles précises sans connaître CSS, XPath ni la syntaxe BlockIt. Pour des éléments stables ou non, il peut utiliser le texte, le nombre d’attributs ou de classes, la position parmi les éléments frères et l’environnement.</p>
+<p>Copiez le HTML dans DevTools, ouvrez le « Mode avancé » de BlockIt, collez-le dans le champ prévu et cliquez sur « Ouvrir le constructeur ».</p>
+<div class="builder-map">
+<article>
+<h4>Fiche d’élément</h4>
+<p>Chaque fiche décrit un élément HTML : balise, nombre d’attributs et conditions sur les attributs, le texte et la position.</p>
+</article>
+<article>
+<h4>Arbre des relations</h4>
+<p>Les ancêtres sont au-dessus, les descendants en dessous avec un retrait et les frères au même niveau.</p>
+</article>
+<article>
+<h4>Caractéristiques stables</h4>
+<p>Vous pouvez désactiver les valeurs ajoutées automatiquement. N’utilisez pas des ID ou classes changeants simplement parce qu’ils figurent dans le HTML.</p>
+</article>
+<article>
+<h4>Vérification</h4>
+<p>Vérifiez immédiatement le nombre de correspondances, puis utilisez « Vérifier après actualisation » pour confirmer sa stabilité.</p>
+</article>
+</div>
+<h4>Conditions disponibles dans une fiche</h4>
+<ul>
+<li>
+<strong>Balise :</strong> indiquez-la ou laissez vide si elle importe peu.</li>
+<li>
+<strong>Nombre d’attributs :</strong> exactement, au moins ou au plus le nombre indiqué.</li>
+<li>
+<strong>Attributs :</strong> conditions sur les noms et valeurs ; pour <code>class</code>, vous pouvez aussi fixer le nombre de classes.</li>
+<li>
+<strong>Texte :</strong> texte propre ou tout le texte intérieur ; correspondance exacte, préfixe, suffixe, fragment ou expression régulière.</li>
+<li>
+<strong>Position parmi les frères :</strong> place parmi les enfants du même parent.</li>
+</ul>
+<h4>Éléments liés</h4>
+<p>Vous pouvez ajouter un parent direct ou un ancêtre à la cible et à ses ancêtres. La cible peut aussi avoir un enfant, un descendant ou un frère. Les éléments liés disposent du bouton « Peut être absent ».</p>
+<p>
+<strong>Position parmi les frères</strong> désigne la place parmi les enfants d’un même parent. <strong>Position dans les résultats</strong> désigne la place parmi tous les éléments trouvés par la règle complète. Ce sont deux conditions différentes.</p>
+<h4>Aperçu et vérification</h4>
+<p>Lisez la description de « Aperçu de la règle ». Elle révèle les attributs, conditions de texte ou relations ajoutés par erreur. Vérifiez ensuite les correspondances sur la page actuelle et après actualisation.</p>
+<h4>Exemple : une règle pour plusieurs éléments</h4>
+<ol class="builder-steps">
+<li>Activez « Position parmi les frères » et saisissez <strong>2, 3 et 5</strong> dans cet exemple.</li>
+<li>Conservez la correspondance exacte du nom d’attribut <code>class</code>.</li>
+<li>Retirez la partie peu fiable de la valeur de classe et remplacez « valeur : exactement » par <strong>« valeur : contient »</strong>.</li>
+<li>Désactivez « Nombre de classes » si ce nombre peut changer.</li>
+<li>Lisez « Aperçu de la règle » et vérifiez que chaque condition est nécessaire.</li>
+<li>Fermez DevTools sur la page cible et cliquez sur « Vérifier après actualisation ». Certains sites chargent un contenu différent lorsque DevTools est ouvert.</li>
+<li>Vérifiez que le nombre de correspondances ne change pas après actualisation : la règle est alors stable.</li>
+<li>Cliquez sur « Créer la règle ».</li>
+</ol>
+<div class="gallery compact-gallery" data-gallery>
+<div class="gallery-stage">
+<button class="gallery-control prev" type="button" aria-label="Étape précédente">‹</button>
+<figure class="gallery-slide active" data-title="Copiez le HTML de l’élément" data-caption="Sélectionnez le conteneur extérieur dans DevTools et copiez-le via « Copier » / “Copy” → « Copier l'élément » / “Copy element”.">
+<img loading="lazy" decoding="async" src="../../images/en/16.png" alt="Copie du HTML pour le constructeur">
+</figure>
+<figure class="gallery-slide" data-title="Cliquez sur « Mode avancé »" data-caption="Ouvrez BlockIt et cliquez sur « Mode avancé ». La section « Créer une règle depuis le HTML » apparaît.">
+<img loading="lazy" decoding="async" src="../../images/en/33.png" alt="Ouverture du mode avancé de BlockIt">
+</figure>
+<figure class="gallery-slide" data-title="Ouvrez le constructeur" data-caption="Collez le HTML dans « Créer une règle depuis le HTML » et cliquez sur « Ouvrir le constructeur ».">
+<img loading="lazy" decoding="async" src="../../images/en/17.png" alt="Ouverture du constructeur depuis le HTML">
+</figure>
+<figure class="gallery-slide" data-title="Examinez le résultat initial" data-caption="Le constructeur remplit la fiche à partir du HTML et affiche immédiatement les correspondances.">
+<img loading="lazy" decoding="async" src="../../images/en/18.png" alt="Fiche remplie automatiquement">
+</figure>
+<figure class="gallery-slide" data-title="Trouvez la position du premier élément" data-caption="Au besoin, cherchez dans DevTools des caractéristiques limitant la recherche. Ici, la publicité est le deuxième élément frère.">
+<img loading="lazy" decoding="async" src="../../images/en/19.png" alt="First similar element in DevTools">
+</figure>
+<figure class="gallery-slide" data-title="Trouvez la position du deuxième élément" data-caption="Une autre publicité ayant les mêmes classes est le troisième élément frère.">
+<img loading="lazy" decoding="async" src="../../images/en/20.png" alt="Second similar sibling element">
+</figure>
+<figure class="gallery-slide" data-title="Trouvez la position du troisième élément" data-caption="La dernière publicité ayant les mêmes classes est le cinquième élément frère.">
+<img loading="lazy" decoding="async" src="../../images/en/21.png" alt="Third similar sibling element">
+</figure>
+<figure class="gallery-slide" data-title="Configurez et vérifiez la règle" data-caption="Une règle bloque trois publicités en indiquant les positions 2, 3 et 5. Les numéros renvoient à la liste au-dessus de la galerie.">
+<img loading="lazy" decoding="async" src="../../images/en/22.png" alt="Completed rule builder form with sibling positions">
+</figure>
+<figure class="gallery-slide" data-title="Confirmez la création" data-caption="Cliquez sur « Créer la règle ». Si BlockIt annonce plusieurs éléments, vérifiez leur nombre et confirmez.">
+<img loading="lazy" decoding="async" src="../../images/en/23.png" alt="Confirming a rule for multiple elements">
+</figure>
+<figure class="gallery-slide" data-title="Vérifiez la page" data-caption="Après l’enregistrement, vérifiez que les blocs choisis ont disparu et que le contenu utile est resté en place.">
+<img loading="lazy" decoding="async" src="../../images/en/24.png" alt="Page after applying a rule from the builder">
+</figure>
+<button class="gallery-control next" type="button" aria-label="Étape suivante">›</button>
+</div>
+<div class="gallery-caption"><span class="gallery-caption-number">1</span><div><b></b><span></span></div></div>
+<div class="gallery-dots" aria-label="Étapes d’utilisation du constructeur"></div>
+</div>
+</div>
+</details>
+      </div>
+      <h3>Quand changer de méthode</h3>
+      <p>Commencez par un sélecteur CSS de DevTools. Une règle HTML rapide convient si les caractéristiques semblent stables mais que vous voulez choisir les attributs. Si elles sont instables ou que la page comporte de nombreux blocs semblables, utilisez <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> ou le constructeur.</p>
+    </section>
 
-            <h3 id="modes">Que signifient les modes de blocage ?</h3>
-            <ul>
-                <li><strong>Supprimer</strong> (convient dans la plupart des cas) : L'élément est complètement retiré du code HTML de la page, libérant ainsi de l'espace pour d'autres éléments. Mais cette option peut parfois entraîner une rupture de la mise en page.</li>
-                <li><strong>Masquer :</strong> L'élément devient invisible mais continue d'occuper le même espace sur la page. La mise en page ne se brise pas.</li>
-            </ul>
-        </section>
+    <section class="chapter" id="selectors">
+      <h2>Aide-mémoire des sélecteurs CSS <a class="top-link" href="#top">Retour en haut</a>
+</h2>
+      <h3>Que sont les sélecteurs ?</h3>
+      <p>
+Les <strong>sélecteurs</strong> trouvent un élément selon ses propriétés : balise, classe, identifiant, attributs ou position dans la structure HTML.</p>
+      <p>Dans les styles CSS, ils appliquent une mise en forme. Dans BlockIt, ils servent <strong>uniquement à trouver des éléments</strong> afin de les bloquer.</p>
+      <p>Ces exemples vous aideront à lire et modifier légèrement les sélecteurs CSS courants.</p>
+      <h3>Vérifier un sélecteur</h3>
+      <ol>
+<li>Ouvrez l’onglet <strong>« Éléments » / “Elements”</strong> de DevTools.</li>
+<li>Appuyez sur <kbd>Ctrl + F</kbd>, ou <kbd>Cmd + F</kbd> sur Mac.</li>
+<li>Collez le sélecteur dans la recherche.</li>
+<li>DevTools surligne les correspondances et en indique le nombre, par exemple <code>1 of 3</code>.</li>
+</ol>
+      <div class="gallery" data-gallery>
+        <div class="gallery-stage">
+          <figure class="gallery-slide active" data-title="Vérifiez le sélecteur" data-caption="Dans « Éléments » / “Elements”, appuyez sur Ctrl + F, collez le sélecteur et vérifiez les correspondances.">
+<img loading="lazy" decoding="async" src="../../images/selector-check.png" alt="Recherche avec Ctrl+F">
+</figure>
+        </div>
+        <div class="gallery-caption">
+<span class="gallery-caption-number">1</span>
+<div>
+<b>
+</b>
+<span>
+</span>
+</div>
+</div>
+        <div class="gallery-dots" aria-label="Vérification dans DevTools">
+</div>
+      </div>
+      <h3>Types de sélecteurs</h3>
+      <div class="syntax-grid">
+        <article class="syntax-example">
+<h4>Sélecteur universel (<code>*</code>)</h4>
+<p>Trouve <strong>tous</strong> les éléments. Utilisez-le avec prudence : il renvoie tout le HTML.</p>
+<p>
+<strong>Sélecteur :</strong> <code>*</code>
+</p>
+<p>
+<strong>Ce qu’il trouve :</strong> tous les éléments sans exception.</p>
+</article>
+        <article class="syntax-example">
+<h4>Sélecteur de balise</h4>
+<p>Trouve tous les éléments portant la balise HTML indiquée.</p>
+<p>
+<strong>Sélecteurs :</strong> <code>h1</code>, <code>p</code>, <code>button</code>, <code>div</code>
+</p>
+<p>
+<strong>Ce qu’ils trouvent :</strong>
+</p>
+<ul>
+<li>
+<code>h1</code> — tous les titres de premier niveau ;</li>
+<li>
+<code>p</code> — tous les paragraphes ;</li>
+<li>
+<code>button</code> — tous les boutons ;</li>
+<li>
+<code>div</code> — tous les conteneurs <code>&lt;div&gt;</code>.</li>
+</ul>
+</article>
+        <article class="syntax-example">
+<h4>Sélecteur de classe (<code>.class</code>)</h4>
+<p>Trouve les éléments ayant la classe indiquée. Écrivez plusieurs classes à la suite, sans espace.</p>
+<p>
+<strong>Sélecteurs :</strong> <code>.card</code>, <code>.card__title</code>, <code>.card.featured</code>
+</p>
+<p>
+<strong>Ce qu’ils trouvent :</strong>
+</p>
+<ul>
+<li>
+<code>.card</code> — tous les éléments de classe <code>card</code> ;</li>
+<li>
+<code>.card__title</code> — tous les éléments de classe <code>card__title</code> ;</li>
+<li>
+<code>.card.featured</code> — les éléments ayant les classes <code>card</code> et <code>featured</code>.</li>
+</ul>
+<p>L’élément peut avoir d’autres classes : <code>class="card featured compact"</code> correspond aussi à <code>.card.featured</code>. <code>[class="card featured"]</code> exige la chaîne complète, dans cet ordre et sans classe supplémentaire.</p>
+</article>
+        <article class="syntax-example">
+<h4>Sélecteur d’identifiant (<code>#id</code>)</h4>
+<p>Trouve l’élément portant l’<code>id</code> unique indiqué.</p>
+<p>
+<strong>Sélecteurs :</strong> <code>#salad-cat</code>, <code>#confused-cat</code>, <code>#bread-cat</code>
+</p>
+<p>
+<strong>Ce qu’ils trouvent :</strong>
+</p>
+<ul>
+<li>
+<code>#salad-cat</code> — l’élément avec <code>id="salad-cat"</code> ;</li>
+<li>
+<code>#confused-cat</code> — l’élément avec <code>id="confused-cat"</code> ;</li>
+<li>
+<code>#bread-cat</code> — l’élément avec <code>id="bread-cat"</code>.</li>
+</ul>
+</article>
+        <article class="syntax-example">
+<h4>Sélecteur d’attribut (<code>[attribut="valeur"]</code>)</h4>
+<p>Vous pouvez vérifier une valeur exacte ou la présence d’un attribut. Écrivez plusieurs conditions à la suite.</p>
+<p>
+<strong>Sélecteurs :</strong> <code>[data-type]</code>, <code>[data-type="description"]</code>, <code>[data-type="description"][aria-label="Card"]</code>, <code>[class~="card"]</code>, <code>[class="card featured"]</code>
+</p>
+<p>
+<strong>Ce qu’ils trouvent :</strong>
+</p>
+<ul>
+<li>
+<code>[data-type]</code> — les éléments possédant <code>data-type</code>, quelle que soit sa valeur ;</li>
+<li>
+<code>[data-type="description"]</code> — les éléments dont <code>data-type</code> vaut exactement <code>description</code> ;</li>
+<li>
+<code>[data-type="description"][aria-label="Card"]</code> — les éléments où les deux attributs correspondent ;</li>
+<li>
+<code>[class~="card"]</code> — les éléments dont la liste de classes contient la classe distincte <code>card</code> ;</li>
+<li>
+<code>[class="card featured"]</code> — les éléments dont l’attribut <code>class</code> complet correspond exactement.</li>
+</ul>
+<div class="operator-reference">
+<h5>Façons de comparer une valeur</h5>
+<dl>
+<div><dt><code>[href^="https://"]</code></dt><dd>la valeur commence par <code>https://</code></dd></div>
+<div><dt><code>[src$=".png"]</code></dt><dd>la valeur se termine par <code>.png</code></dd></div>
+<div><dt><code>[class*="advert"]</code></dt><dd>la valeur contient <code>advert</code> n’importe où</dd></div>
+<div><dt><code>[class~="card"]</code></dt><dd>la liste de mots séparés par des espaces contient le mot <code>card</code></dd></div>
+<div><dt><code>[lang|="en"]</code></dt><dd>la valeur vaut <code>en</code> ou commence par <code>en-</code>, par exemple <code>en-US</code></dd></div>
+<div><dt><code>[aria-label*="advertisement" i]</code></dt><dd>la valeur contient « advertisement », sans tenir compte de la casse</dd></div>
+</dl>
+</div>
+<p>Un sélecteur ne vérifie que les attributs indiqués et n’interdit pas les autres. Ainsi, <code>[data-type="description"][aria-label="Card"]</code> trouve aussi un élément ayant un attribut <code>title</code> supplémentaire. Le CSS standard ne peut pas exiger l’absence de tout autre attribut.</p>
+</article>
+        <article class="syntax-example">
+<h4>Sélecteurs combinés</h4>
+<p>Balise, classe, ID et conditions d’attribut peuvent être combinés sans espace pour le même élément.</p>
+<p>
+<strong>Sélecteurs :</strong> <code>h2.card__title</code>, <code>div.card.featured</code>, <code>div[data-type="description"]</code>, <code>article.card[data-type="advertisement"][aria-label="Advertisement"]</code>
+</p>
+<p>
+<strong>Ce qu’ils trouvent :</strong>
+</p>
+<ul>
+<li>
+<code>h2.card__title</code> — un <code>&lt;h2&gt;</code> de classe <code>card__title</code> ;</li>
+<li>
+<code>div.card.featured</code> — un <code>&lt;div&gt;</code> avec les classes <code>card</code> et <code>featured</code> ; d’autres sont autorisées ;</li>
+<li>
+<code>div[data-type="description"]</code> — un <code>&lt;div&gt;</code> avec l’attribut indiqué ; d’autres sont autorisés ;</li>
+<li>
+<code>article.card[data-type="advertisement"][aria-label="Advertisement"]</code> — un <code>&lt;article&gt;</code> de classe <code>card</code> dont les deux valeurs d’attribut correspondent exactement à <code>data-type="advertisement"</code> et <code>aria-label="Advertisement"</code>.</li>
+</ul>
+</article>
+        <article class="syntax-example">
+<h4>Sélecteur de descendant (espace)</h4>
+<p>Trouve les éléments situés <strong>dans</strong> un autre, à n’importe quel niveau.</p>
+<p>
+<strong>Sélecteur :</strong> <code>.card .btn</code>
+</p>
+<p>
+<strong>Ce qu’il trouve :</strong> tous les éléments de classe <code>btn</code> dans un élément de classe <code>card</code>.</p>
+</article>
+        <article class="syntax-example">
+<h4>Sélecteur d’enfant (<code>&gt;</code>)</h4>
+<p>Trouve les enfants <strong>directs</strong> d’un autre élément.</p>
+<p>
+<strong>Sélecteur :</strong> <code>.card__body &gt; .card__title</code>
+</p>
+<p>
+<strong>Ce qu’il trouve :</strong> les éléments de classe <code>card__title</code> enfants directs d’un élément de classe <code>card__body</code>.</p>
+</article>
+        <article class="syntax-example">
+<h4>Sélecteur de frère adjacent (<code>+</code>)</h4>
+<p>Trouve le <strong>frère suivant</strong> au même niveau.</p>
+<p>
+<strong>Sélecteur :</strong> <code>#confused-cat + .card__description</code>
+</p>
+<p>
+<strong>Ce qu’il trouve :</strong> un <code>&lt;p&gt;</code> suivant immédiatement l’élément <code>id="confused-cat"</code>.</p>
+</article>
+        <article class="syntax-example">
+<h4>Pseudo-classe de position</h4>
+<p>Sélectionne les éléments selon leur position parmi leurs frères.</p>
+<p>
+<strong>Sélecteur :</strong> <code>.card__actions :nth-child(2)</code>
+</p>
+<p>
+<strong>Ce qu’il trouve :</strong> le deuxième enfant d’un élément de classe <code>card__actions</code>.</p>
+</article>
+      </div>
+      <p class="selector-limit">
+<strong>Les sélecteurs CSS standard ont des limites.</strong> Ils ne décrivent pas le nombre d’attributs ou de classes sans les énumérer, le texte propre ou interne, les expressions régulières ni les motifs de noms d’attributs. <code>[data-*]</code> n’est par exemple pas du CSS standard. Les règles BlockIt étendent CSS avec <code>[data-*]</code>, <code>:attr-name(/^data-/)</code> et d’autres conditions. <a href="../rules/en/index.html">Consulter la documentation de la syntaxe BlockIt</a>.</p>
 
-        <!-- ============================================================
-        SECTION 3 : Fonctionnalités avancées
-        ============================================================ -->
-        <section id="advanced">
-            <h2>Fonctionnalités avancées <a href="#top" class="back-link">Haut de page</a></h2>
+      <div class="embedded-contexts" id="embedded-contexts">
+        <h3 class="section-heading">Que sont iframe et Shadow DOM ? <a class="top-link" href="#top">Retour en haut</a></h3>
+        <p>
+<strong>iframe</strong> est une page web distincte intégrée dans une autre. Son contenu appartient à son propre document ; une recherche ordinaire depuis la page parente ne peut donc pas y entrer directement.</p>
+        <div class="structure-example">
+          <span>Aspect d’un iframe en HTML</span>
+          <pre><code>&lt;main&gt;
+  &lt;h1&gt;Page principale&lt;/h1&gt;
+  &lt;iframe src="advertisement.html"&gt;&lt;/iframe&gt;
+&lt;/main&gt;</code></pre>
+          <p>Le balisage de <code>advertisement.html</code> est chargé comme document distinct dans l’<code>&lt;iframe&gt;</code>.</p>
+        </div>
+        <p>
+<strong>Shadow DOM</strong> est l’arbre interne isolé d’un composant. Le site sépare ainsi son balisage du reste de la page ; une racine fermée le masque aussi aux scripts ordinaires.</p>
+        <div class="structure-example">
+          <span>Aspect du Shadow DOM dans DevTools</span>
+          <pre><code>&lt;video-player&gt;
+  #shadow-root (open)
+    &lt;button class="play"&gt;Play&lt;/button&gt;
+&lt;/video-player&gt;</code></pre>
+          <p>Le bouton se trouve dans la racine d’ombre de <code>&lt;video-player&gt;</code>, pas dans l’arbre ordinaire de la page.</p>
+        </div>
+        <p>Ces structures créent des limites de recherche : la règle doit s’exécuter dans le document principal, chaque iframe et chaque racine d’ombre accessible. Tous les bloqueurs ne le font pas. BlockIt applique CSS et ses règles étendues dans iframe et Shadow DOM ; XPath ne traverse toutefois pas une limite Shadow DOM.</p>
+      </div>
+    </section>
 
-            <h3 id="xpath">Blocage avec XPath</h3>
-            <p>XPath est utile sur les sites qui utilisent des classes dynamiques (obfuscation) lorsque les sélecteurs CSS sont instables.</p>
-            <p><strong>Comment copier XPath :</strong></p>
-            <ol>
-                <li>Trouvez l'élément via « Inspecter ».</li>
-                <li>Cliquez avec le bouton droit sur l'élément dans le code → <strong>Copier</strong> → <strong>Copier XPath</strong> (ou <strong>Copy XPath</strong>).</li>
-                <li>Collez l'expression copiée dans le champ de saisie de BlockIt. L'extension reconnaîtra automatiquement qu'il s'agit d'un XPath, et vous <strong>n'avez pas besoin d'activer le mode Avancé</strong> pour cela.</li>
-            </ol>
+    <section class="chapter" id="rules">
+      <h2>Gestion des règles <a class="top-link" href="#top">Retour en haut</a>
+</h2>
+      <p>Les règles créées figurent dans la liste du site actuel ou dans celle sans domaine. Les règles du constructeur peuvent être modifiées ou supprimées ; les règles désactivées restent marquées dans la liste.</p>
+      <h3>Désactivation et suppression</h3>
+      <h4>Comment désactiver une règle ?</h4>
+      <p>Repérez-la dans « Règles actives » et cliquez sur « Désactiver ». Elle reste marquée « Désactivée », mais n’est plus appliquée. Actualisez la page pour restaurer un élément déjà supprimé.</p>
+      <h4>Comment supprimer une règle ?</h4>
+      <p>Repérez-la dans « Règles actives » et cliquez sur « Supprimer ». Rechargez ensuite la page avec <kbd>F5</kbd> ou le bouton d’actualisation.</p>
+      <h3>Exportation et importation</h3>
+      <p>L’exportation enregistre les règles dans un fichier. L’importation les ajoute ou remplace la liste actuelle. Cela permet de transférer les réglages entre appareils.</p>
+      <div class="gallery" data-gallery>
+        <div class="gallery-stage">
+          <button class="gallery-control prev" type="button" aria-label="Étape précédente">‹</button>
+          <figure class="gallery-slide active" data-title="Cliquez sur « Mode avancé »" data-caption="Ouvrez BlockIt et cliquez sur « Mode avancé ». Les outils d’exportation et d’importation apparaissent.">
+<img loading="lazy" decoding="async" src="../../images/en/33.png" alt="Ouverture du mode avancé de BlockIt">
+</figure>
+          <figure class="gallery-slide" data-title="Ouvrez l’importation" data-caption="Cliquez sur « Importer les règles », puis sur « Choisir un fichier ».">
+<img loading="lazy" decoding="async" src="../../images/en/9.png" alt="Ouverture de l’importation">
+</figure>
+          <figure class="gallery-slide" data-title="Choisissez le fichier" data-caption="Sélectionnez et ouvrez le fichier JSON enregistré.">
+<img loading="lazy" decoding="async" src="../../images/en/10.png" alt="Selecting a JSON rules file">
+</figure>
+          <figure class="gallery-slide" data-title="Choisissez la méthode" data-caption="Cliquez sur « Tout remplacer » pour supprimer les règles actuelles ou sur « Ajouter » pour les conserver.">
+<img loading="lazy" decoding="async" src="../../images/en/11.png" alt="Choosing a rule import method">
+</figure>
+          <figure class="gallery-slide" data-title="Vérifiez le résultat" data-caption="Après l’importation, BlockIt indique le nombre de règles ajoutées et le total enregistré.">
+<img loading="lazy" decoding="async" src="../../images/en/12.png" alt="Successful rule import message">
+</figure>
+          <button class="gallery-control next" type="button" aria-label="Étape suivante">›</button>
+        </div>
+        <div class="gallery-caption">
+<span class="gallery-caption-number">1</span>
+<div>
+<b>
+</b>
+<span>
+</span>
+</div>
+</div>
+        <div class="gallery-dots" aria-label="Étapes de l’importation">
+</div>
+      </div>
+      <h3>Vérification des règles</h3>
+      <p>Ouvrez la page à vérifier puis BlockIt. Dans « Pour ce site : &lt;domaine&gt; », cliquez sur « Vérifier les règles ».</p>
+      <p>La vérification indique si les règles trouvent des éléments. Vous pouvez mesurer une fois ou activer « Vérifier la stabilité » et choisir plusieurs rechargements. BlockIt suspend alors temporairement les règles et affiche leurs correspondances à chaque chargement.</p>
+      <ul>
+        <li><strong>Fonctionne :</strong> même nombre non nul à chaque vérification.</li>
+        <li><strong>Instable :</strong> le nombre change entre les chargements.</li>
+        <li><strong>N’a pas fonctionné :</strong> aucune correspondance.</li>
+        <li><strong>Erreur :</strong> la règle n’a pas pu être exécutée.</li>
+      </ul>
+      <p>La vérification inclut les règles du domaine de base et celles sans domaine. BlockIt ne sépare pas les sous-domaines : une règle créée sur <code>e.mail.ru</code> est enregistrée pour <code>mail.ru</code>. En revanche, seule la page exacte depuis laquelle le diagnostic est ouvert est contrôlée. Lancez donc la vérification depuis la page pour laquelle la règle a été créée.</p>
+      <div class="note"><strong>La vérification mesure les correspondances, pas leur fonction.</strong> Un résultat non nul ne garantit pas que seuls les éléments voulus ont été trouvés. Comparez le nombre et le résultat sur la page.</div>
+    </section>
 
-            <h3 id="advanced-mode">Mode Avancé</h3>
-            <p>En mode de base, l'extension propose un simple champ pour saisir un sélecteur. Pour un réglage plus fin des règles et des outils supplémentaires, il existe le <strong>Mode Avancé</strong>. Pour l'activer, cliquez sur le bouton correspondant dans l'interface de l'extension.</p>
-            <p>Dans ce mode, vous avez accès à :</p>
-            <ul>
-                <li><strong>Analyseur HTML :</strong> Collez le code HTML d'un élément, et l'extension proposera automatiquement un sélecteur composé de ses attributs.</li>
-                <li><strong>Édition des attributs :</strong> Après l'analyse, vous verrez une liste des attributs de l'élément et pourrez supprimer ceux qui ne sont pas fiables (par exemple, les classes générées dynamiquement) pour affiner le sélecteur.</li>
-                <li><strong>Ajout manuel d'attributs :</strong> Vous pouvez ajouter manuellement un attribut et sa valeur si vous souhaitez affiner davantage le sélecteur.</li>
-                <li><strong>Exporter et importer des règles :</strong> Partagez vos règles avec d'autres ou transférez-les entre appareils.</li>
-            </ul>
-            
-            <h4 id="html-parser">Analyseur HTML, édition et ajout d'attributs</h4>
-            <p>Ces trois outils fonctionnent ensemble comme un flux de travail unifié pour créer des sélecteurs précis sans avoir à mémoriser la syntaxe :</p>
-            <ol>
-                <li><strong>Copiez le code HTML de l'élément</strong> (Clic droit → <strong>Copier</strong> → <strong>Copier l'élément</strong> (ou <strong>Copy element</strong>)).
-                    <div class="screenshot">
-                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/7.png" alt="Copier l'élément HTML" class="screenshot-img">
-                    </div>
-                </li>
-                <li><strong>Activez le mode Avancé dans l'extension et collez le code HTML dans le champ correspondant</strong>. Cliquez sur « Analyser ». L'extension analysera le code et vous montrera la balise et la liste de tous ses attributs.
-                </li>
-                <li><strong>Modifiez la liste des attributs proposés.</strong> Conservez uniquement les attributs qui ont le moins de chances de changer à l'avenir. Par exemple, les <code>id</code> et les <code>class</code> qui ressemblent à du charabia généré dynamiquement sont de mauvais choix pour cela. Le sélecteur dans le champ de saisie sera automatiquement mis à jour à chaque modification que vous apporterez.
-                    <div class="screenshot">
-                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/8.png" alt="Coller du HTML en mode Avancé" class="screenshot-img">
-                    </div>
-                </li>
-                <li><strong>Ajoutez des attributs manuellement si nécessaire.</strong> Si l'ensemble d'attributs suggéré ne suffit pas à créer un sélecteur unique, vous pouvez ajouter le vôtre.</li>
-                <li><strong>Cliquez sur « Ajouter une règle » et confirmez qu'elle a été ajoutée et que l'élément a bien été supprimé de la page.</strong>
-                    <div class="screenshot">
-                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/9.png" alt="Modification de la liste des attributs" class="screenshot-img">
-                    </div>
-                </li>
-            </ol>
-        </section>
-
-        <!-- ============================================================
-        SECTION 4 : Conseils pour choisir un élément à bloquer
-        ============================================================ -->
-        <section id="selector-tips">
-            <h2>Conseils pour choisir un élément à bloquer <a href="#top" class="back-link">Haut de page</a></h2>
-            <p>Les méthodes ci-dessous sont classées de la plus simple à la plus avancée. Commencez par la première et passez à la suivante si la précédente ne fonctionne pas.</p>
-
-            <h3>1. Copier le sélecteur depuis DevTools</h3>
-            <p>C'est la méthode la plus simple qui fonctionne pour la plupart des sites. Les instructions sont décrites dans la section <a href="#how-to-block">« Comment bloquer un élément »</a>.</p>
-
-            <h3>2. Copier XPath depuis DevTools</h3>
-            <p>Utilisez cette méthode si le sélecteur copié ne fonctionne pas à cause de classes dynamiques sur le site. Les instructions pour copier XPath se trouvent dans la section <a href="#xpath">« Blocage avec XPath »</a>.</p>
-
-            <h3>3. Utiliser l'analyseur HTML (en mode Avancé)</h3>
-            <p>Cette méthode est pratique si vous connaissez la théorie des sélecteurs mais ne vous souvenez pas de la syntaxe exacte. Vous collez le code HTML d'un élément, et l'extension propose un sélecteur basé sur ses attributs.</p>
-
-            <h3>4. Modifier la liste des attributs (en mode Avancé)</h3>
-            <p>Après avoir utilisé l'analyseur HTML, vous verrez une liste de tous les attributs de l'élément. Conservez uniquement ceux qui ont le moins de chances de changer à l'avenir. Les classes générées dynamiquement (charabia) sont de mauvais choix.</p>
-
-            <h3>5. Ajouter des attributs manuellement (en mode Avancé)</h3>
-            <p>Si aucune des méthodes automatiques ne fournit un sélecteur stable, vous pouvez ajouter manuellement un attribut unique et sa valeur pour affiner la recherche.</p>
-
-            <h3>6. Écrire un sélecteur manuellement</h3>
-            <p>Nécessite une compréhension de base de la syntaxe des sélecteurs CSS. Cela vous donne plus de contrôle et de stabilité. Pour apprendre les bases, consultez l'<a href="#selectors-cheatsheet">Aide-mémoire des sélecteurs</a> ou le <a href="https://docs.sherparpa.ru/sherpa-rpa/sherpa-designer/rabota-v-sherpa-designer/rukovodstvo-po-veb-selektoram/spravochnik-po-notacii-css-i-xpath-selektorov" target="_blank">Référence des sélecteurs CSS et XPath</a> (en russe).</p>
-        </section>
-
-        <!-- ============================================================
-        SECTION 5 : Exporter et importer des règles
-        ============================================================ -->
-        <section id="export-import">
-            <h2>Exporter et importer des règles <a href="#top" class="back-link">Haut de page</a></h2>
-            <p>Cette fonctionnalité vous permet de partager des règles avec d'autres ou de les transférer entre ordinateurs. Disponible en <strong>mode Avancé</strong>.</p>
-            <ul>
-                <li><strong>Exporter :</strong> Sauvegarde toutes vos règles dans un fichier JSON.</li>
-                <li><strong>Importer :</strong> Charge des règles à partir d'un fichier JSON. Vous pouvez remplacer toutes les règles actuelles ou en ajouter de nouvelles (les doublons seront ignorés).</li>
-            </ul>
-            <h3>Comment importer des règles ?</h3>
-            <ul>
-                <li><strong>En mode Avancé, cliquez sur le bouton "Importer", une fenêtre s'ouvre, cliquez sur "Choisir un fichier" et sélectionnez le fichier.</strong>
-                    <div class="screenshot">
-                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/10.png" alt="Sélection du fichier de règles à importer" class="screenshot-img">
-                    </div>
-                </li>
-                <li><strong>Choisissez l'option : ajouter les règles importées à votre liste ou remplacer votre liste par les règles importées. Selon ce que vous voulez, cliquez sur "Remplacer tout" ou "Ajouter".</strong>
-                    <div class="screenshot">
-                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/11.png" alt="Fenêtre d'importation" class="screenshot-img">
-                    </div>
-                </li>
-                <li><strong>Si tout s'est bien passé, vous verrez un message de confirmation et les nouvelles règles apparaîtront dans votre liste de règles actives dans la fenêtre de l'extension.</strong>
-                    <div class="screenshot">
-                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/12.png" alt="Résultat de l'importation réussi" class="screenshot-img">
-                    </div>
-                </li>
-            </ul>
-        </section>
-
-        <!-- ============================================================
-        SECTION 6 : Résolution des problèmes (FAQ)
-        ============================================================ -->
-        <section id="troubleshooting">
-            <h2>Résolution des problèmes (FAQ) <a href="#top" class="back-link">Haut de page</a></h2>
-
-            <h4>Ma règle n'a pas fonctionné</h4>
-            <ul>
-                <li><strong>Raison possible n°1. L'élément choisi n'est pas le plus externe :</strong> Essayez de remonter dans l'arborescence HTML et de copier un sélecteur pour le conteneur parent.</li>
-                <li><strong>Raison possible n°2. Le site utilise des classes dynamiques (obfuscation) :</strong> Dans ce cas, le sélecteur copié peut cesser de fonctionner. Utilisez XPath ou écrivez un sélecteur manuellement.</li>
-                <li><strong>Raison possible n°3. L'élément est chargé dynamiquement :</strong> L'extension réapplique automatiquement les règles lorsque la page change. Si cela n'a pas aidé, essayez d'actualiser la page.</li>
-                <li><strong>Raison possible n°4. La règle a été créée pour un autre domaine :</strong> Vérifiez que la règle se trouve dans le groupe « Pour ce site » ou « Pour les autres sites ».</li>
-            </ul>
-
-            <h4>Le sélecteur ne trouve aucun élément</h4>
-            <ul>
-                <li><strong>Vérifiez votre sélecteur :</strong> Ouvrez DevTools (F12), passez à l'onglet « Elements », appuyez sur Ctrl+F (ou Cmd+F sur Mac) et entrez votre sélecteur dans la barre de recherche. Si la recherche ne trouve rien, votre sélecteur est incorrect.</li>
-                <li><strong>La page utilise Shadow DOM :</strong> Dans ce cas, les sélecteurs standard peuvent ne pas fonctionner. Essayez d'utiliser XPath ou de rechercher l'élément à l'intérieur de la racine fantôme.</li>
-                <li><strong>L'élément se charge après l'exécution du script :</strong> Certains éléments apparaissent avec un délai. Essayez d'actualiser la page ou d'attendre.</li>
-            </ul>
-
-            <h4>Après la suppression d'un élément, la mise en page s'est brisée et a l'air pire qu'avec la publicité</h4>
-            <ul>
-                <li><strong>Solution :</strong> Supprimez la règle et recréez-la, mais sélectionnez le mode <strong>« Masquer »</strong>. Cela préserve l'espace sur la page et maintient la mise en page intacte.</li>
-            </ul>
-
-            <h4>Le sélecteur trouve trop d'éléments</h4>
-            <p>Affinez le sélecteur en ajoutant plus d'attributs ou en utilisant un chemin plus spécifique. En mode Avancé, vous pouvez ajouter manuellement un attribut unique pour affiner la recherche.</p>
-
-            <h4>Rien ne fonctionne</h4>
-            <p>Si vous avez tout essayé et que l'élément refuse obstinément de se bloquer, peut-être que la meilleure chose à faire est de <strong>pisser sur ce site, de le quitter et d'oublier qu'il existe</strong>. 😄</p>
-        </section>
-
-        <!-- ============================================================
-        SECTION 7 : Aide-mémoire des sélecteurs
-        ============================================================ -->
-        <section id="selectors-cheatsheet">
-            <h2>Aide-mémoire des sélecteurs <a href="#top" class="back-link">Haut de page</a></h2>
-
-            <h3>Que sont les sélecteurs ?</h3>
-            <p><strong>Les sélecteurs</strong> sont un moyen de trouver un élément spécifique sur une page web en fonction de ses propriétés : balise, classe, identifiant, attributs ou position dans la structure HTML.</p>
-            <p>Contrairement aux styles CSS, où les sélecteurs sont utilisés pour appliquer une mise en forme, dans BlockIt, les sélecteurs sont utilisés <strong>uniquement pour trouver</strong> des éléments. Nous ne définissons pas de couleurs, de polices ou de marges — nous <strong>trouvons simplement l'élément</strong> pour le bloquer.</p>
-
-            <h3>Comment ouvrir les outils de développement</h3>
-            <p>Les outils de développement (DevTools) sont l'outil principal pour travailler avec les sélecteurs. Voici comment les ouvrir :</p>
-            <table class="cheatsheet-table">
-                <thead>
-                    <tr>
-                        <th>Action</th>
-                        <th>Résultat</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Appuyez sur <kbd>F12</kbd></td>
-                        <td>Le panneau DevTools s'ouvre</td>
-                    </tr>
-                    <tr>
-                        <td>Ou appuyez sur <kbd>Ctrl + Shift + I</kbd></td>
-                        <td>Pareil</td>
-                    </tr>
-                    <tr>
-                        <td>Ou faites un clic droit sur un élément → <strong>« Inspecter »</strong></td>
-                        <td>DevTools s'ouvre avec l'élément surligné</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h3>Comment personnaliser les outils de développement</h3>
-
-            <h4>Langue de l'interface</h4>
-            <ol>
-                <li>Ouvrez DevTools (<kbd>F12</kbd>).</li>
-                <li>Cliquez sur l'icône d'engrenage (⚙️) dans le coin supérieur droit → <strong>Paramètres</strong>.</li>
-                <li>Dans la section <strong>« Langue »</strong>, sélectionnez votre langue préférée dans le menu déroulant.</li>
-                <div class="screenshot">
-                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/13.png" alt="Changer la langue de DevTools" class="screenshot-img">
-                </div>
-                <li>Fermez et rouvrez DevTools.</li>
-            </ol>
-
-            <h4>Position du panneau</h4>
-            <ol>
-                <li>Cliquez sur les trois points (⋮) dans le coin supérieur droit de DevTools.</li>
-                <li>Choisissez l'une des options :
-                    <ul>
-                        <li><strong>Dock to right</strong> (par défaut)</li>
-                        <li><strong>Dock to bottom</strong> — pratique si vous avez un moniteur large</li>
-                        <li><strong>Dock to left</strong> — si vous préférez une disposition différente</li>
-                        <li><strong>Undock into separate window</strong> — déplacez-le vers un autre moniteur</li>
-                    </ul>
-                </li>
-            </ol>
-            <div class="screenshot">
-                <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/14.png" alt="Changer la position du panneau DevTools" class="screenshot-img">
-            </div>
-
-            <h3>Comment tester les sélecteurs dans les outils de développement</h3>
-            <p>Le moyen le plus rapide de vérifier si votre sélecteur fonctionne est d'utiliser la <strong>recherche (<kbd>Ctrl + F</kbd>)</strong> :</p>
-            <ol>
-                <li>Ouvrez DevTools (<kbd>F12</kbd>) et allez dans l'onglet <strong>« Elements »</strong>.</li>
-                <li>Appuyez sur <kbd>Ctrl + F</kbd> (ou <kbd>Cmd + F</kbd> sur Mac).</li>
-                <li>Saisissez votre sélecteur dans la barre de recherche.</li>
-                <li>DevTools mettra en surbrillance tous les éléments correspondant au sélecteur.</li>
-            </ol>
-            <p>La barre de recherche indique combien d'éléments ont été trouvés (par exemple, <code>1 of 3</code>). Cela vous aide à comprendre à quel point votre sélecteur est précis.</p>
-            <div class="screenshot">
-                <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/15.png" alt="Recherche d'un sélecteur avec Ctrl+F" class="screenshot-img">
-            </div>
-
-            <h3>Exemple pratique : Galerie de chats-mèmes</h3>
-            <p>Mettons maintenant ces connaissances en pratique. Ouvrez la <a href="example.html" target="_blank">page example.html</a> et ouvrez DevTools. Essayez de saisir les sélecteurs du tableau ci-dessous et voyez quels éléments ils trouvent.</p>
-
-            <h3>Types de sélecteurs</h3>
-
-            <h4>1. Sélecteur universel (<code>*</code>)</h4>
-            <p>Trouve <strong>tous</strong> les éléments de la page. À utiliser avec précaution — il retournera tout le contenu du HTML.</p>
-            <p><strong>Sélecteur :</strong> <code>*</code></p>
-            <p><strong>Ce qu'il trouve :</strong> Tous les éléments sans exception.</p>
-
-            <h4>2. Sélecteur de type</h4>
-            <p>Trouve tous les éléments avec la balise HTML spécifiée.</p>
-            <p><strong>Sélecteurs :</strong> <code>h1</code>, <code>p</code>, <code>button</code>, <code>div</code></p>
-            <p><strong>Ce qu'ils trouvent :</strong></p>
-            <ul>
-                <li><code>h1</code> — tous les titres de premier niveau</li>
-                <li><code>p</code> — tous les paragraphes</li>
-                <li><code>button</code> — tous les boutons</li>
-                <li><code>div</code> — tous les conteneurs <code>&lt;div&gt;</code></li>
-            </ul>
-
-            <h4>3. Sélecteur de classe (<code>.classe</code>)</h4>
-            <p>Trouve tous les éléments avec la classe spécifiée dans l'attribut <code>class</code>.</p>
-            <p><strong>Sélecteurs :</strong> <code>.card</code>, <code>.card__title</code>, <code>.btn--view</code></p>
-            <p><strong>Ce qu'ils trouvent :</strong></p>
-            <ul>
-                <li><code>.card</code> — tous les éléments avec la classe <code>card</code></li>
-                <li><code>.card__title</code> — tous les éléments avec la classe <code>card__title</code></li>
-                <li><code>.btn--view</code> — tous les éléments avec la classe <code>btn--view</code></li>
-            </ul>
-
-            <h4>4. Sélecteur d'identifiant (<code>#id</code>)</h4>
-            <p>Trouve un élément avec un <code>id</code> unique. Il ne devrait y avoir qu'un seul élément avec cet identifiant sur la page.</p>
-            <p><strong>Sélecteurs :</strong> <code>#salad-cat</code>, <code>#confused-cat</code>, <code>#bread-cat</code></p>
-            <p><strong>Ce qu'ils trouvent :</strong></p>
-            <ul>
-                <li><code>#salad-cat</code> — l'élément avec <code>id="salad-cat"</code></li>
-                <li><code>#confused-cat</code> — l'élément avec <code>id="confused-cat"</code></li>
-                <li><code>#bread-cat</code> — l'élément avec <code>id="bread-cat"</code></li>
-            </ul>
-
-            <h4>5. Sélecteurs combinés</h4>
-            <p>Vous pouvez combiner la balise, la classe et l'identifiant pour une recherche plus précise.</p>
-            <p><strong>Sélecteurs :</strong> <code>h2.card__title</code>, <code>div.card</code>, <code>p.card__description</code>, <code>button.btn--edit</code></p>
-            <p><strong>Ce qu'ils trouvent :</strong></p>
-            <ul>
-                <li><code>h2.card__title</code> — <code>&lt;h2&gt;</code> avec la classe <code>card__title</code></li>
-                <li><code>div.card</code> — <code>&lt;div&gt;</code> avec la classe <code>card</code></li>
-                <li><code>p.card__description</code> — <code>&lt;p&gt;</code> avec la classe <code>card__description</code></li>
-                <li><code>button.btn--edit</code> — <code>&lt;button&gt;</code> avec la classe <code>btn--edit</code></li>
-            </ul>
-
-            <h4>6. Sélecteur d'attribut (<code>[attribut="valeur"]</code>)</h4>
-            <p>Trouve les éléments avec un attribut et une valeur spécifiques.</p>
-            <p><strong>Sélecteurs :</strong> <code>[data-type="description"]</code>, <code>[data-type="title"]</code></p>
-            <p><strong>Ce qu'ils trouvent :</strong></p>
-            <ul>
-                <li><code>[data-type="description"]</code> — tous les éléments avec <code>data-type="description"</code></li>
-                <li><code>[data-type="title"]</code> — les éléments avec <code>data-type="title"</code></li>
-            </ul>
-
-            <h4>7. Sélecteur de descendant (espace)</h4>
-            <p>Trouve les éléments qui sont <strong>à l'intérieur</strong> d'un autre élément (à n'importe quel niveau d'imbrication).</p>
-            <p><strong>Sélecteur :</strong> <code>.card .btn</code></p>
-            <p><strong>Ce qu'il trouve :</strong> Tous les éléments avec la classe <code>btn</code> qui sont à l'intérieur d'un élément avec la classe <code>card</code>.</p>
-
-            <h4>8. Sélecteur d'enfant direct (<code>&gt;</code>)</h4>
-            <p>Trouve les éléments qui sont des enfants <strong>directs</strong> d'un autre élément. La recherche ne descend que d'un seul niveau.</p>
-            <p><strong>Sélecteur :</strong> <code>.card__body &gt; .card__title</code></p>
-            <p><strong>Ce qu'il trouve :</strong> Les éléments avec la classe <code>card__title</code> qui sont des enfants directs d'un élément avec la classe <code>card__body</code>.</p>
-
-            <h4>9. Sélecteur de frère adjacent (<code>+</code>)</h4>
-            <p>Trouve un élément qui est le <strong>frère suivant</strong> d'un autre élément au même niveau d'imbrication.</p>
-            <p><strong>Sélecteur :</strong> <code>#confused-cat + .card__description</code></p>
-            <p><strong>Ce qu'il trouve :</strong> Le paragraphe (<code>&lt;p&gt;</code>) qui suit immédiatement l'élément avec <code>id="confused-cat"</code>.</p>
-
-            <h4>10. Pseudo-classes de position</h4>
-            <p>Sélectionne les éléments en fonction de leur position parmi leurs frères et sœurs.</p>
-            <p><strong>Sélecteur :</strong> <code>.card__actions :nth-child(2)</code></p>
-            <p><strong>Ce qu'il trouve :</strong> Le deuxième enfant à l'intérieur de l'élément avec la classe <code>card__actions</code>.</p>
-
-            <h3>🧠 Exercices pratiques</h3>
-            <p>Ouvrez la <a href="example.html" target="_blank">page example.html</a> et DevTools. Essayez de trouver les éléments suivants à l'aide de sélecteurs. Vérifiez votre travail avec la barre de recherche (<kbd>Ctrl + F</kbd>) — elle indiquera combien d'éléments ont été trouvés.</p>
-
-            <table class="cheatsheet-table">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Tâche</th>
-                        <th>Ce qu'il faut trouver</th>
-                        <th>Indice</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Trouver tous les titres de deuxième niveau</td>
-                        <td><code>&lt;h2&gt;</code></td>
-                        <td>Sélecteur de type</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Trouver l'élément avec la classe <code>subtitle</code></td>
-                        <td>Un élément</td>
-                        <td>Sélecteur de classe</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>Trouver l'élément avec <code>id="confused-cat"</code></td>
-                        <td>Un élément</td>
-                        <td>Sélecteur d'identifiant</td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>Trouver tous les paragraphes avec la classe <code>card__description</code></td>
-                        <td>Plusieurs éléments</td>
-                        <td>Sélecteur combiné (balise + classe)</td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td>Trouver tous les boutons avec la classe <code>btn--edit</code></td>
-                        <td>Plusieurs éléments</td>
-                        <td>Sélecteur combiné (balise + classe)</td>
-                    </tr>
-                    <tr>
-                        <td>6</td>
-                        <td>Trouver tous les éléments avec l'attribut <code>data-type="description"</code></td>
-                        <td>Plusieurs éléments</td>
-                        <td>Sélecteur d'attribut</td>
-                    </tr>
-                    <tr>
-                        <td>7</td>
-                        <td>Trouver tous les boutons à l'intérieur des éléments avec la classe <code>card</code></td>
-                        <td>Plusieurs éléments</td>
-                        <td>Sélecteur de descendant</td>
-                    </tr>
-                    <tr>
-                        <td>8</td>
-                        <td>Trouver le bouton <code>btn--edit</code> qui suit immédiatement le bouton <code>btn--view</code> à l'intérieur de <code>card__actions</code></td>
-                        <td>Plusieurs éléments</td>
-                        <td>Sélecteur de frère adjacent (<code>+</code>)</td>
-                    </tr>
-                    <tr>
-                        <td>9</td>
-                        <td>Trouver le deuxième bouton à l'intérieur des éléments avec la classe <code>card__actions</code></td>
-                        <td>Plusieurs éléments</td>
-                        <td>Pseudo-classe <code>:nth-child</code></td>
-                    </tr>
-                    <tr>
-                        <td>10</td>
-                        <td>Trouver tous les éléments avec la classe <code>card__image</code> à l'intérieur de la carte "Bread Cat"</td>
-                        <td>Un élément</td>
-                        <td>Combinaison de sélecteurs</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h3>🔍 Comment vérifier vos réponses</h3>
-            <p>Une fois que vous avez écrit un sélecteur, collez-le dans la barre de recherche de DevTools (<kbd>Ctrl + F</kbd>). La barre de recherche indiquera combien d'éléments ont été trouvés (par exemple, <code>1 of 3</code>).</p>
-            <ul>
-                <li>Si vous cherchiez un <strong>élément spécifique unique</strong> (par exemple, par <code>id</code>), le résultat devrait être <code>1 of 1</code>.</li>
-                <li>Si vous cherchiez un <strong>groupe d'éléments</strong> (par exemple, tous les paragraphes avec une certaine classe), le résultat peut être <code>1 of 3</code> ou plus — c'est normal.</li>
-                <li>Le plus important est que les éléments surlignés soient exactement ceux que vous recherchiez. Vérifiez visuellement : les bons éléments sont-ils surlignés sur la page ?</li>
-            </ul>
-            <p>Si les mauvais éléments sont surlignés, affinez le sélecteur en ajoutant plus de conditions.</p>
-
-            <h3>🎮 Pratique supplémentaire</h3>
-            <p>Pour renforcer vos compétences, essayez le jeu <a href="https://flukeout.github.io/" target="_blank">CSS Diner</a>. Vous devez dresser une table en sélectionnant les bonnes assiettes à l'aide de sélecteurs CSS. Les tâches deviennent progressivement plus difficiles et couvrent tous les principaux types de sélecteurs.</p>
-        </section>
-
-        <!-- ============================================================
-        SECTION 8 : Commentaires et contacts
-        ============================================================ -->
-        <section id="feedback">
-            <h2>Commentaires et contacts <a href="#top" class="back-link">Haut de page</a></h2>
-            <p>Je suis toujours ouvert à vos suggestions et retours ! Si vous trouvez un bug, souhaitez suggérer une amélioration, partager vos impressions ou me proposer un emploi — n'hésitez pas à me contacter.</p>
-            <ul>
-                <li><strong>GitHub :</strong> <a href="https://github.com/PavelCraft" target="_blank">PavelCraft</a></li>
-                <li><strong>Telegram :</strong> <a href="https://t.me/PavelCodeMaster" target="_blank">@PavelCodeMaster</a></li>
-                <li><strong>Email :</strong> <a href="mailto:pavelborisov@list.ru">pavelborisov@list.ru</a></li>
-            </ul>
-            <p>Vous pouvez également contribuer au projet : aider avec les traductions, suggérer des idées ou tester de nouvelles fonctionnalités.</p>
-        </section>
-
-        <!-- ============================================================
-        PIED DE PAGE
-        ============================================================ -->
-        <hr>
-        <footer>
-            <p><a href="#top">Haut de page</a></p>
-        </footer>
-
-    </div> <!-- /.container -->
-
-    <!-- ===== FENÊTRE MODALE POUR LES CAPTURES D'ÉCRAN ===== -->
-    <div id="screenshotModal" class="modal">
-        <span class="modal-close">&times;</span>
-        <img class="modal-content" id="modalImage">
+    <section class="chapter faq" id="faq">
+      <h2>Résolution des problèmes <a class="top-link" href="#top">Retour en haut</a>
+</h2>
+      <details>
+      <summary>Autre chose a été bloqué avec la publicité</summary>
+      <p>Cela arrive lorsque le sélecteur est trop large et trouve aussi d’autres éléments.</p>
+      <p>
+<strong>Que faire :</strong>
+</p>
+      <ul>
+        <li>Supprimez la règle comme indiqué dans <a href="#rules">« Gestion des règles »</a>.</li>
+        <li>Choisissez un élément plus précis dans l’arbre HTML, contenant <em>uniquement</em> la publicité.</li>
+        <li>Vérifiez les correspondances avant l’ajout. Plusieurs ne conviennent que si chacune doit être bloquée.</li>
+      </ul>
+      </details>
+      <details>
+      <summary>La règle n’a pas fonctionné</summary>
+      <ul>
+        <li>
+<strong>Cause possible 1 : l’élément choisi n’est pas le plus extérieur.</strong> Remontez dans l’arbre HTML et copiez le sélecteur du conteneur parent.</li>
+        <li>
+<strong>Cause possible 2 : le site utilise des classes dynamiques (obfuscation).</strong> Le sélecteur peut cesser de fonctionner après actualisation. Dans <a href="#methods">« Façons de créer une règle »</a>, indiquez que les caractéristiques sont instables et utilisez <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> ou le constructeur.</li>
+        <li>
+<strong>Cause possible 3 : la page a changé de structure après la création de la règle.</strong> Vérifiez le HTML actuel et les correspondances. Si le bloc a changé, recopiez le sélecteur ou affinez la règle.</li>
+        <li>
+<strong>Cause possible 4 : la règle a été créée pour un autre domaine.</strong> Vérifiez si elle figure dans « Pour ce site » ou « Pour les autres sites ».</li>
+      </ul>
+      </details>
+      <details>
+      <summary>Le sélecteur ne trouve aucun élément</summary>
+      <ul>
+        <li>
+<strong>Vérifiez le sélecteur :</strong> ouvrez DevTools (F12), allez dans « Éléments » / “Elements”, appuyez sur Ctrl + F (Cmd + F sur Mac) et saisissez le sélecteur. Si rien n’est trouvé, il est incorrect.</li>
+      </ul>
+      </details>
+      <details>
+      <summary>La mise en page s’est dégradée après la suppression</summary>
+      <ul>
+        <li>
+<strong>Solution :</strong> supprimez la règle et recréez-la avec <strong>« Masquer »</strong>. L’espace est conservé et la mise en page reste intacte.</li>
+      </ul>
+      </details>
+      <details>
+      <summary>Le sélecteur trouve trop d’éléments</summary>
+      <p>Vérifiez d’abord le nombre et les éléments trouvés. Ajoutez une classe ou un attribut stable au sélecteur. Si cela ne suffit pas, le constructeur peut prendre en compte le texte, le nombre de classes et d’attributs, la position parmi les frères et les relations avec l’environnement. Revérifiez avant et après actualisation.</p>
+      </details>
+      <details>
+      <summary>Je ne parviens pas à comprendre la structure HTML</summary>
+      <p>Utilisez <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> : il compare plusieurs chargements et crée une carte de stabilité. Trouvez l’élément, puis examinez ses caractéristiques stables et son environnement.</p>
+      <p>Si le balisage est très obscurci, le site peut fournir une autre variante aux connexions VPN. Si possible, désactivez temporairement le VPN, rechargez et recommencez l’analyse.</p>
+      </details>
+      <details>
+      <summary>Rien ne fonctionne</summary>
+      <p>Combinez les caractéristiques stables trouvées par StableHTMLFinder avec le constructeur BlockIt pour tenir compte de l’élément et de son environnement.</p>
+      <p>Si la règle échoue toujours ou que l’extension produit des erreurs, envoyez un rapport via le <a href="../../feedback.html">formulaire de retour</a>, avec l’URL, la règle et si possible des captures.</p>
+      </details>
+    </section>
+    <div class="image-lightbox" id="imageLightbox" hidden role="dialog" aria-modal="true" aria-label="Visionneuse de captures">
+      <button class="lightbox-close" type="button" aria-label="Fermer la visionneuse">×</button>
+      <button class="lightbox-nav lightbox-prev" type="button" aria-label="Capture précédente">‹</button>
+      <div class="lightbox-content">
+<img alt="">
+<div class="lightbox-caption">
+<b>
+</b>
+<span>
+</span>
+</div>
+</div>
+      <button class="lightbox-nav lightbox-next" type="button" aria-label="Capture suivante">›</button>
     </div>
-    <script src="../instruction.js"></script>
+    <footer class="footer">Guide de l’extension BlockIt</footer>
+  </main>
+  <script src="../instruction.js">
+</script>
 </body>
 </html>

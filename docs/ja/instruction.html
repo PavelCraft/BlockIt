@@ -1,527 +1,805 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="referrer" content="no-referrer">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BlockIt 拡張機能ユーザーガイド</title>
-    <link rel="stylesheet" href="../styles.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>BlockIt — ユーザーガイド</title>
+  <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
-    <div class="container">
+  <main class="page">
+    <header class="hero" id="top">
+      <div class="eyebrow">BlockIt</div>
+      <h1>BlockIt ユーザーガイド</h1>
+      <p>単純な CSS セレクターからページ構造に基づく精密なルールまで、不要な要素をブロックするルールを作成できます。</p>
+    </header>
 
-        <!-- ============================================================
-        ヘッダーとナビゲーション
-        ============================================================ -->
-        <header>
-            <h1 id="top">BlockIt 拡張機能ユーザーガイド</h1>
-            <p>CSSセレクタまたはXPathを使用して、あらゆるサイトの要素をブロック</p>
-        </header>
+    <nav class="contents" aria-label="目次">
+      <div>
+        <h2>目次</h2>
+        <ul>
+          <li>
+<a href="#what-is">BlockIt とは</a>
+</li>
+          <li>
+<a href="#quick-start">クイックスタート</a>
+</li>
+          <li>
+<a href="#selector-tips">要素を選ぶヒント</a>
+</li>
+          <li>
+<a href="#methods">ルールの作成方法</a>
+</li>
+          <li>
+<a href="#selectors">セレクター早見表</a>
+</li>
+          <li>
+<a href="#rules">ルールの管理</a>
+</li>
+          <li>
+<a href="#faq">トラブルシューティング</a>
+</li>
+        </ul>
+      </div>
+    </nav>
 
-        <nav>
-            <h2>目次</h2>
-            <ul>
-                <li><a href="#what-is">BlockItとは？</a></li>
-                <li><a href="#quick-start">クイックスタート</a></li>
-                <li><a href="#advanced">高度な機能</a></li>
-                <li><a href="#selector-tips">ブロックする要素を選択するためのヒント</a></li>
-                <li><a href="#export-import">ルールのエクスポートとインポート</a></li>
-                <li><a href="#troubleshooting">トラブルシューティング（FAQ）</a></li>
-                <li><a href="#selectors-cheatsheet">セレクターチートシート</a></li>
-                <li><a href="#feedback">フィードバックと連絡先</a></li>
-            </ul>
-        </nav>
+    <section class="chapter" id="what-is">
+      <h2>BlockIt とは</h2>
+      <p>広告を表示するサイトと一般的なブロッカーは、公開フィルターを回避する側と更新する側の終わりのない競争を続けています。</p>
+      <p>
+<strong>BlockIt</strong> は別の方法を採ります。共有リストだけに頼らず、利用するサイトの特定要素に対して自分でルールを作ります。ルールを共有しない限り、サイト側はどの特徴を利用しているか分からず、意図的に無効化しにくくなります。</p>
+      <h3>主な特徴</h3>
+      <ul class="feature-list">
+        <li>
+<strong>簡単：</strong>CSS セレクター、XPath、BlockIt ルールの構文を覚える必要はありません。DevTools からセレクターをコピーして貼り付けるだけで済む場合もあります。</li>
+        <li>
+<strong>柔軟性：</strong>
+          <ul>
+            <li>要素を削除するか非表示にするか選べます</li>
+            <li>ブロックする要素と残す要素を選べます</li>
+            <li>ルールを維持、無効化、削除できます</li>
+            <li>CSS セレクターと XPath 式に対応します</li>
+            <li><a href="#embedded-contexts">iframe と Shadow DOM</a> 内にもルールを適用します
+</li>
+          </ul>
+        </li>
+        <li>
+<strong>プライバシー：</strong>ルールはブラウザー内に保存され、外部へ送信されません。</li>
+        <li>
+<strong>BlockIt 構文：</strong>複雑な場合は標準 CSS を拡張した構文を利用できます。必要に応じて<a href="../rules/en/index.html">BlockIt 構文のドキュメント</a>を参照してください。</li>
+        <li>
+<strong>サイト別グループ：</strong>現在のサイト用とその他のサイト用に自動で整理されます。</li>
+        <li>
+<strong>設定の共有：</strong>ルールをファイルへ書き出して共有できます。</li>
+        <li>
+<strong>多言語：</strong>ブラウザーの言語に従います。ロシア語、英語、フランス語、ドイツ語、スペイン語、ポルトガル語、中国語、日本語に対応し、未対応の場合は英語を表示します。</li>
+        <li>
+<strong>オープンソース：</strong>BSD-3-Clause ライセンスで開発されています。<a href="https://github.com/PavelCraft/BlockIt" target="_blank" rel="noopener noreferrer">GitHub</a> でコードを確認し、改善を提案できます。</li>
+      </ul>
+    </section>
 
-        <hr>
-
-        <!-- ============================================================
-        セクション1: BlockItとは？
-        ============================================================ -->
-        <section id="what-is">
-            <h2>BlockItとは？ <a href="#top" class="back-link">トップへ戻る</a></h2>
-            <p>広告を表示するウェブサイトと一般的な広告ブロッカーは、絶え間ない「軍拡競争」を繰り広げています。サイト開発者は新しい方法で広告を表示し、ブロッカーはそれを隠す方法を見つけ出します。</p>
-            <p><strong>BlockIt</strong> は異なるアプローチを提供します。一般的なフィルターリストに依存する代わりに、ユーザー自身が特定の要素をブロックするルールを作成します。ルールは、ユーザー自身が共有しない限り、ユーザーだけが知っているため、迂回されにくくなります。</p>
-            <p><strong>主な機能：</strong></p>
-            <ul>
-                <li><strong>使いやすさ：</strong> 開発者ツールからセレクタをコピーして拡張機能に貼り付けるだけです。</li>
-                <li><strong>柔軟性：</strong>
-                    <ul>
-                        <li>CSSセレクタとXPath式の両方をサポート</li>
-                        <li>要素を削除するか非表示にするかを自分で決定</li>
-                        <li>ブロックする要素と保持する要素を自分で決定</li>
-                        <li>保持するブロックルールと削除するルールを自分で決定</li>
-                    </ul>
-                </li>
-                <li><strong>プライバシー：</strong> すべてのルールはブラウザにローカルに保存され、どこにも送信されません。</li>
-                <li><strong>サイトごとのルールグループ化：</strong> ルールは現在のサイトとその他すべてのサイトに対して自動的にグループ化されます。これにより管理が容易になります。</li>
-                <li><strong>設定の共有：</strong> ルールをファイルにエクスポートして、他のユーザーと共有できます。</li>
-                <li><strong>多言語サポート：</strong> 拡張機能のインターフェースは、ブラウザに設定された言語に自動的に切り替わります。サポート言語：ロシア語、英語、フランス語、ドイツ語、スペイン語、ポルトガル語、中国語、日本語。お使いの言語がサポートされていない場合は、英語（デフォルト言語）で表示されます。</li>
-                <li><strong>オープンソース：</strong> この拡張機能はBSD-3-Clauseライセンスの下で開発されています。プロジェクトに貢献したり、改善を提案したり、<a href="https://github.com/PavelCraft/BlockIt" target="_blank">GitHub</a>でコードを調べることができます。</li>
-            </ul>
-        </section>
-
-        <!-- ============================================================
-        セクション2: クイックスタート
-        ============================================================ -->
-        <section id="quick-start">
-            <h2>クイックスタート <a href="#top" class="back-link">トップへ戻る</a></h2>
-
-            <h3 id="installation">インストール</h3>
-            <p><strong>方法1（推奨）：</strong> <a href="https://chrome.google.com/webstore" target="_blank">Chrome ウェブストア</a> にアクセスし、BlockIt拡張機能を見つけて「インストール」をクリックします。インストール後、アドレスバーの横にあるパズルアイコンをクリックし、BlockItの横にある「ピン留め」を選択して、拡張機能をブラウザのツールバーにピン留めしてください。</p>
-            <div class="screenshot">
-                <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/1.png" alt="拡張機能をツールバーにピン留め" class="screenshot-img">
+    <section class="chapter" id="quick-start">
+      <h2>クイックスタート <a class="top-link" href="#top">先頭へ</a>
+</h2>
+      <p>DevTools が作成した CSS セレクターから始める場合の手順です。</p>
+      <p>画像の DevTools は英語表示です。DevTools の表示言語は変更できます。</p>
+      <details class="devtools-setup">
+        <summary>DevTools を設定する <span class="expand-hint">任意</span></summary>
+        <div class="devtools-setup-body">
+          <h4>DevTools の開き方</h4>
+          <table class="cheatsheet-table">
+            <thead><tr><th>操作</th><th>結果</th></tr></thead>
+            <tbody>
+              <tr><td><kbd>F12</kbd></td><td>DevTools を開きます。</td></tr>
+              <tr><td><kbd>Ctrl + Shift + I</kbd></td><td>同じパネルを開きます。</td></tr>
+              <tr><td>要素を右クリック → <strong>「検証」 / “Inspect”</strong></td><td>その要素を選択して DevTools を開きます。</td></tr>
+            </tbody>
+          </table>
+          <h4>表示言語</h4>
+          <ol>
+            <li>DevTools を開きます。</li>
+            <li>右上の歯車 ⚙ から <strong>「設定」 / “Settings”</strong> を開きます。</li>
+            <li><strong>「設定」 / “Preferences”</strong> タブを開きます。</li>
+            <li><strong>「言語」 / “Language”</strong> で言語を選びます。</li>
+            <li>DevTools を開き直します。</li>
+          </ol>
+          <h4>パネルの位置</h4>
+          <p>右上の ⋮ から <strong>「固定サイド」 / “Dock side”</strong> を選び、右、下、左、別ウィンドウのいずれかに配置します。</p>
+          <div class="gallery compact-gallery" data-gallery>
+            <div class="gallery-stage">
+              <button class="gallery-control prev" type="button" aria-label="Previous screenshot">‹</button>
+              <figure class="gallery-slide active" data-title="Change the DevTools language" data-caption="Open Settings, go to Preferences, find Language, choose a language, and restart DevTools.">
+                <img loading="lazy" decoding="async" src="../../images/en/31.png" alt="Changing the DevTools language">
+              </figure>
+              <figure class="gallery-slide" data-title="Choose the panel placement" data-caption="Find Dock side in the DevTools menu and dock the panel on the right, bottom, or left, or open it in a separate window.">
+                <img loading="lazy" decoding="async" src="../../images/en/32.png" alt="Changing the DevTools panel placement">
+              </figure>
+              <button class="gallery-control next" type="button" aria-label="Next screenshot">›</button>
             </div>
+            <div class="gallery-caption"><span class="gallery-caption-number">1</span><div><b></b><span></span></div></div>
+            <div class="gallery-dots" aria-label="DevTools settings"></div>
+          </div>
+        </div>
+      </details>
+      <div class="note">
+<strong>一致数を確認してください。</strong>通常は 1 件が良好です。0 件なら何も見つけていません。見つかったすべてをブロックする場合は複数件でも問題ありません。</div>
+      <div class="gallery" data-gallery>
+        <div class="gallery-stage">
+          <button class="gallery-control prev" type="button" aria-label="Previous step">‹</button>
+          <figure class="gallery-slide active" data-title="Open DevTools" data-caption="Right-click the page near the element you need and choose “Inspect”.">
+<img decoding="async" fetchpriority="high" src="../../images/en/1.png" alt="Opening DevTools from the context menu">
+</figure>
+          <figure class="gallery-slide" data-title="Select the element" data-caption="Find the outer container of the block in the HTML tree. Hovering over a row in DevTools highlights the corresponding area on the page.">
+<img loading="lazy" decoding="async" src="../../images/en/2.png" alt="Selecting and highlighting an element in DevTools">
+</figure>
+          <figure class="gallery-slide" data-title="Copy the CSS selector" data-caption="Right-click the selected row and choose “Copy” → “Copy selector”.">
+<img loading="lazy" decoding="async" src="../../images/en/3.png" alt="Copying a CSS selector in DevTools">
+</figure>
+          <figure class="gallery-slide" data-title="Paste the selector and add the rule" data-caption="Paste the selector into BlockIt’s main field and check the “Elements found” count below it. Choose a blocking mode and click “Add rule”.">
+<img loading="lazy" decoding="async" src="../../images/en/4.png" alt="Adding a CSS selector to BlockIt">
+</figure>
+          <figure class="gallery-slide" data-title="Check the result" data-caption="Make sure the success message appears, the rule is listed among active rules, and the unwanted element disappears from the page.">
+<img loading="lazy" decoding="async" src="../../images/en/5.png" alt="A rule successfully added to BlockIt">
+</figure>
+          <button class="gallery-control next" type="button" aria-label="Next step">›</button>
+        </div>
+        <div class="gallery-caption">
+<span class="gallery-caption-number">1</span>
+<div>
+<b>
+</b>
+<span>
+</span>
+</div>
+</div>
+        <div class="gallery-dots" aria-label="Quick-start steps">
+</div>
+      </div>
+      <div id="selector-tips">
+        <h3>ブロックする要素を選ぶヒント</h3>
+        <p>セレクターや HTML をコピーする前に、対象を正確に特定します。</p>
+        <ul>
+          <li>
+<strong>DevTools の強調表示を使います。</strong>HTML の行にカーソルを合わせ、対応する範囲を確認します。</li>
+          <li>
+<strong>余分な内容を含まない最も外側の要素を選びます。</strong>深すぎると広告の一部が残り、広すぎると必要な内容まで隠れます。</li>
+          <li>
+<strong>要素数を確認します。</strong>通常は 1 件が安全です。すべて確認済みなら複数件でも構いません。<strong>0</strong> は何も見つからないことを示します。</li>
+        </ul>
+        <p>ブロックしすぎる、または何もブロックしない場合は削除し、HTML ツリーの別の要素を選びます。</p>
+      </div>
+      <h3>ブロック方式</h3>
+      <ul>
+        <li>
+<strong>削除：</strong>要素を HTML から削除して空間を詰めます。レイアウトが変わる場合があります。</li>
+        <li>
+<strong>非表示：</strong>空間を残したまま見えなくします。削除でレイアウトが崩れる場合に使います。</li>
+      </ul>
+    </section>
 
-            <p><strong>方法 2（開発者向け）：</strong><a href="https://github.com/PavelCraft/BlockIt#english" target="_blank">GitHub</a> からソースコードをダウンロードし、展開した拡張機能を読み込んでください。</p>
+    <section class="chapter" id="methods">
+      <h2>ルールの作成方法 <a class="top-link" href="#top">先頭へ</a>
+</h2>
+      <p>まず DevTools で要素を探し、タグ、クラス、属性を確認します。</p>
+      <div class="method-advisor" id="methodAdvisor">
+        <h3>どの方法が適していますか？</h3>
+        <p>該当する項目を有効にしてください。他の方法は隠れず、推奨される開始点だけが強調されます。</p>
+        <div class="method-options method-switches">
+          <label class="guide-switch">
+<input id="unstableTraits" type="checkbox">
+<span class="guide-switch-control" aria-hidden="true">
+</span>
+<span>
+<b>要素の特徴が不安定</b>
+<small>クラス、ID、属性がランダムに見えるか、再読み込み後に変わります。</small>
+</span>
+</label>
+          <label class="guide-switch">
+<input id="unstablePath" type="checkbox">
+<span class="guide-switch-control" aria-hidden="true">
+</span>
+<span>
+<b>要素までのパスが不安定</b>
+<small>HTML 構造内の位置が再読み込み後に変わります。</small>
+</span>
+</label>
+          <label class="guide-switch">
+<input id="methodsFailed" type="checkbox">
+<span class="guide-switch-control" aria-hidden="true">
+</span>
+<span>
+<b>CSS セレクターと XPath が機能しない</b>
+<small>簡単な方法では要素を安定して見つけられません。</small>
+</span>
+</label>
+        </div>
+        <p class="advisor-hint">推奨方法が下で強調されます。選択すると詳しい手順が開きます。</p>
+      </div>
 
-            <h3 id="how-to-block">要素をブロックする方法</h3>
-            <ol>
-                <li>ブロックしたい要素を右クリックし、「検証」（または「要素を検証」）を選択します。この操作により、HTMLツリー内のその要素に直接移動します。</li>
-                <div class="screenshot">
-                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/2.png" alt="コンテキストメニューを開く" class="screenshot-img">
-                </div>
-                <li>HTMLツリーで、目的の要素を見つけます。正しい要素を選択したことを確認するには、コード行にカーソルを合わせると、ページ上の対応する要素がハイライトされます。ブロックしたいブロックを完全に覆う、最も外側の要素を選択してください。</li>
-                <div class="screenshot">
-                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/3.png" alt="要素を見つける" class="screenshot-img">
-                </div>
-                <li>ツリー内の要素を右クリック → <strong>コピー</strong> → <strong>セレクタをコピー</strong>（または <strong>Copy selector</strong>）。XPathの場合：<strong>XPathをコピー</strong>（または <strong>Copy XPath</strong>）。</li>
-                <div class="screenshot">
-                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/4.png" alt="要素をコピー" class="screenshot-img">
-                </div>
-                <li>BlockIt拡張機能を開き、コピーしたセレクタを入力フィールドに貼り付け、ブロックモードを選択して「ルールを追加」をクリックします。
-                    <div class="screenshot">
-                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/5.png" alt="セレクタをフィールドに貼り付け" class="screenshot-img">
-                    </div>
-                </li>
-                <li>完了！ルールがアクティブルールのリストに表示され、要素がページから消えます。
-                    <div class="screenshot">
-                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/6.png" alt="アクティブルールのリスト" class="screenshot-img">
-                    </div>
-                </li>
-                <li>開発者ツールを閉じるには、<kbd>F12</kbd> を押すか、DevToolsパネルの右上隅にある×ボタンをクリックします。</li>
-            </ol>
+      <div class="method-list">
+        <details id="method-css" data-method="css">
+<summary>
+<span class="method-index">1</span>DevTools から CSS セレクターをコピー <span class="expand-hint">選択して読む</span>
+</summary>
+<div class="method-body">
+<p>標準セレクターを素早く試す方法です。要素を選び、「コピー」 / “Copy” → 「selector をコピー」 / “Copy selector” を選びます。</p>
+<p>BlockIt に貼り付け、一致数を確認して追加します。再読み込み後に不安定なら <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> またはルールビルダーを使います。</p>
+<div class="gallery compact-gallery" data-gallery>
+<div class="gallery-stage">
+<button class="gallery-control prev" type="button" aria-label="Previous step">‹</button>
+<figure class="gallery-slide active" data-title="Open DevTools" data-caption="Right-click the page near the element you need and choose “Inspect”."><img loading="lazy" decoding="async" src="../../images/en/1.png" alt="Opening DevTools from the context menu"></figure>
+<figure class="gallery-slide" data-title="Select the required element" data-caption="Find the outer container of the required block in the HTML tree. When you hover over a row, DevTools highlights the corresponding area of the page."><img loading="lazy" decoding="async" src="../../images/en/2.png" alt="Selecting and highlighting an element in DevTools"></figure>
+<figure class="gallery-slide" data-title="Copy the CSS selector" data-caption="Right-click the selected row and choose “Copy” → “Copy selector”."><img loading="lazy" decoding="async" src="../../images/en/3.png" alt="Copying a CSS selector in DevTools"></figure>
+<figure class="gallery-slide" data-title="Paste the selector and add the rule" data-caption="Paste the selector into BlockIt’s main field and note the “Elements found” message below it. Then choose a blocking mode and click “Add rule”."><img loading="lazy" decoding="async" src="../../images/en/4.png" alt="Adding a CSS selector to BlockIt"></figure>
+<figure class="gallery-slide" data-title="Check the result" data-caption="Make sure the success message appears, the rule is listed among active rules, and the unwanted element has disappeared from the page."><img loading="lazy" decoding="async" src="../../images/en/5.png" alt="A rule successfully added to BlockIt"></figure>
+<button class="gallery-control next" type="button" aria-label="Next step">›</button>
+</div>
+<div class="gallery-caption"><span class="gallery-caption-number">1</span><div><b></b><span></span></div></div>
+<div class="gallery-dots" aria-label="Creating a rule from a CSS selector"></div>
+</div>
+</div>
+</details>
+        <details id="method-xpath" data-method="xpath">
+<summary>
+<span class="method-index">2</span>DevTools から XPath をコピー <span class="expand-hint">選択して読む</span>
+</summary>
+<div class="method-body">
+<p>XPath はページ構造内の経路を表します。属性は不安定でも経路が変わらない場合に役立ちます。「XPath をコピー」 / “Copy XPath” を選び、BlockIt に貼り付けます。</p>
+<div class="note">
+<strong>式を確認してください。</strong>Chrome が <code>id</code> を基準にする場合、その ID が変わると XPath も不安定です。位置番号を含む絶対パスは構造変更で壊れます。</div>
+<p>BlockIt はメイン文書と各 <a href="#embedded-contexts">iframe</a> で XPath を別々に評価します。iframe 内でコピーした XPath は機能する場合があります。一方、XPath は <a href="#embedded-contexts">Shadow DOM</a> の境界を越えません。その場合はルールビルダーまたは <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> を使います。</p>
+<div class="gallery compact-gallery" data-gallery>
+<div class="gallery-stage">
+<button class="gallery-control prev" type="button" aria-label="Previous step">‹</button>
+<figure class="gallery-slide active" data-title="Copy XPath" data-caption="Right-click the required element’s row in DevTools and choose “Copy” → “Copy XPath”. “Copy full XPath” usually creates an expression that depends more heavily on the entire page structure remaining unchanged.">
+<img loading="lazy" decoding="async" src="../../images/en/13.png" alt="Copying XPath in DevTools">
+</figure>
+<figure class="gallery-slide" data-title="Paste XPath and check the match count" data-caption="Paste the expression into BlockIt’s main field. Make sure the extension recognized it as XPath and note the “Elements found” message below the input.">
+<img loading="lazy" decoding="async" src="../../images/en/14.png" alt="Checking XPath in BlockIt">
+</figure>
+<figure class="gallery-slide" data-title="Add the rule" data-caption="Choose a blocking mode, click “Add rule,” and make sure the success message appears and the unwanted element disappears from the page.">
+<img loading="lazy" decoding="async" src="../../images/en/15.png" alt="Successfully adding an XPath rule">
+</figure>
+<button class="gallery-control next" type="button" aria-label="Next step">›</button>
+</div>
+<div class="gallery-caption"><span class="gallery-caption-number">1</span><div><b></b><span></span></div></div>
+<div class="gallery-dots" aria-label="Steps for creating an XPath rule"></div>
+</div>
+</div>
+</details>
+        <details id="method-html" data-method="html">
+<summary>
+<span class="method-index">3</span>HTML から簡易ルールを作成 <span class="expand-hint">選択して読む</span>
+</summary>
+<div class="method-body">
+<p>HTML を解析した後、セレクターに含める属性を自分で選べます。</p>
+<div class="gallery compact-gallery" data-gallery>
+<div class="gallery-stage">
+<button class="gallery-control prev" type="button" aria-label="Previous step">‹</button>
+<figure class="gallery-slide active" data-title="Copy the element’s HTML" data-caption="Right-click the element’s row in DevTools and choose “Copy” → “Copy element”.">
+<img loading="lazy" decoding="async" src="../../images/en/6.png" alt="Copying an HTML element">
+</figure>
+<figure class="gallery-slide" data-title="Click “Advanced mode”" data-caption="Open BlockIt and click “Advanced mode.” The “Create a rule from HTML” section will appear.">
+<img loading="lazy" decoding="async" src="../../images/en/33.png" alt="Opening BlockIt advanced mode">
+</figure>
+<figure class="gallery-slide" data-title="Paste and parse the HTML" data-caption="Paste the copied element into “Create a rule from HTML” and click “Parse HTML.” Keep only the stable attributes you need.">
+<img loading="lazy" decoding="async" src="../../images/en/7.png" alt="Parsing an HTML element in advanced mode">
+</figure>
+<figure class="gallery-slide" data-title="Check and add the rule" data-caption="Check the generated selector and match count, then add the rule. Make sure it works and the unwanted element disappears from the page.">
+<img loading="lazy" decoding="async" src="../../images/en/8.png" alt="Checking and adding a quick HTML rule">
+</figure>
+<button class="gallery-control next" type="button" aria-label="Next step">›</button>
+</div>
+<div class="gallery-caption">
+<span class="gallery-caption-number">1</span>
+<div>
+<b>
+</b>
+<span>
+</span>
+</div>
+</div>
+<div class="gallery-dots" aria-label="Steps for creating a quick rule">
+</div>
+</div>
+<div class="note">
+<strong>すべての属性をそのまま残さないでください。</strong>ランダムなクラスや ID は次回変わる可能性があります。</div>
+</div>
+</details>
+        <details id="method-stable" data-method="stable">
+<summary>
+<span class="method-index">4</span><a class="product-link summary-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> を使う <span class="expand-hint">選択して読む</span>
+</summary>
+<div class="method-body">
+<p>
+<a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> は、クラスや ID が難読化される、読み込みごとに変わる、類似ブロックが多い場合に役立ちます。手作業より簡単なことが多い一方、複数回読み込むため時間がかかります。</p>
+<div class="gallery compact-gallery" data-gallery>
+<div class="gallery-stage">
+<button class="gallery-control prev" type="button" aria-label="Previous step">‹</button>
+<figure class="gallery-slide active" data-title="Start page analysis" data-caption="Open the required page, choose the number of loads in StableHTMLFinder, and click “Analyze page.” More loads identify unchanging traits more reliably, but take longer.">
+<img loading="lazy" decoding="async" src="../../images/en/25.png" alt="Starting page analysis in StableHTMLFinder">
+</figure>
+<figure class="gallery-slide" data-title="Copy the required element’s HTML" data-caption="When analysis finishes, the stability map opens in a separate tab. Select the required element in DevTools and copy it with “Copy” → “Copy element”.">
+<img loading="lazy" decoding="async" src="../../images/en/26.png" alt="Copying an HTML element for stability map search">
+</figure>
+<figure class="gallery-slide" data-title="Find the element on the map" data-caption="Switch to the stability map tab. Paste the copied element into map search and find it. Make sure it is the correct element. Click the nearby menu icon {{map-menu}}, open the selector card, and read the description of the traits used to build the CSS selector or BlockIt rule.">
+<img loading="lazy" decoding="async" src="../../images/en/27.png" alt="Finding an element on the stability map">
+</figure>
+<figure class="gallery-slide" data-title="Check the traits and copy the result" data-caption="Make sure the selector or rule uses genuinely relevant stable traits. Copy the CSS selector or BlockIt rule.">
+<img loading="lazy" decoding="async" src="../../images/en/28.png" alt="Checking traits and copying a selector in StableHTMLFinder">
+</figure>
+<figure class="gallery-slide" data-title="Add the result to BlockIt" data-caption="Paste the copied selector or rule into BlockIt’s main field, make sure it finds the correct number of elements, and click “Add rule”.">
+<img loading="lazy" decoding="async" src="../../images/en/29.png" alt="Checking a StableHTMLFinder selector in BlockIt">
+</figure>
+<figure class="gallery-slide" data-title="Check the page" data-caption="Make sure the rule worked and the unwanted element disappeared from the page.">
+<img loading="lazy" decoding="async" src="../../images/en/30.png" alt="Result of adding a rule from StableHTMLFinder">
+</figure>
+<button class="gallery-control next" type="button" aria-label="Next step">›</button>
+</div>
+<div class="gallery-caption"><span class="gallery-caption-number">1</span><div><b></b><span></span></div></div>
+<div class="gallery-dots" aria-label="Steps for using StableHTMLFinder"></div>
+</div>
+<p>
+<a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> 自体はブロックしません。BlockIt ルールの基礎を選ぶためのツールです。</p>
+<ul class="stable-result-options">
+<li><strong>CSS セレクター：</strong>安定した特徴で正しい数を見つける場合の最も簡単な選択です。</li>
+<li><strong>BlockIt ルール：</strong>標準 CSS では表せない精密な条件が必要な場合に使います。</li>
+<li><strong>マップを自分で確認：</strong>要素と周囲の安定した特徴を調べ、ルールビルダーへ入力します。</li>
+</ul>
+</div>
+</details>
+        <details id="method-builder" data-method="builder">
+<summary>
+<span class="method-index">5</span>ルールビルダーを開く <span class="expand-hint">選択して読む</span>
+</summary>
+<div class="method-body">
+<p>CSS、XPath、BlockIt 構文を知らなくても精密なルールを作れる強力なツールです。テキスト、属性・クラス数、兄弟位置、周囲の要素を条件にできます。</p>
+<p>DevTools で HTML をコピーし、BlockIt の「詳細モード」を開いて貼り付け、「ルールビルダーを開く」を押します。</p>
+<div class="builder-map">
+<article>
+<h4>要素カード</h4>
+<p>各カードはタグ、属性数、属性・テキスト・位置の条件を表します。</p>
+</article>
+<article>
+<h4>関係ツリー</h4>
+<p>祖先は上、子孫は字下げして下、兄弟は同じ階層に表示されます。</p>
+</article>
+<article>
+<h4>安定した特徴</h4>
+<p>自動入力値は無効化できます。変化する ID やクラスを、HTML にあったという理由だけで使わないでください。</p>
+</article>
+<article>
+<h4>確認</h4>
+<p>一致数を確認し、「再読み込み後に確認」で結果が安定しているか確かめます。</p>
+</article>
+</div>
+<h4>カードで指定できる条件</h4>
+<ul>
+<li>
+<strong>タグ：</strong>重要なら指定し、不要なら空欄にします。</li>
+<li>
+<strong>属性数：</strong>指定数と同じ、以上、以下を選べます。</li>
+<li>
+<strong>属性：</strong>名前と値の条件を指定します。<code>class</code> ではクラス数も指定できます。</li>
+<li>
+<strong>テキスト：</strong>要素自身または内部全体のテキストに対し、完全一致、前方・後方一致、部分一致、正規表現を使えます。</li>
+<li>
+<strong>兄弟内の位置：</strong>同じ親の子要素の中での位置です。</li>
+</ul>
+<h4>関連要素</h4>
+<p>対象やその祖先に直接の親または任意の祖先を追加できます。対象には子、子孫、兄弟も設定でき、兄弟に子孫を追加することもできます。関連要素には「存在しなくてもよい」スイッチがあります。</p>
+<p>
+<strong>兄弟内の位置</strong>は同じ親の子要素の中での順位、<strong>ルール結果内の位置</strong>は完成したルールが見つけた全要素の中での順位です。異なる条件です。</p>
+<h4>プレビューと確認</h4>
+<p>「ルールのプレビュー」にある文章を読み、誤って含めた属性、テキスト条件、関係がないか確認します。その後、現在のページと更新後の一致数を調べます。</p>
+<h4>例：複数の要素に１つのルールを作る</h4>
+<ol class="builder-steps">
+<li>「兄弟内の位置」を有効にし、対象の位置を入力します。この例では<strong>2、3、5</strong> です。</li>
+<li><code>class</code> 属性名の完全一致はそのままにします。</li>
+<li>クラス値の不安定な部分を除き、「値：完全一致」を<strong>「値：含む」</strong>に変えます。</li>
+<li>クラス数が重要でなく変化しうるなら、その条件を無効にします。</li>
+<li>「ルールのプレビュー」を読み、条件がすべて必要か確かめます。</li>
+<li>対象ページの開発者ツールを閉じてから「更新後に確認」を押します。開いていると別の内容が読み込まれるサイトがあります。</li>
+<li>更新後も一致数が変わらないことを確認します。ルールの安定性を示す目安です。</li>
+<li>「ルールを作成」を押します。</li>
+</ol>
+<div class="gallery compact-gallery" data-gallery>
+<div class="gallery-stage">
+<button class="gallery-control prev" type="button" aria-label="Previous step">‹</button>
+<figure class="gallery-slide active" data-title="Copy the element’s HTML" data-caption="Select the required block’s outer container in DevTools and copy it with “Copy” → “Copy element”.">
+<img loading="lazy" decoding="async" src="../../images/en/16.png" alt="Copying an HTML element for the rule builder">
+</figure>
+<figure class="gallery-slide" data-title="Click “Advanced mode”" data-caption="Open BlockIt and click “Advanced mode.” The “Create a rule from HTML” section will appear.">
+<img loading="lazy" decoding="async" src="../../images/en/33.png" alt="Opening BlockIt advanced mode">
+</figure>
+<figure class="gallery-slide" data-title="Open the builder" data-caption="Paste the HTML into “Create a rule from HTML” in BlockIt’s advanced mode and click “Open rule builder”.">
+<img loading="lazy" decoding="async" src="../../images/en/17.png" alt="Opening the rule builder from HTML">
+</figure>
+<figure class="gallery-slide" data-title="Review the initial result" data-caption="The builder fills the card from the copied HTML and immediately shows the match count.">
+<img loading="lazy" decoding="async" src="../../images/en/18.png" alt="Automatically filled element card in the builder">
+</figure>
+<figure class="gallery-slide" data-title="Find the first element’s position" data-caption="If necessary, return to DevTools to find traits that restrict the search to the elements you want to block. Here, the advertisement is the second sibling.">
+<img loading="lazy" decoding="async" src="../../images/en/19.png" alt="First similar element in DevTools">
+</figure>
+<figure class="gallery-slide" data-title="Find the second element’s position" data-caption="Another advertisement with the same classes is the third sibling.">
+<img loading="lazy" decoding="async" src="../../images/en/20.png" alt="Second similar sibling element">
+</figure>
+<figure class="gallery-slide" data-title="Find the third element’s position" data-caption="The last advertisement with the same classes is the fifth sibling.">
+<img loading="lazy" decoding="async" src="../../images/en/21.png" alt="Third similar sibling element">
+</figure>
+<figure class="gallery-slide" data-title="Configure and check the rule" data-caption="One rule blocks three advertisements with the same classes by specifying sibling positions 2, 3, and 5. The numbers in the screenshot correspond to the actions listed above the gallery.">
+<img loading="lazy" decoding="async" src="../../images/en/22.png" alt="Completed rule builder form with sibling positions">
+</figure>
+<figure class="gallery-slide" data-title="Confirm rule creation" data-caption="Click “Create rule.” If BlockIt says the rule finds multiple elements, check their number again and confirm saving.">
+<img loading="lazy" decoding="async" src="../../images/en/23.png" alt="Confirming a rule for multiple elements">
+</figure>
+<figure class="gallery-slide" data-title="Check the page" data-caption="After saving, make sure every selected block disappeared and useful page elements remained in place.">
+<img loading="lazy" decoding="async" src="../../images/en/24.png" alt="Page after applying a rule from the builder">
+</figure>
+<button class="gallery-control next" type="button" aria-label="Next step">›</button>
+</div>
+<div class="gallery-caption"><span class="gallery-caption-number">1</span><div><b></b><span></span></div></div>
+<div class="gallery-dots" aria-label="Steps for using the rule builder"></div>
+</div>
+</div>
+</details>
+      </div>
+      <h3>別の方法に切り替える目安</h3>
+      <p>素早く試すなら開発者ツールの CSS セレクターから始めます。特徴が安定しているものの使う属性を選びたい場合は、HTML からの簡易ルールが便利です。特徴が不安定、無作為に見える、または似たブロックが多い場合は <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> やルールビルダーを使います。</p>
+    </section>
 
-            <h3 id="modes">ブロックモードの意味は？</h3>
-            <ul>
-                <li><strong>削除</strong>（ほとんどの場合に適しています）：要素はページのHTMLから完全に削除され、そのスペースは他の要素のために解放されます。ただし、このオプションはレイアウトが崩れる原因になることがあります。</li>
-                <li><strong>非表示：</strong> 要素は見えなくなりますが、ページ上で同じスペースを占有し続けます。レイアウトは崩れません。</li>
-            </ul>
-        </section>
+    <section class="chapter" id="selectors">
+      <h2>CSS セレクター早見表 <a class="top-link" href="#top">先頭へ</a>
+</h2>
+      <h3>セレクターとは</h3>
+      <p>
+<strong>セレクター</strong>は、タグ、クラス、ID、属性、HTML 構造内の位置から要素を見つけます。</p>
+      <p>CSS では書式指定に使いますが、BlockIt では<strong>要素を見つけるためだけ</strong>に使います。</p>
+      <p>以下の例で一般的な CSS セレクターを読んだり少し編集したりできます。</p>
+      <h3>セレクターを確認する</h3>
+      <ol>
+<li>DevTools の <strong>「要素」 / “Elements”</strong> を開きます。</li>
+<li><kbd>Ctrl + F</kbd>（Mac は <kbd>Cmd + F</kbd>）を押します。</li>
+<li>検索欄に貼り付けます。</li>
+<li>一致箇所と件数（例：<code>1 of 3</code>）が表示されます。</li>
+</ol>
+      <div class="gallery" data-gallery>
+        <div class="gallery-stage">
+          <figure class="gallery-slide active" data-title="Check the selector" data-caption="Press Ctrl + F on the Elements tab, paste the selector, and check the number of matching elements.">
+<img loading="lazy" decoding="async" src="../../images/selector-check.png" alt="Searching for a selector with Ctrl+F">
+</figure>
+        </div>
+        <div class="gallery-caption">
+<span class="gallery-caption-number">1</span>
+<div>
+<b>
+</b>
+<span>
+</span>
+</div>
+</div>
+        <div class="gallery-dots" aria-label="Checking a selector in DevTools">
+</div>
+      </div>
+      <h3>セレクターの種類</h3>
+      <div class="syntax-grid">
+        <article class="syntax-example">
+<h4>全称セレクター (<code>*</code>)</h4>
+<p>ページ内の<strong>すべて</strong>を見つけるため、注意して使います。</p>
+<p>
+<strong>セレクター：</strong> <code>*</code>
+</p>
+<p>
+<strong>見つかるもの：</strong>例外なくすべての要素。</p>
+</article>
+        <article class="syntax-example">
+<h4>タグセレクター</h4>
+<p>指定した HTML タグの要素をすべて見つけます。</p>
+<p>
+<strong>セレクター：</strong> <code>h1</code>, <code>p</code>, <code>button</code>, <code>div</code>
+</p>
+<p>
+<strong>見つかるもの：</strong>
+</p>
+<ul>
+<li>
+<code>h1</code> — すべての第１階層見出し。</li>
+<li>
+<code>p</code> — すべての段落。</li>
+<li>
+<code>button</code> — すべてのボタン。</li>
+<li>
+<code>div</code> — すべての <code>&lt;div&gt;</code> コンテナー。</li>
+</ul>
+</article>
+        <article class="syntax-example">
+<h4>クラスセレクター (<code>.class</code>)</h4>
+<p>指定クラスを持つ要素を見つけます。複数クラスは空白なしで続けます。</p>
+<p>
+<strong>セレクター：</strong> <code>.card</code>, <code>.card__title</code>, <code>.card.featured</code>
+</p>
+<p>
+<strong>見つかるもの：</strong>
+</p>
+<ul>
+<li>
+<code>.card</code> — <code>card</code> クラスを持つすべての要素。</li>
+<li>
+<code>.card__title</code> — <code>card__title</code> クラスを持つすべての要素。</li>
+<li>
+<code>.card.featured</code> — <code>card</code> と <code>featured</code> の両方を持つ要素。</li>
+</ul>
+<p>ほかのクラスがあっても一致します。たとえば <code>class="card featured compact"</code> も <code>.card.featured</code> に一致します。クラス文字列全体を厳密に指定するなら <code>[class="card featured"]</code> を使えますが、順序に依存し、追加クラスを許しません。</p>
+</article>
+        <article class="syntax-example">
+<h4>ID セレクター (<code>#id</code>)</h4>
+<p>固有の <code>id</code> を持つ要素を見つけます。</p>
+<p>
+<strong>セレクター：</strong> <code>#salad-cat</code>, <code>#confused-cat</code>, <code>#bread-cat</code>
+</p>
+<p>
+<strong>見つかるもの：</strong>
+</p>
+<ul>
+<li>
+<code>#salad-cat</code> — <code>id="salad-cat"</code> の要素。</li>
+<li>
+<code>#confused-cat</code> — <code>id="confused-cat"</code> の要素。</li>
+<li>
+<code>#bread-cat</code> — <code>id="bread-cat"</code> の要素。</li>
+</ul>
+</article>
+        <article class="syntax-example">
+<h4>属性セレクター (<code>[attribute="value"]</code>)</h4>
+<p>属性の正確な値または存在を確認できます。複数条件は続けて書きます。</p>
+<p>
+<strong>セレクター：</strong> <code>[data-type]</code>, <code>[data-type="description"]</code>, <code>[data-type="description"][aria-label="Card"]</code>, <code>[class~="card"]</code>, <code>[class="card featured"]</code>
+</p>
+<p>
+<strong>見つかるもの：</strong>
+</p>
+<ul>
+<li>
+<code>[data-type]</code> — 値に関係なく <code>data-type</code> 属性を持つ要素。</li>
+<li>
+<code>[data-type="description"]</code> — <code>data-type</code> の値が正確に <code>description</code> の要素。</li>
+<li>
+<code>[data-type="description"][aria-label="Card"]</code> — 両方の属性が一致する要素。</li>
+<li>
+<code>[class~="card"]</code> — クラス一覧に独立した <code>card</code> がある要素。</li>
+<li>
+<code>[class="card featured"]</code> — <code>class</code> 属性全体が指定文字列と正確に一致する要素。</li>
+</ul>
+<div class="operator-reference">
+<h5>値の比較方法</h5>
+<dl>
+<div><dt><code>[href^="https://"]</code></dt><dd>値が <code>https://</code> で始まる</dd></div>
+<div><dt><code>[src$=".png"]</code></dt><dd>値が <code>.png</code> で終わる</dd></div>
+<div><dt><code>[class*="advert"]</code></dt><dd>値のどこかに <code>advert</code> を含む</dd></div>
+<div><dt><code>[class~="card"]</code></dt><dd>空白区切りの単語として <code>card</code> を含む</dd></div>
+<div><dt><code>[lang|="en"]</code></dt><dd>値が <code>en</code> または <code>en-US</code> のように <code>en-</code> で始まる</dd></div>
+<div><dt><code>[aria-label*="advertisement" i]</code></dt><dd>大文字・小文字を区別せず advertisement を含む</dd></div>
+</dl>
+</div>
+<p>セレクターは記載した属性だけを調べ、ほかの属性を禁止しません。たとえば <code>[data-type="description"][aria-label="Card"]</code> は <code>&lt;div data-type="description" aria-label="Card" title="Details"&gt;</code> にも一致します。追加の <code>title</code> は問題ありません。標準 CSS ではほかの属性が一切ないことを要求できません。</p>
+</article>
+        <article class="syntax-example">
+<h4>組み合わせセレクター</h4>
+<p>タグ、クラス、ID、属性条件を空白なしで組み合わせ、同じ要素に適用できます。</p>
+<p>
+<strong>セレクター：</strong> <code>h2.card__title</code>, <code>div.card.featured</code>, <code>div[data-type="description"]</code>, <code>article.card[data-type="advertisement"][aria-label="Advertisement"]</code>
+</p>
+<p>
+<strong>見つかるもの：</strong>
+</p>
+<ul>
+<li>
+<code>h2.card__title</code> — <code>card__title</code> クラスの <code>&lt;h2&gt;</code>。</li>
+<li>
+<code>div.card.featured</code> — <code>card</code> と <code>featured</code> を持つ <code>&lt;div&gt;</code>。ほかのクラスも許されます。</li>
+<li>
+<code>div[data-type="description"]</code> — 指定属性を持つ <code>&lt;div&gt;</code>。ほかの属性も許されます。</li>
+<li>
+<code>article.card[data-type="advertisement"][aria-label="Advertisement"]</code> — <code>card</code> クラスを持ち、２つの属性値がそれぞれ指定値と正確に一致する <code>&lt;article&gt;</code>。</li>
+</ul>
+</article>
+        <article class="syntax-example">
+<h4>子孫セレクター（空白）</h4>
+<p>別の要素の<strong>内側</strong>にある要素を深さに関係なく見つけます。</p>
+<p>
+<strong>セレクター：</strong> <code>.card .btn</code>
+</p>
+<p>
+<strong>見つかるもの：</strong><code>card</code> クラスの要素の内側にある、<code>btn</code> クラスのすべての要素。</p>
+</article>
+        <article class="syntax-example">
+<h4>子セレクター (<code>&gt;</code>)</h4>
+<p>別の要素の<strong>直接の子</strong>を見つけます。</p>
+<p>
+<strong>セレクター：</strong> <code>.card__body &gt; .card__title</code>
+</p>
+<p>
+<strong>見つかるもの：</strong><code>card__body</code> クラスの要素の直接の子で、<code>card__title</code> クラスを持つ要素。</p>
+</article>
+        <article class="syntax-example">
+<h4>隣接兄弟セレクター (<code>+</code>)</h4>
+<p>同じ階層の<strong>直後の兄弟</strong>を見つけます。</p>
+<p>
+<strong>セレクター：</strong> <code>#confused-cat + .card__description</code>
+</p>
+<p>
+<strong>見つかるもの：</strong><code>id="confused-cat"</code> の直後にある、<code>card__description</code> クラスの要素。</p>
+</article>
+        <article class="syntax-example">
+<h4>位置疑似クラス</h4>
+<p>兄弟内の位置で要素を選びます。</p>
+<p>
+<strong>セレクター：</strong> <code>.card__actions :nth-child(2)</code>
+</p>
+<p>
+<strong>見つかるもの：</strong><code>card__actions</code> クラスの要素の２番目の子要素。</p>
+</article>
+      </div>
+      <p class="selector-limit">
+<strong>標準 CSS セレクターには限界があります。</strong>属性やクラスの数を列挙なしで指定したり、要素自身のテキスト、内部テキスト、正規表現、属性名のパターンを表したりできません。たとえば <code>[data-*]</code> は標準 CSS ではありません。こうした場合は <code>[data-*]</code> や <code>:attr-name(/^data-/)</code> などを備えた BlockIt の拡張ルールを使えます。<a href="../rules/en/index.html">BlockIt 構文の資料を見る</a>。</p>
 
-        <!-- ============================================================
-        セクション3: 高度な機能
-        ============================================================ -->
-        <section id="advanced">
-            <h2>高度な機能 <a href="#top" class="back-link">トップへ戻る</a></h2>
+      <div class="embedded-contexts" id="embedded-contexts">
+        <h3 class="section-heading">iframe と Shadow DOM とは？ <a class="top-link" href="#top">先頭へ</a></h3>
+        <p>
+<strong>iframe</strong> は別のページに埋め込まれた独立したページです。内容は別文書にあるため、親ページからの通常の検索では直接たどれません。</p>
+        <div class="structure-example">
+          <span>HTML の iframe の例</span>
+          <pre><code>&lt;main&gt;
+  &lt;h1&gt;メインページ&lt;/h1&gt;
+  &lt;iframe src="advertisement.html"&gt;&lt;/iframe&gt;
+&lt;/main&gt;</code></pre>
+          <p><code>advertisement.html</code> の内容は <code>&lt;iframe&gt;</code> 内の別文書として読み込まれます。</p>
+        </div>
+        <p>
+<strong>Shadow DOM</strong> はコンポーネント内の隔離されたツリーです。ページのほかの部分からマークアップを分離し、閉じたシャドウルートは通常のスクリプトからも隠します。</p>
+        <div class="structure-example">
+          <span>開発者ツールでの Shadow DOM の例</span>
+          <pre><code>&lt;video-player&gt;
+  #shadow-root (open)
+    &lt;button class="play"&gt;再生&lt;/button&gt;
+&lt;/video-player&gt;</code></pre>
+          <p>ボタンは通常のページツリーではなく、<code>&lt;video-player&gt;</code> のシャドウルート内にあります。</p>
+        </div>
+        <p>これらはブロッカーにとって検索の境界になります。ルールは主文書だけでなく、アクセス可能な iframe とシャドウルート内でも動く必要があります。すべてのブロッカーが対応するわけではありません。BlockIt は iframe と Shadow DOM 内で CSS セレクターと拡張ルールを適用しますが、XPath は文書内でのみ動作し、Shadow DOM の境界を越えられません。</p>
+      </div>
+    </section>
 
-            <h3 id="xpath">XPathによるブロック</h3>
-            <p>XPathは、CSSセレクタが不安定な場合に、動的クラス（難読化）を使用するサイトで役立ちます。</p>
-            <p><strong>XPathをコピーする方法：</strong></p>
-            <ol>
-                <li>「検証」で要素を見つけます。</li>
-                <li>コード内の要素を右クリック → <strong>コピー</strong> → <strong>XPathをコピー</strong>（または <strong>Copy XPath</strong>）。</li>
-                <li>コピーした式をBlockItの入力フィールドに貼り付けます。拡張機能は自動的にXPathと認識し、<strong>これのために高度なモードを有効にする必要はありません</strong>。</li>
-            </ol>
+    <section class="chapter" id="rules">
+      <h2>ルールの管理 <a class="top-link" href="#top">先頭へ</a>
+</h2>
+      <p>作成したルールは現在のサイト用またはドメイン指定なしの一覧に表示されます。ビルダーのルールは編集・削除でき、無効なルールも印付きで残ります。</p>
+      <h3>無効化と削除</h3>
+      <h4>ルールを無効にするには</h4>
+      <p>「有効なルール」で「無効化」を押します。ルールは残りますが適用されません。すでに消えた要素を戻すにはページを更新します。</p>
+      <h4>ルールを削除するには</h4>
+      <p>「有効なルール」で「削除」を押します。ページを <kbd>F5</kbd> などで再読み込みすると要素が戻ります。</p>
+      <h3>エクスポートとインポート</h3>
+      <p>エクスポートはルールをファイルへ保存します。インポートはファイルから追加するか現在の一覧を置き換えます。</p>
+      <div class="gallery" data-gallery>
+        <div class="gallery-stage">
+          <button class="gallery-control prev" type="button" aria-label="Previous step">‹</button>
+          <figure class="gallery-slide active" data-title="Click “Advanced mode”" data-caption="Open BlockIt and click “Advanced mode.” The rule export and import tools will then become available.">
+<img loading="lazy" decoding="async" src="../../images/en/33.png" alt="Opening BlockIt advanced mode">
+</figure>
+          <figure class="gallery-slide" data-title="Open import" data-caption="Click “Import rules,” then “Choose file” in the dialog.">
+<img loading="lazy" decoding="async" src="../../images/en/9.png" alt="Opening the rule import dialog">
+</figure>
+          <figure class="gallery-slide" data-title="Choose the rules file" data-caption="Select the saved JSON file containing your rules and open it.">
+<img loading="lazy" decoding="async" src="../../images/en/10.png" alt="Selecting a JSON rules file">
+</figure>
+          <figure class="gallery-slide" data-title="Choose an import method" data-caption="Click “Replace all” to remove current rules, or “Add” to keep them and append the rules from the file.">
+<img loading="lazy" decoding="async" src="../../images/en/11.png" alt="Choosing a rule import method">
+</figure>
+          <figure class="gallery-slide" data-title="Check the result" data-caption="After a successful import, BlockIt shows how many new rules were added and how many are stored in total.">
+<img loading="lazy" decoding="async" src="../../images/en/12.png" alt="Successful rule import message">
+</figure>
+          <button class="gallery-control next" type="button" aria-label="Next step">›</button>
+        </div>
+        <div class="gallery-caption">
+<span class="gallery-caption-number">1</span>
+<div>
+<b>
+</b>
+<span>
+</span>
+</div>
+</div>
+        <div class="gallery-dots" aria-label="Rule import steps">
+</div>
+      </div>
+      <h3>ルールの確認</h3>
+      <p>確認するページで BlockIt を開き、「このサイト用：&lt;ドメイン&gt;」の「ルールを確認」を押します。</p>
+      <p>保存済みルールが要素を見つけるか確認できます。1 回だけ測定するか、「安定性を確認」で複数回読み込めます。測定中はルールを一時停止し、各回の一致数を表示します。</p>
+      <ul>
+        <li><strong>動作：</strong>毎回同じ 1 件以上を見つけます。</li>
+        <li><strong>不安定：</strong>読み込みごとに件数が変わります。</li>
+        <li><strong>未動作：</strong>一致がありません。</li>
+        <li><strong>エラー：</strong>実行できませんでした。</li>
+      </ul>
+      <p>現在の基底ドメイン用とドメイン指定なしのルールを確認します。BlockIt は通常の保存時にサブドメインを分けないため、<code>e.mail.ru</code> のルールも <code>mail.ru</code> 用になります。ただし確認対象は診断を開いたページです。正確な結果にはルール作成元のページから実行してください。</p>
+      <div class="note"><strong>確認するのは一致であり、要素の用途ではありません。</strong>0 件でなくても、意図した要素だけを見つけた保証はありません。</div>
+    </section>
 
-            <h3 id="advanced-mode">高度なモード</h3>
-            <p>基本モードでは、拡張機能はセレクタを入力するためのシンプルなフィールドを提供します。ルールをより細かく調整し、追加のツールを使用するには、<strong>高度なモード</strong>があります。有効にするには、拡張機能のインターフェースで対応するボタンをクリックします。</p>
-            <p>このモードでは、以下にアクセスできます：</p>
-            <ul>
-                <li><strong>HTMLパーサー：</strong> 要素のHTMLコードを貼り付けると、拡張機能がその属性から構成されるセレクタを自動的に提案します。</li>
-                <li><strong>属性の編集：</strong> 解析後、要素の属性リストが表示され、信頼性の低い属性（例：動的に生成されたクラス）を削除してセレクタを調整できます。</li>
-                <li><strong>属性の手動追加：</strong> セレクタをさらに調整したい場合、属性とその値を手動で追加できます。</li>
-                <li><strong>ルールのエクスポートとインポート：</strong> ルールを他のユーザーと共有したり、デバイス間で転送したりできます。</li>
-            </ul>
-
-            <h4 id="html-parser">HTMLパーサー、編集、属性の追加</h4>
-            <p>これらの3つのツールは連携して機能し、構文を覚える必要なく正確なセレクタを作成するための統合ワークフローを形成します：</p>
-            <ol>
-                <li><strong>要素のHTMLコードをコピーします</strong>（右クリック → <strong>コピー</strong> → <strong>要素をコピー</strong>（または <strong>Copy element</strong>））。
-                    <div class="screenshot">
-                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/7.png" alt="HTML要素をコピー" class="screenshot-img">
-                    </div>
-                </li>
-                <li><strong>拡張機能で高度なモードを有効にし、HTMLコードを対応するフィールドに貼り付けます</strong>。「解析」をクリックします。拡張機能がコードを解析し、タグとそのすべての属性のリストを表示します。
-                </li>
-                <li><strong>提案された属性リストを編集します。</strong> 将来変更される可能性が低い属性のみを残します。例えば、動的に生成されたように見える <code>id</code> や <code>class</code> はこの目的には適していません。入力フィールドのセレクタは、変更を加えるたびに自動的に更新されます。
-                    <div class="screenshot">
-                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/8.png" alt="高度なモードでHTMLを貼り付け" class="screenshot-img">
-                    </div>
-                </li>
-                <li><strong>必要に応じて属性を手動で追加します。</strong> 提案された属性セットだけでは一意のセレクタを作成するのに不十分な場合、独自の属性を追加できます。</li>
-                <li><strong>「ルールを追加」をクリックし、追加され、要素がページから削除されたことを確認します。</strong>
-                    <div class="screenshot">
-                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/9.png" alt="属性リストの編集" class="screenshot-img">
-                    </div>
-                </li>
-            </ol>
-        </section>
-
-        <!-- ============================================================
-        セクション4: ブロックする要素を選択するためのヒント
-        ============================================================ -->
-        <section id="selector-tips">
-            <h2>ブロックする要素を選択するためのヒント <a href="#top" class="back-link">トップへ戻る</a></h2>
-            <p>以下の方法は、最も簡単なものから高度なものへと順序付けられています。最初の方法から始めて、前の方法がうまくいかない場合は次の方法に進んでください。</p>
-
-            <h3>1. DevToolsからセレクタをコピーする</h3>
-            <p>これはほとんどのサイトで機能する最も簡単な方法です。手順は <a href="#how-to-block">「要素をブロックする方法」</a> セクションに記載されています。</p>
-
-            <h3>2. DevToolsからXPathをコピーする</h3>
-            <p>サイトの動的クラスが原因でコピーしたセレクタが機能しない場合は、この方法を使用します。XPathのコピー手順は <a href="#xpath">「XPathによるブロック」</a> セクションにあります。</p>
-
-            <h3>3. HTMLパーサーを使用する（高度なモード）</h3>
-            <p>この方法は、セレクタの理論は知っているが正確な構文を覚えていない場合に便利です。要素のHTMLコードを貼り付けると、拡張機能がその属性に基づいてセレクタを提案します。</p>
-
-            <h3>4. 属性リストを編集する（高度なモード）</h3>
-            <p>HTMLパーサーを使用した後、要素のすべての属性のリストが表示されます。将来変更される可能性が低い属性のみを残します。動的に生成されたクラス（意味不明な文字列）はこの目的には適していません。</p>
-
-            <h3>5. 属性を手動で追加する（高度なモード）</h3>
-            <p>自動的な方法のどれも安定したセレクタを提供しない場合は、一意の属性とその値を手動で追加して検索範囲を絞り込むことができます。</p>
-
-            <h3>6. セレクタを手動で記述する</h3>
-            <p>CSSセレクタ構文の基本的な理解が必要です。これにより、より多くの制御と安定性が得られます。基本を学ぶには、<a href="#selectors-cheatsheet">セレクターチートシート</a> または <a href="https://docs.sherparpa.ru/sherpa-rpa/sherpa-designer/rabota-v-sherpa-designer/rukovodstvo-po-veb-selektoram/spravochnik-po-notacii-css-i-xpath-selektorov" target="_blank">CSSおよびXPathセレクターリファレンス</a>（ロシア語）を参照してください。</p>
-        </section>
-
-        <!-- ============================================================
-        セクション5: ルールのエクスポートとインポート
-        ============================================================ -->
-        <section id="export-import">
-            <h2>ルールのエクスポートとインポート <a href="#top" class="back-link">トップへ戻る</a></h2>
-            <p>この機能により、ルールを他のユーザーと共有したり、コンピュータ間で転送したりできます。<strong>高度なモード</strong> で利用可能です。</p>
-            <ul>
-                <li><strong>エクスポート：</strong> すべてのルールをJSONファイルに保存します。</li>
-                <li><strong>インポート：</strong> JSONファイルからルールを読み込みます。すべての現在のルールを置き換えるか、新しいルールを追加できます（重複はスキップされます）。</li>
-            </ul>
-            <h3>ルールをインポートする方法は？</h3>
-            <ul>
-                <li><strong>高度なモードで「インポート」ボタンをクリックすると、ウィンドウが開きます。「ファイルを選択」をクリックしてファイルを選択します。</strong>
-                    <div class="screenshot">
-                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/10.png" alt="インポートするルールファイルを選択" class="screenshot-img">
-                    </div>
-                </li>
-                <li><strong>インポートしたルールをリストに追加するか、インポートしたルールでリストを置き換えるかを選択します。希望に応じて、「すべて置き換え」または「追加」をクリックします。</strong>
-                    <div class="screenshot">
-                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/11.png" alt="インポートウィンドウ" class="screenshot-img">
-                    </div>
-                </li>
-                <li><strong>成功すると、確認メッセージが表示され、新しいルールが拡張機能ウィンドウのアクティブルールリストに表示されます。</strong>
-                    <div class="screenshot">
-                        <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/12.png" alt="インポート成功結果" class="screenshot-img">
-                    </div>
-                </li>
-            </ul>
-        </section>
-
-        <!-- ============================================================
-        セクション6: トラブルシューティング（FAQ）
-        ============================================================ -->
-        <section id="troubleshooting">
-            <h2>トラブルシューティング（FAQ） <a href="#top" class="back-link">トップへ戻る</a></h2>
-
-            <h4>ルールが機能しませんでした</h4>
-            <ul>
-                <li><strong>考えられる理由 #1. 選択した要素が最も外側ではない：</strong> HTMLツリーを上に移動し、親コンテナのセレクタをコピーしてみてください。</li>
-                <li><strong>考えられる理由 #2. サイトが動的クラス（難読化）を使用している：</strong> この場合、コピーしたセレクタは機能しなくなる可能性があります。XPathを使用するか、セレクタを手動で記述してください。</li>
-                <li><strong>考えられる理由 #3. 要素が動的に読み込まれる：</strong> ページが変更されると、拡張機能は自動的にルールを再適用します。それでも解決しない場合は、ページを更新してみてください。</li>
-                <li><strong>考えられる理由 #4. ルールが別のドメイン用に作成された：</strong> ルールが「このサイト用」または「他のサイト用」グループにあることを確認してください。</li>
-            </ul>
-
-            <h4>セレクタが要素を見つけられない</h4>
-            <ul>
-                <li><strong>セレクタを確認してください：</strong> DevTools（F12）を開き、「Elements」タブに移動し、Ctrl+F（Macの場合はCmd+F）を押して、検索ボックスにセレクタを入力します。検索で何も見つからない場合、セレクタが正しくありません。</li>
-                <li><strong>ページがShadow DOMを使用している：</strong> この場合、標準のセレクタは機能しない可能性があります。XPathを使用するか、シャドウルート内で要素を検索してみてください。</li>
-                <li><strong>要素がスクリプト実行後に読み込まれる：</strong> 一部の要素は遅延して表示されます。ページを更新するか、待ってみてください。</li>
-            </ul>
-
-            <h4>要素を削除した後、レイアウトが崩れ、広告がある時より見た目が悪くなった</h4>
-            <ul>
-                <li><strong>解決策：</strong> ルールを削除し、<strong>「非表示」</strong> モードを選択してルールを再作成します。これにより、ページ上のスペースが保持され、レイアウトが維持されます。</li>
-            </ul>
-
-            <h4>セレクタが要素を多く見つけすぎる</h4>
-            <p>より多くの属性を追加するか、より具体的なパスを使用してセレクタを調整します。高度なモードでは、一意の属性を手動で追加して検索範囲を絞り込むことができます。</p>
-
-            <h4>何も効果がない</h4>
-            <p>すべて試しても要素がブロックされない場合、おそらく最善の選択は、<strong>そのサイトを忘れて離れること</strong>です。😄</p>
-        </section>
-
-        <!-- ============================================================
-        セクション7: セレクターチートシート
-        ============================================================ -->
-        <section id="selectors-cheatsheet">
-            <h2>セレクターチートシート <a href="#top" class="back-link">トップへ戻る</a></h2>
-
-            <h3>セレクタとは？</h3>
-            <p><strong>セレクタ</strong> は、タグ、クラス、ID、属性、またはHTML構造内の位置などのプロパティに基づいて、Webページ上の特定の要素を見つける方法です。</p>
-            <p>CSSスタイルとは異なり、BlockItではセレクタは <strong>要素を見つけるためだけ</strong> に使用されます。色、フォント、余白を設定するのではなく、要素を <strong>見つけて</strong> ブロックするだけです。</p>
-
-            <h3>開発者ツールを開く方法</h3>
-            <p>開発者ツール（DevTools）は、セレクタを操作するための主要なツールです。開き方は次のとおりです：</p>
-            <table class="cheatsheet-table">
-                <thead>
-                    <tr>
-                        <th>操作</th>
-                        <th>結果</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><kbd>F12</kbd> キーを押す</td>
-                        <td>DevToolsパネルが開く</td>
-                    </tr>
-                    <tr>
-                        <td>または <kbd>Ctrl + Shift + I</kbd> を押す</td>
-                        <td>同じ</td>
-                    </tr>
-                    <tr>
-                        <td>または要素を右クリック → <strong>「検証」</strong></td>
-                        <td>要素がハイライトされたDevToolsが開く</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h3>開発者ツールをカスタマイズする方法</h3>
-
-            <h4>インターフェース言語</h4>
-            <ol>
-                <li>DevTools（<kbd>F12</kbd>）を開きます。</li>
-                <li>右上隅の歯車アイコン（⚙️）をクリック → <strong>設定</strong>。</li>
-                <li><strong>「言語」</strong> セクションで、ドロップダウンメニューから希望の言語を選択します。</li>
-                <div class="screenshot">
-                    <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/13.png" alt="DevToolsの言語を変更" class="screenshot-img">
-                </div>
-                <li>DevToolsを閉じて再度開きます。</li>
-            </ol>
-
-            <h4>パネルのドッキング位置</h4>
-            <ol>
-                <li>DevToolsの右上隅にある3つの点（⋮）をクリックします。</li>
-                <li>以下のオプションから選択します：
-                    <ul>
-                        <li><strong>Dock to right</strong>（デフォルト）</li>
-                        <li><strong>Dock to bottom</strong> — ワイドモニターを使用している場合に便利</li>
-                        <li><strong>Dock to left</strong> — 異なるレイアウトを希望する場合</li>
-                        <li><strong>Undock into separate window</strong> — 別のモニターに移動</li>
-                    </ul>
-                </li>
-            </ol>
-            <div class="screenshot">
-                <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/14.png" alt="DevToolsパネルの位置を変更" class="screenshot-img">
-            </div>
-
-            <h3>開発者ツールでセレクタをテストする方法</h3>
-            <p>セレクタが機能するかどうかを確認する最速の方法は、<strong>検索（<kbd>Ctrl + F</kbd>）</strong> を使用することです：</p>
-            <ol>
-                <li>DevTools（<kbd>F12</kbd>）を開き、<strong>「Elements」</strong> タブに移動します。</li>
-                <li><kbd>Ctrl + F</kbd>（Macの場合は <kbd>Cmd + F</kbd>）を押します。</li>
-                <li>検索ボックスにセレクタを入力します。</li>
-                <li>DevToolsがセレクタに一致するすべての要素をハイライトします。</li>
-            </ol>
-            <p>検索バーには、見つかった要素の数が表示されます（例：<code>1 of 3</code>）。これにより、セレクタの精度を把握できます。</p>
-            <div class="screenshot">
-                <img src="https://raw.githubusercontent.com/PavelCraft/BlockIt/1a71d4e/images/15.png" alt="Ctrl+Fでセレクタを検索" class="screenshot-img">
-            </div>
-
-            <h3>実践例：猫ミームギャラリー</h3>
-            <p>それでは、この知識を実践してみましょう。<a href="example.html" target="_blank">example.html ページ</a> を開き、DevToolsを開きます。下の表のセレクタを入力して、どの要素が見つかるか確認してみてください。</p>
-
-            <h3>セレクタのタイプ</h3>
-
-            <h4>1. ユニバーサルセレクタ (<code>*</code>)</h4>
-            <p>ページ上の <strong>すべての</strong> 要素を検索します。注意して使用してください — HTML内のすべてが返されます。</p>
-            <p><strong>セレクタ：</strong> <code>*</code></p>
-            <p><strong>検索対象：</strong> すべての要素（例外なし）。</p>
-
-            <h4>2. タイプセレクタ</h4>
-            <p>指定されたHTMLタグを持つすべての要素を検索します。</p>
-            <p><strong>セレクタ：</strong> <code>h1</code>, <code>p</code>, <code>button</code>, <code>div</code></p>
-            <p><strong>検索対象：</strong></p>
-            <ul>
-                <li><code>h1</code> — すべての第1レベルの見出し</li>
-                <li><code>p</code> — すべての段落</li>
-                <li><code>button</code> — すべてのボタン</li>
-                <li><code>div</code> — すべての <code>&lt;div&gt;</code> コンテナ</li>
-            </ul>
-
-            <h4>3. クラスセレクタ (<code>.class</code>)</h4>
-            <p><code>class</code> 属性に指定されたクラスを持つすべての要素を検索します。</p>
-            <p><strong>セレクタ：</strong> <code>.card</code>, <code>.card__title</code>, <code>.btn--view</code></p>
-            <p><strong>検索対象：</strong></p>
-            <ul>
-                <li><code>.card</code> — クラス <code>card</code> を持つすべての要素</li>
-                <li><code>.card__title</code> — クラス <code>card__title</code> を持つすべての要素</li>
-                <li><code>.btn--view</code> — クラス <code>btn--view</code> を持つすべての要素</li>
-            </ul>
-
-            <h4>4. IDセレクタ (<code>#id</code>)</h4>
-            <p>一意の <code>id</code> を持つ要素を検索します。ページ上にこのような要素は1つだけであるべきです。</p>
-            <p><strong>セレクタ：</strong> <code>#salad-cat</code>, <code>#confused-cat</code>, <code>#bread-cat</code></p>
-            <p><strong>検索対象：</strong></p>
-            <ul>
-                <li><code>#salad-cat</code> — <code>id="salad-cat"</code> を持つ要素</li>
-                <li><code>#confused-cat</code> — <code>id="confused-cat"</code> を持つ要素</li>
-                <li><code>#bread-cat</code> — <code>id="bread-cat"</code> を持つ要素</li>
-            </ul>
-
-            <h4>5. 複合セレクタ</h4>
-            <p>より正確な検索のために、タグ、クラス、IDを組み合わせることができます。</p>
-            <p><strong>セレクタ：</strong> <code>h2.card__title</code>, <code>div.card</code>, <code>p.card__description</code>, <code>button.btn--edit</code></p>
-            <p><strong>検索対象：</strong></p>
-            <ul>
-                <li><code>h2.card__title</code> — クラス <code>card__title</code> を持つ <code>&lt;h2&gt;</code></li>
-                <li><code>div.card</code> — クラス <code>card</code> を持つ <code>&lt;div&gt;</code></li>
-                <li><code>p.card__description</code> — クラス <code>card__description</code> を持つ <code>&lt;p&gt;</code></li>
-                <li><code>button.btn--edit</code> — クラス <code>btn--edit</code> を持つ <code>&lt;button&gt;</code></li>
-            </ul>
-
-            <h4>6. 属性セレクタ (<code>[attribute="value"]</code>)</h4>
-            <p>特定の属性と値を持つ要素を検索します。</p>
-            <p><strong>セレクタ：</strong> <code>[data-type="description"]</code>, <code>[data-type="title"]</code></p>
-            <p><strong>検索対象：</strong></p>
-            <ul>
-                <li><code>[data-type="description"]</code> — <code>data-type="description"</code> を持つすべての要素</li>
-                <li><code>[data-type="title"]</code> — <code>data-type="title"</code> を持つ要素</li>
-            </ul>
-
-            <h4>7. 子孫セレクタ（スペース）</h4>
-            <p>別の要素の <strong>内部</strong> にある要素を検索します（任意のネストレベル）。</p>
-            <p><strong>セレクタ：</strong> <code>.card .btn</code></p>
-            <p><strong>検索対象：</strong> クラス <code>card</code> を持つ要素の内部にある、クラス <code>btn</code> を持つすべての要素。</p>
-
-            <h4>8. 子セレクタ (<code>&gt;</code>)</h4>
-            <p>別の要素の <strong>直接の</strong> 子要素を検索します。検索は1レベル深くまでしか進みません。</p>
-            <p><strong>セレクタ：</strong> <code>.card__body &gt; .card__title</code></p>
-            <p><strong>検索対象：</strong> クラス <code>card__body</code> を持つ要素の直接の子要素である、クラス <code>card__title</code> を持つ要素。</p>
-
-            <h4>9. 隣接兄弟セレクタ (<code>+</code>)</h4>
-            <p>同じネストレベルで別の要素の <strong>次の兄弟</strong> である要素を検索します。</p>
-            <p><strong>セレクタ：</strong> <code>#confused-cat + .card__description</code></p>
-            <p><strong>検索対象：</strong> <code>id="confused-cat"</code> を持つ要素の直後にある段落 (<code>&lt;p&gt;</code>)。</p>
-
-            <h4>10. 位置疑似クラス</h4>
-            <p>兄弟要素間での位置に基づいて要素を選択します。</p>
-            <p><strong>セレクタ：</strong> <code>.card__actions :nth-child(2)</code></p>
-            <p><strong>検索対象：</strong> クラス <code>card__actions</code> を持つ要素内の2番目の子要素。</p>
-
-            <h3>🧠 練習問題</h3>
-            <p><a href="example.html" target="_blank">example.html ページ</a> と DevTools を開きます。セレクタを使用して次の要素を見つけてみてください。検索バー（<kbd>Ctrl + F</kbd>）で作業を確認してください — 見つかった要素の数が表示されます。</p>
-
-            <table class="cheatsheet-table">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>タスク</th>
-                        <th>検索対象</th>
-                        <th>ヒント</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>すべての第2レベルの見出しを検索</td>
-                        <td><code>&lt;h2&gt;</code></td>
-                        <td>タイプセレクタ</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>クラス <code>subtitle</code> を持つ要素を検索</td>
-                        <td>1つの要素</td>
-                        <td>クラスセレクタ</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td><code>id="confused-cat"</code> を持つ要素を検索</td>
-                        <td>1つの要素</td>
-                        <td>IDセレクタ</td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>クラス <code>card__description</code> を持つすべての段落を検索</td>
-                        <td>複数の要素</td>
-                        <td>複合セレクタ（タグ + クラス）</td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td>クラス <code>btn--edit</code> を持つすべてのボタンを検索</td>
-                        <td>複数の要素</td>
-                        <td>複合セレクタ（タグ + クラス）</td>
-                    </tr>
-                    <tr>
-                        <td>6</td>
-                        <td>属性 <code>data-type="description"</code> を持つすべての要素を検索</td>
-                        <td>複数の要素</td>
-                        <td>属性セレクタ</td>
-                    </tr>
-                    <tr>
-                        <td>7</td>
-                        <td>クラス <code>card</code> を持つ要素の内部にあるすべてのボタンを検索</td>
-                        <td>複数の要素</td>
-                        <td>子孫セレクタ</td>
-                    </tr>
-                    <tr>
-                        <td>8</td>
-                        <td><code>card__actions</code> 内部で <code>btn--view</code> ボタンの直後にある <code>btn--edit</code> ボタンを検索</td>
-                        <td>複数の要素</td>
-                        <td>隣接兄弟セレクタ (<code>+</code>)</td>
-                    </tr>
-                    <tr>
-                        <td>9</td>
-                        <td>クラス <code>card__actions</code> を持つ要素内の2番目のボタンを検索</td>
-                        <td>複数の要素</td>
-                        <td>疑似クラス <code>:nth-child</code></td>
-                    </tr>
-                    <tr>
-                        <td>10</td>
-                        <td>「Bread Cat」カード内のクラス <code>card__image</code> を持つすべての要素を検索</td>
-                        <td>1つの要素</td>
-                        <td>セレクタの組み合わせ</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h3>🔍 回答を確認する方法</h3>
-            <p>セレクタを記述したら、DevToolsの検索バー（<kbd>Ctrl + F</kbd>）に貼り付けます。検索バーには、見つかった要素の数が表示されます（例：<code>1 of 3</code>）。</p>
-            <ul>
-                <li><strong>特定の単一要素</strong>（例：<code>id</code> による）を探していた場合、結果は <code>1 of 1</code> になるはずです。</li>
-                <li><strong>要素のグループ</strong>（例：特定のクラスを持つすべての段落）を探していた場合、結果は <code>1 of 3</code> 以上になることがあります — これは正常です。</li>
-                <li>重要なのは、ハイライトされた要素が探していた要素であることです。視覚的に確認してください：ページ上で正しい要素がハイライトされていますか？</li>
-            </ul>
-            <p>間違った要素がハイライトされている場合は、条件を追加してセレクタを調整してください。</p>
-
-            <h3>🎮 追加練習</h3>
-            <p>スキルを強化するために、ゲーム <a href="https://flukeout.github.io/" target="_blank">CSS Diner</a> をプレイしてみてください。CSSセレクタを使用して正しいプレートを選択し、テーブルをセットアップします。タスクは徐々に難しくなり、すべての主要なセレクタタイプをカバーします。</p>
-        </section>
-
-        <!-- ============================================================
-        セクション8: フィードバックと連絡先
-        ============================================================ -->
-        <section id="feedback">
-            <h2>フィードバックと連絡先 <a href="#top" class="back-link">トップへ戻る</a></h2>
-            <p>ご提案やフィードバックをいつでもお待ちしています！バグを見つけた場合、改善を提案したい場合、感想を共有したい場合、または仕事を依頼したい場合 — お気軽にお問い合わせください。</p>
-            <ul>
-                <li><strong>GitHub：</strong> <a href="https://github.com/PavelCraft" target="_blank">PavelCraft</a></li>
-                <li><strong>Telegram：</strong> <a href="https://t.me/PavelCodeMaster" target="_blank">@PavelCodeMaster</a></li>
-                <li><strong>メール：</strong> <a href="mailto:pavelborisov@list.ru">pavelborisov@list.ru</a></li>
-            </ul>
-            <p>プロジェクトへの貢献も可能です：翻訳の支援、アイデアの提案、新機能のテストなど。</p>
-        </section>
-
-        <!-- ============================================================
-        フッター
-        ============================================================ -->
-        <hr>
-        <footer>
-            <p><a href="#top">トップへ戻る</a></p>
-        </footer>
-
-    </div> <!-- /.container -->
-
-    <!-- ===== スクリーンショット用モーダルウィンドウ ===== -->
-    <div id="screenshotModal" class="modal">
-        <span class="modal-close">&times;</span>
-        <img class="modal-content" id="modalImage">
+    <section class="chapter faq" id="faq">
+      <h2>トラブルシューティング <a class="top-link" href="#top">先頭へ</a>
+</h2>
+      <details>
+      <summary>広告以外のものもブロックされた</summary>
+      <p>セレクターの範囲が広すぎると、広告以外のページ要素も見つけてしまいます。</p>
+      <p>
+<strong>対処方法：</strong>
+</p>
+      <ul>
+        <li><a href="#rules">「ルールの管理」</a>に従い、ルールを削除します。</li>
+        <li>HTML ツリーを上下して、広告<em>だけ</em>を含む正確なコンテナーを選びます。</li>
+        <li>追加前に一致数を確認します。複数の一致は、すべてブロックしたい場合だけ適切です。</li>
+      </ul>
+      </details>
+      <details>
+      <summary>ルールが動作しない</summary>
+      <ul>
+        <li>
+<strong>原因１：最も外側の要素を選んでいない。</strong>HTML ツリーを上にたどり、親コンテナーのセレクターをコピーします。</li>
+        <li>
+<strong>原因２：動的なクラス名が使われている。</strong>コピーしたセレクターが更新後に使えなくなることがあります。<a href="#methods">「ルールの作成方法」</a>で特徴が不安定だと指定し、<a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> やビルダーを試します。</li>
+        <li>
+<strong>原因３：作成後にページ構造が変わった。</strong>現在の HTML と一致数を確認します。ブロックが作り直されたなら、セレクターを再コピーするかビルダーでルールを調整します。</li>
+        <li>
+<strong>原因４：別のドメイン用のルールだった。</strong>「このサイト用」か「ほかのサイト用」か確認します。</li>
+      </ul>
+      </details>
+      <details>
+      <summary>セレクターが要素を見つけない</summary>
+      <ul>
+        <li>
+<strong>セレクターを確認：</strong>開発者ツール（F12）の「要素」 / “Elements” タブを開き、Ctrl + F（Mac は Cmd + F）でセレクターを検索します。一致がなければセレクターが正しくありません。</li>
+      </ul>
+      </details>
+      <details>
+      <summary>要素を削除するとレイアウトが崩れた</summary>
+      <ul>
+        <li>
+<strong>対処：</strong>ルールを削除し、<strong>「非表示」</strong>モードで作り直します。要素の場所が残り、レイアウトが崩れにくくなります。</li>
+      </ul>
+      </details>
+      <details>
+      <summary>セレクターの一致が多すぎる</summary>
+      <p>まず件数と実際の要素を確認します。安定したクラスや属性があればセレクターに追加します。それでも不十分なら、テキスト、クラス・属性数、兄弟内の位置、周囲との関係を扱えるルールビルダーを使います。調整後、現在のページと更新後に再確認します。</p>
+      </details>
+      <details>
+      <summary>ページの HTML 構造が分からない</summary>
+      <p><a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> は複数回の読み込みを比較して安定性マップを作ります。検索で対象を見つけ、安定した特徴と周囲の要素を調べてください。</p>
+      <p>HTML が特に強く難読化されている場合、VPN 接続には異なるページが提供されている可能性があります。差し支えなければ一時的に VPN を切り、再読み込みして解析し直します。必ず改善するわけではありませんが、接続先のページ版との関係を確かめられます。</p>
+      </details>
+      <details>
+      <summary>どの方法でも解決しない</summary>
+      <p>StableHTMLFinder が見つけた安定特徴と BlockIt のビルダーを組み合わせ、対象と周囲の両方を使うルールを手動で作れます。</p>
+      <p>複数の方法を試しても動作しない、または拡張機能でエラーが出る場合は、BlockIt の<a href="../../feedback.html">お問い合わせフォーム</a>から報告してください。ページ URL、ルール、可能ならスクリーンショットを添えてください。</p>
+      </details>
+    </section>
+    <div class="image-lightbox" id="imageLightbox" hidden role="dialog" aria-modal="true" aria-label="画像ビューアー">
+      <button class="lightbox-close" type="button" aria-label="閉じる">×</button>
+      <button class="lightbox-nav lightbox-prev" type="button" aria-label="前の画像">‹</button>
+      <div class="lightbox-content">
+<img alt="">
+<div class="lightbox-caption">
+<b>
+</b>
+<span>
+</span>
+</div>
+</div>
+      <button class="lightbox-nav lightbox-next" type="button" aria-label="次の画像">›</button>
     </div>
-    <script src="../instruction.js"></script>
+    <footer class="footer">BlockIt 拡張機能ガイド</footer>
+  </main>
+  <script src="../instruction.js">
+</script>
 </body>
 </html>

@@ -62,18 +62,52 @@
   function hasPositionDependentCondition(rule) {
     if (rule.type === 'blockitbuilder') {
       const model = rule.selector;
-      return !!(model?.resultPositions?.enabled || containsSiblingPosition(model?.root || model));
+      return !!(model?.resultPositions?.enabled || containsPositionCondition(model?.root || model));
     }
-    return /:(?:nth-(?:last-)?(?:child|of-type)|first-child|last-child|only-child|matches-position|sibling-position)\b/i
-      .test(String(rule.selector || ''));
+    const selector = String(rule.selector || '');
+    if (rule.type === 'xpath') return hasPositionDependentXPath(selector);
+    return /:(?:nth-(?:last-)?(?:child|of-type)|(?:first|last|only)-(?:child|of-type)|matches-position|sibling-position|sibling-distance)\b/i
+      .test(selector) || hasAdjacentSiblingCombinator(selector);
   }
 
-  function containsSiblingPosition(node) {
+  function containsPositionCondition(node) {
     if (!node || typeof node !== 'object') return false;
-    if (node.siblingPosition?.enabled) return true;
+    if (node.resultPositions?.enabled || node.siblingPosition?.enabled || node.siblingDistance?.enabled) return true;
     return (node.relationGroups || []).some(group =>
-      (group.entries || []).some(entry => containsSiblingPosition(entry.node))
+      (group.entries || []).some(entry => containsPositionCondition(entry.node))
     );
+  }
+
+  /* `+` changes its target when the previous sibling is removed. Ignore plus
+     signs inside attribute values, quoted text, regular expressions and CSS
+     escapes; those are data rather than an adjacent-sibling combinator. */
+  function hasAdjacentSiblingCombinator(selector) {
+    let quote = '', bracketDepth = 0, inRegex = false, escaped = false;
+    for (let index = 0; index < selector.length; index++) {
+      const char = selector[index];
+      if (escaped) { escaped = false; continue; }
+      if (char === '\\') { escaped = true; continue; }
+      if (quote) {
+        if (char === quote) quote = '';
+        continue;
+      }
+      if (char === '"' || char === "'") { quote = char; continue; }
+      if (char === '/' && bracketDepth === 0) {
+        inRegex = !inRegex;
+        continue;
+      }
+      if (inRegex) continue;
+      if (char === '[') { bracketDepth++; continue; }
+      if (char === ']') { bracketDepth = Math.max(0, bracketDepth - 1); continue; }
+      if (char === '+' && bracketDepth === 0) return true;
+    }
+    return false;
+  }
+
+  function hasPositionDependentXPath(expression) {
+    const xpath = String(expression || '').replace(/^xpath:/i, '');
+    return /\b(?:position|last)\s*\(/i.test(xpath) ||
+      /\[\s*\d+(?:\.\d+)?(?:\s*(?:[+*/-]|mod|div)\s*\d+(?:\.\d+)?)*\s*\]/i.test(xpath);
   }
 
   function positionalRuleKey(originalRule, rule) {
