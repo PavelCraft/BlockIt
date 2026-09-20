@@ -229,7 +229,7 @@ function renderRelationCaption(kind) {
   const [tone, label, description] = labels[kind];
   const pill = document.createElement('span'); pill.className = `pill ${tone}`; pill.textContent = label;
   const text = document.createElement('span'); text.textContent = description;
-  caption.append(pill, text); return caption;
+  caption.append(pill, document.createTextNode(' '), text); return caption;
 }
 
 function section(title, hint = '') { const element = document.createElement('div'); element.className = 'section'; const heading = document.createElement('div'); heading.className = 'section-title'; heading.append(document.createTextNode(title)); if (hint) { const detail = document.createElement('span'); detail.textContent = hint; heading.append(detail); } element.append(heading); return element; }
@@ -241,10 +241,11 @@ function renderCount(condition, label, changed) {
   const enabled = checkbox(condition.enabled); const toggleVisual = document.createElement('i'); toggle.append(enabled, toggleVisual);
   const title = document.createElement('span'); title.textContent = label;
   const operator = select([['=', tr('ровно')], ['>=', tr('не менее')], ['<=', tr('не более')]], condition.operator); const value = textInput(condition.value);
-  value.type = 'number'; value.min = '0'; value.disabled = !condition.enabled; operator.disabled = !condition.enabled;
-  enabled.addEventListener('change', () => { condition.enabled = enabled.checked; changed(); });
+  value.type = 'number'; value.min = '0';
+  const refresh = () => { value.disabled = operator.disabled = !enabled.checked; row.classList.toggle('off', !enabled.checked); };
+  enabled.addEventListener('change', () => { condition.enabled = enabled.checked; refresh(); changed(); });
   operator.addEventListener('change', () => { condition.operator = operator.value; changed(); }); value.addEventListener('input', () => { condition.value = value.value; changed(); });
-  row.append(toggle, title, operator, value); return row;
+  refresh(); row.append(toggle, title, operator, value); return row;
 }
 
 function renderPosition(condition) {
@@ -299,8 +300,20 @@ function allRelations(node) { return (node.relationGroups || []).flatMap(group =
 function relationGroup(node) { node.relationGroups ||= []; return node.relationGroups[0] ||= { mode: 'all', entries: [] }; }
 function addRelation(node, relation) { relationGroup(node).entries.push(relation); }
 function deleteRelation(node, relation) { for (const group of node.relationGroups || []) { const index = group.entries?.indexOf(relation) ?? -1; if (index >= 0) group.entries.splice(index, 1); } }
-function newRelation(kind, element = null) {
+function siblingPlacement(source, element) {
+  if (!source?.parentElement || source.parentElement !== element?.parentElement) return { direction: 'any', gap: 0 };
+  const siblings = [...source.parentElement.children], sourceIndex = siblings.indexOf(source), elementIndex = siblings.indexOf(element);
+  if (sourceIndex < 0 || elementIndex < 0 || sourceIndex === elementIndex) return { direction: 'any', gap: 0 };
+  return { direction: elementIndex < sourceIndex ? 'previous' : 'next', gap: Math.max(0, Math.abs(elementIndex - sourceIndex) - 1) };
+}
+
+function newRelation(kind, element = null, ownerSource = null) {
   const relation = { kind, allowAbsent: false, node: element ? nodeFromElement(element) : emptyNode() };
+  if (kind === 'sibling') {
+    const placement = siblingPlacement(ownerSource, element);
+    relation.siblingDirection = placement.direction;
+    relation.siblingGap = placement.direction === 'any' ? null : placement.gap;
+  }
   // A selected related element is already completely described by its header.
   // Keep its full editable form available, but fold it initially so the tree
   // stays readable like the approved layout.  A manually created relation is
@@ -374,14 +387,25 @@ function renderRelationKinds(container, owner, source, allowedKinds = null) {
 function renderCandidateChoices(container, owner, source, kind, allowedKinds = null) {
   container.innerHTML = '';
   const intro = document.createElement('p'); intro.className = 'picker-title'; intro.textContent = tr('{relation} — выберите вариант:', { relation: relationName(kind) });
-  const candidates = candidatesFor(source, kind).slice(0, 5);
+  const candidates = candidatesFor(source, kind);
   const choices = document.createElement('div'); choices.className = 'candidate-choices';
-  candidates.forEach(candidate => {
+  const addCandidate = (candidate, destination = choices) => {
     const button = document.createElement('button'); button.type = 'button'; button.className = 'candidate-choice'; button.textContent = elementPreview(candidate);
     button.title = normalizeText(candidate.outerHTML);
-    button.addEventListener('click', () => { addRelation(owner, newRelation(kind, candidate)); scheduleRender(); }); choices.append(button);
-  });
-  const manual = smallButton(tr('Добавить вручную')); manual.addEventListener('click', () => { addRelation(owner, newRelation(kind)); scheduleRender(); });
+    button.addEventListener('click', () => { addRelation(owner, newRelation(kind, candidate, source)); scheduleRender(); }); destination.append(button);
+  };
+  if (kind === 'sibling' && source?.parentElement) {
+    const sourceIndex = [...source.parentElement.children].indexOf(source);
+    const before = candidates.filter(item => [...source.parentElement.children].indexOf(item) < sourceIndex).slice(-5);
+    const after = candidates.filter(item => [...source.parentElement.children].indexOf(item) > sourceIndex).slice(0, 5);
+    for (const [title, items] of [[tr('Перед выбранным элементом'), before], [tr('После выбранного элемента'), after]]) {
+      if (!items.length) continue;
+      const group = document.createElement('section'); group.className = 'candidate-direction-group';
+      const heading = document.createElement('strong'); heading.textContent = title; group.append(heading);
+      items.forEach(item => addCandidate(item, group)); choices.append(group);
+    }
+  } else candidates.slice(0, 5).forEach(candidate => addCandidate(candidate));
+  const manual = smallButton(tr('Добавить вручную')); manual.addEventListener('click', () => { addRelation(owner, newRelation(kind, null, source)); scheduleRender(); });
   const back = smallButton(`← ${tr('Назад')}`); back.addEventListener('click', () => renderRelationKinds(container, owner, source, allowedKinds));
   if (!candidates.length) choices.append(note(tr('В этом фрагменте HTML нет подходящих вариантов. Можно добавить элемент вручную.')));
   container.append(intro, choices, manual, back);
@@ -390,8 +414,15 @@ function renderCandidateChoices(container, owner, source, kind, allowedKinds = n
 function renderRelation(owner, relation, source) {
   const entry = document.createElement('div'); entry.className = `node relation-entry relation-${relation.kind}${owner === model?.root ? ' root-relation' : ''}`;
   const caption = renderRelationCaption(relation.kind);
+  if (relation.kind === 'sibling') caption.append(document.createTextNode(' '), renderSiblingRelationControl(relation));
   const absentLabel = document.createElement('label'); absentLabel.className = 'absent-toggle'; const absent = checkbox(relation.allowAbsent); absentLabel.append(absent, document.createTextNode(` ${tr('Допускается отсутствие')}`));
   const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'icon-btn danger'; remove.textContent = '×'; remove.title = tr('Удалить элемент'); absent.addEventListener('change', () => { relation.allowAbsent = absent.checked; scheduleUpdate(); }); remove.addEventListener('click', () => { deleteRelation(owner, relation); scheduleRender(); });
+  if (relation.kind === 'sibling') {
+    const hasDistance = relation.siblingGap !== null && relation.siblingGap !== '' && Number.isInteger(Number(relation.siblingGap));
+    const gap = hasDistance ? Math.max(0, Number(relation.siblingGap)) : 0;
+    entry.classList.toggle('has-sibling-gap', gap > 0);
+    if (gap > 0) entry.append(renderSiblingGapMarker(relation));
+  }
   entry.append(caption);
 
   const nested = document.createElement('div'); nested.className = 'nested';
@@ -407,6 +438,83 @@ function renderRelation(owner, relation, source) {
   const lowerTree = renderLowerTree(relation.node, source, relationName(relation.kind));
   if (lowerTree) entry.append(lowerTree);
   return entry;
+}
+
+function siblingGapLabel(relation) {
+  const hasDistance = relation.siblingGap !== null && relation.siblingGap !== '' && Number.isInteger(Number(relation.siblingGap)) && Number(relation.siblingGap) >= 0;
+  if (!hasDistance) {
+    const side = relation.siblingDirection === 'previous' ? tr('перед целью') : relation.siblingDirection === 'next' ? tr('после цели') : tr('с любой стороны');
+    return `${side} · ${tr('расстояние не учитывать')}`;
+  }
+  const gap = Number(relation.siblingGap);
+  const side = relation.siblingDirection === 'previous' ? tr('перед целью') : relation.siblingDirection === 'next' ? tr('после цели') : tr('с любой стороны');
+  return `${side} · ${gap === 0 ? tr('непосредственно рядом') : elementsBetweenLabel(gap)}`;
+}
+
+function elementsBetweenLabel(count) {
+  if (count === 1) return tr('1 элемент между ними');
+  if (globalThis.BlockItUI18n?.locale === 'ru' && count % 10 >= 2 && count % 10 <= 4 && (count % 100 < 12 || count % 100 > 14)) {
+    return tr('{count} элемента между ними', { count });
+  }
+  return tr('{count} элементов между ними', { count });
+}
+
+function renderSiblingRelationControl(relation) {
+  relation.siblingDirection ||= 'any';
+  const hasStoredDistance = relation.siblingGap !== null && relation.siblingGap !== '' && Number.isInteger(Number(relation.siblingGap)) && Number(relation.siblingGap) >= 0;
+  relation.siblingGap = hasStoredDistance ? Number(relation.siblingGap) : null;
+  const details = document.createElement('details'); details.className = 'sibling-relation-control';
+  const summary = document.createElement('summary'); summary.textContent = siblingGapLabel(relation);
+  const fields = document.createElement('div'); fields.className = 'sibling-relation-fields';
+  const directionLabel = document.createElement('label'); directionLabel.append(document.createTextNode(tr('Расположение')), select([
+    ['any', tr('с любой стороны')], ['previous', tr('перед выбранным элементом')], ['next', tr('после выбранного элемента')]
+  ], relation.siblingDirection));
+  const gapLabel = document.createElement('label');
+  const gap = textInput(relation.siblingGap ?? ''); gap.type = 'number'; gap.min = '0'; gap.step = '1'; gap.placeholder = tr('не учитывать');
+  gapLabel.append(document.createTextNode(tr('Элементов между ними')), gap);
+  const hint = document.createElement('small'); hint.textContent = tr('0 — непосредственно рядом. Расстояние считается по странице до применения правил BlockIt.');
+  const direction = directionLabel.querySelector('select');
+  const updatePresentation = () => {
+    const entry = details.closest('.relation-entry');
+    const hasSkippedElements = relation.siblingGap !== null && relation.siblingGap > 0;
+    let marker = entry?.querySelector('.sibling-gap-marker');
+    if (entry && hasSkippedElements && !marker) {
+      marker = renderSiblingGapMarker(relation);
+      entry.insertBefore(marker, entry.querySelector('.relation'));
+    } else if (!hasSkippedElements && marker) {
+      marker.remove();
+      marker = null;
+    }
+    entry?.classList.toggle('has-sibling-gap', hasSkippedElements);
+    summary.textContent = siblingGapLabel(relation);
+    if (marker) marker.textContent = siblingGapMarkerLabel(relation);
+    scheduleUpdate();
+  };
+  direction.addEventListener('change', () => {
+    relation.siblingDirection = direction.value;
+    if (relation.siblingDirection !== 'any' && relation.siblingGap === null) {
+      relation.siblingGap = 0;
+      gap.value = '0';
+    }
+    updatePresentation();
+  });
+  gap.addEventListener('input', () => {
+    const value = gap.value.trim();
+    relation.siblingGap = value === '' ? null : Math.max(0, Number.parseInt(value, 10) || 0);
+    updatePresentation();
+  });
+  fields.append(directionLabel, gapLabel, hint); details.append(summary, fields); return details;
+}
+
+function renderSiblingGapMarker(relation) {
+  const marker = document.createElement('div'); marker.className = 'sibling-gap-marker';
+  marker.textContent = siblingGapMarkerLabel(relation);
+  return marker;
+}
+
+function siblingGapMarkerLabel(relation) {
+  const gap = Math.max(0, Number(relation.siblingGap) || 0);
+  return gap === 0 ? tr('непосредственно рядом') : `⋯ ${elementsBetweenLabel(gap)}`;
 }
 
 function parseHtmlElement(html) { const documentFromHtml = new DOMParser().parseFromString(String(html || ''), 'text/html'); return documentFromHtml.body.firstElementChild; }
@@ -464,7 +572,13 @@ function selectorLikeRule(node) {
   for (const relation of relations.filter(item => item.kind === 'child' || item.kind === 'descendant')) {
     value += `:has(${relation.kind === 'child' ? '> ' : ''}${selectorLikeRule(relation.node)})`;
   }
-  for (const relation of relations.filter(item => item.kind === 'sibling')) value += `:has(~ ${selectorLikeRule(relation.node)})`;
+  for (const relation of relations.filter(item => item.kind === 'sibling')) {
+    const sibling = selectorLikeRule(relation.node);
+    const hasDistance = relation.siblingGap !== null && relation.siblingGap !== '' && Number.isInteger(Number(relation.siblingGap)) && Number(relation.siblingGap) >= 0;
+    const gap = hasDistance ? Number(relation.siblingGap) : 0;
+    const direction = relation.siblingDirection === 'any' ? 'either' : relation.siblingDirection;
+    value += hasDistance ? `:sibling-distance(${direction},${gap + 1},${sibling})` : `:near(${sibling})`;
+  }
   return value;
 }
 
@@ -473,6 +587,15 @@ function stringModeLabel(mode) { return tr(({ exact: 'равно', prefix: 'на
 function nameModeLabel(mode) { return tr(({ exact: '', prefix: 'Имя начинается с', regex: 'Имя соответствует регулярному выражению' })[mode] || mode); }
 function relationRole(kind) { return tr(({ child: 'Дочерний элемент', descendant: 'Потомок', 'ancestor-nearest': 'Родитель', 'ancestor-any': 'Предок', sibling: 'Сиблинг' })[kind] || 'Связанный элемент'); }
 function relationDescription(kind) { return tr(({ child: 'непосредственно внутри родительского элемента', descendant: 'внутри родительского элемента на любом уровне', 'ancestor-nearest': 'непосредственный родитель', 'ancestor-any': 'предок на любом уровне выше', sibling: 'на одном уровне с исходным элементом' })[kind] || kind); }
+
+function siblingDescription(relation) {
+  const hasDistance = relation.siblingGap !== null && relation.siblingGap !== '' && Number.isInteger(Number(relation.siblingGap)) && Number(relation.siblingGap) >= 0;
+  if (!hasDistance && relation.siblingDirection === 'any') return tr('на одном уровне с исходным элементом, с любой стороны и на любом расстоянии');
+  const direction = relation.siblingDirection === 'previous' ? tr('перед исходным элементом') : relation.siblingDirection === 'next' ? tr('после исходного элемента') : tr('с любой стороны');
+  if (!hasDistance) return `${direction}, ${tr('расстояние не учитывать')}`;
+  const gap = Number(relation.siblingGap);
+  return gap === 0 ? `${direction}, ${tr('непосредственно рядом')}` : `${direction}, ${elementsBetweenLabel(gap)}`;
+}
 
 function structuredRuleDescription(ruleModel) {
   const fragment = document.createDocumentFragment();
@@ -485,7 +608,7 @@ function structuredRuleDescription(ruleModel) {
     const list = document.createElement('ul');
     const item = (label, value) => { const li = document.createElement('li'); const name = document.createElement('span'); name.textContent = `${label}: `; const detail = document.createElement('b'); detail.textContent = value; li.append(name, detail); list.append(li); };
     if (relation) {
-    item(tr('Связь'), relationDescription(relation.kind));
+    item(tr('Связь'), relation.kind === 'sibling' ? siblingDescription(relation) : relationDescription(relation.kind));
     if (relation.allowAbsent) item(tr('Отсутствие'), tr('допускается'));
     }
     if (node.attributeCount?.enabled) item(tr('Количество атрибутов'), `${comparisonLabel(node.attributeCount.operator)} ${node.attributeCount.value}`);

@@ -292,6 +292,61 @@ Website: {domain} · Regeln: {count}
 Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.
 Der Kontext konnte nicht geladen werden.
 Bei der Prüfung der Regel ist ein Fehler aufgetreten.
+Optional. Bis zu 5 Bilder, höchstens 30 MiB pro Datei und 70 MiB insgesamt.
+PNG, JPEG oder WebP
+0 KiB von 70 MiB
+Geben Sie eine E-Mail-Adresse, einen Telegram-Benutzernamen oder einen Profillink ein. Die Kontaktart wird automatisch erkannt.
+you@example.com oder @username
+E-Mail oder Telegram
+Die Anhänge überschreiten 15 MiB: Die Meldung wird nur über Telegram ohne E-Mail-Kopie zugestellt.
+Mir ist bewusst, dass technische Angaben, die Seitenadresse und Screenshots vertrauliche Daten enthalten können. Ich stimme der Übermittlung der ausgewählten Materialien an den Entwickler gemäß der
+Datenschutzerklärung
+In Telegram fortfahren
+KiB
+MiB
+{size} von 70 MiB
+„{name}“ hat ein nicht unterstütztes Format. Verwenden Sie PNG, JPEG oder WebP.
+„{name}“ überschreitet die Grenze von 30 MiB pro Datei.
+Die Anhänge dürfen zusammen 70 MiB nicht überschreiten.
+Nicht erkannt
+Datei „{name}“ konnte nicht gelesen werden.
+Technische Angaben und Anhänge überschreiten die zulässige Größe.
+ Versuchen Sie es in {minutes} Min. erneut.
+ Versuchen Sie es nach {time} erneut.
+Der Server hat die Formulardaten abgelehnt. Prüfen Sie die Eingaben.
+Der Server erlaubt Meldungen aus dieser Erweiterungsversion noch nicht.
+Der Server hat die Anhänge wegen ihrer Größe abgelehnt.
+Zu viele Einsendungen.{retry}
+Der Feedbackdienst ist vorübergehend nicht verfügbar. Versuchen Sie es später erneut.
+Der Server hat mit Status {status} geantwortet.
+Geben Sie eine gültige E-Mail-Adresse, @username oder einen Link wie https://t.me/username ein.
+Geben Sie einen Kontakt für die Antwort an.
+Prüfen Sie Ihre Kontaktdaten.
+Bestätigen Sie Ihre Zustimmung zur Datenschutzerklärung.
+Anhänge werden vorbereitet…
+Problemtyp: {topic}. Keine weitere Beschreibung angegeben.
+Die Meldung wurde an Telegram gesendet. Wegen der Größe der Anhänge wurde keine E-Mail-Kopie erstellt.
+Die Meldung wurde an Telegram gesendet, die E-Mail-Kopie konnte jedoch nicht zugestellt werden.
+Die Meldung und die ausgewählten Materialien werden an den BlockIt-Entwickler gesendet.
+Vor dem ausgewählten Element
+Nach dem ausgewählten Element
+auf beiden Seiten · Abstand ignorieren
+vor dem Ziel
+nach dem Ziel
+direkt daneben
+1 Element dazwischen
+{count} Elemente dazwischen
+Position
+auf beiden Seiten
+vor dem ausgewählten Element
+nach dem ausgewählten Element
+Elemente dazwischen
+0 bedeutet direkt daneben. Der Abstand wird auf der Seite vor dem Anwenden der BlockIt-Regeln gemessen.
+auf derselben Ebene wie das Ausgangselement, auf beiden Seiten und in beliebigem Abstand
+vor dem Ausgangselement
+nach dem Ausgangselement
+{count} Elemente dazwischen
+Abstand ignorieren
 `.trim().split('\n'),
   es: `
 Comentarios
@@ -584,6 +639,61 @@ Sitio: {domain} · Reglas: {count}
 No se pudo conectar con el servidor. Compruebe la conexión e inténtelo de nuevo.
 No se pudo cargar el contexto.
 Se produjo un error al comprobar la regla.
+Opcional. Hasta 5 imágenes, 30 MiB por archivo y 70 MiB en total.
+PNG, JPEG o WebP
+0 KiB de 70 MiB
+Introduzca un correo electrónico, un nombre de usuario de Telegram o un enlace al perfil. El método de contacto se detecta automáticamente.
+you@example.com o @username
+Correo o Telegram
+Los archivos adjuntos superan 15 MiB: el informe se enviará por Telegram sin copia por correo.
+Entiendo que los datos técnicos, la dirección de la página y las capturas pueden contener información confidencial, y acepto enviar el material seleccionado al desarrollador conforme a la
+Política de privacidad
+Continuar en Telegram
+KiB
+MiB
+{size} de 70 MiB
+«{name}» tiene un formato no admitido. Use PNG, JPEG o WebP.
+«{name}» supera el límite de 30 MiB por archivo.
+El tamaño total de los adjuntos no debe superar 70 MiB.
+No reconocido
+No se pudo leer «{name}».
+Los datos técnicos y los adjuntos superan el tamaño permitido.
+ Vuelva a intentarlo en {minutes} min.
+ Vuelva a intentarlo después de las {time}.
+El servidor rechazó los datos del formulario. Revise los campos.
+El servidor aún no permite informes desde esta versión de la extensión.
+El servidor rechazó los adjuntos por su tamaño.
+Demasiados envíos.{retry}
+El servicio de comentarios no está disponible temporalmente. Inténtelo más tarde.
+El servidor respondió con el estado {status}.
+Introduzca un correo válido, @username o un enlace como https://t.me/username.
+Indique un contacto para recibir la respuesta.
+Revise sus datos de contacto.
+Confirme que acepta la Política de privacidad.
+Preparando adjuntos…
+Tipo de problema: {topic}. No se proporcionó una descripción adicional.
+Informe enviado a Telegram. No se creó una copia por correo debido al tamaño de los adjuntos.
+Informe enviado a Telegram, pero no se pudo entregar la copia por correo.
+El mensaje y los materiales seleccionados se enviarán al desarrollador de BlockIt.
+Antes del elemento seleccionado
+Después del elemento seleccionado
+a cualquier lado · ignorar la distancia
+antes del objetivo
+después del objetivo
+inmediatamente adyacente
+1 elemento entre ambos
+{count} elementos entre ambos
+Posición
+a cualquier lado
+antes del elemento seleccionado
+después del elemento seleccionado
+Elementos entre ambos
+0 significa inmediatamente adyacente. La distancia se mide en la página antes de aplicar las reglas de BlockIt.
+al mismo nivel que el elemento de origen, a cualquier lado y a cualquier distancia
+antes del elemento de origen
+después del elemento de origen
+{count} elementos entre ambos
+ignorar la distancia
 `.trim().split('\n'),
   fr: `
 Commentaires
@@ -876,6 +986,61 @@ Site : {domain} · Règles : {count}
 Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.
 Impossible de charger le contexte.
 Une erreur s’est produite lors de la vérification de la règle.
+Facultatif. Jusqu’à 5 images, 30 Mio par fichier et 70 Mio au total.
+PNG, JPEG ou WebP
+0 Kio sur 70 Mio
+Saisissez une adresse e-mail, un nom d’utilisateur Telegram ou un lien vers le profil. Le moyen de contact est détecté automatiquement.
+you@example.com ou @username
+E-mail ou Telegram
+Les pièces jointes dépassent 15 Mio : le signalement sera transmis par Telegram sans copie par e-mail.
+Je comprends que les données techniques, l’adresse de la page et les captures peuvent contenir des informations confidentielles, et j’accepte d’envoyer les éléments sélectionnés au développeur conformément à la
+Politique de confidentialité
+Continuer dans Telegram
+Kio
+Mio
+{size} sur 70 Mio
+« {name} » utilise un format non pris en charge. Utilisez PNG, JPEG ou WebP.
+« {name} » dépasse la limite de 30 Mio par fichier.
+La taille totale des pièces jointes ne doit pas dépasser 70 Mio.
+Non reconnu
+Impossible de lire « {name} ».
+Les données techniques et les pièces jointes dépassent la taille autorisée.
+ Réessayez dans {minutes} min.
+ Réessayez après {time}.
+Le serveur a refusé les données du formulaire. Vérifiez les champs.
+Le serveur n’autorise pas encore les signalements de cette version de l’extension.
+Le serveur a refusé les pièces jointes en raison de leur taille.
+Trop d’envois.{retry}
+Le service de retour est temporairement indisponible. Réessayez plus tard.
+Le serveur a répondu avec le code {status}.
+Saisissez un e-mail valide, @username ou un lien comme https://t.me/username.
+Indiquez un contact pour la réponse.
+Vérifiez vos coordonnées.
+Confirmez votre accord avec la Politique de confidentialité.
+Préparation des pièces jointes…
+Type de problème : {topic}. Aucune autre description fournie.
+Signalement envoyé à Telegram. Aucune copie par e-mail n’a été créée en raison de la taille des pièces jointes.
+Signalement envoyé à Telegram, mais la copie par e-mail n’a pas pu être livrée.
+Le message et les éléments sélectionnés seront envoyés au développeur de BlockIt.
+Avant l’élément sélectionné
+Après l’élément sélectionné
+d’un côté ou de l’autre · ignorer la distance
+avant la cible
+après la cible
+juste à côté
+1 élément entre les deux
+{count} éléments entre les deux
+Position
+d’un côté ou de l’autre
+avant l’élément sélectionné
+après l’élément sélectionné
+Éléments entre les deux
+0 signifie juste à côté. La distance est mesurée sur la page avant l’application des règles BlockIt.
+au même niveau que l’élément source, d’un côté ou de l’autre et à n’importe quelle distance
+avant l’élément source
+après l’élément source
+{count} éléments entre les deux
+ignorer la distance
 `.trim().split('\n'),
   pt: `
 Contacto
@@ -1168,6 +1333,61 @@ Site: {domain} · Regras: {count}
 Não foi possível contactar o servidor. Verifique a ligação e tente novamente.
 Não foi possível carregar o contexto.
 Ocorreu um erro ao verificar a regra.
+Opcional. Até 5 imagens, 30 MiB por ficheiro e 70 MiB no total.
+PNG, JPEG ou WebP
+0 KiB de 70 MiB
+Introduza um email, nome de utilizador do Telegram ou ligação para o perfil. O meio de contacto é detetado automaticamente.
+you@example.com ou @username
+Email ou Telegram
+Os anexos excedem 15 MiB: o pedido será entregue pelo Telegram sem cópia por email.
+Compreendo que os dados técnicos, o endereço da página e as capturas podem conter informações confidenciais e autorizo o envio dos materiais selecionados ao programador nos termos da
+Política de Privacidade
+Continuar no Telegram
+KiB
+MiB
+{size} de 70 MiB
+«{name}» tem um formato não suportado. Utilize PNG, JPEG ou WebP.
+«{name}» excede o limite de 30 MiB por ficheiro.
+O tamanho total dos anexos não pode exceder 70 MiB.
+Não reconhecido
+Não foi possível ler «{name}».
+Os dados técnicos e os anexos excedem o tamanho permitido.
+ Tente novamente dentro de {minutes} min.
+ Tente novamente depois das {time}.
+O servidor recusou os dados do formulário. Verifique os campos.
+O servidor ainda não permite pedidos desta versão da extensão.
+O servidor recusou os anexos devido ao tamanho.
+Demasiados envios.{retry}
+O serviço de feedback está temporariamente indisponível. Tente mais tarde.
+O servidor respondeu com o estado {status}.
+Introduza um email válido, @username ou uma ligação como https://t.me/username.
+Indique um contacto para resposta.
+Verifique os dados de contacto.
+Confirme a aceitação da Política de Privacidade.
+A preparar anexos…
+Tipo de problema: {topic}. Não foi fornecida uma descrição adicional.
+Pedido enviado para o Telegram. Não foi criada uma cópia por email devido ao tamanho dos anexos.
+Pedido enviado para o Telegram, mas não foi possível entregar a cópia por email.
+A mensagem e os materiais selecionados serão enviados ao programador do BlockIt.
+Antes do elemento selecionado
+Depois do elemento selecionado
+de qualquer lado · ignorar a distância
+antes do alvo
+depois do alvo
+imediatamente ao lado
+1 elemento entre eles
+{count} elementos entre eles
+Posição
+de qualquer lado
+antes do elemento selecionado
+depois do elemento selecionado
+Elementos entre eles
+0 significa imediatamente ao lado. A distância é medida na página antes de aplicar as regras do BlockIt.
+no mesmo nível do elemento de origem, de qualquer lado e a qualquer distância
+antes do elemento de origem
+depois do elemento de origem
+{count} elementos entre eles
+ignorar a distância
 `.trim().split('\n'),
   ja: `
 フィードバック
@@ -1460,6 +1680,61 @@ HTML 要素が見つかりません。タグから始まるマークアップを
 サーバーに接続できませんでした。接続を確認して再試行してください。
 情報を読み込めませんでした。
 ルールの確認中にエラーが発生しました。
+任意。画像は最大5枚、1ファイル30 MiB、合計70 MiBまで。
+PNG、JPEG、WebP
+70 MiB 中 0 KiB
+メールアドレス、Telegram のユーザー名、またはプロフィールへのリンクを入力してください。連絡方法は自動判定されます。
+you@example.com または @username
+メールまたは Telegram
+添付ファイルが15 MiBを超えるため、メールのコピーなしでTelegramに送信されます。
+技術情報、ページのURL、スクリーンショットに機密情報が含まれる可能性を理解し、選択した資料を開発者に送信することに同意します。詳細は
+プライバシーポリシー
+Telegram で続ける
+KiB
+MiB
+70 MiB 中 {size}
+「{name}」は対応していない形式です。PNG、JPEG、WebPを使用してください。
+「{name}」は1ファイルあたり30 MiBの上限を超えています。
+添付ファイルの合計サイズは70 MiB以下にしてください。
+認識できません
+ファイル「{name}」を読み取れませんでした。
+技術情報と添付ファイルがサイズ制限を超えています。
+ {minutes}分後に再試行してください。
+ {time}以降に再試行してください。
+サーバーがフォームのデータを拒否しました。入力内容を確認してください。
+サーバーはこの拡張機能のビルドからの報告をまだ許可していません。
+添付ファイルが大きすぎるため、サーバーに拒否されました。
+送信回数が多すぎます。{retry}
+フィードバックサービスは一時的に利用できません。後でもう一度お試しください。
+サーバーはステータス{status}を返しました。
+有効なメールアドレス、@username、または https://t.me/username 形式のリンクを入力してください。
+返信先を入力してください。
+連絡先を確認してください。
+プライバシーポリシーへの同意を確認してください。
+添付ファイルを準備中…
+問題の種類: {topic}。追加の説明はありません。
+Telegramに送信しました。添付ファイルが大きいため、メールのコピーは作成されませんでした。
+Telegramに送信しましたが、メールのコピーは配信できませんでした。
+メッセージと選択した資料はBlockItの開発者に送信されます。
+選択した要素の前
+選択した要素の後
+どちら側でも可・距離を考慮しない
+対象の前
+対象の後
+すぐ隣
+間に1個の要素
+間に{count}個の要素
+位置
+どちら側でも可
+選択した要素の前
+選択した要素の後
+間にある要素の数
+0はすぐ隣を意味します。距離はBlockItルールが適用される前のページで測定されます。
+元の要素と同じ階層で、どちら側でも任意の距離
+元の要素の前
+元の要素の後
+間に{count}個の要素
+距離を考慮しない
 `.trim().split('\n'),
   zh_CN: `
 反馈
@@ -1752,5 +2027,60 @@ MB
 无法连接服务器。请检查网络连接后重试。
 无法加载上下文。
 检查规则时发生错误。
+可选。最多5张图片，单个文件不超过30 MiB，总计不超过70 MiB。
+PNG、JPEG 或 WebP
+已用 0 KiB，共 70 MiB
+请输入电子邮箱、Telegram 用户名或个人资料链接。系统会自动识别联系方式。
+you@example.com 或 @username
+邮箱或 Telegram
+附件超过15 MiB：报告将通过Telegram发送，不会发送邮件副本。
+我理解技术信息、页面网址和截图可能包含机密数据，并同意将所选材料发送给开发者，具体遵照
+隐私政策
+在 Telegram 中继续
+KiB
+MiB
+已用 {size}，共 70 MiB
+“{name}”的格式不受支持。请使用PNG、JPEG或WebP。
+“{name}”超过单文件30 MiB的限制。
+附件总大小不得超过70 MiB。
+无法识别
+无法读取文件“{name}”。
+技术信息和附件超过大小限制。
+ 请在{minutes}分钟后重试。
+ 请在{time}后重试。
+服务器拒绝了表单数据。请检查填写内容。
+服务器尚未允许此扩展版本提交报告。
+服务器因附件过大而拒绝接收。
+提交次数过多。{retry}
+反馈服务暂时不可用，请稍后重试。
+服务器返回状态码{status}。
+请输入有效的邮箱、@username或 https://t.me/username 格式的链接。
+请填写回复联系方式。
+请检查联系方式。
+请确认同意隐私政策。
+正在准备附件…
+问题类型：{topic}。未提供更多说明。
+报告已发送至Telegram。由于附件较大，未创建邮件副本。
+报告已发送至Telegram，但邮件副本未能送达。
+消息和所选材料将发送给BlockIt开发者。
+在所选元素之前
+在所选元素之后
+任一侧 · 忽略距离
+在目标之前
+在目标之后
+紧邻
+中间有1个元素
+中间有{count}个元素
+位置
+任一侧
+在所选元素之前
+在所选元素之后
+中间的元素数
+0表示紧邻。距离按BlockIt规则应用前的页面计算。
+与源元素同级，位于任一侧且距离不限
+在源元素之前
+在源元素之后
+中间有{count}个元素
+忽略距离
 `.trim().split('\n'),
 };

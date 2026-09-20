@@ -5,7 +5,7 @@
     'attr-name', 'attr', 'text', 'own-text', 'html', 'class-name', 'attrs',
     'within', 'near', 'children', 'accessible', 'visible', 'size', 'style',
     'property', 'in-frame', 'in-shadow', 'frame-has', 'has-frame',
-    'class-count', 'attribute-count', 'attr-count', 'matches-position', 'sibling-position',
+    'class-count', 'attribute-count', 'attr-count', 'matches-position', 'sibling-position', 'sibling-distance',
     // Text conditions emitted by the Rule Builder.  `:text(...)` and
     // `:own-text(...)` mean exact equality; the suffixed forms correspond to
     // the other modes offered in its text-condition controls.
@@ -226,6 +226,23 @@
     if (filter.name === 'class-count') return compareCount(element.classList.length, value);
     if (filter.name === 'attribute-count' || filter.name === 'attr-count') return compareCount(element.attributes.length, value);
     if (filter.name === 'sibling-position') return parsePositionList(value).includes([...(element.parentElement?.children || [])].indexOf(element) + 1);
+    if (filter.name === 'sibling-distance') {
+      const [directionValue, distanceValue, siblingSelector] = splitArgs(value);
+      const direction = String(directionValue || '').trim().toLowerCase();
+      const distance = Number(distanceValue);
+      if (!['previous', 'next', 'either'].includes(direction) || !Number.isInteger(distance) || distance < 1 || !siblingSelector) throw new Error('Expected sibling-distance(previous|next|either, positive integer, selector)');
+      const originalSiblingAt = globalThis.__blockItOriginalSiblingAt;
+      const directions = direction === 'either' ? ['previous', 'next'] : [direction];
+      return directions.some(itemDirection => {
+        let sibling;
+        if (typeof originalSiblingAt === 'function') sibling = originalSiblingAt(element, itemDirection, distance);
+        else {
+          sibling = element;
+          for (let step = 0; step < distance && sibling; step++) sibling = itemDirection === 'previous' ? sibling.previousElementSibling : sibling.nextElementSibling;
+        }
+        return Boolean(sibling && matchesSelector(sibling, siblingSelector));
+      });
+    }
     if (filter.name === 'matches-position') return true;
     if (filter.name === 'text') return textMatches(textOf(element, false), value);
     if (filter.name === 'own-text') return textMatches(textOf(element, true), value);

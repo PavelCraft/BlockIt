@@ -386,9 +386,11 @@
 <strong>Text:</strong> the element’s own text or all text inside it; exact match, prefix, suffix, substring, or regular expression.</li>
 <li>
 <strong>Sibling position:</strong> the element’s position among children of the same parent.</li>
+<li>
+<strong>Distance to a sibling:</strong> for a related sibling, specify how many elements are between it and the target; <code>0</code> means an immediately adjacent sibling.</li>
 </ul>
 <h4>Related elements</h4>
-<p>You can add a direct parent or any ancestor to the target and its ancestors. The target can also have a child, descendant, or sibling; siblings can have descendants of their own. Related elements have an “May be absent” switch.</p>
+<p>You can add a direct parent or any ancestor to the target and its ancestors. The target can also have a child, descendant, or sibling; siblings can have descendants of their own. The distance to a sibling can be taken into account when needed. Related elements have an “May be absent” switch.</p>
 <p>
 <strong>Sibling position</strong> is an element’s place among children of one parent. <strong>Position in rule results</strong> is its place among all elements found by the complete rule. These are different conditions.</p>
 <h4>Preview and testing</h4>

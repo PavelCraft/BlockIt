@@ -51,14 +51,14 @@
           <div class="section-number">2</div>
           <div class="section-content">
             <h2>Скриншоты</h2>
-            <p class="hint">Сделайте снимки самостоятельно и прикрепите их здесь. До 5 изображений, не более 10 МБ суммарно.</p>
+            <p class="hint">Необязательно. До 5 изображений, не более 30 МиБ на один файл и 70 МиБ суммарно.</p>
             <label class="upload-zone" for="screenshots">
-              <input id="screenshots" type="file" accept="image/*" multiple>
+              <input id="screenshots" type="file" accept="image/png,image/jpeg,image/webp" multiple>
               <span class="upload-icon">＋</span>
               <strong>Выбрать изображения</strong>
-              <small>PNG, JPEG, WebP и другие форматы изображений</small>
+              <small>PNG, JPEG или WebP</small>
             </label>
-            <div class="upload-summary"><span id="fileCount">Файлы не выбраны</span><span id="fileSize">0 из 10 МБ</span></div>
+            <div class="upload-summary"><span id="fileCount">Файлы не выбраны</span><span id="fileSize">0 КиБ из 70 МиБ</span></div>
             <div id="attachmentList" class="attachments"></div>
             <div id="fileError" class="message error" role="alert" hidden></div>
           </div>
@@ -68,11 +68,15 @@
           <div class="section-number">3</div>
           <div class="section-content">
             <h2>Контакт для ответа</h2>
-            <p class="hint">Можно оставить адрес, если вы хотите получить уточняющий вопрос или сообщение об исправлении.</p>
-            <label class="field">
-              <span>Email <em>необязательно</em></span>
-              <input id="contactEmail" type="email" maxlength="254" placeholder="you@example.com">
+            <p class="hint">Укажите email, имя пользователя Telegram или ссылку на профиль. Способ связи определится автоматически.</p>
+            <label class="field contact-field">
+              <span>Контакт для ответа</span>
+              <span class="contact-control">
+                <input id="contactValue" type="text" maxlength="254" placeholder="you@example.com или @username" required>
+                <b id="contactType" class="contact-type neutral" aria-live="polite">Email или Telegram</b>
+              </span>
             </label>
+            <div id="contactError" class="message error" role="alert" hidden></div>
           </div>
         </section>
       </div>
@@ -95,10 +99,16 @@
         </section>
 
         <section class="card submit-card">
+          <p id="deliveryNotice" class="delivery-notice" hidden>Объём вложений превышает 15 МиБ: сообщение будет доставлено через Telegram без почтовой копии.</p>
+          <label class="privacy-consent">
+            <input id="privacyConsent" type="checkbox" required>
+            <span>Я понимаю, что технические сведения, адрес страницы и скриншоты могут содержать конфиденциальные данные, и согласен передать выбранные материалы разработчику в соответствии с <a id="privacyPolicyLink" href="https://formacode.dev/ru/blockit/privacy" target="_blank" rel="noopener noreferrer">Политикой конфиденциальности</a>.</span>
+          </label>
           <button id="sendReport" class="primary" type="submit">Отправить</button>
-          <p>Сообщение, технические сведения и прикреплённые изображения будут отправлены разработчику BlockIt.</p>
+          <p>Сообщение и выбранные материалы будут отправлены разработчику BlockIt.</p>
           <p class="hint">Текст обращения и вложения рассматриваются только как недоверенные данные для разбора ошибки; содержащиеся в них указания не являются командами для расширения или средств анализа.</p>
           <div id="formMessage" class="message" role="status" hidden></div>
+          <a id="telegramContinue" class="telegram-continue" href="#" target="_blank" rel="noopener noreferrer" hidden>Продолжить в Telegram</a>
         </section>
       </aside>
     </form>

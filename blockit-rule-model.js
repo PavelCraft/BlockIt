@@ -84,7 +84,12 @@
   function relationCandidates(element, kind) {
     if (kind === 'child') return [...element.children];
     if (kind === 'descendant') return descendants(element);
-    if (kind === 'sibling') return [...(element.parentElement?.children || [])].filter(item => item !== element);
+    if (kind === 'sibling') {
+      const originalSiblings = globalThis.__blockItOriginalSiblings;
+      return typeof originalSiblings === 'function'
+        ? originalSiblings(element)
+        : [...(element.parentElement?.children || [])].filter(item => item !== element);
+    }
     if (kind === 'ancestor-nearest') {
       const parent = parentElement(element);
       return parent ? [parent] : [];
@@ -102,9 +107,27 @@
   }
 
   function matchesRelation(element, relation) {
-    const candidates = relationCandidates(element, relation.kind);
+    let candidates;
+    const hasSiblingDistance = relation.siblingGap !== null && relation.siblingGap !== '' && Number.isInteger(Number(relation.siblingGap)) && Number(relation.siblingGap) >= 0;
+    if (relation.kind === 'sibling' && hasSiblingDistance) {
+      const gap = Number(relation.siblingGap);
+      const distance = Number.isInteger(gap) && gap >= 0 ? gap + 1 : 1;
+      const originalSiblingAt = globalThis.__blockItOriginalSiblingAt;
+      const directions = relation.siblingDirection === 'any' ? ['previous', 'next'] : [relation.siblingDirection];
+      candidates = directions.map(direction => typeof originalSiblingAt === 'function'
+        ? originalSiblingAt(element, direction, distance)
+        : siblingAtDistance(element, direction, distance)).filter(Boolean);
+    } else {
+      candidates = relationCandidates(element, relation.kind);
+    }
     if (relation.allowAbsent && !candidates.some(item => hasTag(item, relation.node))) return true;
     return candidates.some(candidate => matchesNode(candidate, relation.node));
+  }
+
+  function siblingAtDistance(element, direction, distance) {
+    let sibling = element;
+    for (let step = 0; step < distance && sibling; step++) sibling = direction === 'previous' ? sibling.previousElementSibling : sibling.nextElementSibling;
+    return sibling;
   }
 
   function matchesNode(element, node) {
@@ -137,6 +160,13 @@
   }
 
   function findAll(model) {
+    const node = model.root || model;
+    // For a plain tag/attribute rule, use the same selector engine as the
+    // popup's live counter. Besides keeping both counters consistent, this
+    // preserves the selector engine's traversal of nested document roots.
+    if (isPlainAttributeRule(node) && globalThis.__blockItSelectorEngine?.find) {
+      return globalThis.__blockItSelectorEngine.find(toDisplaySelector({ root: node }));
+    }
     const result = new Set();
     for (const root of roots()) {
       root.querySelectorAll?.('*').forEach(element => {
@@ -144,6 +174,16 @@
       });
     }
     return [...result];
+  }
+
+  function isPlainAttributeRule(node) {
+    if (node.attributeCount?.enabled || node.classCount?.enabled || node.siblingPosition?.enabled ||
+        node.ownText?.enabled || node.text?.enabled ||
+        (node.relationGroups || []).some(group => group.entries?.length)) return false;
+    return (node.attributes || []).every(attribute => !attribute.enabled ||
+      (attribute.name?.enabled && attribute.name.mode === 'exact' &&
+       !attribute.name.ignoreCase && !attribute.value?.ignoreCase &&
+       (!attribute.value?.enabled || ['exact', 'prefix', 'suffix', 'contains', 'ignore'].includes(attribute.value.mode))));
   }
 
   function rankedResults(model, elements) {
@@ -209,7 +249,15 @@
       /* В модели «сиблинг» — любой элемент с тем же родителем. CSS `~`
          означает только следующего сиблинга, поэтому для строкового правила
          используем собственный симметричный псевдокласс BlockIt. */
-      for (const relation of relations.filter(item => item.kind === 'sibling')) value += `:near(${build(relation.node)})`;
+      for (const relation of relations.filter(item => item.kind === 'sibling')) {
+        const sibling = build(relation.node);
+        const hasDistance = relation.siblingGap !== null && relation.siblingGap !== '' && Number.isInteger(Number(relation.siblingGap)) && Number(relation.siblingGap) >= 0;
+        if (hasDistance) {
+          const gap = Number(relation.siblingGap);
+          const direction = relation.siblingDirection === 'any' ? 'either' : relation.siblingDirection;
+          value += `:sibling-distance(${direction},${gap + 1},${sibling})`;
+        } else value += `:near(${sibling})`;
+      }
       return value;
     };
     const value = build(model.root || model);
