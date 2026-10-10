@@ -17,7 +17,7 @@
         'en': 'en',      // English
         'fr': 'fr',      // French
         'es': 'es',      // Spanish
-        'pt': 'pt',      // Portuguese
+        'pt-br': 'pt',   // Brazilian Portuguese
         'de': 'de',      // German
         'zh': 'zh_CN',   // Chinese (simplified)
         'ja': 'ja'       // Japanese
@@ -59,8 +59,8 @@
         }
 
         // Check if we have a mapping for the full code (e.g., 'zh-CN')
-        if (LANGUAGE_MAP[lang]) {
-            return LANGUAGE_MAP[lang];
+        if (LANGUAGE_MAP[lang.toLowerCase()]) {
+            return LANGUAGE_MAP[lang.toLowerCase()];
         }
 
         // Not supported → fallback

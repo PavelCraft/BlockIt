@@ -6,7 +6,7 @@ const vm = require('node:vm');
 
 const root = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
-const languages = ['ru', 'en', 'de', 'es', 'fr', 'pt', 'ja', 'zh_CN'];
+const languages = ['ru', 'en', 'de', 'es', 'fr', 'pt_BR', 'ja', 'zh_CN'];
 const script = read('blockit-ui-i18n.js').replace(
   '  const uiLanguage =',
   '  globalThis.__sourcePhrases = english; const uiLanguage ='
@@ -38,6 +38,17 @@ test('all Chrome message catalogs have the same keys', () => {
   }
 });
 
+test('the Add attribute button uses the custom icon in every locale', () => {
+  for (const language of languages) {
+    const catalog = JSON.parse(read(`_locales/${language}/messages.json`));
+    assert.ok(catalog.addAttrBtn.message.trim(), language);
+    assert.doesNotMatch(catalog.addAttrBtn.message, /➕|\u2795/u, language);
+  }
+  const popup = read('popup.html');
+  assert.match(popup, /class="add-attribute-icon"/);
+  assert.match(popup, /data-i18n="addAttrBtn"/);
+});
+
 test('every requested Chrome message key exists in all catalogs', () => {
   const catalog = JSON.parse(read('_locales/en/messages.json'));
   for (const file of ['popup.html', 'popup.js', 'import.html', 'import.js', 'welcome.html', 'welcome.js']) {
@@ -65,6 +76,14 @@ test('all additional UI dictionaries are complete and preserve placeholders', ()
   }
 });
 
+test('Brazilian Portuguese is selected for pt-BR and not for other Portuguese regions', () => {
+  const brazil = createContext('pt-BR');
+  assert.equal(brazil.document.documentElement.lang, 'pt-BR');
+  assert.equal(brazil.BlockItUITranslations.pt_BR.length, Object.keys(brazil.__sourcePhrases).length);
+  const portugal = createContext('pt-PT');
+  assert.equal(portugal.document.documentElement.lang, 'en');
+});
+
 test('user-visible Russian strings in extension pages and scripts have translations', () => {
   const source = createContext('ru').__sourcePhrases;
   for (const file of ['contacts.html', 'feedback.html', 'rule-builder.html', 'rule-audit.html']) {
@@ -81,10 +100,11 @@ test('user-visible Russian strings in extension pages and scripts have translati
 
 test('the interface selects each supported language and interpolates values', () => {
   for (const language of languages) {
-    const context = createContext(language === 'zh_CN' ? 'zh-CN' : language);
+    const context = createContext(language === 'zh_CN' ? 'zh-CN' : (language === 'pt_BR' ? 'pt-BR' : language));
     const result = context.BlockItUI18n.t('Найдено {count} элементов', { count: 3 });
     assert.ok(result.includes('3'), language);
     assert.ok(!result.includes('{count}'), language);
-    assert.equal(context.document.documentElement.lang, language === 'zh_CN' ? 'zh-CN' : language);
+    const expectedDocumentLanguage = language === 'zh_CN' ? 'zh-CN' : language === 'pt_BR' ? 'pt-BR' : language;
+    assert.equal(context.document.documentElement.lang, expectedDocumentLanguage);
   }
 });

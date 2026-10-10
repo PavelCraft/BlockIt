@@ -51,6 +51,50 @@ button:disabled { border-color: var(--line); background: #e8ebf0; color: #929baa
   box-shadow: 0 5px 15px rgba(63, 109, 246, .22);
 }
 .btn-primary:hover, #addRule:hover, #parseBtn:hover, #addAttrBtn:hover, .btn-export:hover, .btn-import:hover { border-color: var(--blue-strong); background: var(--blue-strong); }
+
+/* A compact secondary action: visually separate from the primary Add rule button. */
+#addAttrBtn.add-attr-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 34px;
+  padding: 6px 11px 6px 7px;
+  border: 1px solid #b9c8ef;
+  background: #fff;
+  color: var(--blue-strong);
+  box-shadow: none;
+}
+#addAttrBtn.add-attr-btn:hover:not(:disabled) {
+  border-color: var(--blue);
+  background: var(--blue-soft);
+  color: var(--blue-strong);
+  box-shadow: none;
+}
+.add-attribute-icon {
+  width: 20px;
+  height: 20px;
+  display: grid;
+  flex: 0 0 20px;
+  place-items: center;
+  border-radius: 6px;
+  background: var(--blue);
+}
+.add-attribute-icon svg {
+  width: 13px;
+  height: 13px;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+}
+#addAttrBtn.add-attr-btn:disabled {
+  border-color: var(--line);
+  background: #f4f6f9;
+  color: #929baa;
+  box-shadow: none;
+}
+#addAttrBtn.add-attr-btn:disabled .add-attribute-icon { background: #b8c0cc; }
 .btn-secondary, .btn-file { border-color: var(--line); background: #fff; color: var(--ink); }
 .btn-danger, .btn-clear-all {
   border-color: #d13438;

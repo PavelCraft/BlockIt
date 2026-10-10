@@ -282,6 +282,11 @@ body{margin:0;background:radial-gradient(circle at 8% 0,#e6eeff 0,transparent 28
 .reference-shot{display:block;max-width:100%;margin:14px auto;border:1px solid #d8e0ef;border-radius:10px;box-shadow:0 8px 22px rgba(43,64,106,.1);cursor:zoom-in}
 .chapter a:not(.top-link){padding:1px 4px;border-radius:4px;background:#eef3ff;color:#2d56cb;text-decoration:none;box-decoration-break:clone;-webkit-box-decoration-break:clone}
 .chapter a:not(.top-link):hover{background:#dfe9ff;color:#2347ad}
+.chapter a.button{display:inline-flex;align-items:center;padding:9px 13px;border:1px solid #8ba8ec;border-radius:8px;background:#f4f7ff;color:#294fae;font-size:13px;font-weight:750}
+.chapter a.button:hover{border-color:#6387df;background:#e7eeff;color:#1f439f}
+.instruction-video-frame{position:relative;overflow:hidden;width:100%;margin:18px 0 12px;aspect-ratio:16/9;border-radius:14px;background:#121722;box-shadow:0 10px 26px rgba(28,42,68,.14)}
+.instruction-video-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.instruction-video-fallback{text-align:center}
 .feature-list>li>ul{margin:5px 0 2px;padding-left:21px}
 .feature-list>li>ul li{margin:3px 0}
 .method-switches{grid-template-columns:repeat(3,minmax(0,1fr))}

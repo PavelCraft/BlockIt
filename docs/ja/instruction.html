@@ -19,6 +19,7 @@
       <div>
         <h2>目次</h2>
         <ul>
+          <li><a href="#video-guide">動画チュートリアル</a></li>
           <li>
 <a href="#what-is">BlockIt とは</a>
 </li>
@@ -44,15 +45,18 @@
       </div>
     </nav>
 
+    <section class="chapter video-guide" id="video-guide">
+      <h2>動画チュートリアル <a class="top-link" href="#top">先頭へ戻る</a></h2>
+      <p>BlockIt の使い方、ルールの作成、結果の確認方法を動画で説明します。</p>
+      <div class="instruction-video-frame"><iframe src="https://www.youtube-nocookie.com/embed/N6_wsSausO4" title="BlockIt 動画チュートリアル" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+    </section>
+
     <section class="chapter" id="what-is">
       <h2>BlockIt とは</h2>
-      <p>広告を表示するサイトと一般的なブロッカーは、公開フィルターを回避する側と更新する側の終わりのない競争を続けています。</p>
       <p>
-<strong>BlockIt</strong> は別の方法を採ります。共有リストだけに頼らず、利用するサイトの特定要素に対して自分でルールを作ります。ルールを共有しない限り、サイト側はどの特徴を利用しているか分からず、意図的に無効化しにくくなります。</p>
+<strong>BlockIt</strong> は、ページ内の特定要素に対するルールを作成し、なぜその要素が見つかるのかを理解するための拡張機能です。ルールビルダーでは、検索に使われる要素や周辺要素の特徴を確認できます。それらの特徴で対象を十分に区別できるかを確かめ、安定していると思う特徴を選べます。</p>
       <h3>主な特徴</h3>
       <ul class="feature-list">
-        <li>
-<strong>簡単：</strong>CSS セレクター、XPath、BlockIt ルールの構文を覚える必要はありません。DevTools からセレクターをコピーして貼り付けるだけで済む場合もあります。</li>
         <li>
 <strong>柔軟性：</strong>
           <ul>
@@ -172,10 +176,11 @@
       <h3>ブロック方式</h3>
       <ul>
         <li>
-<strong>削除：</strong>要素を HTML から削除して空間を詰めます。レイアウトが変わる場合があります。</li>
+<strong>削除：</strong>要素がページから消え、通常はその分のスペースが空きます。下のコンテンツが移動することがあります。</li>
         <li>
 <strong>非表示：</strong>空間を残したまま見えなくします。削除でレイアウトが崩れる場合に使います。</li>
       </ul>
+      <p>通常、ルールはすぐに適用されます。要素がまだ表示されている場合は、ページを再読み込みしてください。</p>
     </section>
 
     <section class="chapter" id="methods">
@@ -224,7 +229,7 @@
 </summary>
 <div class="method-body">
 <p>標準セレクターを素早く試す方法です。要素を選び、「コピー」 / “Copy” → 「selector をコピー」 / “Copy selector” を選びます。</p>
-<p>BlockIt に貼り付け、一致数を確認して追加します。再読み込み後に不安定なら <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> またはルールビルダーを使います。</p>
+<p>BlockIt に貼り付け、一致数を確認して追加します。再読み込み後に不安定なら <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> またはルールビルダーを使います。</p>
 <div class="gallery compact-gallery" data-gallery>
 <div class="gallery-stage">
 <button class="gallery-control prev" type="button" aria-label="Previous step">‹</button>
@@ -248,7 +253,7 @@
 <p>XPath はページ構造内の経路を表します。属性は不安定でも経路が変わらない場合に役立ちます。「XPath をコピー」 / “Copy XPath” を選び、BlockIt に貼り付けます。</p>
 <div class="note">
 <strong>式を確認してください。</strong>Chrome が <code>id</code> を基準にする場合、その ID が変わると XPath も不安定です。位置番号を含む絶対パスは構造変更で壊れます。</div>
-<p>BlockIt はメイン文書と各 <a href="#embedded-contexts">iframe</a> で XPath を別々に評価します。iframe 内でコピーした XPath は機能する場合があります。一方、XPath は <a href="#embedded-contexts">Shadow DOM</a> の境界を越えません。その場合はルールビルダーまたは <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> を使います。</p>
+<p>BlockIt はメイン文書と各 <a href="#embedded-contexts">iframe</a> で XPath を別々に評価します。iframe 内でコピーした XPath は機能する場合があります。一方、XPath は <a href="#embedded-contexts">Shadow DOM</a> の境界を越えません。その場合はルールビルダーまたは <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> を使います。</p>
 <div class="gallery compact-gallery" data-gallery>
 <div class="gallery-stage">
 <button class="gallery-control prev" type="button" aria-label="Previous step">‹</button>
@@ -309,11 +314,12 @@
 </details>
         <details id="method-stable" data-method="stable">
 <summary>
-<span class="method-index">4</span><a class="product-link summary-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> を使う <span class="expand-hint">選択して読む</span>
+<span class="method-index">4</span><a class="product-link summary-link" href="https://formacode.dev/en/stablehtmlfinder" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> を使う <span class="expand-hint">選択して読む</span>
 </summary>
 <div class="method-body">
+<p><a class="button" href="https://chromewebstore.google.com/detail/stablehtmlfinder/mdnfjmhokoblclpjbkofkkjmbfbnokmm" target="_blank" rel="noopener noreferrer">Chrome ウェブストアからStableHTMLFinderをインストール</a></p>
 <p>
-<a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> は、クラスや ID が難読化される、読み込みごとに変わる、類似ブロックが多い場合に役立ちます。手作業より簡単なことが多い一方、複数回読み込むため時間がかかります。</p>
+<a class="product-link" href="https://formacode.dev/en/stablehtmlfinder" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> は、クラスや ID が難読化される、読み込みごとに変わる、類似ブロックが多い場合に役立ちます。手作業より簡単なことが多い一方、複数回読み込むため時間がかかります。</p>
 <div class="gallery compact-gallery" data-gallery>
 <div class="gallery-stage">
 <button class="gallery-control prev" type="button" aria-label="Previous step">‹</button>
@@ -341,7 +347,7 @@
 <div class="gallery-dots" aria-label="Steps for using StableHTMLFinder"></div>
 </div>
 <p>
-<a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> 自体はブロックしません。BlockIt ルールの基礎を選ぶためのツールです。</p>
+<a class="product-link" href="https://formacode.dev/en/stablehtmlfinder" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> 自体はブロックしません。BlockIt ルールの基礎を選ぶためのツールです。</p>
 <ul class="stable-result-options">
 <li><strong>CSS セレクター：</strong>安定した特徴で正しい数を見つける場合の最も簡単な選択です。</li>
 <li><strong>BlockIt ルール：</strong>標準 CSS では表せない精密な条件が必要な場合に使います。</li>
@@ -374,21 +380,23 @@
 <p>一致数を確認し、「再読み込み後に確認」で結果が安定しているか確かめます。</p>
 </article>
 </div>
-<h4>カードで指定できる条件</h4>
+<h4>要素カードではどの特徴を指定できますか？</h4>
+<p>できるだけ、必要で十分に安定した特徴だけを残してください。DevTools で一致する要素を調べたい場合は、通常の CSS セレクターに変換できる特徴を使います。プレビューの横にあるラベルで「CSS セレクター」か「BlockIt ルール」かを確認できます。</p>
 <ul>
 <li>
-<strong>タグ：</strong>重要なら指定し、不要なら空欄にします。</li>
+<strong>タグ、クラス、属性：</strong>タグ、個別のクラス、属性名や属性値の一般的な条件は、通常 CSS セレクターで表現できます。属性名は完全一致で指定でき、属性値には CSS が対応する完全一致、前方一致、後方一致、部分一致を使えます。</li>
 <li>
-<strong>属性数：</strong>指定数と同じ、以上、以下を選べます。</li>
+<strong>属性数とクラス数：</strong>指定数と同じ、以上、以下を設定できます。これらの個数は通常の CSS セレクターでは確認できず、BlockIt 構文が必要です。</li>
 <li>
-<strong>属性：</strong>名前と値の条件を指定します。<code>class</code> ではクラス数も指定できます。</li>
+<strong>テキスト：</strong>要素自身のテキストまたは内部のテキストに対して、完全一致、前方一致、後方一致、部分一致、正規表現を指定できます。CSS はテキストで要素を検索できないため、この条件には BlockIt が必要です。</li>
 <li>
-<strong>テキスト：</strong>要素自身または内部全体のテキストに対し、完全一致、前方・後方一致、部分一致、正規表現を使えます。</li>
+<strong>クラス名の部分一致、正規表現、属性名のパターン：</strong>これらの条件にも BlockIt が必要です。CSS セレクターでは正規表現を調べられません。</li>
 <li>
-<strong>兄弟内の位置：</strong>同じ親の子要素の中での位置です。</li>
+<strong>兄弟内の位置：</strong>同じ親の子要素の中での位置は、<code>:nth-child()</code> などの CSS 疑似クラスで表現できます。一方、ルール全体の一致結果の中から位置を選ぶ機能は BlockIt 固有です。</li>
 <li>
-<strong>兄弟要素までの距離：</strong>関連付けた兄弟要素と対象の間にある要素数を指定できます。<code>0</code> は隣接する兄弟要素を意味します。</li>
+<strong>関連要素と兄弟要素までの距離：</strong>CSS で表現できる関係もありますが、関係と条件の組み合わせによっては BlockIt が必要です。距離 <code>0</code> は隣接する兄弟要素を意味します。</li>
 </ul>
+<p>プレビューに「BlockIt ルール」と表示された場合、そのルールを CSS として DevTools で試すことはできません。正確なルールに必要な場合に、そのような特徴を使ってください。ルールを StableHTMLFinder の安定性マップ検索に入力すると、マップ上のどの要素が一致するか確認できます。CSS セレクターはコピーして DevTools で試せます。</p>
 <h4>関連要素</h4>
 <p>対象やその祖先に直接の親または任意の祖先を追加できます。対象には子、子孫、兄弟も設定でき、兄弟に子孫を追加することもできます。兄弟要素までの距離は必要に応じて指定できます。関連要素には「存在しなくてもよい」スイッチがあります。</p>
 <p>
@@ -448,7 +456,7 @@
 </details>
       </div>
       <h3>別の方法に切り替える目安</h3>
-      <p>素早く試すなら開発者ツールの CSS セレクターから始めます。特徴が安定しているものの使う属性を選びたい場合は、HTML からの簡易ルールが便利です。特徴が不安定、無作為に見える、または似たブロックが多い場合は <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> やルールビルダーを使います。</p>
+      <p>素早く試すなら開発者ツールの CSS セレクターから始めます。特徴が安定しているものの使う属性を選びたい場合は、HTML からの簡易ルールが便利です。特徴が不安定、無作為に見える、または似たブロックが多い場合は <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> やルールビルダーを使います。</p>
     </section>
 
     <section class="chapter" id="selectors">
@@ -749,7 +757,7 @@
         <li>
 <strong>原因１：最も外側の要素を選んでいない。</strong>HTML ツリーを上にたどり、親コンテナーのセレクターをコピーします。</li>
         <li>
-<strong>原因２：動的なクラス名が使われている。</strong>コピーしたセレクターが更新後に使えなくなることがあります。<a href="#methods">「ルールの作成方法」</a>で特徴が不安定だと指定し、<a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> やビルダーを試します。</li>
+<strong>原因２：動的なクラス名が使われている。</strong>コピーしたセレクターが更新後に使えなくなることがあります。<a href="#methods">「ルールの作成方法」</a>で特徴が不安定だと指定し、<a class="product-link" href="https://formacode.dev/en/stablehtmlfinder" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> やビルダーを試します。</li>
         <li>
 <strong>原因３：作成後にページ構造が変わった。</strong>現在の HTML と一致数を確認します。ブロックが作り直されたなら、セレクターを再コピーするかビルダーでルールを調整します。</li>
         <li>
@@ -776,13 +784,14 @@
       </details>
       <details>
       <summary>ページの HTML 構造が分からない</summary>
-      <p><a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> は複数回の読み込みを比較して安定性マップを作ります。検索で対象を見つけ、安定した特徴と周囲の要素を調べてください。</p>
+      <p><a class="product-link" href="https://formacode.dev/en/stablehtmlfinder" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> は複数回の読み込みを比較して安定性マップを作ります。検索で対象を見つけ、安定した特徴と周囲の要素を調べてください。</p>
       <p>HTML が特に強く難読化されている場合、VPN 接続には異なるページが提供されている可能性があります。差し支えなければ一時的に VPN を切り、再読み込みして解析し直します。必ず改善するわけではありませんが、接続先のページ版との関係を確かめられます。</p>
       </details>
       <details>
       <summary>どの方法でも解決しない</summary>
-      <p>StableHTMLFinder が見つけた安定特徴と BlockIt のビルダーを組み合わせ、対象と周囲の両方を使うルールを手動で作れます。</p>
-      <p>複数の方法を試しても動作しない、または拡張機能でエラーが出る場合は、BlockIt の<a href="../../feedback.html">お問い合わせフォーム</a>から報告してください。ページ URL、ルール、可能ならスクリーンショットを添えてください。</p>
+      <p><a class="product-link" href="https://formacode.dev/en/stablehtmlfinder" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> で見つけた安定した特徴と BlockIt のルールビルダーを組み合わせると、対象要素とその周辺を考慮したルールを手動で作れます。</p>
+      <p>または、<a class="product-link" href="https://chromewebstore.google.com/detail/ddkjiahejlhfcafbddmgiahcphecmpfh?utm_source=item-share-cb" target="_blank" rel="noopener noreferrer">uBlock Origin Lite</a> をお試しください。</p>
+      <p>BlockIt の使用中に問題が起きた場合（ルールが機能しない、拡張機能でエラーが出るなど）は、<a href="../../feedback.html">お問い合わせフォーム</a>から報告してください。ページ URL とルールを記載し、可能であればスクリーンショットも添えてください。</p>
       </details>
     </section>
     <div class="image-lightbox" id="imageLightbox" hidden role="dialog" aria-modal="true" aria-label="画像ビューアー">

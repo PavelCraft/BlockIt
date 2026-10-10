@@ -344,11 +344,23 @@
     'перед исходным элементом': 'before the source element',
     'после исходного элемента': 'after the source element',
     '{count} элемента между ними': '{count} elements between them',
-    'расстояние не учитывать': 'ignore distance'
+    'расстояние не учитывать': 'ignore distance',
+    "Другие атрибуты не добавлены.": "No other attributes added.",
+    "Другие атрибуты": "Other attributes",
+    "Классы": "Classes",
+    "Класс": "Class",
+    "целый класс": "whole class",
+    "Имя класса": "Class name",
+    "Удалить класс": "Remove class",
+    "Добавить класс": "Add class"
   };
 
   const uiLanguage = chrome.i18n.getUILanguage?.() || 'en';
-  const locale = /^zh(?:-|_)/i.test(uiLanguage) ? 'zh_CN' : uiLanguage.slice(0, 2).toLowerCase();
+  const locale = /^zh(?:-|_)/i.test(uiLanguage)
+    ? 'zh_CN'
+    : /^pt[-_]BR$/i.test(uiLanguage)
+      ? 'pt_BR'
+      : uiLanguage.slice(0, 2).toLowerCase();
   const isRussian = locale === 'ru';
   const translatedPhrases = globalThis.BlockItUITranslations?.[locale];
   const sourcePhrases = Object.keys(english);
@@ -362,7 +374,7 @@
     return result;
   }
   function localize(root = document) {
-    document.documentElement.lang = isRussian ? 'ru' : (locale === 'zh_CN' ? 'zh-CN' : (translatedPhrases ? locale : 'en'));
+    document.documentElement.lang = isRussian ? 'ru' : (locale === 'zh_CN' ? 'zh-CN' : (locale === 'pt_BR' ? 'pt-BR' : (translatedPhrases ? locale : 'en')));
     if (isRussian) return;
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
     const nodes = [];

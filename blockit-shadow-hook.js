@@ -5,19 +5,18 @@
   const originalAttachShadow = Element.prototype.attachShadow;
   let activeRules = [];
   let scheduled = false;
+  let hasDynamicRules = false;
   const reportedInvalidRules = new Set();
-  /* Remember identities selected by positional rules. A removed element must
-     not cause its old neighbour to inherit the match, but a node later added
-     by the page may legitimately become a new target. */
-  const frozenPositionalMatches = new Map();
+  const HIDDEN_ATTRIBUTE = 'data-blockit-hidden';
+  const sheets = new Map();
+  const markedElements = new Set();
   const siblingSnapshots = new WeakMap();
-  const blockItRemovedNodes = new WeakSet();
-  let pendingAddedNodes = new Set();
 
   Element.prototype.attachShadow = function(init) {
     const root = originalAttachShadow.call(this, init);
     if (init?.mode === 'closed') closedRoots.set(this, root);
     observeRoot(root);
+    globalThis.__blockItSelectorEngine?.scheduleApply?.();
     return root;
   };
 
@@ -57,7 +56,7 @@
     if (!parent?.children) return;
     const snapshot = snapshotParent(parent);
     for (const node of record.removedNodes) {
-      if (node.nodeType !== 1 || blockItRemovedNodes.has(node)) continue;
+      if (node.nodeType !== 1) continue;
       const index = snapshot.indexOf(node);
       if (index >= 0) snapshot.splice(index, 1);
     }
@@ -112,130 +111,86 @@
     return { ...rule, selector: target.selector, type: target.type || 'css' };
   }
 
-  function hasPositionDependentCondition(rule) {
-    if (rule.type === 'blockitbuilder') {
-      const model = rule.selector;
-      return !!(model?.resultPositions?.enabled || containsPositionCondition(model?.root || model));
-    }
-    const selector = String(rule.selector || '');
-    if (rule.type === 'xpath') return hasPositionDependentXPath(selector);
-    return /:(?:nth-(?:last-)?(?:child|of-type)|(?:first|last|only)-(?:child|of-type)|matches-position|sibling-position|sibling-distance)\b/i
-      .test(selector) || hasAdjacentSiblingCombinator(selector);
+  function nativeSelector(rule) {
+    if (rule.type === 'xpath') return null;
+    const selector = rule.type === 'blockitbuilder'
+      ? globalThis.__blockItRuleModel.toCssSelector?.(rule.selector)
+      : rule.selector;
+    if (typeof selector !== 'string' || !selector.trim() ||
+        globalThis.__blockItSelectorCore.isBlockItRule(selector)) return null;
+    // querySelector validates the entire selector, including nested :has().
+    document.querySelector(selector);
+    return selector;
   }
 
-  function containsPositionCondition(node) {
-    if (!node || typeof node !== 'object') return false;
-    if (node.resultPositions?.enabled || node.siblingPosition?.enabled || node.siblingDistance?.enabled) return true;
-    return (node.relationGroups || []).some(group =>
-      (group.entries || []).some(entry =>
-        (entry.kind === 'sibling' && entry.siblingGap !== null && entry.siblingGap !== '') ||
-        containsPositionCondition(entry.node)
-      )
-    );
-  }
-
-  /* `+` changes its target when the previous sibling is removed. Ignore plus
-     signs inside attribute values, quoted text, regular expressions and CSS
-     escapes; those are data rather than an adjacent-sibling combinator. */
-  function hasAdjacentSiblingCombinator(selector, topLevelOnly = false) {
-    let quote = '', bracketDepth = 0, parenDepth = 0, inRegex = false, escaped = false;
-    for (let index = 0; index < selector.length; index++) {
-      const char = selector[index];
-      if (escaped) { escaped = false; continue; }
-      if (char === '\\') { escaped = true; continue; }
-      if (quote) {
-        if (char === quote) quote = '';
-        continue;
+  function updateSheets(roots, cssRules) {
+    if (!cssRules.length && !hasDynamicRules) {
+      for (const [root, sheet] of sheets) {
+        root.adoptedStyleSheets = root.adoptedStyleSheets.filter(item => item !== sheet);
       }
-      if (char === '"' || char === "'") { quote = char; continue; }
-      if (char === '/' && bracketDepth === 0) {
-        inRegex = !inRegex;
-        continue;
+      sheets.clear();
+      return;
+    }
+    const css = [
+      ...(hasDynamicRules ? [
+        `[data-blockit-hidden="collapse"] { display: none !important; }`,
+        `[data-blockit-hidden="reserve"] { visibility: hidden !important; pointer-events: none !important; }`
+      ] : []),
+      ...cssRules
+    ].join('\n');
+    for (const root of roots) {
+      let sheet = sheets.get(root);
+      if (!sheet) {
+        sheet = new CSSStyleSheet();
+        sheets.set(root, sheet);
       }
-      if (inRegex) continue;
-      if (char === '[') { bracketDepth++; continue; }
-      if (char === ']') { bracketDepth = Math.max(0, bracketDepth - 1); continue; }
-      if (char === '(') { parenDepth++; continue; }
-      if (char === ')') { parenDepth = Math.max(0, parenDepth - 1); continue; }
-      if (char === '+' && bracketDepth === 0 && (!topLevelOnly || parenDepth === 0)) return true;
+      if (!root.adoptedStyleSheets.includes(sheet)) root.adoptedStyleSheets = [...root.adoptedStyleSheets, sheet];
+      sheet.replaceSync(css);
+      sheet.disabled = false;
     }
-    return false;
-  }
-
-  function hasPositionDependentXPath(expression) {
-    const xpath = String(expression || '').replace(/^xpath:/i, '');
-    return /\b(?:position|last)\s*\(/i.test(xpath) ||
-      /\[\s*\d+(?:\.\d+)?(?:\s*(?:[+*/-]|mod|div)\s*\d+(?:\.\d+)?)*\s*\]/i.test(xpath);
-  }
-
-  function positionalRuleKey(originalRule, rule) {
-    return `${originalRule.id || ''}\u0000${rule.type || 'css'}\u0000${typeof rule.selector === 'string' ? rule.selector : originalRule.selector || ''}`;
-  }
-
-  function rememberAddedSubtree(node) {
-    if (node.nodeType !== 1) return;
-    pendingAddedNodes.add(node);
-    node.querySelectorAll?.('*').forEach(element => pendingAddedNodes.add(element));
-  }
-
-  function siblingAtDistance(element, direction, distance) {
-    let sibling = element;
-    for (let index = 0; index < distance && sibling; index++) {
-      sibling = direction === 'previous' ? sibling.previousElementSibling : sibling.nextElementSibling;
+    for (const [root, sheet] of sheets) {
+      if (roots.includes(root)) continue;
+      root.adoptedStyleSheets = root.adoptedStyleSheets.filter(item => item !== sheet);
+      sheets.delete(root);
     }
-    return sibling;
-  }
-
-  function hasNewSiblingAnchor(element, rule, addedNodes) {
-    const selector = typeof rule.selector === 'string' ? rule.selector : '';
-    if (/:has\(\s*\+/i.test(selector) && addedNodes.has(element.nextElementSibling)) return true;
-    if (hasAdjacentSiblingCombinator(selector, true) && addedNodes.has(element.previousElementSibling)) return true;
-    const distances = selector.matchAll(/:sibling-distance\(\s*(previous|next|either)\s*,\s*(\d+)\s*,/gi);
-    for (const [, direction, rawDistance] of distances) {
-      const distance = Number(rawDistance);
-      const directions = direction.toLowerCase() === 'either' ? ['previous', 'next'] : [direction.toLowerCase()];
-      if (distance > 0 && directions.some(item => addedNodes.has(siblingAtDistance(element, item, distance)))) return true;
-    }
-    return false;
-  }
-
-  function isFreshPositionalMatch(element, rule, addedNodes) {
-    return addedNodes.has(element) || hasNewSiblingAnchor(element, rule, addedNodes);
   }
 
   function applyRules() {
-    /* Consume external mutations once. A second pass caused by BlockIt's own
-       removals must not reuse them to delete the next sibling. */
-    const addedNodes = pendingAddedNodes;
-    pendingAddedNodes = new Set();
+    // Match against the page without BlockIt's own styling or marker
+    // attributes. This matters for :visible, :style and :attr-count.
+    for (const sheet of sheets.values()) sheet.disabled = true;
+    for (const element of markedElements) element.removeAttribute(HIDDEN_ATTRIBUTE);
+    markedElements.clear();
     captureSiblingTopology();
     globalThis.__blockItRuleModel?.captureSiblingPositions?.();
-    const planned = [];
+    const marked = new Map();
+    const cssRules = [];
+    let dynamic = false;
     for (const originalRule of activeRules) {
       if (originalRule.enabled === false) continue;
       const rule = normalizeRule(originalRule);
       if (!rule) continue;
 
-      if (['css', 'blockitrule'].includes(rule.type || 'css')) {
-        for (const innerSelector of globalThis.__blockItSelectorEngine.getFrameHasFilters(rule.selector)) {
-          globalThis.__blockItSelectorEngine.reportFrameMatches(innerSelector, innerSelector);
-        }
-      }
-
-      let elements = [];
       try {
-        const positional = hasPositionDependentCondition(rule);
-        const key = positional ? positionalRuleKey(originalRule, rule) : null;
-        const matches = findElements(rule.selector, rule.type || 'css');
-        if (key) {
-          const frozen = frozenPositionalMatches.get(key);
-          elements = frozen
-            ? matches.filter(element => frozen.has(element) || isFreshPositionalMatch(element, rule, addedNodes))
-            : matches;
-          if (!frozen) frozenPositionalMatches.set(key, new Set(elements));
-          else elements.forEach(element => frozen.add(element));
-        } else {
-          elements = matches;
+        if (['css', 'blockitrule'].includes(rule.type || 'css')) {
+          for (const innerSelector of globalThis.__blockItSelectorEngine.getFrameHasFilters(rule.selector)) {
+            globalThis.__blockItSelectorEngine.reportFrameMatches(innerSelector, innerSelector);
+          }
+        }
+        const css = nativeSelector(rule);
+        if (css) {
+          const declaration = rule.mode === 'remove'
+            ? 'display: none !important;'
+            : 'visibility: hidden !important; pointer-events: none !important;';
+          cssRules.push(`${css} { ${declaration} }`);
+          continue;
+        }
+        dynamic = true;
+        for (const element of findElements(rule.selector, rule.type || 'css')) {
+          if (element?.nodeType !== 1 || !element.isConnected) continue;
+          if (rule.mode === 'remove' || !marked.has(element)) {
+            marked.set(element, rule.mode === 'remove' ? 'collapse' : 'reserve');
+          }
         }
       } catch (error) {
         const key = `${rule.type}:${JSON.stringify(rule.selector)}`;
@@ -249,22 +204,21 @@
           }, `${error.name}: ${error.message}`);
         }
       }
-      planned.push({ rule, elements });
     }
-    /* Evaluate every rule against the same DOM state. Two equivalent sibling
-       rules must not remove two successive siblings in a single pass. */
-    for (const { rule, elements } of planned) {
-      for (const element of elements) {
-        if (!element.isConnected) continue;
-        if (rule.mode === 'remove') {
-          blockItRemovedNodes.add(element);
-          element.remove();
-        } else {
-          element.style.setProperty('visibility', 'hidden', 'important');
-          element.style.setProperty('pointer-events', 'none', 'important');
-        }
-      }
+    // All rules have seen the same DOM. Only now expose their effects.
+    hasDynamicRules = dynamic;
+    updateSheets(globalThis.__blockItSelectorEngine.roots(), cssRules);
+    for (const [element, mode] of marked) {
+      element.setAttribute(HIDDEN_ATTRIBUTE, mode);
+      markedElements.add(element);
     }
+  }
+
+  function containsShadowHost(node) {
+    if (node.nodeType !== 1) return false;
+    if (node.shadowRoot || closedRoots.has(node)) return true;
+    return [...(node.querySelectorAll?.('*') || [])].some(child =>
+      child.shadowRoot || closedRoots.has(child));
   }
 
   function observeRoot(root) {
@@ -272,27 +226,27 @@
     Object.defineProperty(root, '__blockItObserved', { value: true });
     new MutationObserver(records => {
       if (!activeRules.length) return;
+      let relevant = false;
       for (const record of records) {
         if (record.type === 'childList') {
           updateSiblingTopology(record);
-          record.addedNodes.forEach(rememberAddedSubtree);
+          if (hasDynamicRules || [...record.addedNodes].some(containsShadowHost)) relevant = true;
         }
+        if (hasDynamicRules && (record.type === 'characterData' ||
+            (record.type === 'attributes' && record.attributeName !== HIDDEN_ATTRIBUTE))) relevant = true;
       }
-      if (scheduled) return;
+      if (!relevant || scheduled) return;
       scheduled = true;
       setTimeout(() => {
         scheduled = false;
         applyRules();
       }, 50);
-    }).observe(root, { childList: true, subtree: true });
+    }).observe(root, { childList: true, attributes: true, characterData: true, subtree: true });
   }
 
   window.addEventListener('message', event => {
     if (event.source !== window || event.data?.source !== 'blockit' || event.data?.action !== 'apply-rules') return;
     activeRules = Array.isArray(event.data.rules) ? event.data.rules : [];
-    if (!activeRules.length) {
-      pendingAddedNodes.clear();
-    }
     globalThis.__blockItSelectorEngine.roots().forEach(observeRoot);
     applyRules();
   });

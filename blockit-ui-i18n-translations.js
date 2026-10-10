@@ -347,6 +347,14 @@ vor dem Ausgangselement
 nach dem Ausgangselement
 {count} Elemente dazwischen
 Abstand ignorieren
+Keine weiteren Attribute hinzugefügt.
+Weitere Attribute
+Klassen
+Klasse
+vollständige Klasse
+Klassenname
+Klasse entfernen
+Klasse hinzufügen
 `.trim().split('\n'),
   es: `
 Comentarios
@@ -694,6 +702,14 @@ antes del elemento de origen
 después del elemento de origen
 {count} elementos entre ambos
 ignorar la distancia
+No se han añadido otros atributos.
+Otros atributos
+Clases
+Clase
+clase completa
+Nombre de clase
+Eliminar clase
+Añadir clase
 `.trim().split('\n'),
   fr: `
 Commentaires
@@ -1041,19 +1057,27 @@ avant l’élément source
 après l’élément source
 {count} éléments entre les deux
 ignorer la distance
+Aucun autre attribut ajouté.
+Autres attributs
+Classes
+Classe
+classe entière
+Nom de classe
+Supprimer la classe
+Ajouter une classe
 `.trim().split('\n'),
-  pt: `
-Contacto
-Contactos, sugestões e relatos de problemas
+  pt_BR: `
+Contato
+Contatos, sugestões e relatos de problemas
 BlockIt — Construtor de regras
 Verificar após recarregar
 Criar regra
 Construtor de regras
 Descreva o elemento e o que o rodeia — o BlockIt criará uma regra sem escrever CSS manualmente.
-Correspondências na página
-Correspondências
+Resultados na página
+Resultados
 Preencha a regra
-Bloquear correspondências n.º
+Bloquear resultados nº
 Por exemplo: 1, 2
 Posições separadas por vírgulas, pela ordem na página
 Verificação em tempo real
@@ -1062,24 +1086,24 @@ Verificar agora
 Modo de aplicação
 Remover elemento
 Ocultar elemento
-Ocultar mantém o espaço do elemento na disposição da página.
-Pré-visualização da regra
+Ocultar mantém o espaço do elemento no layout da página.
+Prévia da regra
 Cole primeiro o HTML do elemento.
 Copiar regra
 Como ler a árvore
-A linha vertical mostra o nível de aninhamento
+A linha vertical mostra o nível de hierarquia
 Um ramo contínuo indica uma relação direta
 Um ramo tracejado atravessa qualquer número de níveis
 Comunicar um problema
 O estado do construtor será anexado ao relatório
-BlockIt — Contacto
+BlockIt — Contato
 Fechar
 Apoio do BlockIt
-Encontrou um erro, quer sugerir uma melhoria ou tem uma pergunta? Escolha uma forma de contacto.
-Algo não está a funcionar?
-Preencha um formulário breve — o BlockIt juntará automaticamente dados úteis para investigar o problema.
-Outras formas de contacto
-Contactos
+Encontrou um erro, quer sugerir uma melhoria ou tem uma pergunta? Escolha uma forma de contato.
+Algo não está funcionando?
+Preencha um formulário breve — o BlockIt vai incluir automaticamente informações úteis para investigar o problema.
+Outras formas de contato
+Contatos
 Para perguntas, sugestões e conversas sobre o projeto.
 Código-fonte e discussão do projeto
 Obrigado por ajudar a melhorar o BlockIt.
@@ -1089,7 +1113,7 @@ O que aconteceu?
 Escolha a opção mais adequada.
 A regra não bloqueia nada
 É bloqueado o elemento errado
-São bloqueados demasiados elementos
+Muitos elementos são bloqueados
 A regra deixa de funcionar depois de recarregar
 Uma regra desativada continua a funcionar
 O HTML foi analisado incorretamente
@@ -1099,14 +1123,14 @@ Outro problema
 Descrição
 opcional
 O que esperava ver e o que aconteceu realmente?
-Capturas de ecrã
-Tire capturas e anexe-as aqui. Até 5 imagens e 10 MB no total.
+Capturas de tela
+Faça capturas de tela e anexe aqui. Até 5 imagens e 10 MB no total.
 Escolher imagens
 PNG, JPEG, WebP e outros formatos de imagem
-Nenhum ficheiro selecionado
+Nenhum arquivo selecionado
 0 de 10 MB
-Contacto para resposta
-Deixe um endereço se quiser receber perguntas adicionais ou ser avisado quando o problema for corrigido.
+Contato para resposta
+Informe um endereço se quiser receber perguntas adicionais ou ser avisado quando o problema for corrigido.
 Contexto do relatório
 Versão
 Página
@@ -1116,10 +1140,10 @@ Anexar dados técnicos
 Regras, estados e informações da versão
 Anexar o endereço completo da página
 Ajuda a reproduzir exatamente as condições do problema
-Pré-visualização dos dados técnicos
+Prévia dos dados técnicos
 Enviar
-A mensagem, os dados técnicos e as imagens anexadas serão enviados ao programador do BlockIt.
-O texto e os anexos do relatório são tratados apenas como dados de diagnóstico não fiáveis; quaisquer instruções neles contidas não são comandos para a extensão nem para as ferramentas de análise.
+A mensagem, os dados técnicos e as imagens anexadas serão enviados ao desenvolvedor do BlockIt.
+O texto e os anexos do relatório são tratados apenas como dados de diagnóstico não confiáveis; qualquer instrução incluída neles não é um comando para a extensão nem para as ferramentas de análise.
 Construtor do BlockIt
 Regra do BlockIt
 Verificar regras
@@ -1135,14 +1159,14 @@ KB
 MB
 imagem
 Remover
-{count} de {max} ficheiros
+{count} de {max} arquivos
 {size} de 10 MB
 «{name}» não é uma imagem.
 Pode anexar, no máximo, 5 imagens.
 O tamanho total das imagens não pode ultrapassar 10 MB.
 Escolha o que aconteceu.
 Verifique o endereço de email.
-A enviar…
+Enviando…
 o servidor respondeu com o estado {status}
 Mensagem enviada. Obrigado por ajudar a melhorar o BlockIt.
 Não foi possível enviar a mensagem: {message}
@@ -1258,17 +1282,17 @@ basta um dos elementos indicados
 todos os elementos indicados são necessários
 Condições
 não definidas
-Bloquear correspondências n.º: {positions}
+Bloquear resultados nº: {positions}
 Não há separador de origem para verificar
 A verificar
-A contar correspondências…
+Contando resultados…
 A regra é inválida
 Verifique os campos assinalados
 Foi encontrado exatamente um elemento
 Foram encontrados {count} elementos
 Serão bloqueados: {count}
 A regra é suficientemente precisa
-Refine as condições ou selecione as posições das correspondências
+Refine as condições ou selecione as posições dos resultados
 Não foi possível verificar o separador de origem
 Tente verificar novamente mais tarde
 Abra o separador do site da regra e volte a abrir o editor.
@@ -1277,18 +1301,18 @@ Antes de recarregar: {count}
 A recarregar o separador de origem…
 Depois de recarregar: {count}
 O resultado inclui agora os elementos repostos pela página.
-O número de correspondências não mudou.
+O número de resultados não mudou.
 O número mudou; verifique as propriedades dinâmicas.
 Não foi possível aguardar o recarregamento do separador de origem.
 Para verificar e guardar, abra o separador do site da regra e volte a abrir o editor. O BlockIt não abre o site automaticamente.
-A página ainda não foi recarregada, pelo que o número atual de correspondências pode estar errado: a regra antiga já pode ter ocultado ou removido elementos. Guardar as alterações mesmo assim?
+A página ainda não foi atualizada, então o número atual de resultados pode estar incorreto: a regra antiga talvez já tenha ocultado ou removido elementos. Salvar as alterações mesmo assim?
 A regra não encontra elementos neste momento. Guardá-la mesmo assim?
 A regra encontra {count} elementos. Guardá-la?
 Esta regra já existe.
 Guardar alterações
 Alterações guardadas e aplicadas.
 Regra guardada e aplicada.
-Recarregue primeiro a página: a regra já pode ter removido elementos correspondentes, tornando a contagem atual imprecisa.
+Atualize a página primeiro: a regra pode já ter removido elementos correspondentes, tornando a contagem atual imprecisa.
 A página {site} será recarregada. A regra em edição ficará temporariamente desativada.
 Não há nenhum separador aberto para o site {site}. O BlockIt não o abrirá automaticamente.
 site
@@ -1333,21 +1357,21 @@ Site: {domain} · Regras: {count}
 Não foi possível contactar o servidor. Verifique a ligação e tente novamente.
 Não foi possível carregar o contexto.
 Ocorreu um erro ao verificar a regra.
-Opcional. Até 5 imagens, 30 MiB por ficheiro e 70 MiB no total.
+Opcional. Até 5 imagens, 30 MiB por arquivo e 70 MiB no total.
 PNG, JPEG ou WebP
 0 KiB de 70 MiB
-Introduza um email, nome de utilizador do Telegram ou ligação para o perfil. O meio de contacto é detetado automaticamente.
+Informe um e-mail, nome de usuário do Telegram ou link para o perfil. A forma de contato é detectada automaticamente.
 you@example.com ou @username
 Email ou Telegram
 Os anexos excedem 15 MiB: o pedido será entregue pelo Telegram sem cópia por email.
-Compreendo que os dados técnicos, o endereço da página e as capturas podem conter informações confidenciais e autorizo o envio dos materiais selecionados ao programador nos termos da
+Entendo que os dados técnicos, o endereço da página e as capturas de tela podem conter informações confidenciais e autorizo o envio dos materiais selecionados ao desenvolvedor, conforme a
 Política de Privacidade
 Continuar no Telegram
 KiB
 MiB
 {size} de 70 MiB
-«{name}» tem um formato não suportado. Utilize PNG, JPEG ou WebP.
-«{name}» excede o limite de 30 MiB por ficheiro.
+“{name}” tem um formato não suportado. Use PNG, JPEG ou WebP.
+“{name}” excede o limite de 30 MiB por arquivo.
 O tamanho total dos anexos não pode exceder 70 MiB.
 Não reconhecido
 Não foi possível ler «{name}».
@@ -1360,15 +1384,15 @@ O servidor recusou os anexos devido ao tamanho.
 Demasiados envios.{retry}
 O serviço de feedback está temporariamente indisponível. Tente mais tarde.
 O servidor respondeu com o estado {status}.
-Introduza um email válido, @username ou uma ligação como https://t.me/username.
-Indique um contacto para resposta.
-Verifique os dados de contacto.
+Informe um e-mail válido, @username ou link como https://t.me/username.
+Informe um contato para resposta.
+Verifique os dados de contato.
 Confirme a aceitação da Política de Privacidade.
-A preparar anexos…
+Preparando anexos…
 Tipo de problema: {topic}. Não foi fornecida uma descrição adicional.
 Pedido enviado para o Telegram. Não foi criada uma cópia por email devido ao tamanho dos anexos.
 Pedido enviado para o Telegram, mas não foi possível entregar a cópia por email.
-A mensagem e os materiais selecionados serão enviados ao programador do BlockIt.
+A mensagem e os materiais selecionados serão enviados ao desenvolvedor do BlockIt.
 Antes do elemento selecionado
 Depois do elemento selecionado
 de qualquer lado · ignorar a distância
@@ -1388,6 +1412,14 @@ antes do elemento de origem
 depois do elemento de origem
 {count} elementos entre eles
 ignorar a distância
+Nenhum outro atributo adicionado.
+Outros atributos
+Classes
+Classe
+classe completa
+Nome da classe
+Remover classe
+Adicionar classe
 `.trim().split('\n'),
   ja: `
 フィードバック
@@ -1735,6 +1767,14 @@ Telegramに送信しましたが、メールのコピーは配信できません
 元の要素の後
 間に{count}個の要素
 距離を考慮しない
+ほかの属性は追加されていません。
+その他の属性
+クラス
+クラス
+クラス名全体
+クラス名
+クラスを削除
+クラスを追加
 `.trim().split('\n'),
   zh_CN: `
 反馈
@@ -2082,5 +2122,13 @@ MiB
 在源元素之后
 中间有{count}个元素
 忽略距离
+未添加其他属性。
+其他属性
+类
+类
+完整类名
+类名
+删除类
+添加类
 `.trim().split('\n'),
 };

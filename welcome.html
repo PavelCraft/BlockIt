@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Добро пожаловать в BlockIt</title>
   <link rel="stylesheet" href="welcome.css">
+  <link rel="stylesheet" href="welcome-video.css">
 </head>
 <body>
   <header class="welcome-top">
@@ -68,6 +69,24 @@
         <div class="welcome-actions"><button id="closeWelcome" type="button" data-i18n="welcomeClose">Понятно</button><a href="docs/index.html" data-i18n="welcomeInstructions">Подробнее о работе расширения</a></div>
       </div>
     </section>
+
+    <section class="welcome-video" id="welcomeVideo" hidden>
+      <div class="welcome-video-copy">
+        <div class="eyebrow" data-i18n="welcomeVideoEyebrow">Видеоинструкция</div>
+        <h2 data-i18n="welcomeVideoTitle">Как пользоваться BlockIt</h2>
+        <p data-i18n="welcomeVideoDescription">Посмотрите пошаговую инструкцию по созданию и проверке правил.</p>
+      </div>
+      <div class="video-frame">
+        <iframe
+          id="welcomeVideoFrame"
+          data-src="https://www.youtube-nocookie.com/embed/ZHKVCtUHlV8"
+          title="Видеоинструкция по BlockIt"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen></iframe>
+      </div>
+    </section>
+
   </main>
   <script src="welcome.js"></script>
 </body>

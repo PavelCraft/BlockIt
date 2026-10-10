@@ -1,0 +1,22 @@
+# Store packages are build artifacts.
+BlockIt*.zip
+
+# Local video-instruction production files.
+Video-instruction*.mp4
+audio-*.webm
+audio-instruction-*.m4a
+*.mp3
+*.wav
+voiceover-aligned/
+
+# Timing, transcription, and voice-over helper files.
+Таймкоды*.txt
+transcription*.txt
+build_*voiceover*.py
+rebuild_voiceover*.py
+repair_voiceover*.py
+snap_voiceover*.py
+validate_full_voiceover*.py
+
+# Editor and patch backups.
+*.orig

@@ -19,6 +19,7 @@
       <div>
         <h2>目录</h2>
         <ul>
+          <li><a href="#video-guide">视频教程</a></li>
           <li>
 <a href="#what-is">什么是 BlockIt？</a>
 </li>
@@ -46,15 +47,18 @@
       </div>
     </nav>
 
+    <section class="chapter video-guide" id="video-guide">
+      <h2>视频教程 <a class="top-link" href="#top">返回顶部</a></h2>
+      <p>视频介绍如何使用 BlockIt、创建规则并检查结果。</p>
+      <div class="instruction-video-frame"><iframe src="https://www.youtube-nocookie.com/embed/slyBGPqhDD8" title="BlockIt 视频教程" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+    </section>
+
     <section class="chapter" id="what-is">
       <h2>什么是 BlockIt？</h2>
-      <p>展示广告的网站与常见拦截器一直在竞争：网站开发者设法绕过公开过滤列表，而拦截器开发者不断更新这些列表。</p>
       <p>
-<strong>BlockIt</strong> 采用不同的方式。您可以为常用网站上的特定元素自行创建规则，而不是只依赖共享列表。只要不主动分享规则，网站就不知道规则依赖哪些特征，也更难故意使其失效。</p>
+<strong>BlockIt</strong> 帮助您为页面中的特定元素创建规则，并了解规则为何会匹配这些元素。构建器会显示搜索所依据的元素特征及其周围结构。您可以检查这些特征是否足以区分目标元素，并选择您认为稳定的特征。</p>
       <h3>主要功能</h3>
       <ul class="feature-list">
-        <li>
-<strong>易于使用：</strong>无需记住 CSS 选择器、XPath 或 BlockIt 规则语法。有时从开发者工具复制选择器并粘贴即可。</li>
         <li>
 <strong>灵活：</strong>
           <ul>
@@ -174,10 +178,11 @@
       <h3>屏蔽模式</h3>
       <ul>
         <li>
-<strong>删除：</strong>从 HTML 中移除元素并释放空间，有时会改变布局。</li>
+<strong>删除：</strong>元素会从页面上消失，通常会释放原有空间。下方内容可能会移动。</li>
         <li>
 <strong>隐藏：</strong>保留空间但让元素不可见。删除后布局变差时使用。</li>
       </ul>
+      <p>规则通常会立即生效。如果元素仍然可见，请刷新页面。</p>
     </section>
 
     <section class="chapter" id="methods">
@@ -226,7 +231,7 @@
 </summary>
 <div class="method-body">
 <p>先用标准选择器快速测试。选中元素，然后选择“复制” / “Copy” → “复制 selector” / “Copy selector”。</p>
-<p>粘贴到 BlockIt，检查匹配数并添加规则。如果刷新后不可靠，请使用 <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> 或规则构建器。</p>
+<p>粘贴到 BlockIt，检查匹配数并添加规则。如果刷新后不可靠，请使用 <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> 或规则构建器。</p>
 <div class="gallery compact-gallery" data-gallery>
 <div class="gallery-stage">
 <button class="gallery-control prev" type="button" aria-label="Previous step">‹</button>
@@ -250,7 +255,7 @@
 <p>XPath 描述页面结构中通往元素的路径。当属性不稳定但路径不变时很有用。选择“复制 XPath” / “Copy XPath”，然后粘贴到 BlockIt。</p>
 <div class="note">
 <strong>检查复制的表达式。</strong>Chrome 可能以 <code>id</code> 为基础；ID 变化时 XPath 也不稳定。带位置编号的绝对路径会因结构变化而失效。</div>
-<p>BlockIt 会在主文档和每个 <a href="#embedded-contexts">iframe</a> 中分别计算 XPath，因此从 iframe 内复制的 XPath 可能有效。XPath 无法跨越 <a href="#embedded-contexts">Shadow DOM</a> 边界；这时请使用规则构建器或 <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a>。</p>
+<p>BlockIt 会在主文档和每个 <a href="#embedded-contexts">iframe</a> 中分别计算 XPath，因此从 iframe 内复制的 XPath 可能有效。XPath 无法跨越 <a href="#embedded-contexts">Shadow DOM</a> 边界；这时请使用规则构建器或 <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a>。</p>
 <div class="gallery compact-gallery" data-gallery>
 <div class="gallery-stage">
 <button class="gallery-control prev" type="button" aria-label="Previous step">‹</button>
@@ -311,11 +316,12 @@
 </details>
         <details id="method-stable" data-method="stable">
 <summary>
-<span class="method-index">4</span>使用 <a class="product-link summary-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> <span class="expand-hint">选择以阅读</span>
+<span class="method-index">4</span>使用 <a class="product-link summary-link" href="https://formacode.dev/en/stablehtmlfinder" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> <span class="expand-hint">选择以阅读</span>
 </summary>
 <div class="method-body">
+<p><a class="button" href="https://chromewebstore.google.com/detail/stablehtmlfinder/mdnfjmhokoblclpjbkofkkjmbfbnokmm" target="_blank" rel="noopener noreferrer">从 Chrome 网上应用店安装 StableHTMLFinder</a></p>
 <p>
-<a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> 适用于类和 ID 被混淆、每次加载都会变化或页面有大量相似区块的情况。它通常比手工分析 HTML 更简单，但多次加载需要时间。</p>
+<a class="product-link" href="https://formacode.dev/en/stablehtmlfinder" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> 适用于类和 ID 被混淆、每次加载都会变化或页面有大量相似区块的情况。它通常比手工分析 HTML 更简单，但多次加载需要时间。</p>
 <div class="gallery compact-gallery" data-gallery>
 <div class="gallery-stage">
 <button class="gallery-control prev" type="button" aria-label="Previous step">‹</button>
@@ -343,7 +349,7 @@
 <div class="gallery-dots" aria-label="Steps for using StableHTMLFinder"></div>
 </div>
 <p>
-<a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> 本身不屏蔽元素，而是帮助选择 BlockIt 规则的基础：</p>
+<a class="product-link" href="https://formacode.dev/en/stablehtmlfinder" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> 本身不屏蔽元素，而是帮助选择 BlockIt 规则的基础：</p>
 <ul class="stable-result-options">
 <li><strong>CSS 选择器：</strong>使用稳定特征并找到正确数量时最简单。</li>
 <li><strong>BlockIt 规则：</strong>需要标准 CSS 不具备的扩展条件时使用。</li>
@@ -376,19 +382,23 @@
 <p>先检查匹配数量，再用“刷新后检查”确认结果保持稳定。</p>
 </article>
 </div>
-<h4>卡片中可用的条件</h4>
+<h4>可以在元素卡片中指定哪些特征？</h4>
+<p>请尽量只保留必要且足够稳定的特征。如果想在 DevTools 中检查匹配结果，请使用构建器能够转换为普通 CSS 选择器的特征。预览旁的标签会显示生成结果：“CSS 选择器”或“BlockIt 规则”。</p>
 <ul>
 <li>
-<strong>标签：</strong>可以指定；如果不重要，也可以留空。</li>
+<strong>标签、类和属性：</strong>标签、单个类，以及常见的属性名和值条件通常可以用 CSS 选择器表示。属性名可要求完全匹配；CSS 支持的属性值运算符包括完全匹配、以某内容开头、以某内容结尾和包含某内容。</li>
 <li>
-<strong>属性数量：</strong>可以要求恰好、至少或至多为指定数量。</li>
+<strong>属性数量和类数量：</strong>可以设置准确、最少或最多数量。普通 CSS 选择器无法检查这些数量，需要使用 BlockIt 语法。</li>
 <li>
-<strong>属性：</strong>可为名称和值设置条件；对于 <code>class</code>，还可以指定类的数量。</li>
+<strong>文本：</strong>元素自身的文本或其内部文本，可检查完全匹配、前缀、后缀、子字符串或正则表达式。CSS 无法按文本选择元素，因此此条件需要 BlockIt。</li>
 <li>
-<strong>文本：</strong>可检查元素自身文本或内部全部文本，并使用精确匹配、前缀、后缀、子字符串或正则表达式。</li>
+<strong>类名部分匹配、正则表达式和属性名模式：</strong>这些条件也需要 BlockIt；CSS 选择器无法检查正则表达式。</li>
 <li>
-<strong>兄弟位置：</strong>元素在同一父元素的子元素中的位置。</li>
+<strong>兄弟位置：</strong>元素在同一父元素子元素中的位置可以用 <code>:nth-child()</code> 等 CSS 伪类表示。但在完整规则的匹配结果中选择位置，是 BlockIt 的另一项功能。</li>
+<li>
+<strong>关联元素和兄弟距离：</strong>有些关系可以用 CSS 表示，另一些关系与条件的组合则需要 BlockIt。距离 <code>0</code> 表示紧邻的兄弟元素。</li>
 </ul>
+<p>如果预览显示“BlockIt 规则”，就无法在 DevTools 中将其作为 CSS 测试。只有在精确规则确实需要时才添加这些特征。您可以将规则输入 StableHTMLFinder 稳定性地图的搜索框，查看地图中哪些元素与规则匹配；CSS 选择器则可以复制到 DevTools 中测试。</p>
 <h4>关联元素</h4>
 <p>可以为目标元素及其祖先添加直接父元素或任意祖先。目标元素也可以包含子元素、后代或兄弟元素，兄弟元素还可拥有自己的后代。关联元素带有“允许不存在”开关。</p>
 <p>
@@ -448,7 +458,7 @@
 </details>
       </div>
       <h3>何时改用其他方法</h3>
-      <p>若想快速获得结果，可先尝试开发者工具中的 CSS 选择器。如果元素特征看起来稳定，但您想控制要使用哪些属性，可使用 HTML 快速规则。如果特征不稳定、像随机生成，或页面上有许多相似区块，请使用 <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> 或规则构建器。</p>
+      <p>若想快速获得结果，可先尝试开发者工具中的 CSS 选择器。如果元素特征看起来稳定，但您想控制要使用哪些属性，可使用 HTML 快速规则。如果特征不稳定、像随机生成，或页面上有许多相似区块，请使用 <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> 或规则构建器。</p>
     </section>
 
     <section class="chapter" id="selectors">
@@ -749,7 +759,7 @@
         <li>
 <strong>可能原因 1：选中的不是最外层元素。</strong>在 HTML 树中向上移动，复制父容器的选择器。</li>
         <li>
-<strong>可能原因 2：网站使用动态类名（混淆）。</strong>复制的选择器可能在刷新后失效。请在<a href="#methods">“创建规则的方法”</a>中标记元素特征不稳定，并尝试建议的方法，例如 <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> 或规则构建器。</li>
+<strong>可能原因 2：网站使用动态类名（混淆）。</strong>复制的选择器可能在刷新后失效。请在<a href="#methods">“创建规则的方法”</a>中标记元素特征不稳定，并尝试建议的方法，例如 <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> 或规则构建器。</li>
         <li>
 <strong>可能原因 3：创建规则后页面结构发生变化。</strong>检查元素当前的 HTML 和匹配数量。如果网站重建了区块，请重新复制选择器或在构建器中完善规则。</li>
         <li>
@@ -776,13 +786,14 @@
       </details>
       <details>
       <summary>我看不懂页面的 HTML 结构</summary>
-      <p>可以使用 <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a>：它比较多次加载并生成稳定性地图。在地图中搜索目标元素，再检查其稳定特征和周围元素。</p>
+      <p>可以使用 <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a>：它比较多次加载并生成稳定性地图。在地图中搜索目标元素，再检查其稳定特征和周围元素。</p>
       <p>如果标记被严重混淆，网站可能向 VPN 连接提供不同的页面版本。情况允许时，可暂时关闭 VPN、刷新页面并重新分析。这并非对所有网站都有帮助，但可确认复杂标记是否与当前连接获得的页面版本有关。</p>
       </details>
       <details>
       <summary>仍然无法解决</summary>
-      <p>尝试将 StableHTMLFinder 找到的稳定特征与 BlockIt 规则构建器结合，手动创建同时考虑元素及其周围结构的规则。</p>
-      <p>如果尝试多种方法后规则仍无效，或扩展程序出现错误，请通过 BlockIt 的<a href="../../feedback.html">反馈表单</a>报告问题。尽可能附上页面网址、规则和截图。</p>
+      <p>将 <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> 找到的稳定特征与 BlockIt 构建器结合起来，可以手动创建同时考虑目标元素及其周围结构的规则。</p>
+      <p>或者试试 <a class="product-link" href="https://chromewebstore.google.com/detail/ddkjiahejlhfcafbddmgiahcphecmpfh?utm_source=item-share-cb" target="_blank" rel="noopener noreferrer">uBlock Origin Lite</a> 扩展程序。</p>
+      <p>如果问题具体发生在使用 BlockIt 时（例如规则没有生效或扩展程序报错），请通过<a href="../../feedback.html">反馈表单</a>告知我们。请提供页面网址、规则，并尽可能附上截图。</p>
       </details>
     </section>
     <div class="image-lightbox" id="imageLightbox" hidden role="dialog" aria-modal="true" aria-label="截图查看器">

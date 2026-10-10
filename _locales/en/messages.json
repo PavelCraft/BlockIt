@@ -7,34 +7,121 @@
     "message": "Block HTML elements on any website using selectors",
     "description": "Description of the extension"
   },
-  "welcomeTitle": { "message": "Welcome to BlockIt", "description": "Welcome page title" },
-  "welcomeGuide": { "message": "Open instructions", "description": "Instructions link" },
-  "welcomeEyebrow": { "message": "Extension installed", "description": "Welcome page label" },
-  "welcomeHeroTitle": { "message": "Welcome to BlockIt", "description": "Welcome page heading" },
-  "welcomeHeroDescription": { "message": "Pin the extension to your Chrome toolbar to block unwanted elements on a page in just a few clicks.", "description": "Welcome page description" },
-  "welcomeMenuTitle": { "message": "Extensions", "description": "Extensions menu heading" },
-  "welcomeStep1Title": { "message": "Open the extensions menu", "description": "First pinning step" },
-  "welcomeStep1Description": { "message": "Click the Extensions icon on the right side of the Chrome toolbar.", "description": "First step description" },
-  "welcomeStep2Title": { "message": "Pin BlockIt", "description": "Second pinning step" },
-  "welcomeStep2Description": { "message": "Click the pin icon next to the extension name. Its icon will appear on the browser toolbar.", "description": "Second step description" },
-  "welcomeStep3Title": { "message": "Start blocking", "description": "Third pinning step" },
-  "welcomeStep3Description": { "message": "Open a page, click the BlockIt icon, then add a selector or create a rule.", "description": "Third step description" },
-  "welcomeClose": { "message": "Got it", "description": "Welcome close button" },
-  "welcomeInstructions": { "message": "Learn more about the extension", "description": "Detailed instructions link" },
-  "htmlRuleTitle": { "message": "Create a rule from HTML", "description": "HTML rule section title" },
-  "htmlRuleHelp": { "message": "Copy the required element in DevTools and paste it here.", "description": "HTML rule section help" },
-  "quickRuleTitle": { "message": "Quick rule", "description": "Quick HTML rule title" },
-  "quickRuleHelp": { "message": "Use the tag and selected attributes.", "description": "Quick HTML rule description" },
-  "parseHtmlBtn": { "message": "Parse HTML", "description": "Parse HTML button" },
-  "parsedRuleTitle": { "message": "Quick rule settings", "description": "Parsed HTML result title" },
-  "parsedRuleReady": { "message": "HTML parsed", "description": "Parsed HTML status" },
-  "builderFollowup": { "message": "Need text, position or surrounding elements?", "description": "Rule builder follow-up hint" },
-  "openThisInBuilder": { "message": "Open this HTML in the builder →", "description": "Open parsed HTML in rule builder" },
-  "exactRuleTitle": { "message": "Precise rule", "description": "Precise HTML rule title" },
-  "exactRuleHelp": { "message": "Add conditions for text, quantity, position and surrounding elements.", "description": "Precise HTML rule description" },
-  "openBuilderBtn": { "message": "Open builder", "description": "Open rule builder button" },
-  "generatedRuleLabel": { "message": "Ready rule", "description": "Generated rule label" },
-  "generatedRuleHelp": { "message": "Edit the generated selector if necessary.", "description": "Generated selector help" },
+  "welcomeTitle": {
+    "message": "Welcome to BlockIt",
+    "description": "Welcome page title"
+  },
+  "welcomeGuide": {
+    "message": "Open instructions",
+    "description": "Instructions link"
+  },
+  "welcomeEyebrow": {
+    "message": "Extension installed",
+    "description": "Welcome page label"
+  },
+  "welcomeHeroTitle": {
+    "message": "Welcome to BlockIt",
+    "description": "Welcome page heading"
+  },
+  "welcomeHeroDescription": {
+    "message": "Pin the extension to your Chrome toolbar to block unwanted elements on a page in just a few clicks.",
+    "description": "Welcome page description"
+  },
+  "welcomeVideoEyebrow": { "message": "Video tutorial", "description": "Welcome video label" },
+  "welcomeVideoTitle": { "message": "How to use BlockIt", "description": "Welcome video heading" },
+  "welcomeVideoDescription": { "message": "Watch a step-by-step guide to creating and checking rules.", "description": "Welcome video description" },
+  "welcomeMenuTitle": {
+    "message": "Extensions",
+    "description": "Extensions menu heading"
+  },
+  "welcomeStep1Title": {
+    "message": "Open the extensions menu",
+    "description": "First pinning step"
+  },
+  "welcomeStep1Description": {
+    "message": "Click the Extensions icon on the right side of the Chrome toolbar.",
+    "description": "First step description"
+  },
+  "welcomeStep2Title": {
+    "message": "Pin BlockIt",
+    "description": "Second pinning step"
+  },
+  "welcomeStep2Description": {
+    "message": "Click the pin icon next to the extension name. Its icon will appear on the browser toolbar.",
+    "description": "Second step description"
+  },
+  "welcomeStep3Title": {
+    "message": "Start blocking",
+    "description": "Third pinning step"
+  },
+  "welcomeStep3Description": {
+    "message": "Open a page, click the BlockIt icon, then add a selector or create a rule.",
+    "description": "Third step description"
+  },
+  "welcomeClose": {
+    "message": "Got it",
+    "description": "Welcome close button"
+  },
+  "welcomeInstructions": {
+    "message": "Learn more about the extension",
+    "description": "Detailed instructions link"
+  },
+  "htmlRuleTitle": {
+    "message": "Create a rule from HTML",
+    "description": "HTML rule section title"
+  },
+  "htmlRuleHelp": {
+    "message": "Copy the required element in DevTools and paste it here.",
+    "description": "HTML rule section help"
+  },
+  "quickRuleTitle": {
+    "message": "Quick rule",
+    "description": "Quick HTML rule title"
+  },
+  "quickRuleHelp": {
+    "message": "Use the tag and selected attributes.",
+    "description": "Quick HTML rule description"
+  },
+  "parseHtmlBtn": {
+    "message": "Parse HTML",
+    "description": "Parse HTML button"
+  },
+  "parsedRuleTitle": {
+    "message": "Quick rule settings",
+    "description": "Parsed HTML result title"
+  },
+  "parsedRuleReady": {
+    "message": "HTML parsed",
+    "description": "Parsed HTML status"
+  },
+  "builderFollowup": {
+    "message": "Need text, position or surrounding elements?",
+    "description": "Rule builder follow-up hint"
+  },
+  "openThisInBuilder": {
+    "message": "Open this HTML in the builder →",
+    "description": "Open parsed HTML in rule builder"
+  },
+  "exactRuleTitle": {
+    "message": "Precise rule",
+    "description": "Precise HTML rule title"
+  },
+  "exactRuleHelp": {
+    "message": "Add conditions for text, quantity, position and surrounding elements.",
+    "description": "Precise HTML rule description"
+  },
+  "openBuilderBtn": {
+    "message": "Open builder",
+    "description": "Open rule builder button"
+  },
+  "generatedRuleLabel": {
+    "message": "Ready rule",
+    "description": "Generated rule label"
+  },
+  "generatedRuleHelp": {
+    "message": "Edit the generated selector if necessary.",
+    "description": "Generated selector help"
+  },
   "pasteHtmlLabel": {
     "message": "Paste copied HTML element:",
     "description": "Label for HTML input"
@@ -72,7 +159,7 @@
     "description": "Attribute value input placeholder"
   },
   "addAttrBtn": {
-    "message": "➕ Add",
+    "message": "Add",
     "description": "Add attribute button text"
   },
   "enterSelector": {
@@ -100,7 +187,7 @@
     "description": "Hint for hide mode"
   },
   "modeRemoveHint": {
-    "message": "Element is completely removed from HTML. Layout may shift, but space is freed.",
+    "message": "The element disappears and its space is freed. Nearby content may shift.",
     "description": "Hint for remove mode"
   },
   "addRuleBtn": {
@@ -271,8 +358,12 @@
     "message": "Invalid format. Expected an array of rules or an object with a 'rules' field.",
     "description": "Error when format is invalid"
   },
-  "importSettings": { "message": "Settings" },
-  "errorInvalidJSON": { "message": "Invalid JSON. Check the file contents." },
+  "importSettings": {
+    "message": "Settings"
+  },
+  "errorInvalidJSON": {
+    "message": "Invalid JSON. Check the file contents."
+  },
   "errorMissingSelector": {
     "message": "Rule #{index} does not contain a 'selector' field.",
     "description": "Error when rule is missing selector field"
@@ -388,5 +479,25 @@
   "toolsDivider": {
     "message": "─── Tools ───",
     "description": "Divider text for tools section"
+  },
+  "classesHelp": {
+    "message": "Each class can be edited or removed",
+    "description": "Quick rule class editor"
+  },
+  "classValueLabel": {
+    "message": "Class name",
+    "description": "Quick rule class editor"
+  },
+  "deleteClassTitle": {
+    "message": "Remove class",
+    "description": "Quick rule class editor"
+  },
+  "classNamePlaceholder": {
+    "message": "Add a class",
+    "description": "Quick rule class editor"
+  },
+  "addClassBtn": {
+    "message": "Add",
+    "description": "Quick rule class editor"
   }
 }

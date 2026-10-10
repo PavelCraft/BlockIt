@@ -226,48 +226,10 @@ function initStorageListener() {
 }
 
 // ============================================================
-//  DOM MUTATION OBSERVER
-//  Re-apply rules when page content changes (SPA support)
-// ============================================================
-
-let observer = null;
-
-function initObserver() {
-  // Clean up old observer
-  if (observer) {
-    observer.disconnect();
-    observer = null;
-  }
-
-  observer = new MutationObserver(() => {
-    applyRules(); // applyRules() already checks context validity
-  });
-
-  const startObserving = () => {
-    if (document.body && observer) {
-      observer.observe(document.body, {
-        childList: true,
-        subtree: true
-      });
-    }
-  };
-
-  if (document.body) {
-    startObserving();
-  } else {
-    document.addEventListener('DOMContentLoaded', startObserving);
-  }
-}
-
-// ============================================================
 //  CLEANUP
 // ============================================================
 
 function cleanup() {
-  if (observer) {
-    observer.disconnect();
-    observer = null;
-  }
   if (storageListener) {
     getStorageChangeEvent()?.removeListener(storageListener);
     storageListener = null;
@@ -281,7 +243,6 @@ function cleanup() {
 function init() {
   const onReady = () => {
     applyRules();
-    initObserver();
     initStorageListener();
   };
 

@@ -7,34 +7,121 @@
     "message": "Блокировка HTML-элементов на любых сайтах с помощью селекторов",
     "description": "Описание расширения"
   },
-  "welcomeTitle": { "message": "Добро пожаловать в BlockIt", "description": "Заголовок страницы приветствия" },
-  "welcomeGuide": { "message": "Открыть инструкцию", "description": "Ссылка на инструкцию" },
-  "welcomeEyebrow": { "message": "Расширение установлено", "description": "Метка страницы приветствия" },
-  "welcomeHeroTitle": { "message": "Добро пожаловать в BlockIt", "description": "Заголовок страницы приветствия" },
-  "welcomeHeroDescription": { "message": "Закрепите расширение на панели Chrome, чтобы блокировать нежелательные элементы на странице в несколько кликов.", "description": "Описание страницы приветствия" },
-  "welcomeMenuTitle": { "message": "Расширения", "description": "Заголовок меню расширений" },
-  "welcomeStep1Title": { "message": "Откройте меню расширений", "description": "Первый шаг закрепления" },
-  "welcomeStep1Description": { "message": "Нажмите значок «Расширения» в правой части панели Chrome.", "description": "Описание первого шага" },
-  "welcomeStep2Title": { "message": "Закрепите BlockIt", "description": "Второй шаг закрепления" },
-  "welcomeStep2Description": { "message": "Нажмите значок булавки рядом с названием расширения. Иконка появится на панели браузера.", "description": "Описание второго шага" },
-  "welcomeStep3Title": { "message": "Начните блокировать", "description": "Третий шаг закрепления" },
-  "welcomeStep3Description": { "message": "Откройте нужную страницу, нажмите иконку BlockIt и добавьте селектор или создайте правило.", "description": "Описание третьего шага" },
-  "welcomeClose": { "message": "Понятно", "description": "Кнопка закрытия приветствия" },
-  "welcomeInstructions": { "message": "Подробнее о работе расширения", "description": "Ссылка на подробную инструкцию" },
-  "htmlRuleTitle": { "message": "Создать правило из HTML", "description": "Заголовок блока создания правила из HTML" },
-  "htmlRuleHelp": { "message": "Скопируйте нужный элемент в DevTools и вставьте его сюда.", "description": "Пояснение к полю HTML" },
-  "quickRuleTitle": { "message": "Быстрое правило", "description": "Заголовок быстрого правила" },
-  "quickRuleHelp": { "message": "Использовать тег и выбранные атрибуты.", "description": "Описание быстрого правила" },
-  "parseHtmlBtn": { "message": "Разобрать HTML", "description": "Кнопка разбора HTML" },
-  "parsedRuleTitle": { "message": "Настройка быстрого правила", "description": "Заголовок результата разбора" },
-  "parsedRuleReady": { "message": "HTML разобран", "description": "Статус разбора HTML" },
-  "builderFollowup": { "message": "Нужны условия по тексту, положению или окружению?", "description": "Подсказка перехода в конструктор" },
-  "openThisInBuilder": { "message": "Открыть этот HTML в конструкторе →", "description": "Переход в конструктор после разбора" },
-  "exactRuleTitle": { "message": "Точное правило", "description": "Заголовок точного правила" },
-  "exactRuleHelp": { "message": "Добавить условия по тексту, количеству, положению и окружению элемента.", "description": "Описание точного правила" },
-  "openBuilderBtn": { "message": "Открыть конструктор", "description": "Кнопка открытия конструктора" },
-  "generatedRuleLabel": { "message": "Готовое правило", "description": "Заголовок правила, созданного из HTML" },
-  "generatedRuleHelp": { "message": "При необходимости отредактируйте сформированный селектор.", "description": "Пояснение к сформированному селектору" },
+  "welcomeTitle": {
+    "message": "Добро пожаловать в BlockIt",
+    "description": "Заголовок страницы приветствия"
+  },
+  "welcomeGuide": {
+    "message": "Открыть инструкцию",
+    "description": "Ссылка на инструкцию"
+  },
+  "welcomeEyebrow": {
+    "message": "Расширение установлено",
+    "description": "Метка страницы приветствия"
+  },
+  "welcomeHeroTitle": {
+    "message": "Добро пожаловать в BlockIt",
+    "description": "Заголовок страницы приветствия"
+  },
+  "welcomeHeroDescription": {
+    "message": "Закрепите расширение на панели Chrome, чтобы блокировать нежелательные элементы на странице в несколько кликов.",
+    "description": "Описание страницы приветствия"
+  },
+  "welcomeVideoEyebrow": { "message": "Видеоинструкция", "description": "Метка видео на странице приветствия" },
+  "welcomeVideoTitle": { "message": "Как пользоваться BlockIt", "description": "Заголовок видео на странице приветствия" },
+  "welcomeVideoDescription": { "message": "Посмотрите пошаговую инструкцию по созданию и проверке правил.", "description": "Описание видео на странице приветствия" },
+  "welcomeMenuTitle": {
+    "message": "Расширения",
+    "description": "Заголовок меню расширений"
+  },
+  "welcomeStep1Title": {
+    "message": "Откройте меню расширений",
+    "description": "Первый шаг закрепления"
+  },
+  "welcomeStep1Description": {
+    "message": "Нажмите значок «Расширения» в правой части панели Chrome.",
+    "description": "Описание первого шага"
+  },
+  "welcomeStep2Title": {
+    "message": "Закрепите BlockIt",
+    "description": "Второй шаг закрепления"
+  },
+  "welcomeStep2Description": {
+    "message": "Нажмите значок булавки рядом с названием расширения. Иконка появится на панели браузера.",
+    "description": "Описание второго шага"
+  },
+  "welcomeStep3Title": {
+    "message": "Начните блокировать",
+    "description": "Третий шаг закрепления"
+  },
+  "welcomeStep3Description": {
+    "message": "Откройте нужную страницу, нажмите иконку BlockIt и добавьте селектор или создайте правило.",
+    "description": "Описание третьего шага"
+  },
+  "welcomeClose": {
+    "message": "Понятно",
+    "description": "Кнопка закрытия приветствия"
+  },
+  "welcomeInstructions": {
+    "message": "Подробнее о работе расширения",
+    "description": "Ссылка на подробную инструкцию"
+  },
+  "htmlRuleTitle": {
+    "message": "Создать правило из HTML",
+    "description": "Заголовок блока создания правила из HTML"
+  },
+  "htmlRuleHelp": {
+    "message": "Скопируйте нужный элемент в DevTools и вставьте его сюда.",
+    "description": "Пояснение к полю HTML"
+  },
+  "quickRuleTitle": {
+    "message": "Быстрое правило",
+    "description": "Заголовок быстрого правила"
+  },
+  "quickRuleHelp": {
+    "message": "Использовать тег и выбранные атрибуты.",
+    "description": "Описание быстрого правила"
+  },
+  "parseHtmlBtn": {
+    "message": "Разобрать HTML",
+    "description": "Кнопка разбора HTML"
+  },
+  "parsedRuleTitle": {
+    "message": "Настройка быстрого правила",
+    "description": "Заголовок результата разбора"
+  },
+  "parsedRuleReady": {
+    "message": "HTML разобран",
+    "description": "Статус разбора HTML"
+  },
+  "builderFollowup": {
+    "message": "Нужны условия по тексту, положению или окружению?",
+    "description": "Подсказка перехода в конструктор"
+  },
+  "openThisInBuilder": {
+    "message": "Открыть этот HTML в конструкторе →",
+    "description": "Переход в конструктор после разбора"
+  },
+  "exactRuleTitle": {
+    "message": "Точное правило",
+    "description": "Заголовок точного правила"
+  },
+  "exactRuleHelp": {
+    "message": "Добавить условия по тексту, количеству, положению и окружению элемента.",
+    "description": "Описание точного правила"
+  },
+  "openBuilderBtn": {
+    "message": "Открыть конструктор",
+    "description": "Кнопка открытия конструктора"
+  },
+  "generatedRuleLabel": {
+    "message": "Готовое правило",
+    "description": "Заголовок правила, созданного из HTML"
+  },
+  "generatedRuleHelp": {
+    "message": "При необходимости отредактируйте сформированный селектор.",
+    "description": "Пояснение к сформированному селектору"
+  },
   "pasteHtmlLabel": {
     "message": "Вставьте скопированный HTML-элемент:",
     "description": "Метка для поля ввода HTML"
@@ -72,7 +159,7 @@
     "description": "Плейсхолдер для значения атрибута"
   },
   "addAttrBtn": {
-    "message": "➕ Добавить",
+    "message": "Добавить",
     "description": "Текст кнопки добавления атрибута"
   },
   "enterSelector": {
@@ -100,7 +187,7 @@
     "description": "Подсказка для режима 'Скрыть'"
   },
   "modeRemoveHint": {
-    "message": "Элемент будет полностью удалён из HTML. Вёрстка может 'поехать', но место освободится.",
+    "message": "Элемент исчезает, а его место освобождается. Содержимое ниже может сдвинуться.",
     "description": "Подсказка для режима 'Удалить'"
   },
   "addRuleBtn": {
@@ -271,8 +358,12 @@
     "message": "Неверный формат. Ожидается массив правил или объект с полем 'rules'.",
     "description": "Ошибка неверного формата"
   },
-  "importSettings": { "message": "Настройки" },
-  "errorInvalidJSON": { "message": "Некорректный JSON. Проверьте содержимое файла." },
+  "importSettings": {
+    "message": "Настройки"
+  },
+  "errorInvalidJSON": {
+    "message": "Некорректный JSON. Проверьте содержимое файла."
+  },
   "errorMissingSelector": {
     "message": "Правило #{index} не содержит поля 'selector'.",
     "description": "Ошибка отсутствия поля selector"
@@ -388,5 +479,25 @@
   "toolsDivider": {
     "message": "─── Инструменты ───",
     "description": "Разделитель для секции инструментов"
+  },
+  "classesHelp": {
+    "message": "Каждый класс можно изменить или удалить",
+    "description": "Quick rule class editor"
+  },
+  "classValueLabel": {
+    "message": "Имя класса",
+    "description": "Quick rule class editor"
+  },
+  "deleteClassTitle": {
+    "message": "Удалить класс",
+    "description": "Quick rule class editor"
+  },
+  "classNamePlaceholder": {
+    "message": "Добавить класс",
+    "description": "Quick rule class editor"
+  },
+  "addClassBtn": {
+    "message": "Добавить",
+    "description": "Quick rule class editor"
   }
 }

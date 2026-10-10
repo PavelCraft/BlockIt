@@ -438,7 +438,9 @@ function parseOuterTag(html) {
 function buildSelector(tag, attributes) {
   let selector = tag;
   for (const [key, value] of Object.entries(attributes)) {
-    selector += `[${CSS.escape(key)}="${CSS.escape(value)}"]`;
+    if (key.toLowerCase() === 'class') {
+      selector += String(value).split(/\s+/).filter(Boolean).map(className => `.${CSS.escape(className)}`).join('');
+    } else selector += `[${CSS.escape(key)}="${CSS.escape(value)}"]`;
   }
   return selector;
 }
@@ -446,6 +448,47 @@ function buildSelector(tag, attributes) {
 // ============================================================
 //  ATTRIBUTES RENDERER
 // ============================================================
+
+function renderQuickClasses(tag, attributes, key, value) {
+  const block = document.createElement('div'); block.className = 'quick-classes';
+  const heading = document.createElement('div'); heading.className = 'quick-classes-heading';
+  const name = document.createElement('strong'); name.textContent = 'class';
+  const help = document.createElement('span'); help.textContent = chrome.i18n.getMessage('classesHelp');
+  heading.append(name, help); block.append(heading);
+  const classes = String(value).split(/\s+/).filter(Boolean);
+  const list = document.createElement('div'); list.className = 'quick-class-list';
+  classes.forEach((className, classIndex) => {
+    const item = document.createElement('div'); item.className = 'quick-class-item';
+    const input = document.createElement('input'); input.type = 'text'; input.value = className;
+    input.setAttribute('aria-label', chrome.i18n.getMessage('classValueLabel'));
+    input.addEventListener('change', () => {
+      classes[classIndex] = input.value.trim();
+      const remaining = classes.filter(Boolean);
+      attributes[key] = remaining.join(' ');
+      renderAttributes(tag, attributes); updateSelector(tag, attributes);
+    });
+    const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'attr-delete'; remove.textContent = '🗑️'; remove.title = chrome.i18n.getMessage('deleteClassTitle');
+    remove.addEventListener('click', () => {
+      classes.splice(classIndex, 1);
+      attributes[key] = classes.join(' ');
+      renderAttributes(tag, attributes); updateSelector(tag, attributes);
+    });
+    item.append(input, remove); list.append(item);
+  });
+  const addRow = document.createElement('div'); addRow.className = 'quick-class-add';
+  const newClass = document.createElement('input'); newClass.type = 'text'; newClass.placeholder = chrome.i18n.getMessage('classNamePlaceholder');
+  const add = document.createElement('button'); add.type = 'button'; add.className = 'add-class-btn'; add.textContent = `＋ ${chrome.i18n.getMessage('addClassBtn')}`;
+  const addClass = () => {
+    const additions = newClass.value.trim().split(/\s+/).filter(Boolean);
+    if (!additions.length) return;
+    attributes[key] = [...new Set([...classes, ...additions])].join(' ');
+    renderAttributes(tag, attributes); updateSelector(tag, attributes);
+  };
+  add.addEventListener('click', addClass);
+  newClass.addEventListener('keydown', event => { if (event.key === 'Enter') { event.preventDefault(); addClass(); } });
+  addRow.append(newClass, add); block.append(list, addRow);
+  return block;
+}
 
 function renderAttributes(tag, attributes) {
   attributesContainer.innerHTML = '';
@@ -460,6 +503,10 @@ function renderAttributes(tag, attributes) {
   }
 
   for (const [key, value] of Object.entries(attributes)) {
+    if (key.toLowerCase() === 'class') {
+      attributesContainer.append(renderQuickClasses(tag, attributes, key, value));
+      continue;
+    }
     const div = document.createElement('div');
     div.className = 'attr-item';
 

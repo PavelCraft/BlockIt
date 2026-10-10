@@ -19,6 +19,7 @@
       <div>
         <h2>Inhalt</h2>
         <ul>
+          <li><a href="#video-guide">Videoanleitung</a></li>
           <li>
 <a href="#what-is">Was ist BlockIt?</a>
 </li>
@@ -44,15 +45,18 @@
       </div>
     </nav>
 
+    <section class="chapter video-guide" id="video-guide">
+      <h2>Videoanleitung <a class="top-link" href="#top">Nach oben</a></h2>
+      <p>Das Video zeigt, wie du BlockIt verwendest, Regeln erstellst und das Ergebnis prüfst.</p>
+      <div class="instruction-video-frame"><iframe src="https://www.youtube-nocookie.com/embed/fZs3ojlWAGA" title="BlockIt-Videoanleitung" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+    </section>
+
     <section class="chapter" id="what-is">
       <h2>Was ist BlockIt?</h2>
-      <p>Websites mit Werbung und verbreitete Blocker befinden sich in einem ständigen Wettrüsten: Website-Entwickler suchen Wege, öffentliche Filterlisten zu umgehen, während Blocker-Entwickler diese Listen fortlaufend aktualisieren.</p>
       <p>
-<strong>BlockIt</strong> verfolgt beim Blockieren von Werbung und anderen unerwünschten Elementen einen anderen Ansatz. Statt sich nur auf gemeinsame Filterlisten zu verlassen, erstellen Sie Regeln für konkrete Elemente auf den von Ihnen besuchten Websites. Solange Sie diese Regeln nicht teilen, weiß die Website nicht, auf welche Eigenschaften sich Ihre BlockIt-Regeln stützen, und kann sie daher schwerer gezielt unwirksam machen.</p>
+<strong>BlockIt</strong> hilft Ihnen, Regeln für konkrete Seitenelemente zu erstellen und nachzuvollziehen, warum eine Regel sie findet. Der Konstruktor zeigt, welche Eigenschaften des Elements und seiner Umgebung für die Suche verwendet werden. So können Sie prüfen, ob diese Eigenschaften das Zielelement ausreichend von anderen unterscheiden, und auswählen, welche Sie für stabil halten.</p>
       <h3>Wichtige Funktionen</h3>
       <ul class="feature-list">
-        <li>
-<strong>Einfache Bedienung:</strong> Sie müssen sich die Syntax von CSS-Selektoren, XPath oder BlockIt-Regeln nicht merken. Manchmal genügt es, einen Selektor aus den Entwicklertools zu kopieren und in die Erweiterung einzufügen.</li>
         <li>
 <strong>Flexibilität:</strong>
           <ul>
@@ -172,10 +176,11 @@
       <h3>Blockiermodi</h3>
       <ul>
         <li>
-<strong>Entfernen:</strong> entfernt das Element aus dem HTML und gibt seinen Platz frei. Das funktioniert meist gut, kann aber gelegentlich das Layout verändern.</li>
+<strong>Entfernen:</strong> Das Element verschwindet von der Seite und sein Platz wird normalerweise frei. Der Inhalt darunter kann nachrücken.</li>
         <li>
 <strong>Ausblenden:</strong> macht das Element unsichtbar, erhält aber seinen Platz. Verwenden Sie dies, wenn die Seite nach dem Entfernen schlechter aussieht.</li>
       </ul>
+      <p>Die Regel wird normalerweise sofort angewendet. Ist das Element weiterhin sichtbar, laden Sie die Seite neu.</p>
     </section>
 
     <section class="chapter" id="methods">
@@ -224,7 +229,7 @@
 </summary>
 <div class="method-body">
 <p>Beginnen Sie hier, um schnell zu testen, ob ein Standardselektor das Element blockieren kann. Die Entwicklertools erstellen ihn automatisch: Element auswählen, dann „Kopieren“ / “Copy” → „selector kopieren“ / “Copy selector”.</p>
-<p>Fügen Sie den Selektor in das Hauptfeld von BlockIt ein, prüfen Sie die Trefferzahl und fügen Sie die Regel hinzu. Wird sie nach dem Neuladen unzuverlässig, verwenden Sie <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> oder den Regelkonstruktor.</p>
+<p>Fügen Sie den Selektor in das Hauptfeld von BlockIt ein, prüfen Sie die Trefferzahl und fügen Sie die Regel hinzu. Wird sie nach dem Neuladen unzuverlässig, verwenden Sie <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> oder den Regelkonstruktor.</p>
 <div class="gallery compact-gallery" data-gallery>
 <div class="gallery-stage">
 <button class="gallery-control prev" type="button" aria-label="Vorheriger Schritt">‹</button>
@@ -248,7 +253,7 @@
 <p>XPath beschreibt den Pfad zu einem Element durch die Seitenstruktur. Das kann helfen, wenn Klassen und andere Attribute instabil sind, der Pfad selbst jedoch gleich bleibt. Wählen Sie in den Entwicklertools „XPath kopieren“ / “Copy XPath” und fügen Sie den Ausdruck in BlockIt ein.</p>
 <div class="note">
 <strong>Prüfen Sie den kopierten Ausdruck.</strong> Chrome kann XPath um eine <code>id</code> aufbauen. Ändert sich diese ID, ist auch XPath instabil. Ein absoluter Pfad mit Positionsnummern bricht, wenn sich die HTML-Struktur ändert.</div>
-<p>BlockIt wertet XPath getrennt im Hauptdokument und in jedem <a href="#embedded-contexts">iframe</a> aus; ein innerhalb eines iframe kopierter XPath kann daher funktionieren. Browser werten XPath nicht über eine <a href="#embedded-contexts">Shadow-DOM</a>-Grenze hinweg aus. Verwenden Sie dort den Regelkonstruktor oder <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a>, um eine CSS-basierte oder erweiterte BlockIt-Regel zu erstellen.</p>
+<p>BlockIt wertet XPath getrennt im Hauptdokument und in jedem <a href="#embedded-contexts">iframe</a> aus; ein innerhalb eines iframe kopierter XPath kann daher funktionieren. Browser werten XPath nicht über eine <a href="#embedded-contexts">Shadow-DOM</a>-Grenze hinweg aus. Verwenden Sie dort den Regelkonstruktor oder <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a>, um eine CSS-basierte oder erweiterte BlockIt-Regel zu erstellen.</p>
 <div class="gallery compact-gallery" data-gallery>
 <div class="gallery-stage">
 <button class="gallery-control prev" type="button" aria-label="Vorheriger Schritt">‹</button>
@@ -309,11 +314,12 @@
 </details>
         <details id="method-stable" data-method="stable">
 <summary>
-<span class="method-index">4</span><a class="product-link summary-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> verwenden <span class="expand-hint">Zum Lesen auswählen</span>
+<span class="method-index">4</span><a class="product-link summary-link" href="https://formacode.dev/en/stablehtmlfinder" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> verwenden <span class="expand-hint">Zum Lesen auswählen</span>
 </summary>
 <div class="method-body">
+<p><a class="button" href="https://chromewebstore.google.com/detail/stablehtmlfinder/mdnfjmhokoblclpjbkofkkjmbfbnokmm" target="_blank" rel="noopener noreferrer">StableHTMLFinder aus dem Chrome Web Store installieren</a></p>
 <p>
-<a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> hilft, wenn Klassen und IDs verschleiert sind, sich zwischen Ladevorgängen ändern oder die Seite viele ähnliche Blöcke enthält. Das ist oft einfacher als eine manuelle HTML-Analyse, benötigt aber Zeit, weil die Erweiterung die Seite mehrfach laden muss.</p>
+<a class="product-link" href="https://formacode.dev/en/stablehtmlfinder" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> hilft, wenn Klassen und IDs verschleiert sind, sich zwischen Ladevorgängen ändern oder die Seite viele ähnliche Blöcke enthält. Das ist oft einfacher als eine manuelle HTML-Analyse, benötigt aber Zeit, weil die Erweiterung die Seite mehrfach laden muss.</p>
 <div class="gallery compact-gallery" data-gallery>
 <div class="gallery-stage">
 <button class="gallery-control prev" type="button" aria-label="Vorheriger Schritt">‹</button>
@@ -341,7 +347,7 @@
 <div class="gallery-dots" aria-label="Schritte zur Verwendung von StableHTMLFinder"></div>
 </div>
 <p>
-<a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> blockiert selbst keine Elemente. Es hilft Ihnen, die Grundlage für eine BlockIt-Regel zu wählen:</p>
+<a class="product-link" href="https://formacode.dev/en/stablehtmlfinder" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> blockiert selbst keine Elemente. Es hilft Ihnen, die Grundlage für eine BlockIt-Regel zu wählen:</p>
 <ul class="stable-result-options">
 <li><strong>CSS-Selektor</strong> — die einfachste Wahl, wenn er stabile Eigenschaften nutzt und die richtige Elementzahl findet.</li>
 <li><strong>BlockIt-Regel</strong> — wenn ein genauer Treffer erweiterte, in Standard-CSS nicht verfügbare Syntax benötigt.</li>
@@ -374,21 +380,23 @@
 <p>Prüfen Sie sofort die Trefferzahl und anschließend mit „Nach dem Neuladen prüfen“, ob das Ergebnis stabil bleibt.</p>
 </article>
 </div>
-<h4>In einer Karte verfügbare Bedingungen</h4>
+<h4>Welche Eigenschaften können Sie in einer Elementkarte festlegen?</h4>
+<p>Verwenden Sie möglichst nur notwendige und ausreichend stabile Eigenschaften. Wenn Sie Treffer in DevTools prüfen möchten, wählen Sie Eigenschaften, aus denen der Konstruktor einen normalen CSS-Selektor bilden kann. Die Kennzeichnung neben der Vorschau zeigt das Ergebnis: „CSS-Selektor“ oder „BlockIt-Regel“.</p>
 <ul>
 <li>
-<strong>Tag:</strong> angeben oder leer lassen, wenn er nicht wichtig ist.</li>
+<strong>Tag, Klassen und Attribute:</strong> Ein Tag, einzelne Klassen und übliche Bedingungen für Attributnamen und -werte lassen sich normalerweise als CSS-Selektor ausdrücken. Attributnamen können exakt abgeglichen werden; unterstützte CSS-Operatoren für Werte sind exakt, beginnt mit, endet mit und enthält.</li>
 <li>
-<strong>Attributanzahl:</strong> genau, mindestens oder höchstens die angegebene Zahl.</li>
+<strong>Anzahl der Attribute und Klassen:</strong> Legen Sie eine genaue, minimale oder maximale Anzahl fest. Diese Zählungen lassen sich nicht mit einem normalen CSS-Selektor prüfen und erfordern die BlockIt-Syntax.</li>
 <li>
-<strong>Attribute:</strong> Bedingungen für Namen und Werte; bei <code>class</code> kann auch die Klassenanzahl festgelegt werden.</li>
+<strong>Text:</strong> eigener Text des Elements oder Text innerhalb des Elements, einschließlich exakter Übereinstimmung, Anfang, Ende, Teilzeichenfolge oder regulärem Ausdruck. CSS wählt Elemente nicht anhand ihres Textes aus; dafür ist BlockIt erforderlich.</li>
 <li>
-<strong>Text:</strong> eigener Text des Elements oder gesamter Text darin; genaue Übereinstimmung, Anfang, Ende, Teilzeichenfolge oder regulärer Ausdruck.</li>
+<strong>Teilübereinstimmung von Klassennamen, reguläre Ausdrücke und Muster für Attributnamen:</strong> Auch diese Bedingungen erfordern BlockIt; CSS-Selektoren können keine regulären Ausdrücke prüfen.</li>
 <li>
-<strong>Geschwisterposition:</strong> Position des Elements unter den Kindern desselben Elternelements.</li>
+<strong>Geschwisterposition:</strong> Die Position unter den Kindern eines Elternelements lässt sich mit einer CSS-Pseudoklasse wie <code>:nth-child()</code> ausdrücken. Eine Position unter den Treffern der vollständigen Regel auszuwählen, ist eine eigene BlockIt-Funktion.</li>
 <li>
-<strong>Abstand zum Geschwister:</strong> Für ein verbundenes Geschwisterelement kann angegeben werden, wie viele Elemente zwischen ihm und dem Ziel liegen; <code>0</code> bedeutet ein direkt angrenzendes Geschwisterelement.</li>
+<strong>Verwandte Elemente und Geschwisterabstand:</strong> Einige Beziehungen lassen sich als CSS ausdrücken, andere Kombinationen aus Beziehungen und Bedingungen erfordern BlockIt. Ein Abstand von <code>0</code> bedeutet ein direkt angrenzendes Geschwisterelement.</li>
 </ul>
+<p>Steht in der Vorschau „BlockIt-Regel“, können Sie sie nicht als CSS in DevTools testen. Verwenden Sie solche Eigenschaften, wenn sie für eine präzise Regel nötig sind. Geben Sie die Regel in die Suche der Stabilitätskarte von StableHTMLFinder ein, um zu sehen, welche dort dargestellten Elemente darauf passen. Einen CSS-Selektor können Sie dagegen kopieren und in DevTools testen.</p>
 <h4>Verwandte Elemente</h4>
 <p>Dem Zielelement und seinen Vorfahren können ein direktes Elternelement oder beliebige Vorfahren hinzugefügt werden. Das Ziel kann außerdem ein Kind, einen Nachfahren oder ein Geschwister haben; Geschwister können eigene Nachfahren besitzen. Der Abstand zu einem Geschwister kann bei Bedarf berücksichtigt werden. Für verwandte Elemente gibt es den Schalter „Darf fehlen“.</p>
 <p>
@@ -448,7 +456,7 @@
 </details>
       </div>
       <h3>Wann Sie die Methode wechseln sollten</h3>
-      <p>Beginnen Sie für ein schnelles Ergebnis mit einem CSS-Selektor aus den Entwicklertools. Eine HTML-Schnellregel ist sinnvoll, wenn die Eigenschaften stabil wirken, Sie aber die verwendeten Attribute selbst bestimmen möchten. Sind die Eigenschaften instabil oder zufällig oder enthält die Seite viele ähnliche Blöcke, verwenden Sie <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> oder den Regelkonstruktor.</p>
+      <p>Beginnen Sie für ein schnelles Ergebnis mit einem CSS-Selektor aus den Entwicklertools. Eine HTML-Schnellregel ist sinnvoll, wenn die Eigenschaften stabil wirken, Sie aber die verwendeten Attribute selbst bestimmen möchten. Sind die Eigenschaften instabil oder zufällig oder enthält die Seite viele ähnliche Blöcke, verwenden Sie <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> oder den Regelkonstruktor.</p>
     </section>
 
     <section class="chapter" id="selectors">
@@ -749,7 +757,7 @@
         <li>
 <strong>Mögliche Ursache 1: Nicht das äußerste Element wurde gewählt.</strong> Gehen Sie im HTML-Baum weiter nach oben und kopieren Sie den Selektor des übergeordneten Containers.</li>
         <li>
-<strong>Mögliche Ursache 2: Die Website verwendet dynamische Klassen (Verschleierung).</strong> Ein kopierter Selektor kann nach dem Neuladen ausfallen. Markieren Sie unter <a href="#methods">„Möglichkeiten, eine Regel zu erstellen“</a> die Eigenschaften als instabil und verwenden Sie eine empfohlene Methode, etwa <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> oder den Konstruktor.</li>
+<strong>Mögliche Ursache 2: Die Website verwendet dynamische Klassen (Verschleierung).</strong> Ein kopierter Selektor kann nach dem Neuladen ausfallen. Markieren Sie unter <a href="#methods">„Möglichkeiten, eine Regel zu erstellen“</a> die Eigenschaften als instabil und verwenden Sie eine empfohlene Methode, etwa <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> oder den Konstruktor.</li>
         <li>
 <strong>Mögliche Ursache 3: Die Seite hat ihre Struktur nach dem Erstellen der Regel geändert.</strong> Prüfen Sie das aktuelle HTML und die Trefferzahl. Wurde der Block umgebaut, kopieren Sie den Selektor erneut oder verfeinern Sie die Regel im Konstruktor.</li>
         <li>
@@ -776,13 +784,14 @@
       </details>
       <details>
       <summary>Die HTML-Struktur der Seite ist unverständlich</summary>
-      <p>Verwenden Sie <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder/install" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a>: Die Erweiterung vergleicht mehrere Ladevorgänge und erstellt eine Stabilitätskarte. Suchen Sie dort das Element und untersuchen Sie seine stabilen Eigenschaften und seine Umgebung.</p>
+      <p>Verwenden Sie <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a>: Die Erweiterung vergleicht mehrere Ladevorgänge und erstellt eine Stabilitätskarte. Suchen Sie dort das Element und untersuchen Sie seine stabilen Eigenschaften und seine Umgebung.</p>
       <p>Wirkt das Markup besonders stark verschleiert, liefert die Website VPN-Verbindungen möglicherweise eine andere Seitenvariante. Falls möglich, deaktivieren Sie das VPN vorübergehend, laden Sie neu und wiederholen Sie die Analyse. Das hilft nicht überall, zeigt aber, ob die kompliziertere Struktur mit der gelieferten Seitenvariante zusammenhängt.</p>
       </details>
       <details>
       <summary>Nichts hilft</summary>
-      <p>Kombinieren Sie die von StableHTMLFinder ermittelten stabilen Eigenschaften mit dem BlockIt-Konstruktor. So erstellen Sie manuell eine Regel, die Element und Umgebung berücksichtigt.</p>
-      <p>Funktioniert die Regel trotz verschiedener Versuche nicht oder meldet die Erweiterung Fehler, senden Sie über das <a href="../../feedback.html">Feedback-Formular</a> einen Bericht. Geben Sie Seitenadresse und Regel an und fügen Sie möglichst Screenshots bei.</p>
+      <p>Kombinieren Sie stabile Eigenschaften aus <a class="product-link" href="https://formacode.dev/en/stablehtmlfinder" target="_blank" rel="noopener noreferrer">StableHTMLFinder</a> mit dem BlockIt-Konstruktor. So können Sie manuell eine Regel erstellen, die sowohl das Element als auch seine Umgebung berücksichtigt.</p>
+      <p>Oder probieren Sie die Erweiterung <a class="product-link" href="https://chromewebstore.google.com/detail/ddkjiahejlhfcafbddmgiahcphecmpfh?utm_source=item-share-cb" target="_blank" rel="noopener noreferrer">uBlock Origin Lite</a> aus.</p>
+      <p>Wenn das Problem speziell bei der Verwendung von BlockIt auftritt – etwa wenn eine Regel nicht greift oder die Erweiterung einen Fehler meldet –, senden Sie über das <a href="../../feedback.html">Feedback-Formular</a> einen Bericht. Geben Sie die Seitenadresse und die Regel an und fügen Sie möglichst Screenshots bei.</p>
       </details>
     </section>
     <div class="image-lightbox" id="imageLightbox" hidden role="dialog" aria-modal="true" aria-label="Screenshot-Ansicht">

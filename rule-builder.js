@@ -5,6 +5,7 @@ const countDetail = document.getElementById('countDetail');
 const matchSelection = document.getElementById('matchSelection');
 const matchPositions = document.getElementById('matchPositions');
 const ruleCode = document.getElementById('ruleCode');
+const ruleType = document.getElementById('ruleType');
 const ruleSummary = document.getElementById('ruleSummary');
 const reloadResult = document.getElementById('reloadResult');
 const builderModeRadios = [...document.querySelectorAll('input[name="builderBlockMode"]')];
@@ -26,6 +27,10 @@ function newStringCondition(value = '', enabled = false) {
   return { enabled, mode: 'exact', value, ignoreCase: false };
 }
 
+function newClassCondition(value = '', mode = 'exact') {
+  return { enabled: true, mode, value };
+}
+
 function newCount(value = 0, enabled = true) {
   return { enabled, operator: '=', value };
 }
@@ -33,12 +38,15 @@ function newCount(value = 0, enabled = true) {
 function newPosition(value = '', enabled = false) { return { enabled, value }; }
 
 function nodeFromElement(element) {
+  const classNames = [...element.classList];
   return {
     tag: element.localName,
     attributeCount: newCount(element.attributes.length, true),
-    classCount: newCount(element.classList.length, element.hasAttribute('class')),
+    classCount: newCount(element.classList.length, classNames.length > 0),
+    classesEnabled: classNames.length > 0,
+    classes: classNames.map(value => newClassCondition(value)),
     siblingPosition: newPosition('', false),
-    attributes: [...element.attributes].map(attribute => ({
+    attributes: [...element.attributes].filter(attribute => attribute.name.toLowerCase() !== 'class').map(attribute => ({
       enabled: true,
       name: newStringCondition(attribute.name, true),
       value: newStringCondition(attribute.value, true)
@@ -50,7 +58,7 @@ function nodeFromElement(element) {
 }
 
 function emptyNode() {
-  return { tag: '', attributeCount: newCount(0, false), classCount: newCount(0, false), siblingPosition: newPosition('', false), attributes: [], ownText: newStringCondition(), text: newStringCondition(), relationGroups: [{ mode: 'all', entries: [] }] };
+  return { tag: '', attributeCount: newCount(0, false), classCount: newCount(0, false), classesEnabled: false, classes: [], siblingPosition: newPosition('', false), attributes: [], ownText: newStringCondition(), text: newStringCondition(), relationGroups: [{ mode: 'all', entries: [] }] };
 }
 
 function normalizeText(value) { return String(value || '').replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim(); }
@@ -131,7 +139,24 @@ function ancestorDepth(node, visited = new Set()) {
   return parents.length ? 1 + Math.max(...parents.map(relation => ancestorDepth(relation.node, new Set(visited)))) : 0;
 }
 
+function ensureClassData(node) {
+  node.classes ||= [];
+  const remaining = [];
+  for (const attribute of node.attributes || []) {
+    const isClass = attribute.name?.enabled && attribute.name.mode === 'exact' && attribute.name.value.trim().toLowerCase() === 'class';
+    if (!isClass) { remaining.push(attribute); continue; }
+    node.classesEnabled = attribute.enabled !== false;
+    const mode = attribute.value?.mode || 'exact';
+    const values = mode === 'exact' ? String(attribute.value?.value || '').split(/\s+/).filter(Boolean) : [String(attribute.value?.value || '')].filter(Boolean);
+    values.forEach(value => node.classes.push(newClassCondition(value, mode)));
+  }
+  node.attributes = remaining;
+  node.classesEnabled ??= node.classes.length > 0;
+  if (!node.classesEnabled && node.classCount) node.classCount.enabled = false;
+}
+
 function renderNode(node, title, source, isRoot = false, hideParentRelations = false, hideRelations = false, allowAncestor = false, allowLower = isRoot, sourceChanged = null) {
+  ensureClassData(node);
   const isCollapsed = !!collapsedNodes.get(node);
   const card = document.createElement('article'); card.className = `card${isRoot ? ' primary-card' : ''}${isCollapsed ? ' collapsed' : ''}`;
   const header = document.createElement('header'); header.className = 'card-head';
@@ -179,7 +204,11 @@ function renderNode(node, title, source, isRoot = false, hideParentRelations = f
   body.append(counts);
 
   const attributes = section(tr('Атрибуты'), tr('совпадут все включённые'));
-  if (!node.attributes.length) attributes.append(note(tr('У этого элемента пока нет добавленных атрибутов.')));
+  attributes.append(renderClassBlock(node));
+  const otherAttributesHeading = document.createElement('div'); otherAttributesHeading.className = 'other-attributes-heading';
+  const otherAttributesTitle = document.createElement('strong'); otherAttributesTitle.textContent = tr('Другие атрибуты');
+  otherAttributesHeading.append(otherAttributesTitle); attributes.append(otherAttributesHeading);
+  if (!node.attributes.length) attributes.append(note(tr('Другие атрибуты не добавлены.')));
   node.attributes.forEach((attribute, index) => attributes.append(renderAttribute(node, attribute, index)));
   const addAttribute = smallButton(`+ ${tr('Добавить атрибут')}`); addAttribute.classList.add('add');
   addAttribute.addEventListener('click', () => { node.attributes.push({ enabled: true, name: newStringCondition('', true), value: newStringCondition('', false) }); scheduleRender(); });
@@ -217,8 +246,11 @@ function renderHtmlImporter(node, sourceChanged) {
 }
 
 function nodeSummary(node) {
+  ensureClassData(node);
+  const activeClasses = node.classesEnabled ? node.classes.filter(item => item.enabled !== false) : [];
   const enabled = (node.attributes || []).filter(attribute => attribute.enabled).length
-    + Number(!!node.attributeCount?.enabled) + Number(!!node.classCount?.enabled)
+    + (node.classesEnabled ? Math.max(1, activeClasses.filter(item => item.mode === 'ignore' || item.value).length) : 0)
+    + Number(!!node.attributeCount?.enabled) + Number(!!node.classCount?.enabled && node.classesEnabled)
     + Number(!!node.ownText?.enabled) + Number(!!node.text?.enabled);
   return enabled ? `${enabled} ${tr(enabled === 1 ? 'условие' : 'условия')}` : tr('без условий');
 }
@@ -235,14 +267,15 @@ function renderRelationCaption(kind) {
 function section(title, hint = '') { const element = document.createElement('div'); element.className = 'section'; const heading = document.createElement('div'); heading.className = 'section-title'; heading.append(document.createTextNode(title)); if (hint) { const detail = document.createElement('span'); detail.textContent = hint; heading.append(detail); } element.append(heading); return element; }
 function note(value) { const item = document.createElement('p'); item.className = 'note'; item.textContent = value; return item; }
 
-function renderCount(condition, label, changed) {
+function renderCount(condition, label, changed, available = true) {
   const row = document.createElement('div'); row.className = 'quantity';
   const toggle = document.createElement('label'); toggle.className = 'toggle';
   const enabled = checkbox(condition.enabled); const toggleVisual = document.createElement('i'); toggle.append(enabled, toggleVisual);
   const title = document.createElement('span'); title.textContent = label;
   const operator = select([['=', tr('ровно')], ['>=', tr('не менее')], ['<=', tr('не более')]], condition.operator); const value = textInput(condition.value);
   value.type = 'number'; value.min = '0';
-  const refresh = () => { value.disabled = operator.disabled = !enabled.checked; row.classList.toggle('off', !enabled.checked); };
+  enabled.disabled = !available;
+  const refresh = () => { const disabled = !available || !enabled.checked; value.disabled = operator.disabled = disabled; row.classList.toggle('off', disabled); };
   enabled.addEventListener('change', () => { condition.enabled = enabled.checked; refresh(); changed(); });
   operator.addEventListener('change', () => { condition.operator = operator.value; changed(); }); value.addEventListener('input', () => { condition.value = value.value; changed(); });
   refresh(); row.append(toggle, title, operator, value); return row;
@@ -260,23 +293,61 @@ function renderPosition(condition) {
   refresh(); row.append(toggle.element, title, value, hint); return row;
 }
 
+function renderClassBlock(node) {
+  ensureClassData(node);
+  const block = document.createElement('div'); block.className = 'class-conditions';
+  const header = document.createElement('div'); header.className = 'class-conditions-head';
+  const toggle = switchToggle(node.classesEnabled); const name = textInput('class'); name.disabled = true; name.className = 'class-fixed-name';
+  const title = document.createElement('strong'); title.textContent = tr('Классы');
+  header.append(toggle.element, name, title); block.append(header);
+  const body = document.createElement('div'); body.className = 'class-conditions-body';
+  const modes = [['exact', tr('значение: точно')], ['prefix', tr('значение: начинается с')], ['suffix', tr('значение: заканчивается на')], ['contains', tr('значение: содержит')], ['regex', tr('значение: рег. выражение')], ['ignore', tr('значение не важно')]];
+  node.classes.forEach((condition, index) => {
+    const row = document.createElement('div'); row.className = 'class-condition-row';
+    const value = textInput(condition.value); value.placeholder = tr('Имя класса');
+    const mode = select(modes, condition.mode || 'exact');
+    const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'icon-btn danger remove'; remove.textContent = '×'; remove.title = tr('Удалить класс');
+    const refreshValue = () => { value.disabled = mode.value === 'ignore'; row.classList.toggle('value-ignored', value.disabled); };
+    value.addEventListener('input', () => { condition.value = value.value; scheduleUpdate(); });
+    mode.addEventListener('change', () => { condition.mode = mode.value; refreshValue(); scheduleUpdate(); });
+    remove.addEventListener('click', () => { node.classes.splice(index, 1); scheduleRender(); });
+    refreshValue(); row.append(value, mode, remove); body.append(row);
+  });
+  const add = smallButton('+ ' + tr('Добавить класс')); add.classList.add('add', 'add-class-condition');
+  add.addEventListener('click', () => { node.classes.push(newClassCondition()); scheduleRender(); });
+  body.append(add);
+  const countWrap = document.createElement('div'); countWrap.className = 'class-count-after';
+  countWrap.append(renderCount(node.classCount, tr('Количество классов в этом class'), () => scheduleUpdate(), node.classesEnabled));
+  body.append(countWrap); block.append(body);
+  const refresh = () => { body.classList.toggle('off', !toggle.input.checked); if (!toggle.input.checked) body.querySelectorAll('input,select,button').forEach(control => { control.disabled = true; }); };
+  toggle.input.addEventListener('change', () => { node.classesEnabled = toggle.input.checked; if (!node.classesEnabled) node.classCount.enabled = false; refresh(); scheduleRender(); });
+  refresh(); return block;
+}
+
 function renderAttribute(node, attribute, index) {
   const block = document.createElement('div'); block.className = 'attribute-block';
-  const row = document.createElement('div'); row.className = `condition toggle-row${attribute.name.value.trim().toLowerCase() === 'class' ? ' class-row' : ''}`;
+  const isClassAttribute = attribute.name.value.trim().toLowerCase() === 'class';
+  if (isClassAttribute && !attribute.enabled) node.classCount.enabled = false;
+  const row = document.createElement('div'); row.className = `condition toggle-row${isClassAttribute ? ' class-row' : ''}`;
   const toggle = switchToggle(attribute.enabled); const enabled = toggle.input;
   const name = textInput(attribute.name.value); const nameMode = select([['exact', tr('имя: точно')], ['prefix', tr('имя: начинается с')], ['regex', tr('имя: рег. выражение')]], attribute.name.mode);
   const value = textInput(attribute.value.value); const valueMode = select([['exact', tr('значение: точно')], ['prefix', tr('значение: начинается с')], ['suffix', tr('значение: заканчивается на')], ['contains', tr('значение: содержит')], ['regex', tr('значение: рег. выражение')], ['ignore', tr('значение не важно')]], attribute.value.mode);
   const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'icon-btn danger remove'; remove.textContent = '×';
   const refreshDisabled = () => { const disabled = !enabled.checked; name.disabled = nameMode.disabled = valueMode.disabled = disabled; value.disabled = disabled || valueMode.value === 'ignore'; row.classList.toggle('off', disabled); };
-  enabled.addEventListener('change', () => { attribute.enabled = enabled.checked; refreshDisabled(); scheduleUpdate(); });
-  nameMode.addEventListener('change', () => { attribute.name.mode = nameMode.value; scheduleUpdate(); }); name.addEventListener('input', () => { attribute.name.value = name.value; scheduleUpdate(); }); name.addEventListener('blur', () => scheduleRender());
+  enabled.addEventListener('change', () => {
+    attribute.enabled = enabled.checked;
+    if (isClassAttribute && !attribute.enabled) node.classCount.enabled = false;
+    refreshDisabled();
+    if (isClassAttribute) scheduleRender(); else scheduleUpdate();
+  });
+  nameMode.addEventListener('change', () => { attribute.name.mode = nameMode.value; scheduleUpdate(); }); name.addEventListener('input', () => { attribute.name.value = name.value; if (isClassAttribute && name.value.trim().toLowerCase() !== 'class') node.classCount.enabled = false; scheduleUpdate(); }); name.addEventListener('blur', () => scheduleRender());
   valueMode.addEventListener('change', () => {
     attribute.value.mode = valueMode.value;
     if (valueMode.value === 'ignore') { attribute.value.value = ''; value.value = ''; }
     refreshDisabled(); scheduleUpdate();
   }); value.addEventListener('input', () => { attribute.value.value = value.value; scheduleUpdate(); });
-  remove.addEventListener('click', () => { node.attributes.splice(index, 1); scheduleRender(); }); refreshDisabled(); row.append(toggle.element, name, nameMode, value, valueMode, remove);
-  if (attribute.name.value.trim().toLowerCase() === 'class') { const classExtra = document.createElement('div'); classExtra.className = 'class-extra'; classExtra.append(renderCount(node.classCount, tr('Количество классов в этом class'), () => scheduleUpdate())); row.append(classExtra); }
+  remove.addEventListener('click', () => { if (isClassAttribute) node.classCount.enabled = false; node.attributes.splice(index, 1); scheduleRender(); }); refreshDisabled(); row.append(toggle.element, name, nameMode, value, valueMode, remove);
+  if (isClassAttribute) { const classExtra = document.createElement('div'); classExtra.className = 'class-extra'; classExtra.append(renderCount(node.classCount, tr('Количество классов в этом class'), () => scheduleUpdate(), attribute.enabled)); row.append(classExtra); }
   block.append(row);
   return block;
 }
@@ -386,8 +457,13 @@ function renderRelationKinds(container, owner, source, allowedKinds = null) {
 
 function renderCandidateChoices(container, owner, source, kind, allowedKinds = null) {
   container.innerHTML = '';
-  const intro = document.createElement('p'); intro.className = 'picker-title'; intro.textContent = tr('{relation} — выберите вариант:', { relation: relationName(kind) });
   const candidates = candidatesFor(source, kind);
+  if (!candidates.length) {
+    addRelation(owner, newRelation(kind, null, source));
+    scheduleRender();
+    return;
+  }
+  const intro = document.createElement('p'); intro.className = 'picker-title'; intro.textContent = tr('{relation} — выберите вариант:', { relation: relationName(kind) });
   const choices = document.createElement('div'); choices.className = 'candidate-choices';
   const addCandidate = (candidate, destination = choices) => {
     const button = document.createElement('button'); button.type = 'button'; button.className = 'candidate-choice'; button.textContent = elementPreview(candidate);
@@ -407,7 +483,6 @@ function renderCandidateChoices(container, owner, source, kind, allowedKinds = n
   } else candidates.slice(0, 5).forEach(candidate => addCandidate(candidate));
   const manual = smallButton(tr('Добавить вручную')); manual.addEventListener('click', () => { addRelation(owner, newRelation(kind, null, source)); scheduleRender(); });
   const back = smallButton(`← ${tr('Назад')}`); back.addEventListener('click', () => renderRelationKinds(container, owner, source, allowedKinds));
-  if (!candidates.length) choices.append(note(tr('В этом фрагменте HTML нет подходящих вариантов. Можно добавить элемент вручную.')));
   container.append(intro, choices, manual, back);
 }
 
@@ -546,11 +621,28 @@ function cssAttribute(attribute) {
   return `:attr(${nameExpression}, ${quoteCss(value.value)})`;
 }
 
+function escapeRuleRegex(value) {
+  return String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\//g, '\\/');
+}
+
+function classRule(condition) {
+  if (condition.enabled === false || condition.mode === 'ignore' || !condition.value) return '';
+  if ((condition.mode || 'exact') === 'exact') return '.' + CSS.escape(condition.value);
+  if (condition.mode === 'regex') return ':class-name(/' + condition.value + '/)';
+  const escaped = escapeRuleRegex(condition.value);
+  const expression = condition.mode === 'prefix' ? '^' + escaped : condition.mode === 'suffix' ? escaped + '$' : escaped;
+  return ':class-name(/' + expression + '/)';
+}
+
 function nodeRule(node) {
   let value = node.tag || '*';
+  if (node.classesEnabled) {
+    const classes = (node.classes || []).map(classRule).join('');
+    value += classes || '[class]';
+  }
   value += (node.attributes || []).map(cssAttribute).join('');
   if (node.attributeCount?.enabled) value += `:attr-count(${node.attributeCount.operator}${node.attributeCount.value})`;
-  if (node.classCount?.enabled) value += `:class-count(${node.classCount.operator}${node.classCount.value})`;
+  if (node.classCount?.enabled && node.classesEnabled) value += `:class-count(${node.classCount.operator}${node.classCount.value})`;
   if (node.siblingPosition?.enabled && node.siblingPosition.value) value += `:sibling-position(${node.siblingPosition.value})`;
   const appendText = (condition, pseudo) => {
     if (!condition?.enabled || condition.mode === 'ignore') return;
@@ -597,9 +689,20 @@ function siblingDescription(relation) {
   return gap === 0 ? `${direction}, ${tr('непосредственно рядом')}` : `${direction}, ${elementsBetweenLabel(gap)}`;
 }
 
+function relatedPreviewDepth(kind, sourceDepth) {
+  return kind === 'sibling' ? sourceDepth : sourceDepth + 1;
+}
+
 function structuredRuleDescription(ruleModel) {
   const fragment = document.createDocumentFragment();
-  const appendNode = (node, role, depth, relation = null) => {
+  const appendNode = (node, role, depth, relation = null, includeAncestors = true) => {
+    const relations = (node.relationGroups || []).flatMap(group => group.entries || []);
+    const ancestors = includeAncestors ? relations.filter(entry => entry.kind.startsWith('ancestor')) : [];
+    // Render ancestors first so the preview follows the page hierarchy.
+    ancestors.slice().reverse().forEach((entry, index) => {
+      appendNode(entry.node, relationRole(entry.kind), depth + index, entry, false);
+    });
+    depth += ancestors.length;
     const block = document.createElement('section'); block.className = 'summary-node'; block.style.setProperty('--summary-depth', depth);
     const heading = document.createElement('div'); heading.className = 'summary-node-heading';
     const roleElement = document.createElement('strong'); roleElement.textContent = role;
@@ -612,7 +715,17 @@ function structuredRuleDescription(ruleModel) {
     if (relation.allowAbsent) item(tr('Отсутствие'), tr('допускается'));
     }
     if (node.attributeCount?.enabled) item(tr('Количество атрибутов'), `${comparisonLabel(node.attributeCount.operator)} ${node.attributeCount.value}`);
-    if (node.classCount?.enabled) item(tr('Количество классов'), `${comparisonLabel(node.classCount.operator)} ${node.classCount.value}`);
+    if (node.classCount?.enabled && node.classesEnabled) item(tr('Количество классов'), `${comparisonLabel(node.classCount.operator)} ${node.classCount.value}`);
+    if (node.classesEnabled) {
+      const activeClasses = (node.classes || []).filter(condition => condition.enabled !== false);
+      const describedClasses = activeClasses.filter(condition => condition.mode === 'ignore' || condition.value);
+      if (!describedClasses.length) item(tr('Атрибут'), `class — ${tr('значение не важно')}`);
+      for (const condition of describedClasses) {
+      if (condition.mode === 'ignore') { item(tr('Класс'), tr('значение не важно')); continue; }
+      const description = (condition.mode || 'exact') === 'exact' ? `«${condition.value}»` : `${stringModeLabel(condition.mode)} «${condition.value}»`;
+      item(tr('Класс'), description);
+      }
+    }
     if (node.siblingPosition?.enabled) item(tr('Позиция среди сиблингов'), node.siblingPosition.value || tr('не указана'));
     for (const attribute of node.attributes || []) {
       if (!attribute.enabled || !attribute.name?.enabled) continue;
@@ -631,7 +744,10 @@ function structuredRuleDescription(ruleModel) {
     }
     if (!list.children.length) item(tr('Условия'), tr('не заданы'));
     block.append(list); fragment.append(block);
-    for (const group of node.relationGroups || []) for (const entry of group.entries || []) appendNode(entry.node, relationRole(entry.kind), depth + 1, entry);
+    for (const entry of relations) {
+      if (entry.kind.startsWith('ancestor')) continue;
+      appendNode(entry.node, relationRole(entry.kind), relatedPreviewDepth(entry.kind, depth), entry);
+    }
   };
   appendNode(ruleModel.root, tr('Блокируемый элемент'), 0);
   if (ruleModel.resultPositions?.enabled) {
@@ -641,8 +757,14 @@ function structuredRuleDescription(ruleModel) {
 }
 
 function updatePreview() {
-  if (!model) { ruleCode.textContent = '—'; ruleSummary.textContent = tr('Сначала вставьте HTML элемента.'); countStatus.textContent = '—'; countDetail.textContent = tr('Заполняйте правило'); return; }
-  ruleCode.textContent = globalThis.__blockItRuleModel.toDisplaySelector?.(model) || selectorLikeRule(model.root);
+  if (!model) { ruleCode.textContent = '—'; ruleType.hidden = true; ruleSummary.textContent = tr('Сначала вставьте HTML элемента.'); countStatus.textContent = '—'; countDetail.textContent = tr('Заполняйте правило'); return; }
+  const ruleModel = globalThis.__blockItRuleModel;
+  const cssSelector = ruleModel.toCssSelector?.(model);
+  const isCss = !!cssSelector;
+  ruleCode.textContent = cssSelector || ruleModel.toDisplaySelector?.(model) || selectorLikeRule(model.root);
+  ruleType.textContent = isCss ? `CSS ${chrome.i18n.getMessage('selectorTypeCSS') || 'selector'}` : tr('Правило BlockIt');
+  ruleType.className = `rule-type${isCss ? '' : ' blockit'}`;
+  ruleType.hidden = false;
   ruleSummary.replaceChildren(structuredRuleDescription(model));
 }
 

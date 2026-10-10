@@ -7,34 +7,121 @@
     "message": "Bloquez des éléments HTML sur n'importe quel site avec des sélecteurs",
     "description": "Description de l'extension"
   },
-  "welcomeTitle": { "message": "Bienvenue dans BlockIt", "description": "Titre de la page d’accueil" },
-  "welcomeGuide": { "message": "Ouvrir le guide", "description": "Lien vers le guide" },
-  "welcomeEyebrow": { "message": "Extension installée", "description": "Libellé de bienvenue" },
-  "welcomeHeroTitle": { "message": "Bienvenue dans BlockIt", "description": "Titre de bienvenue" },
-  "welcomeHeroDescription": { "message": "Épinglez l’extension à la barre Chrome pour bloquer les éléments indésirables en quelques clics.", "description": "Description de bienvenue" },
-  "welcomeMenuTitle": { "message": "Extensions", "description": "Titre du menu des extensions" },
-  "welcomeStep1Title": { "message": "Ouvrez le menu des extensions", "description": "Première étape" },
-  "welcomeStep1Description": { "message": "Cliquez sur l’icône Extensions à droite de la barre Chrome.", "description": "Description de la première étape" },
-  "welcomeStep2Title": { "message": "Épinglez BlockIt", "description": "Deuxième étape" },
-  "welcomeStep2Description": { "message": "Cliquez sur l’icône d’épingle à côté du nom. L’icône apparaîtra dans la barre du navigateur.", "description": "Description de la deuxième étape" },
-  "welcomeStep3Title": { "message": "Commencez à bloquer", "description": "Troisième étape" },
-  "welcomeStep3Description": { "message": "Ouvrez une page, cliquez sur BlockIt, puis ajoutez un sélecteur ou créez une règle.", "description": "Description de la troisième étape" },
-  "welcomeClose": { "message": "Compris", "description": "Bouton de fermeture" },
-  "welcomeInstructions": { "message": "En savoir plus sur l’extension", "description": "Lien vers le guide détaillé" },
-  "htmlRuleTitle": { "message": "Créer une règle à partir du HTML", "description": "Titre de la section de règle HTML" },
-  "htmlRuleHelp": { "message": "Copiez l’élément souhaité dans DevTools et collez-le ici.", "description": "Aide de la section HTML" },
-  "quickRuleTitle": { "message": "Règle rapide", "description": "Titre de la règle rapide" },
-  "quickRuleHelp": { "message": "Utiliser la balise et les attributs sélectionnés.", "description": "Description de la règle rapide" },
-  "parseHtmlBtn": { "message": "Analyser le HTML", "description": "Bouton d’analyse HTML" },
-  "parsedRuleTitle": { "message": "Paramètres de la règle rapide", "description": "Titre du résultat analysé" },
-  "parsedRuleReady": { "message": "HTML analysé", "description": "État de l’analyse HTML" },
-  "builderFollowup": { "message": "Besoin du texte, de la position ou des éléments environnants ?", "description": "Conseil vers le constructeur" },
-  "openThisInBuilder": { "message": "Ouvrir ce HTML dans le constructeur →", "description": "Ouvrir le HTML dans le constructeur" },
-  "exactRuleTitle": { "message": "Règle précise", "description": "Titre de la règle précise" },
-  "exactRuleHelp": { "message": "Ajouter des conditions sur le texte, le nombre, la position et les éléments environnants.", "description": "Description de la règle précise" },
-  "openBuilderBtn": { "message": "Ouvrir le constructeur", "description": "Bouton d’ouverture du constructeur" },
-  "generatedRuleLabel": { "message": "Règle prête", "description": "Libellé de la règle générée" },
-  "generatedRuleHelp": { "message": "Modifiez le sélecteur créé si nécessaire.", "description": "Aide du sélecteur créé" },
+  "welcomeTitle": {
+    "message": "Bienvenue dans BlockIt",
+    "description": "Titre de la page d’accueil"
+  },
+  "welcomeGuide": {
+    "message": "Ouvrir le guide",
+    "description": "Lien vers le guide"
+  },
+  "welcomeEyebrow": {
+    "message": "Extension installée",
+    "description": "Libellé de bienvenue"
+  },
+  "welcomeHeroTitle": {
+    "message": "Bienvenue dans BlockIt",
+    "description": "Titre de bienvenue"
+  },
+  "welcomeHeroDescription": {
+    "message": "Épinglez l’extension à la barre Chrome pour bloquer les éléments indésirables en quelques clics.",
+    "description": "Description de bienvenue"
+  },
+  "welcomeVideoEyebrow": { "message": "Tutoriel vidéo", "description": "Libellé de la vidéo d’accueil" },
+  "welcomeVideoTitle": { "message": "Comment utiliser BlockIt", "description": "Titre de la vidéo d’accueil" },
+  "welcomeVideoDescription": { "message": "Regardez un guide pas à pas pour créer et vérifier des règles.", "description": "Description de la vidéo d’accueil" },
+  "welcomeMenuTitle": {
+    "message": "Extensions",
+    "description": "Titre du menu des extensions"
+  },
+  "welcomeStep1Title": {
+    "message": "Ouvrez le menu des extensions",
+    "description": "Première étape"
+  },
+  "welcomeStep1Description": {
+    "message": "Cliquez sur l’icône Extensions à droite de la barre Chrome.",
+    "description": "Description de la première étape"
+  },
+  "welcomeStep2Title": {
+    "message": "Épinglez BlockIt",
+    "description": "Deuxième étape"
+  },
+  "welcomeStep2Description": {
+    "message": "Cliquez sur l’icône d’épingle à côté du nom. L’icône apparaîtra dans la barre du navigateur.",
+    "description": "Description de la deuxième étape"
+  },
+  "welcomeStep3Title": {
+    "message": "Commencez à bloquer",
+    "description": "Troisième étape"
+  },
+  "welcomeStep3Description": {
+    "message": "Ouvrez une page, cliquez sur BlockIt, puis ajoutez un sélecteur ou créez une règle.",
+    "description": "Description de la troisième étape"
+  },
+  "welcomeClose": {
+    "message": "Compris",
+    "description": "Bouton de fermeture"
+  },
+  "welcomeInstructions": {
+    "message": "En savoir plus sur l’extension",
+    "description": "Lien vers le guide détaillé"
+  },
+  "htmlRuleTitle": {
+    "message": "Créer une règle à partir du HTML",
+    "description": "Titre de la section de règle HTML"
+  },
+  "htmlRuleHelp": {
+    "message": "Copiez l’élément souhaité dans DevTools et collez-le ici.",
+    "description": "Aide de la section HTML"
+  },
+  "quickRuleTitle": {
+    "message": "Règle rapide",
+    "description": "Titre de la règle rapide"
+  },
+  "quickRuleHelp": {
+    "message": "Utiliser la balise et les attributs sélectionnés.",
+    "description": "Description de la règle rapide"
+  },
+  "parseHtmlBtn": {
+    "message": "Analyser le HTML",
+    "description": "Bouton d’analyse HTML"
+  },
+  "parsedRuleTitle": {
+    "message": "Paramètres de la règle rapide",
+    "description": "Titre du résultat analysé"
+  },
+  "parsedRuleReady": {
+    "message": "HTML analysé",
+    "description": "État de l’analyse HTML"
+  },
+  "builderFollowup": {
+    "message": "Besoin du texte, de la position ou des éléments environnants ?",
+    "description": "Conseil vers le constructeur"
+  },
+  "openThisInBuilder": {
+    "message": "Ouvrir ce HTML dans le constructeur →",
+    "description": "Ouvrir le HTML dans le constructeur"
+  },
+  "exactRuleTitle": {
+    "message": "Règle précise",
+    "description": "Titre de la règle précise"
+  },
+  "exactRuleHelp": {
+    "message": "Ajouter des conditions sur le texte, le nombre, la position et les éléments environnants.",
+    "description": "Description de la règle précise"
+  },
+  "openBuilderBtn": {
+    "message": "Ouvrir le constructeur",
+    "description": "Bouton d’ouverture du constructeur"
+  },
+  "generatedRuleLabel": {
+    "message": "Règle prête",
+    "description": "Libellé de la règle générée"
+  },
+  "generatedRuleHelp": {
+    "message": "Modifiez le sélecteur créé si nécessaire.",
+    "description": "Aide du sélecteur créé"
+  },
   "pasteHtmlLabel": {
     "message": "Collez l'élément HTML copié :",
     "description": "Étiquette du champ HTML"
@@ -72,7 +159,7 @@
     "description": "Espace réservé de la valeur"
   },
   "addAttrBtn": {
-    "message": "➕ Ajouter",
+    "message": "Ajouter",
     "description": "Bouton Ajouter un attribut"
   },
   "enterSelector": {
@@ -100,7 +187,7 @@
     "description": "Astuce du mode Masquer"
   },
   "modeRemoveHint": {
-    "message": "L'élément est complètement supprimé du HTML. La mise en page peut changer, mais l'espace est libéré.",
+    "message": "L’élément disparaît et libère son espace. Le contenu situé en dessous peut se déplacer.",
     "description": "Astuce du mode Supprimer"
   },
   "addRuleBtn": {
@@ -271,8 +358,12 @@
     "message": "Format invalide. Tableau de règles ou objet avec le champ 'rules' attendu.",
     "description": "Erreur de format invalide"
   },
-  "importSettings": { "message": "Paramètres" },
-  "errorInvalidJSON": { "message": "JSON invalide. Vérifiez le contenu du fichier." },
+  "importSettings": {
+    "message": "Paramètres"
+  },
+  "errorInvalidJSON": {
+    "message": "JSON invalide. Vérifiez le contenu du fichier."
+  },
   "errorMissingSelector": {
     "message": "La règle #{index} ne contient pas le champ 'selector'.",
     "description": "Erreur d'absence du champ selector"
@@ -388,5 +479,25 @@
   "toolsDivider": {
     "message": "─── Outils ───",
     "description": "Séparateur pour la section des outils"
+  },
+  "classesHelp": {
+    "message": "Chaque classe peut être modifiée ou supprimée",
+    "description": "Quick rule class editor"
+  },
+  "classValueLabel": {
+    "message": "Nom de classe",
+    "description": "Quick rule class editor"
+  },
+  "deleteClassTitle": {
+    "message": "Supprimer la classe",
+    "description": "Quick rule class editor"
+  },
+  "classNamePlaceholder": {
+    "message": "Ajouter une classe",
+    "description": "Quick rule class editor"
+  },
+  "addClassBtn": {
+    "message": "Ajouter",
+    "description": "Quick rule class editor"
   }
 }

@@ -606,6 +606,16 @@ body.import {
 .attr-item .attr-delete:hover {
   color: #d13438;
 }
+.quick-classes { margin:6px 0; padding:9px; border:1px solid #dce4f2; border-radius:9px; background:#f7f9fd; }
+.quick-classes-heading { display:flex; align-items:baseline; gap:8px; margin-bottom:7px; }
+.quick-classes-heading strong { color:#3158ca; font:700 12px "Courier New",monospace; }
+.quick-classes-heading span { color:#6d7789; font-size:10px; }
+.quick-class-list { display:grid; gap:6px; }
+.quick-class-item,.quick-class-add { display:flex; align-items:center; gap:7px; }
+.quick-class-item input,.quick-class-add input { min-width:0; flex:1; padding:6px 8px; border:1px solid #cfd8e7; border-radius:7px; background:#fff; font:12px "Courier New",monospace; }
+.quick-class-item input:focus,.quick-class-add input:focus { outline:2px solid rgba(63,109,246,.18); border-color:#6f91fa; }
+.quick-class-item .attr-delete { cursor:pointer; border:0; background:transparent; }
+.add-class-btn { flex:0 0 auto; padding:6px 9px; border:1px dashed #9eb2df; border-radius:7px; background:#fff; color:#3158ca; font-size:11px; font-weight:700; cursor:pointer; }
 
 /* ============================================================
  *  14. ATTRIBUTE ADD ROW
