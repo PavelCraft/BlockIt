@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ja"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>使い方 — StableHTMLFinder</title>
+    <link rel="stylesheet" href="../help.css">
+<link rel="canonical" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/ja/"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/en/" hreflang="en"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/fr/" hreflang="fr"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/de/" hreflang="de"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/es/" hreflang="es"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/pt/" hreflang="pt"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/zh/" hreflang="zh"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/ja/" hreflang="ja"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/ru/" hreflang="ru"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/en/" hreflang="x-default"><meta name="description" content="StableHTMLFinder は複数回のページ読み込みを比較し、すべての観測で安定していた要素と特徴を表示します。変化するクラス、ID、構造に頼らずセレクターを作成できます。"></head>
+<body>
+<header class="top">
+    <div class="brand">Stable<span>HTML</span>Finder</div>
+    <nav><a data-privacy-policy="" href="https://formacode.dev/en/stablehtmlfinder/privacy" target="_blank" rel="noopener noreferrer">プライバシーポリシー</a><a href="mailto:contact@formacode.dev" target="_blank" rel="noopener noreferrer">フィードバック</a></nav>
+</header>
+<main class="page">
+    <section class="hero">
+        <div class="eyebrow">使い方</div>
+        <h1>安定性マップの使い方</h1>
+        <p>StableHTMLFinder は複数回のページ読み込みを比較し、すべての観測で安定していた要素と特徴を表示します。変化するクラス、ID、構造に頼らずセレクターを作成できます。</p>
+        <p><a class="button" data-stablehtmlfinder-page="" href="https://formacode.dev/en/stablehtmlfinder" target="_blank" rel="noopener noreferrer">StableHTMLFinderのページ</a> <a class="button" href="https://chromewebstore.google.com/detail/stablehtmlfinder/mdnfjmhokoblclpjbkofkkjmbfbnokmm" target="_blank" rel="noopener noreferrer">Chrome ウェブストアからStableHTMLFinderをインストール</a></p>
+    </section>
+
+    <section class="card">
+        <h2>基本的な手順</h2>
+        <ol>
+            <li>目的の要素があるページを開きます。</li>
+            <li>読み込み回数を選びます。簡単な確認には通常2回で十分ですが、回数を増やすと精度が上がります。</li>
+            <li>解析を開始します。各読み込み後、ページが通常の内容を構築できるよう設定時間だけ待機します。</li>
+            <li>枝を展開するか検索を使って、マップ上の要素を探します。</li>
+            <li>メニュー <b>⋮</b> を開き、特徴の説明を読んでCSSセレクターまたはBlockItルールをコピーします。</li>
+            <li>結果をBlockItの対応する欄に貼り付け、ページ上で確認します。</li>
+        </ol>
+        <p class="note">読み込み回数を増やすほど、偶然の一致を安定した特徴と誤認する危険が減ります。動的IDの2文字が偶然2回一致しても、さらに複数回続くことは通常ありません。</p>
+    </section>
+
+    <section class="card map-reading-card">
+        <h2>安定性マップの見方</h2>
+        <p class="map-reading-lead">マップの各行はHTML要素に対応します。インデントは確認済みのページ構造を表し、字下げされた要素は上の要素の子孫です。すべての読み込みで安定性を確認できた特徴だけが表示されます。表示されないクラスや属性も、観測間で変化しただけかもしれません。</p>
+        <ul class="map-reading-list">
+            <li><b><code>&lt;div&gt;</code>, <code>&lt;a&gt;</code>, <code>&lt;section&gt;</code></b> — 安定したタグ名です。</li>
+            <li><b><code>id="menu"</code></b> — 属性名と完全な値がすべての読み込みで一致しました。</li>
+            <li><b><code>data-*</code>, <code>*-label</code>, <code>*test*</code></b> — 属性名の一部だけが安定しており、それぞれ <code>data-</code>で始まる、 <code>-label</code> で終わる、または含むことを表します： <code>test</code>.</li>
+            <li><b><code>id^="prefix"</code></b> — 属性値が指定テキストで始まります。 <b><code>id$="suffix"</code></b> — そのテキストで終わります。 <b><code>id*="part"</code></b> — そのテキストを含みます。単独の <b><code>=</code></b> （ <code>^</code>, <code>$</code> または <code>*</code> なし）は完全一致を意味します。</li>
+            <li><b>値のない属性名</b> は、属性の存在は安定しているものの、値が変化したか確認できなかったことを意味します。</li>
+            <li><b><code>class</code> （3クラス）</b> は、クラス名または完全な <code>class</code>.</li>
+            <li><b>属性の右側のテキスト</b> — 要素固有の安定したテキストです。「展開」で全文を表示します。</li>
+            <li><b><code>iframe</code>, <code>iframe document</code> と <code>#shadow-root</code></b> は特殊な入れ子部分の境界を示し、その内容は別のマップ枝に続きます。</li>
+            <li><b><code>&lt;...&gt;</code></b> は変化した、または対応が不確かな部分を示します。その下に確認済みの安定部分が再び現れる場合があります。</li>
+        </ul>
+        <div class="map-reading-notes">
+            <p>緑の行は確認済み要素です。薄い緑は推定一致または変化部分の後の安定断片です。オレンジ枠は検索一致、明るい枠は現在の一致を示します。</p>
+            <p>「 <b>⋮</b> 」を押すと、セレクターまたはルールの説明に、属性数、クラス数、固有テキスト、兄弟位置、結果番号、親・祖先・子・子孫・兄弟との関係など追加の確認済み特徴が表示されます。行に個別表示されなくても絞り込みに使われます。</p>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>マップを検索</h2>
+        <p>検索欄では表示テキスト、タグ名、属性、値、要素テキストを検索できます。DevToolsからコピーしたHTMLも貼り付けられます。通常のCSSセレクターは最新の保存済みスナップショットで評価され、対応するマップ要素を強調します。</p>
+        <p>欄の横の矢印で一致箇所を移動できます。他のツリーは隠れないため、結果の祖先や子孫も確認できます。</p>
+    </section>
+
+    <section class="card">
+        <h2>CSSセレクターとBlockItルールのどちらを使う？</h2>
+        <p>安定したID、属性名、固定値、明確な構造など信頼できる特徴を使える場合はCSSセレクターを優先してください。標準CSSは簡単で通常は高速です。</p>
+        <p>CSSでは不十分な場合（クラス/属性数、動的な属性名、固有テキスト、結果位置など）はBlockItルールを使います。強力ですが多少遅くなることがあります。</p>
+        <p>マップは候補を自動生成しますが、この機能は発展途上です。必ず確認し、説明を読んでください。太字の警告は一意性を確認できなかったことを示します。</p>
+        <p><a class="button" data-blockit-docs="" href="https://pavelcraft.github.io/BlockIt/rules/en/" target="_blank" rel="noreferrer">BlockIt構文ドキュメント</a></p>
+    </section>
+
+    <section class="card">
+        <h2>ソースリポジトリを公開しない理由</h2>
+        <p>この拡張機能は変化するサイト構造の理解を助けます。アルゴリズムの詳細を公開すると安定性マップへの意図的な妨害が容易になるため、ソースは非公開です。Chromeウェブストアの審査を回避するものでも、完全な秘密を約束するものでもありません。</p>
+    </section>
+
+    <section class="card">
+        <h2>BlockItとの連携</h2>
+        <p>StableHTMLFinderが安定した特徴を見つけ、 <a data-blockit-page="" href="https://formacode.dev/en/blockit" target="_blank" rel="noopener noreferrer">BlockIt</a> が作成したルールを適用して一致要素を非表示または削除します。DevToolsのセレクターが再読み込み後に壊れる場合に役立ちます。</p>
+        <p>BlockItは別の拡張機能で、マップ作成には不要です。</p>
+        <p><a class="button" href="https://chromewebstore.google.com/detail/BlockIt/honkfhonlklbabiffdmonpoihccbkgln" target="_blank" rel="noopener noreferrer">Chrome ウェブストアから BlockIt をインストール</a></p>
+    </section>
+</main>
+
+
+
+</body></html>

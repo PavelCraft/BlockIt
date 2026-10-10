@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Guide — StableHTMLFinder</title>
+    <link rel="stylesheet" href="../help.css">
+<link rel="canonical" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/en/"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/en/" hreflang="en"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/fr/" hreflang="fr"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/de/" hreflang="de"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/es/" hreflang="es"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/pt/" hreflang="pt"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/zh/" hreflang="zh"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/ja/" hreflang="ja"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/ru/" hreflang="ru"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/en/" hreflang="x-default"><meta name="description" content="StableHTMLFinder compares multiple page loads and shows elements and features that remain stable in every observation. This helps advanced users build selectors without relying on randomly changing classes, IDs, or structure."></head>
+<body>
+<header class="top">
+    <div class="brand">Stable<span>HTML</span>Finder</div>
+    <nav><a data-privacy-policy="" href="https://formacode.dev/en/stablehtmlfinder/privacy" target="_blank" rel="noopener noreferrer">Privacy Policy</a><a href="mailto:contact@formacode.dev" target="_blank" rel="noopener noreferrer">Feedback</a></nav>
+</header>
+<main class="page">
+    <section class="hero">
+        <div class="eyebrow">Guide</div>
+        <h1>How to use the stability map</h1>
+        <p>StableHTMLFinder compares multiple page loads and shows elements and features that remain stable in every observation. This helps advanced users build selectors without relying on randomly changing classes, IDs, or structure.</p>
+        <p><a class="button" data-stablehtmlfinder-page="" href="https://formacode.dev/en/stablehtmlfinder" target="_blank" rel="noopener noreferrer">StableHTMLFinder page</a> <a class="button" href="https://chromewebstore.google.com/detail/stablehtmlfinder/mdnfjmhokoblclpjbkofkkjmbfbnokmm" target="_blank" rel="noopener noreferrer">Install StableHTMLFinder from the Chrome Web Store</a></p>
+    </section>
+
+    <section class="card">
+        <h2>Typical workflow</h2>
+        <ol>
+            <li>Open the page containing the element you need.</li>
+            <li>Choose the number of loads. Two is usually enough for a quick check; more loads make the map more accurate.</li>
+            <li>Start the analysis. After each load, the extension waits for the configured time so the page can finish building its normal content.</li>
+            <li>Find the element on the map by expanding branches or using search.</li>
+            <li>Open the <b>⋮</b> on the required node, read the plain-language feature description, and copy the CSS selector or BlockIt rule.</li>
+            <li>Paste the result into the corresponding BlockIt field and test it on the page.</li>
+        </ol>
+        <p class="note">More loads reduce the risk of mistaking a coincidence for a stable feature. For example, two letters in a dynamic ID may match twice by chance, but usually not across several more loads.</p>
+    </section>
+
+    <section class="card map-reading-card">
+        <h2>How to read the stability map</h2>
+        <p class="map-reading-lead">Each map row represents an HTML element. Indentation follows the confirmed page structure: indented elements are descendants of the element above. The map shows only features confirmed as stable across all loads. A missing class, attribute, or tree section may still exist on the page but have changed between observations.</p>
+        <ul class="map-reading-list">
+            <li><b><code>&lt;div&gt;</code>, <code>&lt;a&gt;</code>, <code>&lt;section&gt;</code></b> — a stable tag name.</li>
+            <li><b><code>id="menu"</code></b> — the attribute name and its full value matched in every load.</li>
+            <li><b><code>data-*</code>, <code>*-label</code>, <code>*test*</code></b> — only part of the attribute name is stable: it respectively starts with <code>data-</code>, ends with <code>-label</code> or contains <code>test</code>.</li>
+            <li><b><code>id^="prefix"</code></b> — the attribute value starts with the shown text; <b><code>id$="suffix"</code></b> — ends with it; <b><code>id*="part"</code></b> — contains it. A plain <b><code>=</code></b> without <code>^</code>, <code>$</code> or <code>*</code> means an exact match.</li>
+            <li><b>An attribute name without a value</b> means the attribute’s presence is stable, while its value changed or could not be confirmed.</li>
+            <li><b><code>class</code> (3 classes)</b> means the class count is stable even though class names or the full <code>class</code>.</li>
+            <li><b>Text to the right of the attributes</b> — stable own text of the element. The “expand” button shows it in full.</li>
+            <li><b><code>iframe</code>, <code>iframe document</code> and <code>#shadow-root</code></b> mark boundaries of special nested page sections. Their content continues in a separate map branch.</li>
+            <li><b><code>&lt;...&gt;</code></b> marks a changing or uncertainly matched section. A confirmed stable fragment may appear below it.</li>
+        </ul>
+        <div class="map-reading-notes">
+            <p>Green rows are confirmed elements. Lighter green marks probable matches or stable fragments after a changing section. An orange outline marks search matches; the brighter outline is the current match.</p>
+            <p>After selecting <b>⋮</b> the selector or rule description may show additional confirmed features: exact attribute and class counts, own text, sibling position, result number, and relationships to parents, ancestors, children, descendants, or siblings. These may refine a result even when not labeled directly on the map row.</p>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>Search the map</h2>
+        <p>The search field can find displayed node text, tag names, attributes, values, and element text. You can also paste HTML copied from DevTools; the extension will match it to map branches. A regular CSS selector is evaluated against the latest saved page snapshot and highlights the linked map elements.</p>
+        <p>The arrows beside the field move between matches. Search does not hide the rest of the tree, so you can inspect each result’s ancestors and descendants.</p>
+    </section>
+
+    <section class="card">
+        <h2>CSS selector or BlockIt rule?</h2>
+        <p>Prefer a CSS selector when it uses clear, durable features such as a stable ID, attribute name, constant value, or clear structure. Standard CSS is simpler and usually faster.</p>
+        <p>Use a BlockIt rule when CSS is not enough—for example, to consider class or attribute counts, dynamic attribute names, own text, or a result position. Rules are more powerful but may run slightly slower.</p>
+        <p>The map generates suggestions automatically, but this feature is still evolving. Always verify them and read the plain-language description. A bold warning means the result could not be confirmed as unique.</p>
+        <p><a class="button" data-blockit-docs="" href="https://pavelcraft.github.io/BlockIt/rules/en/" target="_blank" rel="noreferrer">BlockIt syntax documentation</a></p>
+    </section>
+
+    <section class="card">
+        <h2>Why the source repository is not public</h2>
+        <p>The extension helps users understand changing website markup. A public repository describing the algorithms in detail would make it easier for services to deliberately obstruct the stability map. The source repository is therefore not public. This does not bypass Chrome Web Store review and is not a promise of complete technical secrecy.</p>
+    </section>
+
+    <section class="card">
+        <h2>Connection with BlockIt</h2>
+        <p>StableHTMLFinder finds durable features; <a data-blockit-page="" href="https://formacode.dev/en/blockit" target="_blank" rel="noopener noreferrer">BlockIt</a> applies the resulting rule and hides or removes matching elements. Together they help when a selector copied from DevTools breaks after a reload.</p>
+        <p>BlockIt is a separate extension and is not required to build the map.</p>
+        <p><a class="button" href="https://chromewebstore.google.com/detail/BlockIt/honkfhonlklbabiffdmonpoihccbkgln" target="_blank" rel="noopener noreferrer">Install BlockIt from the Chrome Web Store</a></p>
+    </section>
+</main>
+
+
+
+</body></html>

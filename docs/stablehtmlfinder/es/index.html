@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="es"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Guía — StableHTMLFinder</title>
+    <link rel="stylesheet" href="../help.css">
+<link rel="canonical" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/es/"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/en/" hreflang="en"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/fr/" hreflang="fr"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/de/" hreflang="de"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/es/" hreflang="es"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/pt/" hreflang="pt"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/zh/" hreflang="zh"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/ja/" hreflang="ja"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/ru/" hreflang="ru"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/en/" hreflang="x-default"><meta name="description" content="StableHTMLFinder compara varias cargas y muestra los elementos y características que se mantienen estables. Así, los usuarios avanzados pueden crear selectores sin depender de clases, ID o estructuras cambiantes."></head>
+<body>
+<header class="top">
+    <div class="brand">Stable<span>HTML</span>Finder</div>
+    <nav><a data-privacy-policy="" href="https://formacode.dev/en/stablehtmlfinder/privacy" target="_blank" rel="noopener noreferrer">Política de privacidad</a><a href="mailto:contact@formacode.dev" target="_blank" rel="noopener noreferrer">Comentarios</a></nav>
+</header>
+<main class="page">
+    <section class="hero">
+        <div class="eyebrow">Guía</div>
+        <h1>Cómo usar el mapa de estabilidad</h1>
+        <p>StableHTMLFinder compara varias cargas y muestra los elementos y características que se mantienen estables. Así, los usuarios avanzados pueden crear selectores sin depender de clases, ID o estructuras cambiantes.</p>
+        <p><a class="button" data-stablehtmlfinder-page="" href="https://formacode.dev/en/stablehtmlfinder" target="_blank" rel="noopener noreferrer">Página de StableHTMLFinder</a> <a class="button" href="https://chromewebstore.google.com/detail/stablehtmlfinder/mdnfjmhokoblclpjbkofkkjmbfbnokmm" target="_blank" rel="noopener noreferrer">Instalar StableHTMLFinder desde Chrome Web Store</a></p>
+    </section>
+
+    <section class="card">
+        <h2>Flujo habitual</h2>
+        <ol>
+            <li>Abra la página que contiene el elemento.</li>
+            <li>Elija el número de cargas. Dos suelen bastar para una revisión rápida; más cargas aumentan la precisión.</li>
+            <li>Inicie el análisis. Tras cada carga, la extensión espera el tiempo configurado para que la página complete su contenido habitual.</li>
+            <li>Encuentre el elemento desplegando ramas o usando la búsqueda.</li>
+            <li>Abra el menú <b>⋮</b> en el nodo deseado, lea la descripción y copie el selector CSS o la regla de BlockIt.</li>
+            <li>Pegue el resultado en el campo correspondiente de BlockIt y pruébelo en la página.</li>
+        </ol>
+        <p class="note">Cuantas más cargas, menor es el riesgo de confundir una coincidencia con una característica estable. Dos letras de un ID dinámico pueden coincidir dos veces por azar, pero no normalmente en más cargas.</p>
+    </section>
+
+    <section class="card map-reading-card">
+        <h2>Cómo leer el mapa de estabilidad</h2>
+        <p class="map-reading-lead">Cada fila representa un elemento HTML. La sangría sigue la estructura confirmada; los elementos sangrados son descendientes. El mapa solo muestra características estables en todas las cargas. Una clase, atributo o rama ausente puede existir pero haber cambiado.</p>
+        <ul class="map-reading-list">
+            <li><b><code>&lt;div&gt;</code>, <code>&lt;a&gt;</code>, <code>&lt;section&gt;</code></b> — nombre de etiqueta estable.</li>
+            <li><b><code>id="menu"</code></b> — el nombre y el valor completo del atributo coincidieron en todas las cargas.</li>
+            <li><b><code>data-*</code>, <code>*-label</code>, <code>*test*</code></b> — solo parte del nombre es estable: empieza por <code>data-</code>, termina en <code>-label</code> o contiene <code>test</code>.</li>
+            <li><b><code>id^="prefix"</code></b> — el valor del atributo empieza por el texto indicado; <b><code>id$="suffix"</code></b> — termina en él; <b><code>id*="part"</code></b> — lo contiene. El signo <b><code>=</code></b> sin <code>^</code>, <code>$</code> o <code>*</code> indica una coincidencia exacta.</li>
+            <li><b>Un nombre de atributo sin valor</b> significa que la presencia del atributo es estable, pero su valor cambió o no se confirmó.</li>
+            <li><b><code>class</code> (3 clases)</b> significa que el número de clases es estable aunque los nombres o el valor completo de <code>class</code>.</li>
+            <li><b>El texto a la derecha de los atributos</b> — texto propio estable del elemento. El botón «ampliar» lo muestra completo.</li>
+            <li><b><code>iframe</code>, <code>iframe document</code> y <code>#shadow-root</code></b> marcan los límites de partes anidadas especiales. Su contenido continúa en otra rama.</li>
+            <li><b><code>&lt;...&gt;</code></b> marca una sección cambiante o emparejada con incertidumbre. Debajo puede reaparecer un fragmento estable confirmado.</li>
+        </ul>
+        <div class="map-reading-notes">
+            <p>Las filas verdes son elementos confirmados. El verde claro indica coincidencias probables o fragmentos estables tras una zona cambiante. El borde naranja marca resultados; el más intenso indica el actual.</p>
+            <p>Tras seleccionar <b>⋮</b> la descripción puede mostrar características adicionales: número exacto de atributos y clases, texto propio, posición, número de resultado y relaciones con padres, ancestros, hijos, descendientes o hermanos. Pueden precisar el resultado aunque no aparezcan en la fila.</p>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>Buscar en el mapa</h2>
+        <p>El campo busca texto visible, etiquetas, atributos, valores y texto del elemento. También puede pegar HTML de DevTools. Un selector CSS se evalúa en la última captura y resalta los elementos vinculados.</p>
+        <p>Las flechas permiten recorrer las coincidencias. El resto del árbol permanece visible para examinar ancestros y descendientes.</p>
+    </section>
+
+    <section class="card">
+        <h2>¿Selector CSS o regla de BlockIt?</h2>
+        <p>Prefiera un selector CSS cuando use características claras y duraderas: ID estable, nombre de atributo, valor constante o estructura clara. CSS es más sencillo y suele ser más rápido.</p>
+        <p>Use una regla de BlockIt cuando CSS no baste, por ejemplo para contar clases o atributos, nombres dinámicos, texto propio o posición del resultado. Las reglas son más potentes, aunque algo más lentas.</p>
+        <p>El mapa genera sugerencias automáticamente, pero la función sigue mejorando. Verifíquelas y lea la descripción. Una advertencia en negrita indica que no se pudo confirmar la unicidad.</p>
+        <p><a class="button" data-blockit-docs="" href="https://pavelcraft.github.io/BlockIt/rules/en/" target="_blank" rel="noreferrer">Documentación de la sintaxis de BlockIt</a></p>
+    </section>
+
+    <section class="card">
+        <h2>Por qué el repositorio fuente no es público</h2>
+        <p>La extensión ayuda a entender marcado web cambiante. Un repositorio público con detalles facilitaría obstaculizar deliberadamente el mapa; por eso no se publica. Esto no evita la revisión de Chrome Web Store ni promete secreto técnico total.</p>
+    </section>
+
+    <section class="card">
+        <h2>Relación con BlockIt</h2>
+        <p>StableHTMLFinder encuentra características duraderas; <a data-blockit-page="" href="https://formacode.dev/en/blockit" target="_blank" rel="noopener noreferrer">BlockIt</a> aplica la regla y oculta o elimina los elementos coincidentes. Juntos ayudan cuando un selector de DevTools deja de funcionar tras recargar.</p>
+        <p>BlockIt es una extensión independiente y no es necesaria para crear el mapa.</p>
+        <p><a class="button" href="https://chromewebstore.google.com/detail/BlockIt/honkfhonlklbabiffdmonpoihccbkgln" target="_blank" rel="noopener noreferrer">Instalar BlockIt desde Chrome Web Store</a></p>
+    </section>
+</main>
+
+
+
+</body></html>

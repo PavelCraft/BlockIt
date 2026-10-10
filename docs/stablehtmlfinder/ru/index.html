@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ru"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Инструкция — StableHTMLFinder</title>
+    <link rel="stylesheet" href="../help.css">
+<link rel="canonical" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/ru/"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/en/" hreflang="en"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/fr/" hreflang="fr"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/de/" hreflang="de"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/es/" hreflang="es"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/pt/" hreflang="pt"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/zh/" hreflang="zh"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/ja/" hreflang="ja"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/ru/" hreflang="ru"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/en/" hreflang="x-default"><meta name="description" content="StableHTMLFinder сравнивает несколько загрузок страницы и показывает элементы и признаки, которые сохранились во всех наблюдениях. Это помогает продвинутому пользователю подобрать селектор, не опираясь на случайно меняющиеся классы, id и структуру."></head>
+<body>
+<header class="top">
+    <div class="brand">Stable<span>HTML</span>Finder</div>
+    <nav><a data-privacy-policy="" href="https://formacode.dev/ru/stablehtmlfinder/privacy" target="_blank" rel="noopener noreferrer">Политика конфиденциальности</a><a href="mailto:contact@formacode.dev" target="_blank" rel="noopener noreferrer">Обратная связь</a></nav>
+</header>
+<main class="page">
+    <section class="hero">
+        <div class="eyebrow">Инструкция</div>
+        <h1>Как пользоваться картой стабильности</h1>
+        <p>StableHTMLFinder сравнивает несколько загрузок страницы и показывает элементы и признаки, которые сохранились во всех наблюдениях. Это помогает продвинутому пользователю подобрать селектор, не опираясь на случайно меняющиеся классы, id и структуру.</p>
+        <p><a class="button" data-stablehtmlfinder-page="" href="https://formacode.dev/ru/stablehtmlfinder" target="_blank" rel="noopener noreferrer">Страница StableHTMLFinder</a> <a class="button" href="https://chromewebstore.google.com/detail/stablehtmlfinder/mdnfjmhokoblclpjbkofkkjmbfbnokmm" target="_blank" rel="noopener noreferrer">Установить StableHTMLFinder из Chrome Web Store</a></p>
+    </section>
+
+    <section class="card">
+        <h2>Обычный сценарий</h2>
+        <ol>
+            <li>Откройте страницу, где нужно найти элемент.</li>
+            <li>Выберите число загрузок. Двух обычно достаточно для быстрого просмотра; большее число делает карту точнее.</li>
+            <li>Запустите анализ. После каждой загрузки расширение ждёт заданное время, чтобы страница успела построить обычное содержимое.</li>
+            <li>Найдите элемент на карте: раскрывайте ветки или воспользуйтесь поиском.</li>
+            <li>Откройте меню <b>⋮</b> у нужного узла, прочитайте словесное описание признаков и скопируйте CSS-селектор либо правило BlockIt.</li>
+            <li>Вставьте результат в соответствующее поле BlockIt и проверьте его на странице.</li>
+        </ol>
+        <p class="note">Чем больше загрузок, тем меньше риск принять случайное совпадение за постоянный признак. Например, две одинаковые буквы в динамическом id могут случайно совпасть два раза, но обычно не переживут ещё несколько загрузок.</p>
+    </section>
+
+    <section class="card map-reading-card">
+        <h2>Как читать карту стабильности</h2>
+        <p class="map-reading-lead">Каждая строка карты соответствует HTML-элементу. Вложенность строк повторяет подтверждённую структуру страницы: элементы с отступом являются потомками расположенного выше элемента. Карта показывает только признаки, стабильность которых удалось подтвердить во всех загрузках. Если привычного класса, атрибута или участка дерева нет на карте, это не обязательно означает, что его нет на странице: он мог изменяться между наблюдениями.</p>
+        <ul class="map-reading-list">
+            <li><b><code>&lt;div&gt;</code>, <code>&lt;a&gt;</code>, <code>&lt;section&gt;</code></b> — стабильное имя тега.</li>
+            <li><b><code>id="menu"</code></b> — имя атрибута и всё его значение совпали во всех загрузках.</li>
+            <li><b><code>data-*</code>, <code>*-label</code>, <code>*test*</code></b> — стабильна только часть имени атрибута: оно соответственно начинается с <code>data-</code>, заканчивается на <code>-label</code> или содержит <code>test</code>.</li>
+            <li><b><code>id^="prefix"</code></b> — значение атрибута начинается с указанного текста; <b><code>id$="suffix"</code></b> — заканчивается им; <b><code>id*="part"</code></b> — содержит его. Знак <b><code>=</code></b> без <code>^</code>, <code>$</code> или <code>*</code> означает полное совпадение.</li>
+            <li><b>Имя атрибута без значения</b> означает, что стабильно само наличие атрибута, но его значение менялось или не было подтверждено.</li>
+            <li><b><code>class</code> (3 класса)</b> означает стабильное количество классов при нестабильных названиях или полном значении атрибута <code>class</code>.</li>
+            <li><b>Текст справа от атрибутов</b> — стабильный собственный текст элемента. Кнопка «развернуть» показывает его полностью.</li>
+            <li><b><code>iframe</code>, <code>iframe document</code> и <code>#shadow-root</code></b> отмечают границы особых вложенных частей страницы. Их содержимое продолжается отдельной веткой карты.</li>
+            <li><b><code>&lt;...&gt;</code></b> обозначает изменявшийся или неуверенно сопоставленный участок структуры. Под ним может находиться снова подтверждённый стабильный фрагмент.</li>
+        </ul>
+        <div class="map-reading-notes">
+            <p>Зелёные строки обозначают подтверждённые элементы. Более светлый зелёный используется для вероятного сопоставления или стабильного фрагмента после изменявшегося участка. Оранжевая рамка отмечает совпадение с поисковым запросом, а более яркая рамка — текущее совпадение, к которому перешёл пользователь.</p>
+            <p>После нажатия <b>⋮</b> словесное описание селектора или правила может показать дополнительные подтверждённые признаки: точное количество атрибутов, количество классов, собственный текст, положение среди соседних элементов, номер среди результатов поиска, а также связь с родителем, предком, ребёнком, потомком или соседним элементом. Эти признаки могут использоваться для уточнения результата, даже если отдельной подписи для них нет в самой строке карты.</p>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>Поиск по карте</h2>
+        <p>Одно поле поиска умеет искать по отображаемому тексту узла: названию тега, атрибутам, значениям и тексту элемента. В него также можно вставить HTML, скопированный из DevTools: расширение сопоставит его с ветками карты. Обычный CSS-селектор ищется в последнем сохранённом снимке страницы и подсвечивает связанные с ним элементы карты.</p>
+        <p>Стрелки рядом с полем переходят к следующему и предыдущему совпадению. Поиск не скрывает остальное дерево: так можно сразу изучить родителей и потомков результата.</p>
+    </section>
+
+    <section class="card">
+        <h2>CSS-селектор или правило BlockIt?</h2>
+        <p>Предпочитайте CSS-селектор, если он использует понятные и устойчивые признаки: стабильный id, имя атрибута, постоянное значение или ясную структуру. Обычный CSS проще и обычно работает быстрее.</p>
+        <p>Правило BlockIt нужно, когда CSS недостаточно: например, необходимо учитывать число классов или атрибутов, динамическое имя атрибута, собственный текст либо номер среди результатов. Правила мощнее, но могут работать немного медленнее.</p>
+        <p>Карта генерирует варианты автоматически, но эта функция ещё развивается. Не полагайтесь на неё без проверки: читайте человеческое описание того, что ищет правило. Жирное предупреждение означает, что уникальность результата не удалось подтвердить.</p>
+        <p><a class="button" data-blockit-docs="" href="https://pavelcraft.github.io/BlockIt/rules/ru/" target="_blank" rel="noreferrer">Документация по синтаксису BlockIt</a></p>
+    </section>
+
+    <section class="card">
+        <h2>Почему исходный репозиторий не публикуется</h2>
+        <p>Расширение создано, чтобы помогать пользователям разбираться с меняющейся разметкой сайтов. Открытый репозиторий с подробным описанием алгоритмов упростил бы сервисам намеренное усложнение кода именно против карты стабильности. Поэтому исходный репозиторий не публикуется. Это не отменяет проверки расширения магазином Chrome и не является обещанием полной технической секретности.</p>
+    </section>
+
+    <section class="card">
+        <h2>Связь с BlockIt</h2>
+        <p>StableHTMLFinder помогает найти устойчивые признаки; <a data-blockit-page="" href="https://formacode.dev/ru/blockit" target="_blank" rel="noopener noreferrer">BlockIt</a> применяет созданное правило и скрывает или удаляет совпавшие элементы. Вместе они полезны, когда обычный селектор из DevTools ломается после обновления страницы.</p>
+        <p>BlockIt является отдельным расширением и не требуется для построения карты.</p>
+        <p><a class="button" href="https://chromewebstore.google.com/detail/BlockIt/honkfhonlklbabiffdmonpoihccbkgln" target="_blank" rel="noopener noreferrer">Установить BlockIt из Chrome Web Store</a></p>
+    </section>
+</main>
+
+
+
+</body></html>

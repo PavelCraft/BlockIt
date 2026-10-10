@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>使用指南 — StableHTMLFinder</title>
+    <link rel="stylesheet" href="../help.css">
+<link rel="canonical" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/zh/"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/en/" hreflang="en"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/fr/" hreflang="fr"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/de/" hreflang="de"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/es/" hreflang="es"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/pt/" hreflang="pt"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/zh/" hreflang="zh"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/ja/" hreflang="ja"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/ru/" hreflang="ru"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/en/" hreflang="x-default"><meta name="description" content="StableHTMLFinder 比较多次页面加载，显示在所有观察中保持稳定的元素和特征，帮助高级用户创建不依赖随机变化的类、ID 或结构的选择器。"></head>
+<body>
+<header class="top">
+    <div class="brand">Stable<span>HTML</span>Finder</div>
+    <nav><a data-privacy-policy="" href="https://formacode.dev/en/stablehtmlfinder/privacy" target="_blank" rel="noopener noreferrer">隐私政策</a><a href="mailto:contact@formacode.dev" target="_blank" rel="noopener noreferrer">反馈</a></nav>
+</header>
+<main class="page">
+    <section class="hero">
+        <div class="eyebrow">使用指南</div>
+        <h1>如何使用稳定性地图</h1>
+        <p>StableHTMLFinder 比较多次页面加载，显示在所有观察中保持稳定的元素和特征，帮助高级用户创建不依赖随机变化的类、ID 或结构的选择器。</p>
+        <p><a class="button" data-stablehtmlfinder-page="" href="https://formacode.dev/en/stablehtmlfinder" target="_blank" rel="noopener noreferrer">StableHTMLFinder 页面</a> <a class="button" href="https://chromewebstore.google.com/detail/stablehtmlfinder/mdnfjmhokoblclpjbkofkkjmbfbnokmm" target="_blank" rel="noopener noreferrer">从 Chrome 网上应用店安装 StableHTMLFinder</a></p>
+    </section>
+
+    <section class="card">
+        <h2>典型流程</h2>
+        <ol>
+            <li>打开包含所需元素的页面。</li>
+            <li>选择加载次数。快速查看通常两次即可；次数越多，地图越准确。</li>
+            <li>启动分析。每次加载后，扩展程序会等待设定时间，让页面完成常规内容的构建。</li>
+            <li>展开分支或使用搜索在地图中找到元素。</li>
+            <li>打开 <b>⋮</b> ，阅读特征的文字说明，然后复制 CSS 选择器或 BlockIt 规则。</li>
+            <li>将结果粘贴到 BlockIt 的相应字段，并在页面上测试。</li>
+        </ol>
+        <p class="note">加载次数越多，将偶然匹配误认为稳定特征的风险越低。例如动态 ID 中两个字母可能偶然两次相同，但通常不会在更多次加载中持续。</p>
+    </section>
+
+    <section class="card map-reading-card">
+        <h2>如何阅读稳定性地图</h2>
+        <p class="map-reading-lead">地图的每一行对应一个 HTML 元素。缩进表示已确认的页面结构：缩进元素是上方元素的后代。地图只显示在所有加载中确认稳定的特征。未显示的类、属性或树结构可能仍在页面中，只是观察之间发生了变化。</p>
+        <ul class="map-reading-list">
+            <li><b><code>&lt;div&gt;</code>, <code>&lt;a&gt;</code>, <code>&lt;section&gt;</code></b> — 稳定的标签名。</li>
+            <li><b><code>id="menu"</code></b> — 属性名及完整值在每次加载中均匹配。</li>
+            <li><b><code>data-*</code>, <code>*-label</code>, <code>*test*</code></b> — 只有属性名的一部分稳定：分别表示以 <code>data-</code>开头、以 <code>-label</code> 结尾或包含 <code>test</code>.</li>
+            <li><b><code>id^="prefix"</code></b> — 属性值以指定文本开头； <b><code>id$="suffix"</code></b> — 以该文本结尾； <b><code>id*="part"</code></b> — 包含该文本。单独的 <b><code>=</code></b> 且不带 <code>^</code>, <code>$</code> 或 <code>*</code> ）表示完全匹配。</li>
+            <li><b>没有值的属性名</b> 表示属性本身稳定存在，但其值发生变化或未获确认。</li>
+            <li><b><code>class</code> （3 个类）</b> 表示类的数量稳定，但类名或完整 <code>class</code>.</li>
+            <li><b>属性右侧的文本</b> — 元素稳定的自身文本。“展开”按钮可显示全文。</li>
+            <li><b><code>iframe</code>, <code>iframe document</code> 和 <code>#shadow-root</code></b> 标记特殊嵌套页面部分的边界，其内容在地图的独立分支中继续。</li>
+            <li><b><code>&lt;...&gt;</code></b> 表示发生变化或匹配不确定的结构部分，其下方可能再次出现已确认的稳定片段。</li>
+        </ul>
+        <div class="map-reading-notes">
+            <p>绿色行表示已确认元素。浅绿色表示可能匹配，或变化结构后的稳定片段。橙色边框表示搜索匹配项，更亮的边框表示当前匹配项。</p>
+            <p>点击 <b>⋮</b> 后，选择器或规则说明可能显示其他已确认特征：确切的属性数和类数、自身文本、同级位置、结果序号，以及与父级、祖先、子级、后代或同级元素的关系。即使地图行中未单独显示，这些特征也可用于细化结果。</p>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>搜索地图</h2>
+        <p>搜索框可以查找节点显示文本、标签名、属性、属性值和元素文本。也可以粘贴从 DevTools 复制的 HTML，扩展程序会将其与地图分支匹配。普通 CSS 选择器会在最新保存的页面快照中执行并高亮关联元素。</p>
+        <p>字段旁的箭头用于切换匹配项。搜索不会隐藏树的其他部分，因此可以查看结果的祖先和后代。</p>
+    </section>
+
+    <section class="card">
+        <h2>CSS 选择器还是 BlockIt 规则？</h2>
+        <p>如果使用的是清晰可靠的特征（稳定 ID、属性名、固定值或明确结构），请优先使用 CSS 选择器。标准 CSS 更简单，通常也更快。</p>
+        <p>当 CSS 不够用时，请使用 BlockIt 规则，例如需要考虑类或属性数量、动态属性名、自身文本或结果序号。规则功能更强，但可能稍慢。</p>
+        <p>地图会自动生成建议，但此功能仍在改进。请务必验证并阅读文字说明。粗体警告表示无法确认结果的唯一性。</p>
+        <p><a class="button" data-blockit-docs="" href="https://pavelcraft.github.io/BlockIt/rules/en/" target="_blank" rel="noreferrer">BlockIt 语法文档</a></p>
+    </section>
+
+    <section class="card">
+        <h2>为什么不公开源代码仓库</h2>
+        <p>本扩展帮助用户理解不断变化的网站标记。公开详细算法会让服务商更容易有意干扰稳定性地图，因此不公开源代码仓库。这不影响 Chrome 应用商店的审核，也不承诺完全的技术保密。</p>
+    </section>
+
+    <section class="card">
+        <h2>与 BlockIt 的关系</h2>
+        <p>StableHTMLFinder 查找可靠特征； <a data-blockit-page="" href="https://formacode.dev/en/blockit" target="_blank" rel="noopener noreferrer">BlockIt</a> 应用生成的规则并隐藏或删除匹配元素。当从 DevTools 复制的选择器在刷新后失效时，两者配合很有用。</p>
+        <p>BlockIt 是独立扩展，生成地图不需要它。</p>
+        <p><a class="button" href="https://chromewebstore.google.com/detail/BlockIt/honkfhonlklbabiffdmonpoihccbkgln" target="_blank" rel="noopener noreferrer">从 Chrome 网上应用店安装 BlockIt</a></p>
+    </section>
+</main>
+
+
+
+</body></html>

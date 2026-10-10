@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="de"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Anleitung — StableHTMLFinder</title>
+    <link rel="stylesheet" href="../help.css">
+<link rel="canonical" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/de/"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/en/" hreflang="en"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/fr/" hreflang="fr"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/de/" hreflang="de"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/es/" hreflang="es"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/pt/" hreflang="pt"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/zh/" hreflang="zh"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/ja/" hreflang="ja"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/ru/" hreflang="ru"><link rel="alternate" href="https://pavelcraft.github.io/BlockIt/stablehtmlfinder/en/" hreflang="x-default"><meta name="description" content="StableHTMLFinder vergleicht mehrere Seitenaufrufe und zeigt Elemente und Merkmale, die in allen Beobachtungen stabil bleiben. So können erfahrene Nutzer Selektoren ohne zufällig wechselnde Klassen, IDs oder Strukturen erstellen."></head>
+<body>
+<header class="top">
+    <div class="brand">Stable<span>HTML</span>Finder</div>
+    <nav><a data-privacy-policy="" href="https://formacode.dev/en/stablehtmlfinder/privacy" target="_blank" rel="noopener noreferrer">Datenschutzrichtlinie</a><a href="mailto:contact@formacode.dev" target="_blank" rel="noopener noreferrer">Feedback</a></nav>
+</header>
+<main class="page">
+    <section class="hero">
+        <div class="eyebrow">Anleitung</div>
+        <h1>So verwenden Sie die Stabilitätskarte</h1>
+        <p>StableHTMLFinder vergleicht mehrere Seitenaufrufe und zeigt Elemente und Merkmale, die in allen Beobachtungen stabil bleiben. So können erfahrene Nutzer Selektoren ohne zufällig wechselnde Klassen, IDs oder Strukturen erstellen.</p>
+        <p><a class="button" data-stablehtmlfinder-page="" href="https://formacode.dev/en/stablehtmlfinder" target="_blank" rel="noopener noreferrer">StableHTMLFinder-Seite</a> <a class="button" href="https://chromewebstore.google.com/detail/stablehtmlfinder/mdnfjmhokoblclpjbkofkkjmbfbnokmm" target="_blank" rel="noopener noreferrer">StableHTMLFinder aus dem Chrome Web Store installieren</a></p>
+    </section>
+
+    <section class="card">
+        <h2>Typischer Ablauf</h2>
+        <ol>
+            <li>Öffnen Sie die Seite mit dem gesuchten Element.</li>
+            <li>Wählen Sie die Anzahl der Ladevorgänge. Zwei reichen meist für eine schnelle Prüfung; mehr erhöhen die Genauigkeit.</li>
+            <li>Starten Sie die Analyse. Nach jedem Laden wartet die Erweiterung die eingestellte Zeit, damit die Seite ihren normalen Inhalt aufbauen kann.</li>
+            <li>Suchen Sie das Element, indem Sie Zweige öffnen oder die Suche verwenden.</li>
+            <li>Öffnen Sie das Menü <b>⋮</b> am gewünschten Knoten, lesen Sie die Beschreibung und kopieren Sie den CSS-Selektor oder die BlockIt-Regel.</li>
+            <li>Fügen Sie das Ergebnis in das entsprechende BlockIt-Feld ein und testen Sie es auf der Seite.</li>
+        </ol>
+        <p class="note">Mehr Ladevorgänge verringern das Risiko, einen Zufall für ein stabiles Merkmal zu halten. Zwei Buchstaben einer dynamischen ID können zweimal zufällig übereinstimmen, aber selten über weitere Ladevorgänge.</p>
+    </section>
+
+    <section class="card map-reading-card">
+        <h2>So lesen Sie die Stabilitätskarte</h2>
+        <p class="map-reading-lead">Jede Zeile steht für ein HTML-Element. Die Einrückung folgt der bestätigten Seitenstruktur. Die Karte zeigt nur Merkmale, die bei allen Ladevorgängen stabil waren. Fehlende Klassen, Attribute oder Baumteile können auf der Seite vorhanden sein, sich aber geändert haben.</p>
+        <ul class="map-reading-list">
+            <li><b><code>&lt;div&gt;</code>, <code>&lt;a&gt;</code>, <code>&lt;section&gt;</code></b> — stabiler Tagname.</li>
+            <li><b><code>id="menu"</code></b> — Attributname und vollständiger Wert stimmten bei jedem Laden überein.</li>
+            <li><b><code>data-*</code>, <code>*-label</code>, <code>*test*</code></b> — nur ein Teil des Attributnamens ist stabil: Er beginnt mit <code>data-</code>, endet mit <code>-label</code> oder enthält <code>test</code>.</li>
+            <li><b><code>id^="prefix"</code></b> — der Attributwert beginnt mit dem angegebenen Text; <b><code>id$="suffix"</code></b> — endet damit; <b><code>id*="part"</code></b> — enthält ihn. Ein <b><code>=</code></b> ohne <code>^</code>, <code>$</code> oder <code>*</code> bedeutet eine exakte Übereinstimmung.</li>
+            <li><b>Ein Attributname ohne Wert</b> bedeutet, dass das Attribut vorhanden bleibt, sein Wert sich jedoch änderte oder nicht bestätigt wurde.</li>
+            <li><b><code>class</code> (3 Klassen)</b> bedeutet eine stabile Klassenanzahl, obwohl Namen oder der vollständige <code>class</code>.</li>
+            <li><b>Text rechts neben den Attributen</b> — stabiler eigener Text des Elements. „Erweitern“ zeigt ihn vollständig.</li>
+            <li><b><code>iframe</code>, <code>iframe document</code> und <code>#shadow-root</code></b> kennzeichnen Grenzen besonderer verschachtelter Seitenbereiche. Ihr Inhalt wird in einem eigenen Ast fortgesetzt.</li>
+            <li><b><code>&lt;...&gt;</code></b> kennzeichnet einen veränderlichen oder unsicher zugeordneten Abschnitt. Darunter kann wieder ein bestätigtes stabiles Fragment liegen.</li>
+        </ul>
+        <div class="map-reading-notes">
+            <p>Grüne Zeilen sind bestätigte Elemente. Helleres Grün markiert wahrscheinliche Treffer oder stabile Fragmente nach veränderlichen Bereichen. Orange umrandet Suchtreffer; die hellere Umrandung zeigt den aktuellen Treffer.</p>
+            <p>Nach Auswahl von <b>⋮</b> kann die Beschreibung weitere bestätigte Merkmale zeigen: genaue Attribut-/Klassenanzahl, eigenen Text, Geschwisterposition, Ergebnisnummer sowie Beziehungen zu Eltern, Vorfahren, Kindern, Nachfahren oder Geschwistern. Sie können das Ergebnis auch ohne eigene Zeilenbeschriftung verfeinern.</p>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>Karte durchsuchen</h2>
+        <p>Das Suchfeld findet angezeigten Knotentext, Tags, Attribute, Werte und Elementtext. Sie können auch HTML aus den DevTools einfügen. Ein CSS-Selektor wird im letzten Snapshot ausgewertet und hebt verknüpfte Kartenelemente hervor.</p>
+        <p>Mit den Pfeilen wechseln Sie zwischen Treffern. Der übrige Baum bleibt sichtbar, sodass Vorfahren und Nachfahren geprüft werden können.</p>
+    </section>
+
+    <section class="card">
+        <h2>CSS-Selektor oder BlockIt-Regel?</h2>
+        <p>Bevorzugen Sie CSS-Selektoren mit klaren, dauerhaften Merkmalen wie stabiler ID, Attributname, konstantem Wert oder eindeutiger Struktur. CSS ist einfacher und meist schneller.</p>
+        <p>Verwenden Sie eine BlockIt-Regel, wenn CSS nicht ausreicht, etwa für Klassen-/Attributanzahl, dynamische Attributnamen, eigenen Text oder Ergebnispositionen. Regeln sind leistungsfähiger, können aber langsamer sein.</p>
+        <p>Die Karte erzeugt Vorschläge automatisch, doch diese Funktion wird noch weiterentwickelt. Prüfen Sie sie und lesen Sie die Beschreibung. Eine fette Warnung bedeutet, dass die Eindeutigkeit nicht bestätigt wurde.</p>
+        <p><a class="button" data-blockit-docs="" href="https://pavelcraft.github.io/BlockIt/rules/en/" target="_blank" rel="noreferrer">Dokumentation der BlockIt-Syntax</a></p>
+    </section>
+
+    <section class="card">
+        <h2>Warum das Quellrepository nicht öffentlich ist</h2>
+        <p>Die Erweiterung hilft bei wechselndem Website-Markup. Ein öffentliches Repository mit Algorithmusdetails würde gezielte Gegenmaßnahmen erleichtern; daher ist das Quellrepository nicht öffentlich. Die Prüfung durch den Chrome Web Store bleibt bestehen und vollständige Geheimhaltung wird nicht versprochen.</p>
+    </section>
+
+    <section class="card">
+        <h2>Verbindung mit BlockIt</h2>
+        <p>StableHTMLFinder findet dauerhafte Merkmale; <a data-blockit-page="" href="https://formacode.dev/en/blockit" target="_blank" rel="noopener noreferrer">BlockIt</a> wendet die Regel an und blendet Treffer aus oder entfernt sie. Zusammen helfen sie, wenn ein DevTools-Selektor nach dem Neuladen nicht mehr funktioniert.</p>
+        <p>BlockIt ist eine separate Erweiterung und wird für die Karte nicht benötigt.</p>
+        <p><a class="button" href="https://chromewebstore.google.com/detail/BlockIt/honkfhonlklbabiffdmonpoihccbkgln" target="_blank" rel="noopener noreferrer">BlockIt aus dem Chrome Web Store installieren</a></p>
+    </section>
+</main>
+
+
+
+</body></html>
