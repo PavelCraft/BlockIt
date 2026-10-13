@@ -559,6 +559,7 @@ function renderAttributes(tag, attributes) {
 function updateSelector(tag, attributes) {
   const selector = buildSelector(tag, attributes);
   selectorInput.value = selector;
+  syncSelectorPlaceholder();
   currentTag = tag;
   currentAttributes = attributes;
   checkSelectorCount(selector);

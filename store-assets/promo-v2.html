@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>BlockIt — Chrome Web Store promo</title>
+  <link rel="stylesheet" href="promo-v2.css">
+</head>
+<body>
+  <main class="promo" id="promo">
+    <div class="grid" aria-hidden="true"></div>
+    <header class="brand">
+      <img src="source/icon.png" alt="">
+      <strong>Block<span>It</span></strong>
+    </header>
+
+    <section class="message">
+      <p>CONTROL WHAT STAYS</p>
+      <h1>Your page.<br>Your rules.</h1>
+      <div class="benefit"><i>✓</i><span>Block exactly what you choose</span></div>
+    </section>
+
+    <section class="product-visual" aria-label="BlockIt workflow">
+      <article class="web-page">
+        <header><i></i><i></i><i></i><span>example.com</span></header>
+        <div class="page-lines"><b></b><b></b><b></b></div>
+        <div class="selected-block">
+          <span class="corner tl"></span><span class="corner tr"></span>
+          <span class="corner bl"></span><span class="corner br"></span>
+          <small>Selected element</small>
+          <div><i></i><p><b></b><b></b></p></div>
+        </div>
+        <div class="page-cards"><i></i><i></i><i></i></div>
+      </article>
+
+      <div class="flow-arrow">→</div>
+
+      <article class="rule-card">
+        <header><span class="mini-logo">BI</span><b>BlockIt rule</b><em>Ready</em></header>
+        <div class="rule-line"><i></i><span><small>CLASS</small><b>starts with “promo”</b></span></div>
+        <div class="rule-line"><i></i><span><small>TEXT INSIDE</small><b>contains “sponsored”</b></span></div>
+        <footer><span>1</span><div><b>Exact match</b><small>Checked on the page</small></div></footer>
+      </article>
+
+      <div class="success" aria-hidden="true">✓</div>
+    </section>
+
+    <footer class="steps"><span>Select</span><i></i><span>Describe</span><i></i><span>Control</span></footer>
+  </main>
+  <script>
+    document.querySelector('#promo').dataset.size = new URLSearchParams(location.search).get('size') === 'small' ? 'small' : 'marquee';
+  </script>
+</body>
+</html>

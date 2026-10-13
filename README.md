@@ -12,6 +12,8 @@
 
 **BlockIt** is a lightweight browser extension that lets you remove unwanted HTML elements from any website. Unlike traditional ad blockers that rely on pre-built filter lists, BlockIt puts control in your hands: choose what to block (ads, banners, popups, and any other annoying elements), how to block (remove or hide), manage rules (create, delete, group by site, export and import settings), and use both CSS selectors and XPath.
 
+**Official product page:** [BlockIt on FormaCode](https://formacode.dev/en/blockit)
+
 ---
 
 ### 🚀 Installation
@@ -60,6 +62,8 @@ BSD 3-Clause © 2026 [PavelCraft](https://github.com/PavelCraft)
 ### 💡 Что такое BlockIt?
 
 **BlockIt** — это лёгкое расширение для браузера, которое позволяет удалять нежелательные HTML-элементы с любых сайтов. В отличие от классических блокировщиков рекламы, которые используют готовые списки фильтров, BlockIt даёт управление в руки пользователя: выбирать, что блокировать (рекламу, баннеры, попапы и любые другие надоедливые элементы), как блокировать (удалять или скрывать), управлять правилами (создавать, удалять, группировать по сайтам, экспортировать и импортировать настройки) и использовать как CSS-селекторы, так и XPath.
+
+**Официальная страница продукта:** [BlockIt на сайте FormaCode](https://formacode.dev/ru/blockit)
 
 ---
 

@@ -20,3 +20,35 @@ validate_full_voiceover*.py
 
 # Editor and patch backups.
 *.orig
+
+# Operating-system and editor files.
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Dependencies, build output, and generated test reports.
+node_modules/
+dist/
+build/
+coverage/
+.nyc_output/
+*.log
+
+# Generated promotional images; sources and generators stay versioned.
+store-assets/output/
+
+# Local environment and signing files.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Temporary and backup files.
+*.tmp
+*.bak
+*.swp
+*~

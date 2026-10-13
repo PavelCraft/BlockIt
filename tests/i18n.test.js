@@ -49,6 +49,14 @@ test('the Add attribute button uses the custom icon in every locale', () => {
   assert.match(popup, /data-i18n="addAttrBtn"/);
 });
 
+test('a generated selector hides the custom placeholder', () => {
+  const popup = read('popup.js');
+  assert.match(
+    popup,
+    /function updateSelector\(tag, attributes\) \{[\s\S]*?selectorInput\.value = selector;\s*syncSelectorPlaceholder\(\);/
+  );
+});
+
 test('every requested Chrome message key exists in all catalogs', () => {
   const catalog = JSON.parse(read('_locales/en/messages.json'));
   for (const file of ['popup.html', 'popup.js', 'import.html', 'import.js', 'welcome.html', 'welcome.js']) {

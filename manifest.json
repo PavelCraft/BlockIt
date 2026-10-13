@@ -1,9 +1,10 @@
 {
   "manifest_version": 3,
   "name": "__MSG_extensionName__",
-  "version": "1.2.0",
+  "version": "1.2.2",
   "description": "__MSG_extensionDescription__",
   "default_locale": "en",
+  "homepage_url": "https://formacode.dev/en/blockit",
   "incognito": "split",
   "permissions": ["storage", "scripting"],
   "content_security_policy": {
